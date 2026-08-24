@@ -1,0 +1,33 @@
+name: Tests
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  direct-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install toolchain
+        run: pip install genlayer-test genvm-linter pytest
+      - name: Lint contract
+        run: genvm-lint check contracts/streak_pact.py
+      - name: Direct-mode tests
+        run: pytest tests/direct -v
+
+  dapp-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Build dApp
+        working-directory: app
+        run: |
+          npm install
+          npm run build

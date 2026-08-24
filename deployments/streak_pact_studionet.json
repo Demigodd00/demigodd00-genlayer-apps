@@ -1,0 +1,12 @@
+{
+  "contract": "StreakPact",
+  "network": "studionet",
+  "address": "0xA81e4f3f0465B02261d5aF6dd7d2F16221e230c7",
+  "transaction_hash": "0x474dc8c2f0e14f087f11a3156ef2a5234a4aa813c0eccc3616b0a84a4dd2c22e",
+  "deployer": "0x04C3C6FB05943a1f4d902274f81F52c390D822b2",
+  "constructor_args": {
+    "fee_bps": 0,
+    "period_secs": 86400
+  },
+  "deployed_at": "2026-08-24T15:08:24.313979+00:00"
+}
