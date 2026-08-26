@@ -58,6 +58,7 @@ Python 3.12:
 
 ```bash
 pip install -r requirements-deploy.txt
+python scripts/prepare_gltest_runner.py
 genvm-lint check contracts/streak_pact_v2.py
 genvm-lint check contracts/micro_wagers.py
 pytest tests/direct -v

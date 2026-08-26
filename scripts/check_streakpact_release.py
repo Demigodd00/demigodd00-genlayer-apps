@@ -14,6 +14,7 @@ ROOT = Path(__file__).resolve().parents[1]
 CONTRACT_PATH = ROOT / "contracts" / "streak_pact_v2.py"
 DIRECT_TEST_PATH = ROOT / "tests" / "direct" / "test_streak_pact_v2.py"
 DEPLOY_SCRIPT_PATH = ROOT / "scripts" / "deploy_streak_pact_v2.py"
+RUNNER_PREP_PATH = ROOT / "scripts" / "prepare_gltest_runner.py"
 DEPLOYMENT_PATH = ROOT / "deployments" / "streak_pact_v2_studionet.json"
 WEB_PATH = ROOT / "apps" / "streakpact-web"
 ADDRESS_PATTERN = re.compile(r"^0x[0-9a-fA-F]{40}$")
@@ -91,6 +92,7 @@ def main() -> int:
     args = parse_args()
     results = [
         run_check("GenVM lint and validation", ["genvm-lint", "check", str(CONTRACT_PATH)]),
+        run_check("pinned direct-test runner", [sys.executable, str(RUNNER_PREP_PATH)]),
         run_check("direct contract tests", [sys.executable, "-m", "pytest", str(DIRECT_TEST_PATH), "-q"]),
         run_check(
             "deployment script compilation",
