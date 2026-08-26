@@ -4,6 +4,7 @@ from gltest import get_contract_factory, get_accounts
 from gltest.assertions import tx_execution_succeeded
 
 STAKE = 10**15
+APPEAL_WINDOW_SECS = 300
 
 
 def _wait_until(unix_ts: int) -> None:
@@ -13,7 +14,7 @@ def _wait_until(unix_ts: int) -> None:
 
 def test_appeal_flow_with_bond_on_studionet():
     factory = get_contract_factory("MicroWagers")
-    contract = factory.deploy(args=[0])
+    contract = factory.deploy(args=[0, APPEAL_WINDOW_SECS])
 
     accounts = get_accounts()
     alice, bob = accounts[0], accounts[1]
@@ -44,7 +45,7 @@ def test_appeal_flow_with_bond_on_studionet():
     assert tx_execution_succeeded(resolve_tx)
 
     w_before = contract.get_wager(args=[wid]).call()
-    assert w_before["status"] == "RESOLVED"
+    assert w_before["status"] == "PROVISIONAL"
     original_winner = w_before["winner"].lower()
     assert w_before["appealed"] is False
 
@@ -63,7 +64,7 @@ def test_appeal_flow_with_bond_on_studionet():
     w_after = contract.get_wager(args=[wid]).call()
     assert w_after["appealed"] is True
     assert len(w_after["appeal_statement"]) > 0
-    assert w_after["status"] in ("RESOLVED", "VOIDED")
+    assert w_after["status"] in ("PROVISIONAL", "VOIDED")
 
     if w_after["status"] == "VOIDED":
         # Appeal overturned into refund: no winner, no pot bonus
@@ -95,13 +96,13 @@ def test_appeal_flow_with_bond_on_studionet():
     except Exception:
         pass
 
-    # Current winner (if any) claims everything
-    if w_after["status"] == "RESOLVED":
-        winner_contract = (
-            contract
-            if w_after["winner"].lower() == alice.address.lower()
-            else bob_contract
-        )
+    # Payout remains locked until the appeal window expires.
+    if w_after["status"] == "PROVISIONAL":
+        winner_contract = contract if w_after["winner"].lower() == alice.address.lower() else bob_contract
+        if not w_after["claimable"]:
+            claim_tx = winner_contract.claim(args=[wid]).transact()
+            assert not tx_execution_succeeded(claim_tx)
+            _wait_until(int(w_after["appeal_deadline_unix"]))
         claim_tx = winner_contract.claim(args=[wid]).transact()
         assert tx_execution_succeeded(claim_tx)
         assert contract.get_wager(args=[wid]).call()["status"] == "SETTLED"

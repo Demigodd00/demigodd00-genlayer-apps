@@ -3,6 +3,7 @@ name: Tests
 on:
   push:
   pull_request:
+  workflow_dispatch:
 
 jobs:
   direct-tests:
@@ -13,11 +14,17 @@ jobs:
         with:
           python-version: "3.12"
       - name: Install toolchain
-        run: pip install genlayer-test genvm-linter pytest
-      - name: Lint contract
-        run: genvm-lint check contracts/streak_pact.py
+        run: pip install -r requirements-deploy.txt
+      - name: Lint intelligent contracts
+        run: |
+          genvm-lint check contracts/streak_pact.py
+          genvm-lint check contracts/streak_pact_v2.py
+          genvm-lint check contracts/micro_wagers.py
+          genvm-lint check contracts/bounty_forge.py
       - name: Direct-mode tests
         run: pytest tests/direct -v
+      - name: Validate deployment scripts
+        run: python -m compileall -q scripts
 
   dapp-build:
     runs-on: ubuntu-latest
@@ -26,8 +33,64 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.19.0
+      - name: Install locked dependencies
+        working-directory: apps/streakpact-web
+        run: pnpm install --frozen-lockfile
+      - name: Typecheck dApp
+        working-directory: apps/streakpact-web
+        run: pnpm typecheck
       - name: Build dApp
-        working-directory: app
-        run: |
-          npm install
-          npm run build
+        working-directory: apps/streakpact-web
+        run: pnpm build
+      - name: Audit production dependencies
+        working-directory: apps/streakpact-web
+        run: pnpm audit:prod
+
+  bountyforge-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.19.0
+      - name: Install locked dependencies
+        working-directory: apps/bountyforge-web
+        run: pnpm install --frozen-lockfile
+      - name: Typecheck BountyForge dApp
+        working-directory: apps/bountyforge-web
+        run: pnpm typecheck
+      - name: Build BountyForge dApp
+        working-directory: apps/bountyforge-web
+        run: pnpm build
+      - name: Audit production dependencies
+        working-directory: apps/bountyforge-web
+        run: pnpm audit:prod
+
+  integration-smoke:
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install integration toolchain
+        run: pip install -r requirements-deploy.txt
+      - name: Run StudioNet acceptance tests
+        env:
+          STREAKPACT_TEST_EVIDENCE_URL: ${{ secrets.STREAKPACT_TEST_EVIDENCE_URL }}
+        run: >-
+          gltest
+          tests/integration/test_streak_pact_v2_studionet.py
+          tests/integration/test_streak_pact_v2_challenge_studionet.py
+          tests/integration/test_streak_pact_v2_evidence_studionet.py
+          tests/integration/test_micro_wagers_studionet.py
+          tests/integration/test_micro_wagers_appeal_studionet.py
+          tests/integration/test_bounty_forge_studionet.py
+          --network studionet -v -s

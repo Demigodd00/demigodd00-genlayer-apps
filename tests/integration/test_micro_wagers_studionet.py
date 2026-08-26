@@ -4,6 +4,7 @@ from gltest import get_contract_factory, get_accounts
 from gltest.assertions import tx_execution_succeeded
 
 STAKE = 10**15
+APPEAL_WINDOW_SECS = 300
 
 
 def _wait_until(unix_ts: int) -> None:
@@ -33,7 +34,7 @@ def _resolve(anyone_contract, wid):
 
 def test_resolvable_wager_creator_wins_on_studionet():
     factory = get_contract_factory("MicroWagers")
-    contract = factory.deploy(args=[0])
+    contract = factory.deploy(args=[0, APPEAL_WINDOW_SECS])
 
     accounts = get_accounts()
     alice, bob = accounts[0], accounts[1]
@@ -62,11 +63,16 @@ def test_resolvable_wager_creator_wins_on_studionet():
     _resolve(bob_contract, wid)
 
     w = contract.get_wager(args=[wid]).call()
-    assert w["status"] == "RESOLVED"
+    assert w["status"] == "PROVISIONAL"
     assert w["outcome_label"] == "Yes, the page states it is for use in illustrative examples"
     assert w["winner"].lower() == alice.address.lower()
     assert len(w["verdict_reason"]) > 0
 
+    # Payout remains locked for the configured StudioNet appeal window.
+    claim_tx = contract.claim(args=[wid]).transact()
+    assert not tx_execution_succeeded(claim_tx)
+
+    _wait_until(int(w["appeal_deadline_unix"]))
     claim_tx = contract.claim(args=[wid]).transact()
     assert tx_execution_succeeded(claim_tx)
     assert contract.get_wager(args=[wid]).call()["status"] == "SETTLED"
@@ -74,7 +80,7 @@ def test_resolvable_wager_creator_wins_on_studionet():
 
 def test_undeterminable_wager_voids_on_studionet():
     factory = get_contract_factory("MicroWagers")
-    contract = factory.deploy(args=[0])
+    contract = factory.deploy(args=[0, APPEAL_WINDOW_SECS])
 
     accounts = get_accounts()
     bob = accounts[1]
@@ -86,7 +92,7 @@ def test_undeterminable_wager_voids_on_studionet():
         "Will it rain in Tokyo between 12:00 and 12:10 UTC on January 1st, 2199?",
         "Yes, it will rain then",
         "No, it will not rain then",
-        "",
+        "https://example.com/",
         deadline,
     )
     _accept(bob_contract, wid)

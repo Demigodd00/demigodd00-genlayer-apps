@@ -5,6 +5,7 @@ from datetime import datetime, timezone
 import pytest
 
 STAKE = 10**18
+APPEAL_WINDOW = 3 * 24 * 60 * 60
 
 
 def _addr_hex(a) -> str:
@@ -23,6 +24,12 @@ def _deadline(seconds_ahead: int) -> int:
 
 def _warp_past(deadline_unix: int, direct_vm) -> None:
     target = datetime.fromtimestamp(deadline_unix + 5, tz=timezone.utc).isoformat()
+    direct_vm.warp(target)
+
+
+def _warp_past_appeal(contract, wager_id: str, direct_vm) -> None:
+    resolved = int(contract.get_wager(wager_id)["resolved_at_unix"])
+    target = datetime.fromtimestamp(resolved + APPEAL_WINDOW + 1, tz=timezone.utc).isoformat()
     direct_vm.warp(target)
 
 
@@ -64,6 +71,16 @@ def test_create_wager_stores_terms(direct_vm, direct_deploy, direct_alice):
     assert w["creator_side"] == "Team X wins"
     assert w["taker_side"] == "Team X does not win"
     assert len(w["question"]) > 0
+
+
+def test_studionet_appeal_window_is_configurable(direct_deploy):
+    contract = direct_deploy("contracts/micro_wagers.py", 0, 300)
+    assert contract.get_stats()["appeal_window_secs"] == "300"
+
+
+def test_rejects_appeal_window_below_contract_minimum(direct_deploy):
+    with pytest.raises(Exception, match="appeal window must be"):
+        direct_deploy("contracts/micro_wagers.py", 0, 299)
 
 
 def test_create_rejects_zero_stake(direct_vm, direct_deploy, direct_alice):
@@ -121,6 +138,20 @@ def test_accept_flow(direct_vm, direct_deploy, direct_alice, direct_bob):
     direct_vm.value = 0
 
 
+def test_accept_after_deadline_is_rejected(direct_vm, direct_deploy, direct_alice, direct_bob):
+    contract = direct_deploy("contracts/micro_wagers.py")
+    deadline = _deadline(120)
+    wid = _create(direct_vm, contract, direct_alice, deadline=deadline)
+    _warp_past(deadline, direct_vm)
+
+    direct_vm.sender = direct_bob
+    direct_vm.value = STAKE
+    with pytest.raises(Exception, match="deadline has passed"):
+        contract.accept_wager(wid)
+    direct_vm.value = 0
+    assert contract.get_wager(wid)["status"] == "OPEN"
+
+
 def test_cancel_open_wager_refunds_creator(direct_vm, direct_deploy, direct_alice, direct_bob):
     contract = direct_deploy("contracts/micro_wagers.py")
     wid = _create(direct_vm, contract, direct_alice)
@@ -153,7 +184,7 @@ def test_resolve_requires_live_and_deadline(direct_vm, direct_deploy, direct_ali
     _mock_verdict(direct_vm, "A")
     _mock_source(direct_vm)
     contract.resolve_wager(wid)
-    assert contract.get_wager(wid)["status"] == "RESOLVED"
+    assert contract.get_wager(wid)["status"] == "PROVISIONAL"
 
 
 def test_resolve_creator_wins(direct_vm, direct_deploy, direct_alice, direct_bob):
@@ -170,7 +201,7 @@ def test_resolve_creator_wins(direct_vm, direct_deploy, direct_alice, direct_bob
     contract.resolve_wager(wid)
 
     w = contract.get_wager(wid)
-    assert w["status"] == "RESOLVED"
+    assert w["status"] == "PROVISIONAL"
     assert w["winner"].lower() == _addr_hex(direct_alice).lower()
     assert w["outcome_label"] == "Team X wins"
     assert w["confidence_bucket"] == "70"
@@ -213,6 +244,25 @@ def test_resolve_void_refunds(direct_vm, direct_deploy, direct_alice, direct_bob
     assert contract.get_wager(wid)["outcome_label"] == ""
 
 
+def test_low_confidence_resolution_voids(direct_vm, direct_deploy, direct_alice, direct_bob):
+    contract = direct_deploy("contracts/micro_wagers.py")
+    deadline = _deadline(120)
+    wid = _create(direct_vm, contract, direct_alice, deadline=deadline)
+    direct_vm.sender = direct_bob
+    direct_vm.value = STAKE
+    contract.accept_wager(wid)
+    direct_vm.value = 0
+
+    _warp_past(deadline, direct_vm)
+    _mock_verdict(direct_vm, "A", confidence=40)
+    _mock_source(direct_vm)
+    contract.resolve_wager(wid)
+
+    wager = contract.get_wager(wid)
+    assert wager["status"] == "VOIDED"
+    assert wager["verdict_reason"].startswith("[LOW CONFIDENCE]")
+
+
 def test_claim_only_winner_and_settles(direct_vm, direct_deploy, direct_alice, direct_bob):
     contract = direct_deploy("contracts/micro_wagers.py")
     wid = _create(direct_vm, contract, direct_alice)
@@ -226,6 +276,11 @@ def test_claim_only_winner_and_settles(direct_vm, direct_deploy, direct_alice, d
     _mock_source(direct_vm)
     contract.resolve_wager(wid)
 
+    direct_vm.sender = direct_alice
+    with pytest.raises(Exception, match="appeal window is still open"):
+        contract.claim(wid)
+
+    _warp_past_appeal(contract, wid, direct_vm)
     direct_vm.sender = direct_bob
     with pytest.raises(Exception, match="only the winner can claim"):
         contract.claim(wid)
@@ -290,6 +345,7 @@ def test_appeal_overturned_flips_winner(direct_vm, direct_deploy, direct_alice, 
     assert w["verdict_reason"].startswith("[OVERTURNED ON APPEAL]")
     assert w["pot_bonus_atto"] == "0"
 
+    _warp_past_appeal(contract, wid, direct_vm)
     direct_vm.sender = direct_bob
     contract.claim(wid)
     assert contract.get_wager(wid)["status"] == "SETTLED"
@@ -305,7 +361,7 @@ def test_appeal_guards(direct_vm, direct_deploy, direct_alice, direct_bob):
 
     direct_vm.sender = direct_alice
     direct_vm.value = STAKE
-    with pytest.raises(Exception, match="only resolved wagers"):
+    with pytest.raises(Exception, match="only provisional wagers"):
         contract.appeal_wager(wid, "too early")
     direct_vm.value = 0
 
@@ -316,7 +372,7 @@ def test_appeal_guards(direct_vm, direct_deploy, direct_alice, direct_bob):
 
     direct_vm.sender = direct_alice
     direct_vm.value = STAKE
-    with pytest.raises(Exception, match="winner cannot appeal"):
+    with pytest.raises(Exception, match="only the losing participant"):
         contract.appeal_wager(wid, "i won though")
     direct_vm.value = 0
 
@@ -333,6 +389,29 @@ def test_appeal_guards(direct_vm, direct_deploy, direct_alice, direct_bob):
     direct_vm.value = STAKE
     with pytest.raises(Exception, match="appeal right already used"):
         contract.appeal_wager(wid, "again")
+    direct_vm.value = 0
+
+
+def test_third_party_cannot_appeal(
+    direct_vm, direct_deploy, direct_alice, direct_bob, direct_charlie
+):
+    contract = direct_deploy("contracts/micro_wagers.py")
+    deadline = _deadline(120)
+    wid = _create(direct_vm, contract, direct_alice, deadline=deadline)
+    direct_vm.sender = direct_bob
+    direct_vm.value = STAKE
+    contract.accept_wager(wid)
+    direct_vm.value = 0
+
+    _warp_past(deadline, direct_vm)
+    _mock_verdict(direct_vm, "A")
+    _mock_source(direct_vm)
+    contract.resolve_wager(wid)
+
+    direct_vm.sender = direct_charlie
+    direct_vm.value = STAKE
+    with pytest.raises(Exception, match="only the losing participant"):
+        contract.appeal_wager(wid, "An unrelated account must not be able to interfere.")
     direct_vm.value = 0
 
 
