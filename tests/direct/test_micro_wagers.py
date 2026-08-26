@@ -1,11 +1,11 @@
 ﻿import json
-import time
 from datetime import datetime, timezone
 
 import pytest
 
 STAKE = 10**18
 APPEAL_WINDOW = 3 * 24 * 60 * 60
+TEST_NOW_UNIX = 2_000_000_000
 
 
 def _addr_hex(a) -> str:
@@ -19,7 +19,7 @@ def _addr_hex(a) -> str:
 
 
 def _deadline(seconds_ahead: int) -> int:
-    return int(time.time()) + seconds_ahead
+    return TEST_NOW_UNIX + seconds_ahead
 
 
 def _warp_past(deadline_unix: int, direct_vm) -> None:

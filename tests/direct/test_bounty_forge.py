@@ -1,6 +1,5 @@
 import hashlib
 import json
-import time
 from datetime import datetime, timezone
 
 import pytest
@@ -10,6 +9,7 @@ STAKE = 10**15
 CHALLENGE_WINDOW = 3600
 APPEAL_WINDOW = 300
 DAY = 86400
+TEST_NOW_UNIX = 2_000_000_000
 
 ISSUE_URL = "https://github.com/acme/widgets/issues/42"
 PR_URL = "https://github.com/acme/widgets/pull/99"
@@ -54,7 +54,7 @@ def _warp_to(direct_vm, unix_ts: int) -> None:
 
 
 def _deadline() -> int:
-    return int(time.time()) + 7 * DAY
+    return TEST_NOW_UNIX + 7 * DAY
 
 
 def _deploy(direct_deploy):
@@ -166,7 +166,7 @@ def test_create_bounty_rejects_invalid_input(direct_vm, direct_deploy, direct_al
         contract.create_bounty("Valid title", "x" * 30, "https://github.com/acme/widgets/blob/main/x.ts", _deadline())
 
     with pytest.raises(Exception, match="deadline is too soon"):
-        contract.create_bounty("Valid title", "x" * 30, ISSUE_URL, int(time.time()) + 10)
+        contract.create_bounty("Valid title", "x" * 30, ISSUE_URL, TEST_NOW_UNIX + 10)
 
     direct_vm.value = 0
 
@@ -207,7 +207,7 @@ def test_accepted_claim_full_lifecycle_to_payout(
     with pytest.raises(Exception, match="challenge window is still open"):
         contract.finalize_bounty(bounty_id)
 
-    _warp_to(direct_vm, int(time.time()) + CHALLENGE_WINDOW + 5)
+    _warp_to(direct_vm, TEST_NOW_UNIX + CHALLENGE_WINDOW + 5)
     contract.finalize_bounty(bounty_id)
     assert contract.get_bounty(bounty_id)["status"] == "FINALIZED"
 
@@ -245,7 +245,7 @@ def test_rejected_claim_keeps_bounty_open(
     assert bounty["claim_count"] == "1"
     assert contract.get_claim(bounty_id, 0)["status"] == "REJECTED_PENDING_APPEAL"
 
-    _warp_to(direct_vm, int(time.time()) + APPEAL_WINDOW + 5)
+    _warp_to(direct_vm, TEST_NOW_UNIX + APPEAL_WINDOW + 5)
     direct_vm.sender = direct_charlie
     contract.release_rejected_stake(bounty_id, 0)
 
@@ -371,7 +371,7 @@ def test_claim_slots_are_capped(direct_vm, direct_deploy, direct_alice, direct_b
 
     for index in range(8):
         _submit(direct_vm, contract, direct_bob, bounty_id, pr_url=f"https://github.com/acme/widgets/pull/{99 + index}")
-        _warp_to(direct_vm, int(time.time()) + (index + 1) * (APPEAL_WINDOW + 10))
+        _warp_to(direct_vm, TEST_NOW_UNIX + (index + 1) * (APPEAL_WINDOW + 10))
         contract.release_rejected_stake(bounty_id, index)
     with pytest.raises(Exception, match="slots are exhausted"):
         _submit(direct_vm, contract, direct_bob, bounty_id)
@@ -443,7 +443,7 @@ def test_challenge_window_expiry_blocks_challenges(
     _mock_verdict(direct_vm, verdict="FIXES_ISSUE", confidence=90)
     _submit(direct_vm, contract, direct_bob, bounty_id)
 
-    _warp_to(direct_vm, int(time.time()) + CHALLENGE_WINDOW + 5)
+    _warp_to(direct_vm, TEST_NOW_UNIX + CHALLENGE_WINDOW + 5)
     direct_vm.sender = direct_alice
     direct_vm.value = STAKE
     with pytest.raises(Exception, match="challenge window has closed"):

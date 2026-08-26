@@ -1,15 +1,15 @@
 import json
-import time
 from datetime import datetime, timezone
 
 import pytest
 
 STAKE = 10**18
 DAY = 86400
+TEST_NOW_UNIX = 2_000_000_000
 
 
 def _start(seconds_ahead: int = 120) -> int:
-    return int(time.time()) + seconds_ahead
+    return TEST_NOW_UNIX + seconds_ahead
 
 
 def _warp_to(direct_vm, unix_ts: int) -> None:

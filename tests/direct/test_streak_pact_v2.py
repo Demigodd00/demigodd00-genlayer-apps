@@ -1,6 +1,5 @@
 import hashlib
 import json
-import time
 from datetime import datetime, timezone
 
 import pytest
@@ -11,6 +10,7 @@ APPEAL_WINDOW = 3600
 EVIDENCE_BODY = b'{"activity":"strength workout","duration_minutes":55,"completed":true}'
 EVIDENCE_DIGEST = hashlib.sha256(EVIDENCE_BODY).hexdigest()
 EVIDENCE_URL = "https://arweave.net/audit-fixture-1"
+TEST_NOW_UNIX = 2_000_000_000
 
 
 def _warp_to(direct_vm, unix_ts: int) -> None:
@@ -28,7 +28,7 @@ def _deploy(direct_deploy, owner):
 
 
 def _start() -> int:
-    return int(time.time()) + 120
+    return TEST_NOW_UNIX + 120
 
 
 def _create(
