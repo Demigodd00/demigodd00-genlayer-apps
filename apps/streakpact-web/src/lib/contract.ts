@@ -1,5 +1,6 @@
 import { chains, createClient } from "genlayer-js";
 import { ExecutionResult, TransactionStatus } from "genlayer-js/types";
+import { oneTransactionAtATime, readAllPages, readRecentPage } from "./ui-state";
 
 export type Address = `0x${string}`;
 
@@ -200,31 +201,33 @@ async function write(
   value: bigint,
   onProgress: (progress: TxProgress) => void,
 ): Promise<string> {
-  onProgress({ state: "awaiting-signature", label: "Confirm this transaction in your wallet" });
-  try {
-    const hash = await session.client.writeContract({
-      address: contractAddress(),
-      functionName,
-      args: args as never[],
-      value,
-    });
-    const txHash = String(hash);
-    onProgress({ state: "submitted", label: "Transaction submitted", hash: txHash });
-    await waitForSuccess(hash, onProgress);
-    return txHash;
-  } catch (error) {
-    onProgress({ state: "failed", label: friendlyError(error) });
-    throw error;
-  }
+  return oneTransactionAtATime(session.address, async () => {
+    let txHash: string | undefined;
+    onProgress({ state: "awaiting-signature", label: "Confirm this transaction in your wallet" });
+    try {
+      const hash = await session.client.writeContract({
+        address: contractAddress(),
+        functionName,
+        args: args as never[],
+        value,
+      });
+      txHash = String(hash);
+      onProgress({ state: "submitted", label: "Transaction submitted", hash: txHash });
+      await waitForSuccess(hash, onProgress);
+      return txHash;
+    } catch (error) {
+      onProgress({ state: "failed", label: friendlyError(error), hash: txHash });
+      throw error;
+    }
+  });
 }
 
 export async function listUserPacts(user: Address): Promise<PactSummary[]> {
-  const result = (await readClient.readContract({
+  return readRecentPage(async (offset, count) => (await readClient.readContract({
     address: contractAddress(),
     functionName: "list_user_pacts",
-    args: [user, 0, 25],
-  })) as unknown as { items: PactSummary[] };
-  return result.items;
+    args: [user, offset, count],
+  })) as unknown as { total: string; items: PactSummary[] });
 }
 
 export async function listPacts(): Promise<PactSummary[]> {
@@ -245,12 +248,11 @@ export async function getPact(pactId: string): Promise<PactView> {
 }
 
 export async function listCheckins(pactId: string): Promise<CheckinView[]> {
-  const result = (await readClient.readContract({
+  return readAllPages(async (offset, count) => (await readClient.readContract({
     address: contractAddress(),
     functionName: "list_checkins",
-    args: [pactId, 0, 25],
-  })) as unknown as { items: CheckinView[] };
-  return result.items;
+    args: [pactId, offset, count],
+  })) as unknown as { total: string; items: CheckinView[] }, 60);
 }
 
 export async function getAdminData(): Promise<{

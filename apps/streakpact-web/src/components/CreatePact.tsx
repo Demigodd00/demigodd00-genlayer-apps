@@ -13,6 +13,7 @@ import {
   type WalletSession,
 } from "@/lib/contract";
 import TxNotice from "./TxNotice";
+import { transactionPending } from "@/lib/ui-state";
 
 const templates = [
   {
@@ -69,6 +70,7 @@ export default function CreatePact({
   const [error, setError] = useState("");
   const [progress, setProgress] = useState<TxProgress | null>(null);
   const [created, setCreated] = useState(false);
+  const busy = transactionPending(progress);
 
   const stakeAtto = useMemo(() => {
     try {
@@ -79,6 +81,7 @@ export default function CreatePact({
   }, [stake]);
 
   function applyTemplate(index: number) {
+    if (busy) return;
     const template = templates[index];
     setTitle(template.title);
     setCriteria(template.criteria);
@@ -111,6 +114,7 @@ export default function CreatePact({
   }
 
   async function submit() {
+    if (busy) return;
     if (!session) {
       setError("Connect your wallet before creating a pact.");
       return;
@@ -207,8 +211,8 @@ export default function CreatePact({
               <p>Skipped periods count as misses. Claims open after appeals close.</p>
             </div>
             <div className="form-actions">
-              <button className="button button-secondary" onClick={() => setReviewing(false)}>Edit</button>
-              <button className="button button-primary" onClick={submit} disabled={progress?.state === "finalizing"}>
+              <button className="button button-secondary" onClick={() => setReviewing(false)} disabled={busy}>Edit</button>
+              <button className="button button-primary" onClick={submit} disabled={busy}>
                 {CONTRACT_READY ? "Confirm test stake" : "Preview only"}
               </button>
             </div>

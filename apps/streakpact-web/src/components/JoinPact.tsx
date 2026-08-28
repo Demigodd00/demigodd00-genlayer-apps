@@ -13,6 +13,7 @@ import {
   type WalletSession,
 } from "@/lib/contract";
 import TxNotice from "./TxNotice";
+import { transactionPending } from "@/lib/ui-state";
 
 export default function JoinPact({
   session,
@@ -26,6 +27,7 @@ export default function JoinPact({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [progress, setProgress] = useState<TxProgress | null>(null);
+  const busy = transactionPending(progress);
 
   useEffect(() => {
     const fromLink = new URLSearchParams(window.location.search).get("pact");
@@ -33,6 +35,7 @@ export default function JoinPact({
   }, []);
 
   async function review() {
+    if (loading || busy) return;
     setError("");
     setPact(null);
     if (!CONTRACT_READY) {
@@ -58,6 +61,8 @@ export default function JoinPact({
   }
 
   async function join() {
+    if (busy) return;
+    setError("");
     if (!session || !pact) {
       setError("Connect your wallet before joining.");
       return;
@@ -78,7 +83,7 @@ export default function JoinPact({
         <p>Match the test stake. The rules are fixed.</p>
       </div>
       <div className="form-card join-card">
-        <label><span>Pact ID</span><div className="input-action"><input value={pactId} onChange={(event) => setPactId(event.target.value)} placeholder="sp2-…" /><button className="button button-secondary" onClick={() => void review()}>{loading ? "Loading…" : "Review"}</button></div></label>
+        <label><span>Pact ID</span><div className="input-action"><input value={pactId} disabled={busy || loading} onChange={(event) => { setPactId(event.target.value); setPact(null); }} placeholder="sp2-…" /><button className="button button-secondary" disabled={busy || loading} onClick={() => void review()}>{loading ? "Loading…" : "Review"}</button></div></label>
         {pact ? (
           <div className="invite-review">
             <div className="detail-chips"><span className="mode-chip mode-challenge">Challenge</span><span className="status-chip status-open">Open</span></div>
@@ -91,7 +96,7 @@ export default function JoinPact({
               <div><dt>Allowed misses</dt><dd>{pact.allowed_misses}</dd></div>
               <div className="review-wide"><dt>Starts</dt><dd>{new Date(Number(pact.start_unix) * 1000).toLocaleString()}</dd></div>
             </dl>
-            <button className="button button-primary button-wide" onClick={() => void join()}>Match stake &amp; join</button>
+            <button className="button button-primary button-wide" disabled={busy} onClick={() => void join()}>Match stake &amp; join</button>
           </div>
         ) : null}
         {error ? <p className="form-error" role="alert">{error}</p> : null}

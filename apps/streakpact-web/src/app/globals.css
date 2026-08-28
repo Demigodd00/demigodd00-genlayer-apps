@@ -33,6 +33,11 @@ body {
 }
 
 button, input, textarea, select { font: inherit; }
+.action-controls { border: 0; padding: 0; margin: 0; min-width: 0; }
+.pact-lookup { display: flex; gap: 8px; align-items: flex-end; padding: 16px; text-align: left; }
+.pact-lookup label { flex: 1; min-width: 0; }
+.pact-lookup input { width: 100%; }
+.pact-lookup .button { flex-shrink: 0; }
 button, a { -webkit-tap-highlight-color: transparent; }
 button { color: inherit; }
 a { color: inherit; text-decoration: none; }

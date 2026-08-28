@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   CONTRACT_READY,
   appealPeriod,
@@ -27,6 +27,7 @@ import {
 } from "@/lib/contract";
 import EvidenceFilePicker from "./EvidenceFilePicker";
 import TxNotice from "./TxNotice";
+import { formatCountdown, pactShareUrl, pactTiming, transactionPending } from "@/lib/ui-state";
 
 const demoPact: PactView = {
   id: "sp2-preview",
@@ -69,15 +70,6 @@ function statusLabel(status: string): string {
   return status.replaceAll("_", " ").toLowerCase().replace(/^./, (letter) => letter.toUpperCase());
 }
 
-function countdown(unix: string): string {
-  const delta = Number(unix) * 1000 - Date.now();
-  if (delta <= 0) return "Now";
-  const hours = Math.floor(delta / 3_600_000);
-  const minutes = Math.floor((delta % 3_600_000) / 60_000);
-  if (hours >= 24) return `${Math.floor(hours / 24)}d ${hours % 24}h`;
-  return `${hours}h ${minutes}m`;
-}
-
 export default function Dashboard({
   session,
   refreshToken,
@@ -90,8 +82,12 @@ export default function Dashboard({
   const [checkins, setCheckins] = useState<CheckinView[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [lookupId, setLookupId] = useState("");
+  const selectedId = useRef("");
+  const requestVersion = useRef(0);
 
   const load = useCallback(async () => {
+    const version = ++requestVersion.current;
     setLoading(true);
     setError("");
     if (!CONTRACT_READY) {
@@ -101,83 +97,107 @@ export default function Dashboard({
       setLoading(false);
       return;
     }
-    if (!session) {
-      setItems([]);
-      setSelected(null);
-      setCheckins([]);
-      setLoading(false);
-      return;
-    }
     try {
-      const nextItems = await listUserPacts(session.address);
+      const nextItems = session ? await listUserPacts(session.address) : [];
+      if (version !== requestVersion.current) return;
       setItems(nextItems);
-      if (nextItems.length > 0) {
-        const details = await getPact(nextItems[0].id);
+      const params = new URLSearchParams(window.location.search);
+      const sharedId = params.get("view") === "dashboard" ? params.get("pact") : null;
+      const nextId = selectedId.current || sharedId || nextItems[0]?.id;
+      if (nextId) {
+        if (!/^sp2-\d+$/.test(nextId)) throw new Error("Enter a pact ID such as sp2-5.");
+        const details = await getPact(nextId);
+        const verdicts = await listCheckins(nextId);
+        if (version !== requestVersion.current) return;
+        selectedId.current = nextId;
+        setLookupId(nextId);
         setSelected(details);
-        setCheckins(await listCheckins(details.id));
+        setCheckins(verdicts);
       } else {
         setSelected(null);
         setCheckins([]);
       }
     } catch (loadError) {
-      setError(friendlyError(loadError));
+      if (version === requestVersion.current) setError(friendlyError(loadError));
     } finally {
-      setLoading(false);
+      if (version === requestVersion.current) setLoading(false);
     }
   }, [session]);
 
   useEffect(() => {
     void load();
+    return () => { requestVersion.current += 1; };
   }, [load, refreshToken]);
 
   async function selectPact(pactId: string) {
     if (!CONTRACT_READY) return;
+    pactId = pactId.trim();
+    if (!/^sp2-\d+$/.test(pactId)) {
+      setError("Enter a pact ID such as sp2-5.");
+      return;
+    }
+    const version = ++requestVersion.current;
     setLoading(true);
     setError("");
     try {
       const details = await getPact(pactId);
+      const verdicts = await listCheckins(pactId);
+      if (version !== requestVersion.current) return;
+      selectedId.current = pactId;
+      setLookupId(pactId);
       setSelected(details);
-      setCheckins(await listCheckins(pactId));
+      setCheckins(verdicts);
+      window.history.replaceState(null, "", pactShareUrl(window.location.origin, pactId));
     } catch (selectError) {
-      setError(friendlyError(selectError));
+      if (version === requestVersion.current) setError(friendlyError(selectError));
     } finally {
-      setLoading(false);
+      if (version === requestVersion.current) setLoading(false);
     }
   }
 
-  if (loading && items.length === 0) {
+  const lookup = CONTRACT_READY ? (
+    <form className="pact-lookup" onSubmit={(event) => { event.preventDefault(); void selectPact(lookupId); }}>
+      <label><span>Open a pact</span><input value={lookupId} onChange={(event) => setLookupId(event.target.value)} placeholder="sp2-…" aria-label="Pact ID to open" /></label>
+      <button className="button button-secondary" disabled={loading || !lookupId.trim()}>Open</button>
+    </form>
+  ) : null;
+
+  if (loading && items.length === 0 && !selected) {
     return <div className="loading-panel" role="status"><span />Loading your pacts…</div>;
   }
 
-  if (error && items.length === 0) {
+  if (error && items.length === 0 && !selected) {
     return (
       <div className="empty-panel error-panel">
         <p className="eyebrow">Couldn’t load your pacts</p>
         <h2>Try loading your pacts again.</h2>
         <p>{error}</p>
         <button className="button button-secondary" onClick={() => void load()}>Try again</button>
+        {lookup}
       </div>
     );
   }
 
-  if (!session && CONTRACT_READY) {
+  if (!session && CONTRACT_READY && !selected) {
     return (
       <div className="empty-panel">
         <span className="empty-orbit" aria-hidden="true" />
         <p className="eyebrow">Your dashboard</p>
         <h2>Connect your wallet to see your pacts.</h2>
         <p>Your keys stay in your wallet.</p>
+        {lookup}
       </div>
     );
   }
 
-  if (items.length === 0) {
+  if (items.length === 0 && !selected) {
     return (
       <div className="empty-panel">
         <span className="empty-orbit" aria-hidden="true" />
         <p className="eyebrow">No pacts yet</p>
         <h2>Start your first pact.</h2>
         <p>Go solo or challenge a friend.</p>
+        {lookup}
       </div>
     );
   }
@@ -186,9 +206,12 @@ export default function Dashboard({
     <section className="dashboard-grid">
       <aside className="pact-list" aria-label="Your pacts">
         <div className="list-heading">
-          <div><p className="eyebrow">My pacts</p><h2>{items.length} pact{items.length === 1 ? "" : "s"}</h2></div>
-          <button className="icon-button" aria-label="Refresh pacts" onClick={() => void load()}>↻</button>
+          <div><p className="eyebrow">{items.length ? "Recent pacts" : "Shared pact"}</p><h2>{items.length ? `${items.length} pact${items.length === 1 ? "" : "s"}` : selected?.id}</h2></div>
+          <button className="icon-button" aria-label="Refresh pacts" disabled={loading} onClick={() => void load()}>↻</button>
         </div>
+        {lookup}
+        {items.length === 25 ? <p className="account-note">Latest 25. Open an older pact by ID.</p> : null}
+        {error ? <p className="form-error" role="alert">{error}</p> : null}
         {!CONTRACT_READY ? <div className="preview-ribbon">Product preview</div> : null}
         {items.map((item) => {
           const done = Number(item.kept_count) + Number(item.miss_count);
@@ -207,15 +230,15 @@ export default function Dashboard({
         })}
       </aside>
       {selected ? (
-        <PactDetail session={session} pact={selected} checkins={checkins} onRefresh={load} />
+        <PactDetail key={`${session?.address ?? "preview"}:${selected.id}`} session={session} pact={selected} checkins={checkins} onRefresh={load} />
       ) : null}
     </section>
   );
 }
 
-function PactDetail({
+export function PactDetail({
   session,
-  pact,
+  pact: storedPact,
   checkins,
   onRefresh,
 }: {
@@ -233,6 +256,14 @@ function PactDetail({
   const [appealDigest, setAppealDigest] = useState("");
   const [progress, setProgress] = useState<TxProgress | null>(null);
   const [error, setError] = useState("");
+  const [now, setNow] = useState(() => Math.floor(Date.now() / 1000));
+  useEffect(() => {
+    const timer = window.setInterval(() => setNow(Math.floor(Date.now() / 1000)), 1000);
+    return () => window.clearInterval(timer);
+  }, []);
+  // Update time-based actions locally without polling StudioNet every second.
+  const pact = { ...storedPact, ...pactTiming(storedPact, now) };
+  const busy = transactionPending(progress);
 
   const account = session?.address.toLowerCase() ?? "";
   const maker = pact.maker.toLowerCase();
@@ -240,7 +271,6 @@ function PactDetail({
   const isMaker = account !== "" && account === maker;
   const isTaker = account !== "" && account === taker;
   const isPreview = !CONTRACT_READY;
-  const now = Math.floor(Date.now() / 1000);
   const canSync = pact.status === "LIVE" && now >= Number(pact.next_window_close) && Number(pact.next_period) < Number(pact.periods_total);
   const payoutRecipient = pact.status === "WON"
     ? maker
@@ -249,11 +279,12 @@ function PactDetail({
       : taker;
 
   const appealable = useMemo(
-    () => checkins.filter((item) => (isMaker && item.verdict === "MISSED") || (isTaker && item.verdict === "KEPT")),
+    () => checkins.filter((item) => !item.appealed && ((isMaker && item.verdict === "MISSED") || (isTaker && item.verdict === "KEPT"))),
     [checkins, isMaker, isTaker],
   );
 
   async function run(action: () => Promise<unknown>) {
+    if (busy) return;
     setError("");
     if (!session || isPreview) {
       setError(isPreview ? "Transactions are disabled in preview mode." : "Connect your wallet to continue.");
@@ -268,9 +299,13 @@ function PactDetail({
   }
 
   async function copyInvite() {
-    const url = `${window.location.origin}/?pact=${encodeURIComponent(pact.id)}&view=join`;
-    await navigator.clipboard.writeText(url);
-    setProgress({ state: "confirmed", label: "Invite link copied" });
+    const url = pactShareUrl(window.location.origin, pact.id, pact.status === "OPEN");
+    try {
+      await navigator.clipboard.writeText(url);
+      setProgress({ state: "confirmed", label: "Pact link copied" });
+    } catch {
+      setError(`Copy this pact link: ${url}`);
+    }
   }
 
   function evidenceValidation(url: string, evidenceDigest: string): string {
@@ -333,14 +368,14 @@ function PactDetail({
           <h2>{pact.title}</h2>
           <p>{pact.success_criteria}</p>
         </div>
-        {pact.status === "OPEN" ? <button className="button button-secondary" onClick={() => void copyInvite()}>Copy invite</button> : null}
+        <button className="button button-secondary" disabled={busy} onClick={() => void copyInvite()}>{pact.status === "OPEN" ? "Copy invite" : "Copy pact link"}</button>
       </header>
 
       <div className="metric-row">
         <div><span>Progress</span><strong>{pact.kept_count} kept</strong><small>{completion}% of total</small></div>
         <div><span>Misses used</span><strong>{pact.miss_count} / {pact.allowed_misses}</strong><small>allowed</small></div>
-        <div><span>Test stake</span><strong>{formatGen(pact.pot_atto)} GEN</strong><small>{pact.mode === "SELF" ? "self-stake" : "matched pot"}</small></div>
-        <div><span>Next window</span><strong>{pact.status === "LIVE" ? countdown(pact.next_window_close) : "—"}</strong><small>{pact.status === "LIVE" ? "remaining" : "not active"}</small></div>
+        <div><span>Test stake</span><strong>{formatGen(pact.status === "OPEN" ? pact.stake_atto : pact.pot_atto)} GEN</strong><small>{pact.mode === "SELF" ? "self-stake" : pact.status === "OPEN" ? "awaiting match" : "matched pot"}</small></div>
+        <div><span>Next window</span><strong>{pact.status === "LIVE" ? formatCountdown(now < Number(pact.next_window_open) ? pact.next_window_open : pact.next_window_close, now) : "—"}</strong><small>{pact.status === "LIVE" ? now < Number(pact.next_window_open) ? "until open" : "remaining" : "not active"}</small></div>
       </div>
 
       <section className="timeline-section">
@@ -371,7 +406,10 @@ function PactDetail({
 
       <section className="action-section">
         <div className="section-heading"><div><p className="eyebrow">Next step</p><h3>{actionHeading(pact, isMaker)}</h3></div></div>
-
+        <fieldset className="action-controls" disabled={busy}>
+        {pact.status === "LIVE" && pact.mode === "SELF" && isMaker && now < Number(pact.start_unix) && Number(pact.next_period) === 0 ? (
+          <button className="button button-danger" onClick={() => void run(() => cancelPact(session!, pact.id, setProgress))}>Cancel and refund</button>
+        ) : null}
         {pact.status === "OPEN" && isMaker ? (
           <div className="inline-actions">
             <button className="button button-primary" onClick={() => void copyInvite()}>Copy challenger invite</button>
@@ -389,7 +427,10 @@ function PactDetail({
           <div className="evidence-form">
             <EvidenceFilePicker
               idPrefix={`checkin-${pact.id}`}
-              onDigest={setDigest}
+              onDigest={(nextDigest) => {
+                setDigest(nextDigest);
+                setEvidenceUrl("");
+              }}
               onPublished={(published) => {
                 setEvidenceUrl(published.url);
                 setDigest(published.digest);
@@ -419,7 +460,10 @@ function PactDetail({
                 <label><span>Reason for appeal</span><textarea value={appealStatement} onChange={(event) => setAppealStatement(event.target.value)} rows={3} /></label>
                 <EvidenceFilePicker
                   idPrefix={`appeal-${pact.id}`}
-                  onDigest={setAppealDigest}
+                  onDigest={(nextDigest) => {
+                    setAppealDigest(nextDigest);
+                    setAppealUrl("");
+                  }}
                   onPublished={(published) => {
                     setAppealUrl(published.url);
                     setAppealDigest(published.digest);
@@ -442,6 +486,7 @@ function PactDetail({
         {(pact.status === "WON" || pact.status === "LOST") && account === payoutRecipient ? (
           <button className="button button-primary" onClick={() => void run(() => claimPayout(session!, pact.id, setProgress))}>Claim {formatGen(pact.pot_atto)} test GEN</button>
         ) : null}
+        </fieldset>
 
         {!isPreview && session ? <p className="account-note">Acting as {shortenAddress(session.address)}</p> : null}
         {isPreview ? <p className="preview-note">Preview only. Transactions are disabled.</p> : null}

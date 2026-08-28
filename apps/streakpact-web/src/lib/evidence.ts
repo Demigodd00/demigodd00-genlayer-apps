@@ -21,13 +21,21 @@ export async function publishEvidence(file: File): Promise<PublishedEvidence> {
 
   let payload: EvidenceApiResponse = {};
   try {
-    payload = (await response.json()) as EvidenceApiResponse;
+    const parsed: unknown = await response.json();
+    if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) {
+      payload = parsed as EvidenceApiResponse;
+    }
   } catch {
     // Keep the user-facing error stable when an upstream proxy returns HTML.
   }
 
   if (!response.ok) {
-    throw new Error(payload.error || "Evidence publishing is temporarily unavailable.");
+    if (response.status === 429) {
+      throw new Error("Too many uploads. Wait a minute and try again.");
+    }
+    throw new Error(typeof payload.error === "string" && payload.error
+      ? payload.error
+      : "Evidence publishing is temporarily unavailable.");
   }
 
   if (

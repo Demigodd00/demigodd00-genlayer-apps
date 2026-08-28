@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { friendlyError, hashEvidenceFile } from "@/lib/contract";
 import { publishEvidence, type PublishedEvidence } from "@/lib/evidence";
 
@@ -17,10 +17,13 @@ export default function EvidenceFilePicker({
   const [localDigest, setLocalDigest] = useState("");
   const [state, setState] = useState<"idle" | "hashing" | "ready" | "publishing" | "published">("idle");
   const [error, setError] = useState("");
+  const selection = useRef(0);
 
   async function chooseFile(nextFile: File | undefined) {
+    const selectionId = ++selection.current;
     setError("");
     setLocalDigest("");
+    onDigest("");
     setFile(nextFile ?? null);
     if (!nextFile) {
       setState("idle");
@@ -30,10 +33,12 @@ export default function EvidenceFilePicker({
     setState("hashing");
     try {
       const digest = await hashEvidenceFile(nextFile);
+      if (selection.current !== selectionId) return;
       setLocalDigest(digest);
       onDigest(digest);
       setState("ready");
     } catch (reason) {
+      if (selection.current !== selectionId) return;
       setFile(null);
       setState("idle");
       setError(friendlyError(reason));
@@ -42,10 +47,12 @@ export default function EvidenceFilePicker({
 
   async function publish() {
     if (!file || !localDigest) return;
+    const selectionId = selection.current;
     setError("");
     setState("publishing");
     try {
       const result = await publishEvidence(file);
+      if (selection.current !== selectionId) return;
       if (result.digest.toLowerCase() !== localDigest.toLowerCase()) {
         throw new Error("File verification failed. Nothing was submitted onchain.");
       }
@@ -53,6 +60,7 @@ export default function EvidenceFilePicker({
       onPublished(result);
       setState("published");
     } catch (reason) {
+      if (selection.current !== selectionId) return;
       setState("ready");
       setError(friendlyError(reason));
     }
@@ -67,6 +75,7 @@ export default function EvidenceFilePicker({
         <input
           id={inputId}
           type="file"
+          disabled={state === "hashing" || state === "publishing"}
           accept=".json,.txt,application/json,text/plain"
           onChange={(event) => void chooseFile(event.target.files?.[0])}
         />

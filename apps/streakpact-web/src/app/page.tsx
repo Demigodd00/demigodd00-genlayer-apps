@@ -7,6 +7,7 @@ import EvidenceFilePicker from "@/components/EvidenceFilePicker";
 import JoinPact from "@/components/JoinPact";
 import StudioNetBanner from "@/components/StudioNetBanner";
 import WalletButton from "@/components/WalletButton";
+import { initialWorkspace, watchWalletSession } from "@/lib/ui-state";
 import {
   CONTRACT_READY,
   connectWallet,
@@ -24,21 +25,14 @@ export default function Home() {
   const [refreshToken, setRefreshToken] = useState(0);
 
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    if (params.get("view") === "join" || params.get("pact")) setView("join");
+    setView(initialWorkspace(window.location.search));
   }, []);
 
   useEffect(() => {
-    const provider = window.ethereum;
-    if (!provider?.on) return;
-    const handleAccounts = (...args: unknown[]) => {
-      const accounts = args[0] as string[] | undefined;
-      if (!accounts?.[0] || accounts[0].toLowerCase() !== session?.address.toLowerCase()) {
-        setSession(null);
-      }
-    };
-    provider.on("accountsChanged", handleAccounts);
-    return () => provider.removeListener?.("accountsChanged", handleAccounts);
+    return watchWalletSession(window.ethereum, session?.address, () => {
+      setSession(null);
+      setWalletError("Wallet changed or disconnected. Reconnect to continue.");
+    });
   }, [session]);
 
   async function connect() {
@@ -46,6 +40,7 @@ export default function Home() {
     setWalletError("");
     try {
       setSession(await connectWallet());
+      setWalletError("");
     } catch (error) {
       setWalletError(friendlyError(error));
     } finally {
@@ -113,7 +108,7 @@ export default function Home() {
             <button role="tab" aria-selected={view === "how"} className={view === "how" ? "active" : ""} onClick={() => setView("how")}>How it works</button>
           </div>
 
-          {view === "dashboard" ? <Dashboard session={session} refreshToken={refreshToken} /> : null}
+          {view === "dashboard" ? <Dashboard key={session?.address ?? "disconnected"} session={session} refreshToken={refreshToken} /> : null}
           {view === "create" ? <CreatePact session={session} onCreated={() => completedAction("dashboard")} /> : null}
           {view === "join" ? <JoinPact session={session} onJoined={() => completedAction("dashboard")} /> : null}
           {view === "how" ? <HowItWorks /> : null}
@@ -148,7 +143,10 @@ function HowItWorks() {
         <div>
           <EvidenceFilePicker
             idPrefix="protocol-lab"
-            onDigest={setPreparedDigest}
+            onDigest={(nextDigest) => {
+              setPreparedDigest(nextDigest);
+              setPreparedUrl("");
+            }}
             onPublished={(published) => {
               setPreparedDigest(published.digest);
               setPreparedUrl(published.url);
