@@ -108,6 +108,7 @@ def main() -> int:
         else:
             results.extend(
                 [
+                    run_check("web API safeguards", [pnpm, "test"], WEB_PATH),
                     run_check("web typecheck", [pnpm, "typecheck"], WEB_PATH),
                     run_check("web production build", [pnpm, "build"], WEB_PATH),
                     run_check(

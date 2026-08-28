@@ -1,0 +1,3 @@
+allowBuilds:
+  # Use the locked platform binary; do not run dependency installation hooks.
+  esbuild: false

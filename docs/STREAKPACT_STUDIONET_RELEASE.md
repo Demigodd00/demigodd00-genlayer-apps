@@ -2,6 +2,8 @@
 
 StreakPact is a zero-value StudioNet application. “Deployable” means the source and UI pass their repeatable gates. “Deployed” additionally means the owner has supplied a recoverable signer, created a permanent StudioNet contract, configured the hosted app, and completed the two-wallet acceptance run against that exact address.
 
+For the website setup, use the [Vercel deployment checklist](STREAKPACT_VERCEL_DEPLOYMENT.md).
+
 ## 1. Pre-deployment gate
 
 Use Python 3.12 and Node.js 22.
@@ -14,7 +16,7 @@ cd ../..
 python scripts/check_streakpact_release.py
 ```
 
-This runs GenVM lint/validation, all StreakPact V2 direct tests, deployment-script compilation, web type checking, a production build, and the production dependency audit. A missing permanent deployment is reported as pending rather than failing the pre-deployment gate.
+This runs GenVM lint/validation, all StreakPact V2 direct tests, deployment-script compilation, web API safeguard tests, web type checking, a production build, and the production dependency audit. A missing permanent deployment is reported as pending rather than failing the pre-deployment gate.
 
 ## 2. Evidence publisher
 

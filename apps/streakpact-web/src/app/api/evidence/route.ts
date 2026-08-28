@@ -1,5 +1,6 @@
 import { createHash } from "node:crypto";
 import { NextResponse } from "next/server";
+import { configuredAppOrigin } from "@/lib/server-config";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -42,15 +43,13 @@ function json(body: Record<string, unknown>, status: number, extraHeaders: Heade
   });
 }
 
-function requestOriginAllowed(request: Request): boolean {
-  const expectedOrigin = process.env.STREAKPACT_APP_ORIGIN?.trim().replace(/\/$/, "");
+function requestOriginAllowed(request: Request, expectedOrigin: string | null): boolean {
   const origin = request.headers.get("origin")?.replace(/\/$/, "");
   if (expectedOrigin) return origin === expectedOrigin;
   if (!origin) return true;
 
   try {
-    const forwardedHost = request.headers.get("x-forwarded-host")?.split(",")[0]?.trim();
-    const host = forwardedHost || request.headers.get("host");
+    const host = request.headers.get("host");
     return Boolean(host) && new URL(origin).host === host;
   } catch {
     return false;
@@ -58,12 +57,39 @@ function requestOriginAllowed(request: Request): boolean {
 }
 
 function requesterKey(request: Request): string {
-  return (
-    request.headers.get("cf-connecting-ip")
-    || request.headers.get("x-real-ip")
-    || request.headers.get("x-forwarded-for")?.split(",")[0]?.trim()
-    || "local"
-  );
+  // Vercel overwrites this header. Arbitrary CF/X-Real-IP headers are spoofable.
+  // Other hosts must configure a trusted proxy before using this as a limiter.
+  if (process.env.VERCEL === "1") {
+    return request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
+  }
+  return "local";
+}
+
+class EvidenceRequestTooLarge extends Error {}
+
+async function readBoundedForm(request: Request): Promise<FormData> {
+  if (!request.body) throw new Error("Missing request body");
+  const reader = request.body.getReader();
+  const chunks: Uint8Array[] = [];
+  let size = 0;
+  try {
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      size += value.byteLength;
+      if (size > MAX_REQUEST_BYTES) {
+        await reader.cancel();
+        throw new EvidenceRequestTooLarge();
+      }
+      chunks.push(value);
+    }
+  } finally {
+    reader.releaseLock();
+  }
+  // Bound the actual bytes before multipart parsing, even without Content-Length.
+  return new Response(Buffer.concat(chunks), {
+    headers: { "Content-Type": request.headers.get("content-type") || "" },
+  }).formData();
 }
 
 function consumeRateLimit(key: string): number | null {
@@ -95,7 +121,11 @@ function safeMimeType(file: File): string | null {
 }
 
 export async function POST(request: Request) {
-  if (!requestOriginAllowed(request)) {
+  const expectedOrigin = configuredAppOrigin();
+  if (!expectedOrigin && (process.env.NODE_ENV === "production" || process.env.STREAKPACT_APP_ORIGIN?.trim())) {
+    return json({ error: "Evidence publishing is unavailable until the owner configures the exact HTTPS app origin." }, 503);
+  }
+  if (!requestOriginAllowed(request, expectedOrigin)) {
     return json({ error: "Evidence uploads are accepted only from this StreakPact app." }, 403);
   }
 
@@ -123,8 +153,11 @@ export async function POST(request: Request) {
 
   let form: FormData;
   try {
-    form = await request.formData();
-  } catch {
+    form = await readBoundedForm(request);
+  } catch (error) {
+    if (error instanceof EvidenceRequestTooLarge) {
+      return json({ error: "Evidence must be 100 KB or smaller." }, 413);
+    }
     return json({ error: "The evidence upload could not be read." }, 400);
   }
 

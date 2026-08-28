@@ -44,6 +44,9 @@ jobs:
       - name: Typecheck dApp
         working-directory: apps/streakpact-web
         run: pnpm typecheck
+      - name: Test evidence and readiness safeguards
+        working-directory: apps/streakpact-web
+        run: pnpm test
       - name: Build dApp
         working-directory: apps/streakpact-web
         run: pnpm build

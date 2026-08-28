@@ -68,7 +68,8 @@ export interface TxProgress {
 
 export const CONTRACT_ADDRESS = process.env.NEXT_PUBLIC_STREAKPACT_V2_ADDRESS ?? "";
 export const NETWORK_NAME = process.env.NEXT_PUBLIC_NETWORK_NAME ?? "StudioNet";
-export const CONTRACT_READY = /^0x[0-9a-fA-F]{40}$/.test(CONTRACT_ADDRESS);
+export const CONTRACT_READY = /^0x[0-9a-fA-F]{40}$/.test(CONTRACT_ADDRESS)
+  && !/^0x0{40}$/i.test(CONTRACT_ADDRESS);
 
 const EVIDENCE_PREFIXES = [
   "https://ipfs.io/ipfs/",

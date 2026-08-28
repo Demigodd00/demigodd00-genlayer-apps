@@ -5,6 +5,9 @@ artifacts/
 .opencode/
 .env
 .env.local
+.env.*
+!.env.example
+.vercel/
 
 node_modules/
 .next/
