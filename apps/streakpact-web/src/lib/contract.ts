@@ -2,14 +2,11 @@ import { chains, createClient } from "genlayer-js";
 import { TransactionStatus } from "genlayer-js/types";
 import { oneTransactionAtATime, readAllPages, readRecentPage } from "./ui-state";
 import { assertSuccessfulExecution } from "./receipt";
+import { connectStudioWallet, type EthereumProvider } from "./wallet";
+
+export type { EthereumProvider } from "./wallet";
 
 export type Address = `0x${string}`;
-
-export interface EthereumProvider {
-  request(args: { method: string; params?: unknown[] | Record<string, unknown> }): Promise<unknown>;
-  on?(event: string, listener: (...args: unknown[]) => void): void;
-  removeListener?(event: string, listener: (...args: unknown[]) => void): void;
-}
 
 declare global {
   interface Window {
@@ -157,18 +154,12 @@ export function friendlyError(error: unknown): string {
 
 export async function connectWallet(): Promise<WalletSession> {
   const provider = window.ethereum;
-  if (!provider) {
-    throw new Error("No compatible browser wallet was found. Install or open a GenLayer-capable wallet.");
-  }
-  const accounts = (await provider.request({ method: "eth_requestAccounts" })) as string[];
-  const address = accounts[0];
-  if (!address || !isAddress(address)) throw new Error("The wallet returned an invalid account.");
+  const address = await connectStudioWallet(provider);
   const client = createClient({
     chain: chains.studionet,
     account: address,
     provider: provider as never,
   });
-  await client.connect("studionet");
   return { address, client };
 }
 
