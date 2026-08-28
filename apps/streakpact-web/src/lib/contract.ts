@@ -1,6 +1,7 @@
 import { chains, createClient } from "genlayer-js";
-import { ExecutionResult, TransactionStatus } from "genlayer-js/types";
+import { TransactionStatus } from "genlayer-js/types";
 import { oneTransactionAtATime, readAllPages, readRecentPage } from "./ui-state";
+import { assertSuccessfulExecution } from "./receipt";
 
 export type Address = `0x${string}`;
 
@@ -86,10 +87,6 @@ function contractAddress(): Address {
     throw new Error("StreakPact V2 has not been configured for this environment.");
   }
   return CONTRACT_ADDRESS as Address;
-}
-
-function asRecord(value: unknown): Record<string, unknown> {
-  return value as Record<string, unknown>;
 }
 
 export function isAddress(value: string): value is Address {
@@ -186,11 +183,7 @@ async function waitForSuccess(
     status: TransactionStatus.FINALIZED,
     retries: 120,
   });
-  if (receipt.txExecutionResultName !== ExecutionResult.FINISHED_WITH_RETURN) {
-    const record = asRecord(receipt);
-    const reason = String(record.error ?? record.txExecutionResultName ?? "contract execution failed");
-    throw new Error(reason);
-  }
+  assertSuccessfulExecution(receipt);
   onProgress({ state: "confirmed", label: "Confirmed by GenLayer validators", hash: txHash });
 }
 
