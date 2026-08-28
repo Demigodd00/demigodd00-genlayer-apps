@@ -1,0 +1,130 @@
+{
+  "schema_version": 1,
+  "product": "StreakPact by demigodd00",
+  "verified_on": "2026-08-28",
+  "status": "publicly_deployed_manual_wallet_and_device_signoff_pending",
+  "public_url": "https://streakpact-zeta.vercel.app",
+  "repository": {
+    "url": "https://github.com/Demigodd00/streakpact",
+    "private": true,
+    "production_branch": "main"
+  },
+  "hosting": {
+    "provider": "Vercel",
+    "team_slug": "demi17",
+    "project_name": "streakpact",
+    "plan": "Hobby",
+    "root_directory": "apps/streakpact-web",
+    "framework": "Next.js",
+    "node_version": "22.x",
+    "package_manager": "pnpm@11.19.0",
+    "verified_application_commit": "6e1e2857790107dc57cb56015c9440f325661609",
+    "verified_application_deployment": {
+      "id": "CkkkCDDSK8j4cLuTPPrWBEkocKvg",
+      "url": "https://streakpact-gpgk7loai-demi17.vercel.app",
+      "dashboard_url": "https://vercel.com/demi17/streakpact/CkkkCDDSK8j4cLuTPPrWBEkocKvg",
+      "state": "READY",
+      "build_duration_seconds": 35,
+      "verified_at": "2026-08-28T19:48:55Z"
+    },
+    "provenance_note": "Subsequent documentation and acceptance-record commits may trigger newer deployments with the same application code."
+  },
+  "contract": {
+    "network": "studionet",
+    "chain_id": 61999,
+    "address": "0xae785A6DF3a2AA204A5E64FC02246d17b3fc38a6",
+    "source_sha256": "b24ef1c96b6db375a0a5b44088e40eba54e1ff865c557eedf6ce9e8d245f213b",
+    "fee_bps": 0,
+    "period_secs": 60,
+    "appeal_window_secs": 300,
+    "monetary_value": false,
+    "state_persistence": "temporary_development_network",
+    "record": "streak_pact_v2_studionet.json"
+  },
+  "production_environment": [
+    {
+      "name": "NEXT_PUBLIC_NETWORK_NAME",
+      "scope": "Production",
+      "value": "StudioNet"
+    },
+    {
+      "name": "NEXT_PUBLIC_STREAKPACT_V2_ADDRESS",
+      "scope": "Production",
+      "value": "0xae785A6DF3a2AA204A5E64FC02246d17b3fc38a6"
+    },
+    {
+      "name": "STREAKPACT_APP_ORIGIN",
+      "scope": "Production",
+      "value": "https://streakpact-zeta.vercel.app"
+    },
+    {
+      "name": "PINATA_JWT",
+      "scope": "Production",
+      "sensitive": true,
+      "server_only": true,
+      "value_intentionally_omitted": true
+    }
+  ],
+  "wallet_private_key_uploaded_to_host": false,
+  "firewall": {
+    "rule_name": "StreakPact evidence uploads",
+    "rule_id": "rule_streak_pact_evidence_uploads_YSex8O",
+    "enabled": true,
+    "published": true,
+    "match": { "path_equals": "/api/evidence", "method_equals": "POST" },
+    "rate_limit": { "algorithm": "fixed_window", "requests": 5, "window_seconds": 60, "key": "client_ip" },
+    "action": "429",
+    "observed_excess_status": 429,
+    "observed_header": { "x-vercel-mitigated": "deny" },
+    "record": "streak_pact_v2_hosted_checks.json"
+  },
+  "validation": {
+    "genvm_validation": "passed",
+    "direct_contract_tests_passed": 13,
+    "web_tests_passed": 63,
+    "typescript": "passed",
+    "production_build": "passed",
+    "production_dependency_audit": "no_known_vulnerabilities_reported",
+    "github_ci": {
+      "conclusion": "success",
+      "commit": "6e1e2857790107dc57cb56015c9440f325661609",
+      "url": "https://github.com/Demigodd00/streakpact/actions/runs/33205326108"
+    },
+    "exact_release_acceptance": {
+      "status": "passed",
+      "contract_transactions_checked": 42,
+      "successful_executions": 29,
+      "expected_rejections": 13,
+      "state_assertions": 28,
+      "credited_native_transfers": 6,
+      "completed_at": "2026-08-28T20:44:27.558869+01:00",
+      "record": "streak_pact_v2_acceptance.json"
+    },
+    "hosted_health": "configured",
+    "hosted_public_evidence_uploads": "passed",
+    "public_evidence_download_digests": "passed",
+    "foreign_and_missing_origin_rejection": "passed",
+    "edge_rate_limit": "passed",
+    "real_javascript_sdk_receipt_classification": "passed",
+    "saved_secret_scan": {
+      "browser_assets_checked": 17,
+      "release_files_checked": 12,
+      "matches": 0,
+      "local_environment_files_git_ignored": true
+    },
+    "browser": {
+      "public_home_invite_shared_pact_and_status_views": "passed",
+      "checked_viewport_width_px": 624,
+      "horizontal_overflow_observed": false,
+      "deployed_missing_wallet_fallback": "passed",
+      "wallet_provider_regression_tests": "passed_mocked_provider",
+      "real_metamask_connect_sign_reject": "pending_manual",
+      "physical_phone": "pending_manual",
+      "limitation": "The available browser has no installed wallet; a connected desktop Chrome or physical phone was unavailable. SDK signer tests do not prove MetaMask behavior."
+    }
+  },
+  "remaining_manual_checks": [
+    "Connect to the public site using the real MetaMask wallet, reject one request, create a test pact, and confirm its result, refresh recovery and account switching.",
+    "Open an invitation or shared pact in a physical phone wallet browser and verify layout, proof selection and approvals."
+  ]
+}

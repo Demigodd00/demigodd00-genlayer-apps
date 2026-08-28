@@ -4,6 +4,14 @@ The GitHub repository stays private. The production website, browser JavaScript,
 StudioNet contract source and published IPFS evidence are publicly inspectable.
 This is a zero-fee StudioNet demonstration, not a real-money launch.
 
+The current deployment is live at
+[streakpact-zeta.vercel.app](https://streakpact-zeta.vercel.app).
+The project is on Vercel Hobby with the origin lock, sensitive upload secret,
+and published edge rate limit configured. See the
+[verified deployment status](STREAKPACT_DEPLOYMENT_STATUS.md) and
+[machine-readable hosting record](../deployments/streak_pact_v2_vercel.json).
+The instructions below are the reproducible setup, not outstanding setup work.
+
 ## Owner-only prerequisites
 
 - Put a dedicated, recoverable StudioNet signer in the ignored root `.env` as

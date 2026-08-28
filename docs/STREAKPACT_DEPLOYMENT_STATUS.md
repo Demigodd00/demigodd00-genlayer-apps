@@ -1,7 +1,9 @@
 # StreakPact by demigodd00: StudioNet deployment status
 
-Checked on 2026-08-28. The intelligent contract is deployed and verified;
-the public website and full hosted acceptance run are still pending.
+Checked on 2026-08-28. The website is live at
+[streakpact-zeta.vercel.app](https://streakpact-zeta.vercel.app).
+Hosting, evidence publishing, and the exact-release two-wallet contract matrix
+have passed. Real MetaMask/device sign-off remains a separate manual check.
 
 ## Release identity
 
@@ -19,79 +21,108 @@ StudioNet has no monetary value and is a temporary development environment;
 this is the intended release address, not a promise of permanent state retention.
 See the [official network comparison](https://docs.genlayer.com/developers/networks).
 
-## Verified
+## Hosting and evidence: passed
 
-- The saved signer derives the configured treasury address. No private key was
-  printed, committed, or uploaded to a hosting provider.
-- The deployment receipt is `FINALIZED` and the leader execution result is
-  `SUCCESS`, with no GenVM error. Finality alone was not treated as success.
-- Live `get_config` returns the expected version and treasury, zero fees,
-  60-second periods, and a 300-second appeal window.
-- Live `get_stats` returns an empty initial state; no acceptance pacts have yet
-  been created against this release address.
-- The deployed contract schema is available.
-- `gen_getContractCode` returns 32,440 bytes whose SHA-256 matches the release
-  source. StudioNet accepted the address-string parameter form. An EVM
-  `eth_getCode` lookup returned empty and was not used as the code check.
-- The local frontend address matches the deployment record.
-- `python scripts/check_streakpact_release.py --require-deployment` passes:
-  GenVM validation, pinned runner verification, 13 direct contract tests,
-  deployment-script compilation, 20 web API tests, TypeScript checking,
-  production build, dependency audit, and deployment provenance checks.
-- The production dependency audit reported no known vulnerabilities.
-- GitHub reports `Demigodd00/streakpact` as private. Local deployment and server
-  environment files are Git-ignored.
-- A restricted Pinata Files Write credential was created and saved in the
-  ignored frontend server environment. Pinata authentication returned HTTP 200.
-  The existing key remains active; no wallet key was sent to Vercel.
-- Vercel's import form has the StudioNet address and network label, plus the
-  Pinata JWT marked sensitive and scoped to Production only. These are staged
-  form values, not a completed project deployment.
-- The real evidence route published a 167-byte synthetic JSON fixture to public
-  IPFS (HTTP 201). Downloading it returned HTTP 200 with identical bytes and
-  SHA-256. A foreign-origin request was rejected with HTTP 403. This exercised
-  the local route with real Pinata access, not a hosted Vercel deployment.
-  - Verified at: `2026-08-28T17:44:37.347Z`.
-  - CID: `bafkreiblbf2ii2d7bg2vio4bwmxy4pahuemva5kdck4abdn5htofsvfjui`.
-  - SHA-256: `2b097484687f09b5543b81b32f8e3c07a11950754312b8008dbd3cdc5954a9a2`.
-  - [Public synthetic fixture](https://gateway.pinata.cloud/ipfs/bafkreiblbf2ii2d7bg2vio4bwmxy4pahuemva5kdck4abdn5htofsvfjui).
+- Vercel project `demi17/streakpact`, Hobby plan, private GitHub repository
+  `Demigodd00/streakpact`, production branch `main`.
+- Root directory `apps/streakpact-web`; Node.js `22.x`; pnpm `11.19.0`.
+- Final application revision: `6e1e2857790107dc57cb56015c9440f325661609`.
+  Later acceptance-record/documentation commits may create additional deployments.
+- Production environment contains the release address, StudioNet label, exact
+  HTTPS origin, and a sensitive server-only `PINATA_JWT`. No wallet key was
+  uploaded to Vercel. Local environment files remain Git-ignored.
+- The public health endpoint returns HTTP 200 with all configuration gates true.
+- Two 152-byte synthetic JSON proofs were published through the hosted route
+  with HTTP 201, downloaded with HTTP 200, and matched byte-for-byte and by
+  SHA-256. Repeat checks re-download existing files without republishing them.
+- Foreign and missing Origin headers are rejected with HTTP 403.
+- The published Vercel Firewall rule limits `POST /api/evidence` to five requests
+  per IP per 60 seconds. Excess requests returned HTTP 429 with
+  `x-vercel-mitigated: deny`, proving enforcement at Vercel's edge.
+- The browser upload flow handles Vercel's plain-text 429 response clearly.
 
-## Interface cleanup
+See the [hosting record](../deployments/streak_pact_v2_vercel.json) and
+[hosted check receipts](../deployments/streak_pact_v2_hosted_checks.json).
+Origin checks are not authentication, and per-IP limiting does not eliminate
+distributed abuse. Keep an eye on the free hosting and Pinata usage quotas.
 
-The home, create, join, pact dashboard, and read-only status screens use shorter
-copy. Proof fingerprints, manual proof links, transaction hashes, and contract
-configuration are expandable. The illustrative pact is explicitly labeled as
-an example; the static developer checklist is no longer presented as live app
-status. StudioNet/no-value, public-proof privacy, test stake, failure-recipient,
-missed-period, and appeal disclosures remain.
+## Contract acceptance: passed
 
-The expanded web suite passed all 25 API and UI checks. Local browser checks
-covered the home page, create/review form, invitation screen, three-step guide,
-visible upload privacy notice, and live read-only contract metrics. No wallet
-transaction was signed during these UI checks. Hosted and mobile acceptance
-remain separate launch requirements.
+The release code hash, schema, configuration and owner signer were verified.
+The deployed source is 32,440 bytes and matches the recorded SHA-256. The fee is
+zero, periods are 60 seconds, and appeals last 300 seconds.
 
-The final UI production bundle and TypeScript checks pass. The upload credential
-is absent from browser assets and staged changes, and its local file remains
-Git-ignored. The status screen explicitly labels incomplete configuration; it
-does not treat configured credentials as proof of hosted end-to-end acceptance.
+The recorded run used two actual SDK signers against this exact address:
+42 contract transactions, comprising 29 successful executions and 13 expected
+rejections, plus 28 state assertions. All six emitted refunds/payouts were
+independently checked for finality, recipient, amount, parent linkage, and
+`value_credited: true`.
 
-Local web checks used bundled Node.js `24.19.0` and emitted the expected engine
-warning because the project targets Node.js `22.x`. Vercel must use the configured
-Node.js 22 runtime; its production build remains part of hosted acceptance.
+| Pact | Scenario | Final state | Verified test GEN credit |
+| --- | --- | --- | --- |
+| `sp2-1` | Unstarted self-pact cancellation | `VOIDED` | 0.001 to maker |
+| `sp2-2` | Unmatched challenge cancellation | `VOIDED` | 0.001 to maker |
+| `sp2-3` | Matched challenge loss | `SETTLED` | 0.002 to challenger |
+| `sp2-4` | Self-pact loss | `SETTLED` | 0.001 to failure recipient |
+| `sp2-5` | Self-pact win after appeal | `SETTLED` | 0.001 to maker |
+| `sp2-6` | Matched challenge win after appeal | `SETTLED` | 0.002 to maker |
 
-## Still required for the website launch
+The run includes real `KEPT` and `MISSED` evidence evaluations, elapsed-period
+misses, maker and challenger appeals, duplicate/unauthorized appeal rejection,
+wrong-stake/self-join rejection, premature finalization/claim rejection, and
+wrong-recipient/double-claim rejection. One claim exceeded the initial polling
+window; resuming its existing transaction hash verified success without a
+duplicate submission. StudioNet confirmation times are not guaranteed.
 
-1. Finish the Vercel project configuration, using the recorded contract address,
-   `NEXT_PUBLIC_NETWORK_NAME=StudioNet`, the server-only Pinata JWT, and the exact
-   production HTTPS origin. Deploy or redeploy after setting these values.
-2. Publish the Vercel Firewall upload rate limit from the hosting checklist.
-3. Verify the hosted health endpoint, real evidence upload and download digest,
-   wallet connection, mobile layout, and invite links.
-4. Record the two-wallet acceptance matrix against this exact release address,
-   including successful evidence, missed periods, appeals, cancellation,
-   challenge joining, finalization, and claims. Earlier temporary-contract tests
-   do not replace this acceptance run.
+Final observed stats: six created, three self-pacts, three challenges, four
+settled, four kept periods and eight missed periods. The two cancelled pacts
+are not counted as settled.
 
-Follow the [Vercel checklist](STREAKPACT_VERCEL_DEPLOYMENT.md) and
-[StudioNet release runbook](STREAKPACT_STUDIONET_RELEASE.md) for the remaining work.
+See the [complete transaction and transfer journal](../deployments/streak_pact_v2_acceptance.json).
+These are explicitly synthetic reading-log fixtures with no personal data and
+no claim that real-world activity was independently observed. The SDK signer
+matrix is not a MetaMask browser test.
+
+## Build and interface checks: passed
+
+- GenVM lint/validation, pinned runner verification, and 13 direct contract tests.
+- `check_streakpact_release.py --require-deployment --skip-web` passed all
+  deployment provenance and contract gates; web gates were run separately.
+- 63 web tests, TypeScript checking, and the production build passed.
+- Production dependency audit: no known vulnerabilities reported.
+- The saved wallet key and upload JWT had zero matches across 17 browser assets
+  and 12 release files. Neither ignored environment file is included in Git.
+- Real successful and rejected StudioNet receipts were re-read with the web's
+  JavaScript SDK. The UI now uses actual leader execution results when the SDK
+  omits its normalized field; `FINALIZED` alone never means success.
+- Wallet connection uses standard account/network requests, verifies StudioNet,
+  and does not require a MetaMask Snap. Mock-provider tests cover switching,
+  unknown-network setup, rejection, account changes and wrong-network refusal.
+- Shorter UI copy retains the StudioNet/no-value and public-proof warnings.
+  Shared pact links work without a wallet, failure recipients can open their
+  pact, and cancellation, pagination, stale-proof, timing and duplicate-submit
+  controls have regression coverage.
+- Hosted home, invitation, shared-pact and status views were checked at the
+  available 624-pixel browser width without horizontal overflow.
+
+Local checks used Node.js `24.19.0` and emitted the expected engine warning;
+the hosted production runtime is Node.js `22.x`.
+
+## Remaining manual sign-off
+
+1. In the real MetaMask browser, open the public URL, connect to StudioNet,
+   reject one request, then create a test pact and verify its confirmed result.
+   Refresh and switch accounts to check recovery with the actual wallet.
+2. Open an invite/shared pact on a physical phone, preferably in MetaMask's
+   built-in browser, and check layout, proof selection and wallet approvals.
+
+The available browser has no installed wallet; a connected desktop Chrome or
+phone was not available. These checks are **not** marked passed. There is no
+remaining Vercel account, origin, upload-secret, firewall or contract deployment
+setup required. A custom domain is optional; the public Vercel URL already works.
+
+This is a tested StudioNet demo, not a mainnet security certification. The
+private repository does not make delivered JavaScript, contract source or
+published IPFS proofs private. Use only valueless test GEN and non-sensitive
+proofs. See the [Vercel checklist](STREAKPACT_VERCEL_DEPLOYMENT.md) and
+[release runbook](STREAKPACT_STUDIONET_RELEASE.md) for repeatable checks.

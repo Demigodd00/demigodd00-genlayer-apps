@@ -1,0 +1,1914 @@
+{
+  "network": "studionet",
+  "contract": "0xae785A6DF3a2AA204A5E64FC02246d17b3fc38a6",
+  "source_sha256": "b24ef1c96b6db375a0a5b44088e40eba54e1ff865c557eedf6ce9e8d245f213b",
+  "started_at": "2026-08-28T18:28:06.020892+00:00",
+  "transactions": {
+    "create-self-cancellation": {
+      "method": "create_pact",
+      "args": [
+        "SELF",
+        "Release acceptance: self-cancellation",
+        "For this StudioNet demonstration, accept a JSON reading log as evidence. The log must show activity reading, completed true, and duration_minutes at least 30. No identity, timestamp, or third-party attestation is required.",
+        3,
+        1,
+        1787943670,
+        "0xBf46A84B8A4aF420543db043207AF0B93F9486a8"
+      ],
+      "role": "maker",
+      "sender": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
+      "value_atto": "1000000000000000",
+      "expected_error": null,
+      "started_at": "2026-08-28T18:31:10.787517+00:00",
+      "broadcast_attempted": true,
+      "evm_transaction_hash": "0xb405dcc29ce187e35d3f806941b0ec5aeb6c63b583637bd70747544ec339316a",
+      "transaction_hash": "0xb405dcc29ce187e35d3f806941b0ec5aeb6c63b583637bd70747544ec339316a",
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "finished_at": "2026-08-28T18:31:55.162807+00:00",
+      "leader_execution_result": "SUCCESS",
+      "checked": true
+    },
+    "reject-nonmaker-cancellation": {
+      "method": "cancel_before_start",
+      "args": [
+        "sp2-1"
+      ],
+      "role": "tester",
+      "sender": "0xBf46A84B8A4aF420543db043207AF0B93F9486a8",
+      "value_atto": "0",
+      "expected_error": "only the maker can cancel",
+      "started_at": "2026-08-28T18:31:58.418632+00:00",
+      "broadcast_attempted": true,
+      "evm_transaction_hash": "0xdb5e71cc0d42fb52892fbd119dc6b17bca5ae0f0de7532806c5160c1d90e6e88",
+      "transaction_hash": "0xdb5e71cc0d42fb52892fbd119dc6b17bca5ae0f0de7532806c5160c1d90e6e88",
+      "status": "FINALIZED",
+      "execution_succeeded": false,
+      "finished_at": "2026-08-28T18:32:42.833169+00:00",
+      "leader_execution_result": "ERROR",
+      "checked": true
+    },
+    "cancel-self": {
+      "method": "cancel_before_start",
+      "args": [
+        "sp2-1"
+      ],
+      "role": "maker",
+      "sender": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
+      "value_atto": "0",
+      "expected_error": null,
+      "started_at": "2026-08-28T18:32:42.846863+00:00",
+      "broadcast_attempted": true,
+      "evm_transaction_hash": "0x08ff49409751f248c429caac74d0f10e9a7ca66c718b27e5c6f397a370601a89",
+      "transaction_hash": "0x08ff49409751f248c429caac74d0f10e9a7ca66c718b27e5c6f397a370601a89",
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "finished_at": "2026-08-28T18:33:32.416008+00:00",
+      "leader_execution_result": "SUCCESS",
+      "checked": true
+    },
+    "create-unmatched-cancellation": {
+      "method": "create_pact",
+      "args": [
+        "CHALLENGE",
+        "Release acceptance: unmatched-cancellation",
+        "For this StudioNet demonstration, accept a JSON reading log as evidence. The log must show activity reading, completed true, and duration_minutes at least 30. No identity, timestamp, or third-party attestation is required.",
+        3,
+        1,
+        1787943815,
+        "0xBf46A84B8A4aF420543db043207AF0B93F9486a8"
+      ],
+      "role": "maker",
+      "sender": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
+      "value_atto": "1000000000000000",
+      "expected_error": null,
+      "started_at": "2026-08-28T18:33:35.286943+00:00",
+      "broadcast_attempted": true,
+      "evm_transaction_hash": "0x02c35f20cf25a5b4d21a05fc68a665253fd385659ad3297abc2b147dd6d9784a",
+      "transaction_hash": "0x02c35f20cf25a5b4d21a05fc68a665253fd385659ad3297abc2b147dd6d9784a",
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "finished_at": "2026-08-28T18:34:35.791771+00:00",
+      "leader_execution_result": "SUCCESS",
+      "checked": true
+    },
+    "cancel-unmatched-challenge": {
+      "method": "cancel_before_start",
+      "args": [
+        "sp2-2"
+      ],
+      "role": "maker",
+      "sender": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
+      "value_atto": "0",
+      "expected_error": null,
+      "started_at": "2026-08-28T18:34:41.008241+00:00",
+      "broadcast_attempted": true,
+      "evm_transaction_hash": "0xa6f9c2c78620d68430a53cf9b3c527d52a5a583732bb36ffdb4201fc4cf0595c",
+      "transaction_hash": "0xa6f9c2c78620d68430a53cf9b3c527d52a5a583732bb36ffdb4201fc4cf0595c",
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "finished_at": "2026-08-28T18:35:26.723556+00:00",
+      "leader_execution_result": "SUCCESS",
+      "checked": true
+    },
+    "create-challenge-loss": {
+      "method": "create_pact",
+      "args": [
+        "CHALLENGE",
+        "Release acceptance: challenge-loss",
+        "For this StudioNet demonstration, accept a JSON reading log as evidence. The log must show activity reading, completed true, and duration_minutes at least 30. No identity, timestamp, or third-party attestation is required.",
+        3,
+        1,
+        1787942852,
+        "0xBf46A84B8A4aF420543db043207AF0B93F9486a8"
+      ],
+      "role": "maker",
+      "sender": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
+      "value_atto": "1000000000000000",
+      "expected_error": null,
+      "started_at": "2026-08-28T18:37:32.200527+00:00",
+      "broadcast_attempted": true,
+      "evm_transaction_hash": "0x82f9cd9f6bfcee02b4a63240ed1b8e5760a253a9954e954c05d638aba32a232d",
+      "transaction_hash": "0x82f9cd9f6bfcee02b4a63240ed1b8e5760a253a9954e954c05d638aba32a232d",
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "finished_at": "2026-08-28T18:38:22.571666+00:00",
+      "leader_execution_result": "SUCCESS",
+      "checked": true
+    },
+    "reject-maker-join": {
+      "method": "join_pact",
+      "args": [
+        "sp2-3"
+      ],
+      "role": "maker",
+      "sender": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
+      "value_atto": "1000000000000000",
+      "expected_error": "maker cannot join own pact",
+      "started_at": "2026-08-28T18:38:28.051226+00:00",
+      "broadcast_attempted": true,
+      "evm_transaction_hash": "0x26619f76f4531d6b5cd2a9fdc2e276e3ae96f745dcf0472b448be83cbc042ac2",
+      "transaction_hash": "0x26619f76f4531d6b5cd2a9fdc2e276e3ae96f745dcf0472b448be83cbc042ac2",
+      "status": "FINALIZED",
+      "execution_succeeded": false,
+      "finished_at": "2026-08-28T18:39:12.411260+00:00",
+      "leader_execution_result": "ERROR",
+      "checked": true
+    },
+    "reject-wrong-stake": {
+      "method": "join_pact",
+      "args": [
+        "sp2-3"
+      ],
+      "role": "tester",
+      "sender": "0xBf46A84B8A4aF420543db043207AF0B93F9486a8",
+      "value_atto": "2000000000000000",
+      "expected_error": "challenger must match the stake exactly",
+      "started_at": "2026-08-28T18:39:12.421287+00:00",
+      "broadcast_attempted": true,
+      "evm_transaction_hash": "0xdafcb60e3ca338dac923c4fdf24b15ab110ff1babae319fb3e0b01b3a9f09927",
+      "transaction_hash": "0xdafcb60e3ca338dac923c4fdf24b15ab110ff1babae319fb3e0b01b3a9f09927",
+      "status": "FINALIZED",
+      "execution_succeeded": false,
+      "finished_at": "2026-08-28T18:39:57.824646+00:00",
+      "leader_execution_result": "ERROR",
+      "checked": true
+    },
+    "join-matched-challenge": {
+      "method": "join_pact",
+      "args": [
+        "sp2-3"
+      ],
+      "role": "tester",
+      "sender": "0xBf46A84B8A4aF420543db043207AF0B93F9486a8",
+      "value_atto": "1000000000000000",
+      "expected_error": null,
+      "started_at": "2026-08-28T18:39:57.843796+00:00",
+      "broadcast_attempted": true,
+      "evm_transaction_hash": "0x7eeffbd5e431a153afcd235fd5ef13044c5ddfe2b08ecf12eb49b2497a4a46c8",
+      "transaction_hash": "0x7eeffbd5e431a153afcd235fd5ef13044c5ddfe2b08ecf12eb49b2497a4a46c8",
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "finished_at": "2026-08-28T18:40:43.186024+00:00",
+      "leader_execution_result": "SUCCESS",
+      "checked": true
+    },
+    "reject-matched-cancellation": {
+      "method": "cancel_before_start",
+      "args": [
+        "sp2-3"
+      ],
+      "role": "maker",
+      "sender": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
+      "value_atto": "0",
+      "expected_error": "pact cannot be cancelled",
+      "started_at": "2026-08-28T18:40:46.439659+00:00",
+      "broadcast_attempted": true,
+      "evm_transaction_hash": "0xe20fd0b7abca02ebc1436f1c92b8de58e6274c26c14538de8521e78c15fe76ca",
+      "transaction_hash": "0xe20fd0b7abca02ebc1436f1c92b8de58e6274c26c14538de8521e78c15fe76ca",
+      "status": "FINALIZED",
+      "execution_succeeded": false,
+      "finished_at": "2026-08-28T18:41:30.796161+00:00",
+      "leader_execution_result": "ERROR",
+      "checked": true
+    },
+    "create-self-loss": {
+      "method": "create_pact",
+      "args": [
+        "SELF",
+        "Release acceptance: self-loss",
+        "For this StudioNet demonstration, accept a JSON reading log as evidence. The log must show activity reading, completed true, and duration_minutes at least 30. No identity, timestamp, or third-party attestation is required.",
+        3,
+        1,
+        1787942610,
+        "0xBf46A84B8A4aF420543db043207AF0B93F9486a8"
+      ],
+      "role": "maker",
+      "sender": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
+      "value_atto": "1000000000000000",
+      "expected_error": null,
+      "started_at": "2026-08-28T18:41:30.808155+00:00",
+      "broadcast_attempted": true,
+      "evm_transaction_hash": "0x2252acbfdd3a4ca7f15efbe40f1d6bf3400f8e75f23c993d5fddc4db8ed3f5b2",
+      "transaction_hash": "0x2252acbfdd3a4ca7f15efbe40f1d6bf3400f8e75f23c993d5fddc4db8ed3f5b2",
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "finished_at": "2026-08-28T18:42:16.199147+00:00",
+      "leader_execution_result": "SUCCESS",
+      "checked": true
+    },
+    "create-self-win": {
+      "method": "create_pact",
+      "args": [
+        "SELF",
+        "Release acceptance: self-win",
+        "For this StudioNet demonstration, accept a JSON reading log as evidence. The log must show activity reading, completed true, and duration_minutes at least 30. No identity, timestamp, or third-party attestation is required.",
+        3,
+        1,
+        1787942819,
+        "0xBf46A84B8A4aF420543db043207AF0B93F9486a8"
+      ],
+      "role": "maker",
+      "sender": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
+      "value_atto": "1000000000000000",
+      "expected_error": null,
+      "started_at": "2026-08-28T18:43:59.343860+00:00",
+      "broadcast_attempted": true,
+      "evm_transaction_hash": "0x679a1fec78282d1e8ba71b4753633e4a15adb5c5059f1f061d777ae5549e2a4a",
+      "transaction_hash": "0x679a1fec78282d1e8ba71b4753633e4a15adb5c5059f1f061d777ae5549e2a4a",
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "finished_at": "2026-08-28T18:44:44.801891+00:00",
+      "leader_execution_result": "SUCCESS",
+      "emitted_transactions": [],
+      "triggered_transactions": [],
+      "checked": true
+    },
+    "self-win-live-proof": {
+      "method": "submit_checkin",
+      "args": [
+        "sp2-5",
+        "https://gateway.pinata.cloud/ipfs/bafkreiejvp72lirrec2zz46t7kqideoxar7aagvyw637kk5barlrmugmd4",
+        "89abffa5a23120b59cf3d3faa08191d7047e001ab8b7b7f52ba104571650cc1f",
+        "Synthetic reading-log acceptance check."
+      ],
+      "role": "maker",
+      "sender": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
+      "value_atto": "0",
+      "expected_error": null,
+      "started_at": "2026-08-28T18:47:02.007367+00:00",
+      "broadcast_attempted": true,
+      "evm_transaction_hash": "0x5b6f28bf697da89d9621a50aeb29d25a048b9f9f9b85b779d2b7225bdc9d42da",
+      "transaction_hash": "0x5b6f28bf697da89d9621a50aeb29d25a048b9f9f9b85b779d2b7225bdc9d42da",
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "finished_at": "2026-08-28T18:48:14.262590+00:00",
+      "leader_execution_result": "SUCCESS",
+      "emitted_transactions": [],
+      "triggered_transactions": [],
+      "checked": true
+    },
+    "reject-claim-before-finality": {
+      "method": "claim",
+      "args": [
+        "sp2-5"
+      ],
+      "role": "maker",
+      "sender": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
+      "value_atto": "0",
+      "expected_error": "pact is not finalized",
+      "started_at": "2026-08-28T18:48:17.532280+00:00",
+      "broadcast_attempted": true,
+      "evm_transaction_hash": "0x287997f7f021a5805f331f25cda970c482db5099873fa5a7a44fa4728ca02343",
+      "transaction_hash": "0x287997f7f021a5805f331f25cda970c482db5099873fa5a7a44fa4728ca02343",
+      "status": "FINALIZED",
+      "execution_succeeded": false,
+      "finished_at": "2026-08-28T18:49:02.951593+00:00",
+      "leader_execution_result": "ERROR",
+      "emitted_transactions": [],
+      "triggered_transactions": [],
+      "checked": true
+    },
+    "self-win-record-misses": {
+      "method": "record_elapsed_periods",
+      "args": [
+        "sp2-5"
+      ],
+      "role": "maker",
+      "sender": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
+      "value_atto": "0",
+      "expected_error": null,
+      "started_at": "2026-08-28T18:50:02.002817+00:00",
+      "broadcast_attempted": true,
+      "evm_transaction_hash": "0x1c2c1ae4e3b84e4747a955919ed42fcae01ff34fa5cfd5a0148f8f3b1aa396d8",
+      "transaction_hash": "0x1c2c1ae4e3b84e4747a955919ed42fcae01ff34fa5cfd5a0148f8f3b1aa396d8",
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "finished_at": "2026-08-28T18:50:46.971631+00:00",
+      "leader_execution_result": "SUCCESS",
+      "emitted_transactions": [],
+      "triggered_transactions": [],
+      "checked": true
+    },
+    "self-win-propose": {
+      "method": "propose_settlement",
+      "args": [
+        "sp2-5"
+      ],
+      "role": "maker",
+      "sender": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
+      "value_atto": "0",
+      "expected_error": null,
+      "started_at": "2026-08-28T18:50:52.470016+00:00",
+      "broadcast_attempted": true,
+      "evm_transaction_hash": "0xd77d7baa047443c7a10d1d2abfbc43e9e7747597b22de34c9cbdca80bd962acd",
+      "transaction_hash": "0xd77d7baa047443c7a10d1d2abfbc43e9e7747597b22de34c9cbdca80bd962acd",
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "finished_at": "2026-08-28T18:51:38.135024+00:00",
+      "leader_execution_result": "SUCCESS",
+      "emitted_transactions": [],
+      "triggered_transactions": [],
+      "checked": true
+    },
+    "reject-unauthorized-appeal": {
+      "method": "appeal_period",
+      "args": [
+        "sp2-5",
+        1,
+        "This synthetic reading log meets the explicitly agreed demonstration criteria.",
+        "https://gateway.pinata.cloud/ipfs/bafkreiejvp72lirrec2zz46t7kqideoxar7aagvyw637kk5barlrmugmd4",
+        "89abffa5a23120b59cf3d3faa08191d7047e001ab8b7b7f52ba104571650cc1f"
+      ],
+      "role": "tester",
+      "sender": "0xBf46A84B8A4aF420543db043207AF0B93F9486a8",
+      "value_atto": "0",
+      "expected_error": "only the maker can appeal a missed period",
+      "started_at": "2026-08-28T18:51:41.349781+00:00",
+      "broadcast_attempted": true,
+      "evm_transaction_hash": "0x167b7c6119eb75d740e8bee1dce51b532924e47a0c83f38054fcc855f90fa02f",
+      "transaction_hash": "0x167b7c6119eb75d740e8bee1dce51b532924e47a0c83f38054fcc855f90fa02f",
+      "status": "FINALIZED",
+      "execution_succeeded": false,
+      "finished_at": "2026-08-28T18:52:26.826169+00:00",
+      "leader_execution_result": "ERROR",
+      "emitted_transactions": [],
+      "triggered_transactions": [],
+      "checked": true
+    },
+    "self-win-appeal": {
+      "method": "appeal_period",
+      "args": [
+        "sp2-5",
+        1,
+        "This synthetic reading log meets the explicitly agreed demonstration criteria.",
+        "https://gateway.pinata.cloud/ipfs/bafkreiejvp72lirrec2zz46t7kqideoxar7aagvyw637kk5barlrmugmd4",
+        "89abffa5a23120b59cf3d3faa08191d7047e001ab8b7b7f52ba104571650cc1f"
+      ],
+      "role": "maker",
+      "sender": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
+      "value_atto": "0",
+      "expected_error": null,
+      "started_at": "2026-08-28T18:52:26.837946+00:00",
+      "broadcast_attempted": true,
+      "evm_transaction_hash": "0xbdb3eaf2406d694357928129ad53afa21fe33e3f42f540dc3cdfa5de9cb0f447",
+      "transaction_hash": "0xbdb3eaf2406d694357928129ad53afa21fe33e3f42f540dc3cdfa5de9cb0f447",
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "finished_at": "2026-08-28T18:53:35.277540+00:00",
+      "leader_execution_result": "SUCCESS",
+      "emitted_transactions": [],
+      "triggered_transactions": [],
+      "checked": true
+    },
+    "reject-duplicate-appeal": {
+      "method": "appeal_period",
+      "args": [
+        "sp2-5",
+        1,
+        "This synthetic reading log meets the explicitly agreed demonstration criteria.",
+        "https://gateway.pinata.cloud/ipfs/bafkreiejvp72lirrec2zz46t7kqideoxar7aagvyw637kk5barlrmugmd4",
+        "89abffa5a23120b59cf3d3faa08191d7047e001ab8b7b7f52ba104571650cc1f"
+      ],
+      "role": "maker",
+      "sender": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
+      "value_atto": "0",
+      "expected_error": "period appeal already used",
+      "started_at": "2026-08-28T18:53:40.775049+00:00",
+      "broadcast_attempted": true,
+      "evm_transaction_hash": "0x713bf0d2287acfb027e5c40e22da688e32e447cab94cd8394d7ac96f5ac1fb91",
+      "transaction_hash": "0x713bf0d2287acfb027e5c40e22da688e32e447cab94cd8394d7ac96f5ac1fb91",
+      "status": "FINALIZED",
+      "execution_succeeded": false,
+      "finished_at": "2026-08-28T18:54:26.319262+00:00",
+      "leader_execution_result": "ERROR",
+      "emitted_transactions": [],
+      "triggered_transactions": [],
+      "checked": true
+    },
+    "reject-early-finalization": {
+      "method": "finalize_settlement",
+      "args": [
+        "sp2-5"
+      ],
+      "role": "maker",
+      "sender": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
+      "value_atto": "0",
+      "expected_error": "appeal window is still open",
+      "started_at": "2026-08-28T18:54:26.339157+00:00",
+      "broadcast_attempted": true,
+      "evm_transaction_hash": "0xa342372c876955f9900ca2b271a3589901afb984ec20a433df7fdf6185dae6e1",
+      "transaction_hash": "0xa342372c876955f9900ca2b271a3589901afb984ec20a433df7fdf6185dae6e1",
+      "status": "FINALIZED",
+      "execution_succeeded": false,
+      "finished_at": "2026-08-28T18:55:12.857515+00:00",
+      "leader_execution_result": "ERROR",
+      "emitted_transactions": [],
+      "triggered_transactions": [],
+      "checked": true
+    },
+    "self-win-finalize": {
+      "method": "finalize_settlement",
+      "args": [
+        "sp2-5"
+      ],
+      "role": "maker",
+      "sender": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
+      "value_atto": "0",
+      "expected_error": null,
+      "started_at": "2026-08-28T18:56:03.033529+00:00",
+      "broadcast_attempted": true,
+      "evm_transaction_hash": "0x49b9892e82ffba5effabac3ee0725f525b4f02b14e8ce3de90c7d9a68c5854cf",
+      "transaction_hash": "0x49b9892e82ffba5effabac3ee0725f525b4f02b14e8ce3de90c7d9a68c5854cf",
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "finished_at": "2026-08-28T18:56:53.312604+00:00",
+      "leader_execution_result": "SUCCESS",
+      "emitted_transactions": [],
+      "triggered_transactions": [],
+      "checked": true
+    },
+    "reject-nonwinner-claim": {
+      "method": "claim",
+      "args": [
+        "sp2-5"
+      ],
+      "role": "tester",
+      "sender": "0xBf46A84B8A4aF420543db043207AF0B93F9486a8",
+      "value_atto": "0",
+      "expected_error": "only the payout recipient can claim",
+      "started_at": "2026-08-28T18:56:56.542696+00:00",
+      "broadcast_attempted": true,
+      "evm_transaction_hash": "0x4addde2ffee75cd9ff129c3f1fdf8c2d17a0dd67f5dc9cb7bbae74c0bbe8fe20",
+      "transaction_hash": "0x4addde2ffee75cd9ff129c3f1fdf8c2d17a0dd67f5dc9cb7bbae74c0bbe8fe20",
+      "status": "FINALIZED",
+      "execution_succeeded": false,
+      "finished_at": "2026-08-28T18:57:41.991570+00:00",
+      "leader_execution_result": "ERROR",
+      "emitted_transactions": [],
+      "triggered_transactions": [],
+      "checked": true
+    },
+    "self-win-claim": {
+      "method": "claim",
+      "args": [
+        "sp2-5"
+      ],
+      "role": "maker",
+      "sender": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
+      "value_atto": "0",
+      "expected_error": null,
+      "started_at": "2026-08-28T18:57:42.002370+00:00",
+      "broadcast_attempted": true,
+      "evm_transaction_hash": "0x75150c29f989626d8cda1833552a70be7e9e167e66d5e09e40b862b428a14436",
+      "transaction_hash": "0x75150c29f989626d8cda1833552a70be7e9e167e66d5e09e40b862b428a14436",
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "finished_at": "2026-08-28T18:58:28.428593+00:00",
+      "leader_execution_result": "SUCCESS",
+      "emitted_transactions": [
+        {
+          "on": "finalized",
+          "value": 1000000000000000,
+          "address": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
+          "is_eth_send": true
+        }
+      ],
+      "triggered_transactions": [
+        "0xb413a4ad8154709a15fde2cbcc6195cded4741dad8bd62612399f5a899b09a05"
+      ],
+      "checked": true
+    },
+    "reject-double-claim": {
+      "method": "claim",
+      "args": [
+        "sp2-5"
+      ],
+      "role": "maker",
+      "sender": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
+      "value_atto": "0",
+      "expected_error": "pact is not finalized",
+      "started_at": "2026-08-28T18:58:31.678420+00:00",
+      "broadcast_attempted": true,
+      "evm_transaction_hash": "0x8081df78dbbf863c8fa0a827974c17e4c738fb58e01cfc481fc7b796595a17d1",
+      "transaction_hash": "0x8081df78dbbf863c8fa0a827974c17e4c738fb58e01cfc481fc7b796595a17d1",
+      "status": "FINALIZED",
+      "execution_succeeded": false,
+      "finished_at": "2026-08-28T18:59:17.166614+00:00",
+      "leader_execution_result": "ERROR",
+      "emitted_transactions": [],
+      "triggered_transactions": [],
+      "checked": true
+    },
+    "self-loss-propose": {
+      "method": "propose_settlement",
+      "args": [
+        "sp2-4"
+      ],
+      "role": "maker",
+      "sender": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
+      "value_atto": "0",
+      "expected_error": null,
+      "started_at": "2026-08-28T19:02:29.898226+00:00",
+      "broadcast_attempted": true,
+      "evm_transaction_hash": "0x78c581eb495b6a0ac6827bfda48b2ef664ba87961a8cd79d5d9c83bde537d5b7",
+      "transaction_hash": "0x78c581eb495b6a0ac6827bfda48b2ef664ba87961a8cd79d5d9c83bde537d5b7",
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "finished_at": "2026-08-28T19:03:14.318338+00:00",
+      "leader_execution_result": "SUCCESS",
+      "emitted_transactions": [],
+      "triggered_transactions": [],
+      "checked": true
+    },
+    "challenge-loss-propose": {
+      "method": "propose_settlement",
+      "args": [
+        "sp2-3"
+      ],
+      "role": "maker",
+      "sender": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
+      "value_atto": "0",
+      "expected_error": null,
+      "started_at": "2026-08-28T19:03:19.838298+00:00",
+      "broadcast_attempted": true,
+      "evm_transaction_hash": "0x5ad072c41365e20fdcf575921431797cf75245f3866edb86ec7b6f9e04c4761b",
+      "transaction_hash": "0x5ad072c41365e20fdcf575921431797cf75245f3866edb86ec7b6f9e04c4761b",
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "finished_at": "2026-08-28T19:04:04.206210+00:00",
+      "leader_execution_result": "SUCCESS",
+      "emitted_transactions": [],
+      "triggered_transactions": [],
+      "checked": true
+    },
+    "challenge-loss-evidence-review": {
+      "method": "appeal_period",
+      "args": [
+        "sp2-3",
+        0,
+        "Please evaluate this synthetic log against the agreed reading requirements.",
+        "https://gateway.pinata.cloud/ipfs/bafkreicsshzsovq7wuwba2jgg4t3jk46zgaw2l2du6zkq6igds5ucaljcu",
+        "5291f327561fb52c1069263727b4ab9ec9816d2f43a7b2a879061cbb41016915"
+      ],
+      "role": "maker",
+      "sender": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
+      "value_atto": "0",
+      "expected_error": null,
+      "started_at": "2026-08-28T19:04:07.500084+00:00",
+      "broadcast_attempted": true,
+      "evm_transaction_hash": "0xfeb015c06f666b57d5d4e42ceb1b701a083ed851e1bcc5572e2408ed1d5c9906",
+      "transaction_hash": "0xfeb015c06f666b57d5d4e42ceb1b701a083ed851e1bcc5572e2408ed1d5c9906",
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "finished_at": "2026-08-28T19:05:07.845156+00:00",
+      "leader_execution_result": "SUCCESS",
+      "emitted_transactions": [],
+      "triggered_transactions": [],
+      "checked": true
+    },
+    "create-challenge-win": {
+      "method": "create_pact",
+      "args": [
+        "CHALLENGE",
+        "Release acceptance: challenge-win",
+        "For this StudioNet demonstration, accept a JSON reading log as evidence. The log must show activity reading, completed true, and duration_minutes at least 30. No identity, timestamp, or third-party attestation is required.",
+        3,
+        1,
+        1787944091,
+        "0xBf46A84B8A4aF420543db043207AF0B93F9486a8"
+      ],
+      "role": "maker",
+      "sender": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
+      "value_atto": "1000000000000000",
+      "expected_error": null,
+      "started_at": "2026-08-28T19:05:11.271022+00:00",
+      "broadcast_attempted": true,
+      "evm_transaction_hash": "0x424c13334c8039bbb40a32202013c31f54ab06a7e8581c303f9af4bb954e0ce1",
+      "transaction_hash": "0x424c13334c8039bbb40a32202013c31f54ab06a7e8581c303f9af4bb954e0ce1",
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "finished_at": "2026-08-28T19:05:56.397432+00:00",
+      "leader_execution_result": "SUCCESS",
+      "emitted_transactions": [],
+      "triggered_transactions": [],
+      "checked": true
+    },
+    "challenge-win-join": {
+      "method": "join_pact",
+      "args": [
+        "sp2-6"
+      ],
+      "role": "tester",
+      "sender": "0xBf46A84B8A4aF420543db043207AF0B93F9486a8",
+      "value_atto": "1000000000000000",
+      "expected_error": null,
+      "started_at": "2026-08-28T19:05:59.702882+00:00",
+      "broadcast_attempted": true,
+      "evm_transaction_hash": "0x0d62e34aef7a7a3cd80434f86d4fa684d09ebd66a913e2204fd8a52a933cfc46",
+      "transaction_hash": "0x0d62e34aef7a7a3cd80434f86d4fa684d09ebd66a913e2204fd8a52a933cfc46",
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "finished_at": "2026-08-28T19:06:44.093203+00:00",
+      "leader_execution_result": "SUCCESS",
+      "emitted_transactions": [],
+      "triggered_transactions": [],
+      "checked": true
+    },
+    "challenge-win-proof": {
+      "method": "submit_checkin",
+      "args": [
+        "sp2-6",
+        "https://gateway.pinata.cloud/ipfs/bafkreiejvp72lirrec2zz46t7kqideoxar7aagvyw637kk5barlrmugmd4",
+        "89abffa5a23120b59cf3d3faa08191d7047e001ab8b7b7f52ba104571650cc1f",
+        "Synthetic challenge reading-log acceptance."
+      ],
+      "role": "maker",
+      "sender": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
+      "value_atto": "0",
+      "expected_error": null,
+      "started_at": "2026-08-28T19:08:14.003094+00:00",
+      "broadcast_attempted": true,
+      "evm_transaction_hash": "0xa55f98dc5b377688e543003836dddb5a43d60ba44b98db3c37adae2058d93575",
+      "transaction_hash": "0xa55f98dc5b377688e543003836dddb5a43d60ba44b98db3c37adae2058d93575",
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "finished_at": "2026-08-28T19:09:45.357611+00:00",
+      "leader_execution_result": "SUCCESS",
+      "emitted_transactions": [],
+      "triggered_transactions": [],
+      "checked": true
+    },
+    "challenge-win-propose": {
+      "method": "propose_settlement",
+      "args": [
+        "sp2-6"
+      ],
+      "role": "maker",
+      "sender": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
+      "value_atto": "0",
+      "expected_error": null,
+      "started_at": "2026-08-28T19:11:14.011463+00:00",
+      "broadcast_attempted": true,
+      "evm_transaction_hash": "0x27e6f160f8b05537ed3ee9430444642a29356d2705c83d13ab499032436ecdf9",
+      "transaction_hash": "0x27e6f160f8b05537ed3ee9430444642a29356d2705c83d13ab499032436ecdf9",
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "finished_at": "2026-08-28T19:11:57.455299+00:00",
+      "leader_execution_result": "SUCCESS",
+      "emitted_transactions": [],
+      "triggered_transactions": [],
+      "checked": true
+    },
+    "challenge-win-taker-appeal": {
+      "method": "appeal_period",
+      "args": [
+        "sp2-6",
+        0,
+        "As the challenger, I request an independent review of this reading log against the agreed criteria.",
+        "https://gateway.pinata.cloud/ipfs/bafkreiejvp72lirrec2zz46t7kqideoxar7aagvyw637kk5barlrmugmd4",
+        "89abffa5a23120b59cf3d3faa08191d7047e001ab8b7b7f52ba104571650cc1f"
+      ],
+      "role": "tester",
+      "sender": "0xBf46A84B8A4aF420543db043207AF0B93F9486a8",
+      "value_atto": "0",
+      "expected_error": null,
+      "started_at": "2026-08-28T19:12:00.756027+00:00",
+      "broadcast_attempted": true,
+      "evm_transaction_hash": "0x01aeb348174d3e8253fb5f08c65a1631396b0dabe390df1c73fb79c6eadd96c8",
+      "transaction_hash": "0x01aeb348174d3e8253fb5f08c65a1631396b0dabe390df1c73fb79c6eadd96c8",
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "finished_at": "2026-08-28T19:13:27.474892+00:00",
+      "leader_execution_result": "SUCCESS",
+      "emitted_transactions": [],
+      "triggered_transactions": [],
+      "checked": true
+    },
+    "challenge-win-maker-appeal": {
+      "method": "appeal_period",
+      "args": [
+        "sp2-6",
+        1,
+        "This synthetic log satisfies the agreed demonstration criteria for the missed period.",
+        "https://gateway.pinata.cloud/ipfs/bafkreiejvp72lirrec2zz46t7kqideoxar7aagvyw637kk5barlrmugmd4",
+        "89abffa5a23120b59cf3d3faa08191d7047e001ab8b7b7f52ba104571650cc1f"
+      ],
+      "role": "maker",
+      "sender": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
+      "value_atto": "0",
+      "expected_error": null,
+      "started_at": "2026-08-28T19:13:30.723552+00:00",
+      "broadcast_attempted": true,
+      "evm_transaction_hash": "0x8ae86d90b9e38d4bc6a48f39ff95e7d731d1cbf2c6d86f6482b888ea10fc5039",
+      "transaction_hash": "0x8ae86d90b9e38d4bc6a48f39ff95e7d731d1cbf2c6d86f6482b888ea10fc5039",
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "finished_at": "2026-08-28T19:14:47.300656+00:00",
+      "leader_execution_result": "SUCCESS",
+      "emitted_transactions": [],
+      "triggered_transactions": [],
+      "checked": true
+    },
+    "self-loss-finalize": {
+      "method": "finalize_settlement",
+      "args": [
+        "sp2-4"
+      ],
+      "role": "maker",
+      "sender": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
+      "value_atto": "0",
+      "expected_error": null,
+      "started_at": "2026-08-28T19:14:50.556784+00:00",
+      "broadcast_attempted": true,
+      "evm_transaction_hash": "0xc4124e1d208a77df75917334b454a7ce38df57e4d38d0a99316126aede3ae8bd",
+      "transaction_hash": "0xc4124e1d208a77df75917334b454a7ce38df57e4d38d0a99316126aede3ae8bd",
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "finished_at": "2026-08-28T19:15:34.947819+00:00",
+      "leader_execution_result": "SUCCESS",
+      "emitted_transactions": [],
+      "triggered_transactions": [],
+      "checked": true
+    },
+    "self-loss-reject-maker-claim": {
+      "method": "claim",
+      "args": [
+        "sp2-4"
+      ],
+      "role": "maker",
+      "sender": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
+      "value_atto": "0",
+      "expected_error": "only the payout recipient can claim",
+      "started_at": "2026-08-28T19:15:38.230529+00:00",
+      "broadcast_attempted": true,
+      "evm_transaction_hash": "0x43700a25abbe324ecf70390e5b984ed9fea539b1e642ed82174f9461eabc1357",
+      "transaction_hash": "0x43700a25abbe324ecf70390e5b984ed9fea539b1e642ed82174f9461eabc1357",
+      "status": "FINALIZED",
+      "execution_succeeded": false,
+      "finished_at": "2026-08-28T19:16:22.621401+00:00",
+      "leader_execution_result": "ERROR",
+      "emitted_transactions": [],
+      "triggered_transactions": [],
+      "checked": true
+    },
+    "self-loss-claim": {
+      "method": "claim",
+      "args": [
+        "sp2-4"
+      ],
+      "role": "tester",
+      "sender": "0xBf46A84B8A4aF420543db043207AF0B93F9486a8",
+      "value_atto": "0",
+      "expected_error": null,
+      "started_at": "2026-08-28T19:16:22.647118+00:00",
+      "broadcast_attempted": true,
+      "evm_transaction_hash": "0xef7f5cca889f69eb592ec38bd4fe32fe79f47543ed56c3b7136ba28b56e4bc0e",
+      "transaction_hash": "0xef7f5cca889f69eb592ec38bd4fe32fe79f47543ed56c3b7136ba28b56e4bc0e",
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "finished_at": "2026-08-28T19:17:08.940668+00:00",
+      "leader_execution_result": "SUCCESS",
+      "emitted_transactions": [
+        {
+          "on": "finalized",
+          "value": 1000000000000000,
+          "address": "0xBf46A84B8A4aF420543db043207AF0B93F9486a8",
+          "is_eth_send": true
+        }
+      ],
+      "triggered_transactions": [
+        "0xccad7485d18619fa8fbfb7df9a030304492805dcd3dc522adc8773b9670fac0b"
+      ],
+      "checked": true
+    },
+    "challenge-loss-finalize": {
+      "method": "finalize_settlement",
+      "args": [
+        "sp2-3"
+      ],
+      "role": "maker",
+      "sender": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
+      "value_atto": "0",
+      "expected_error": null,
+      "started_at": "2026-08-28T19:17:12.423622+00:00",
+      "broadcast_attempted": true,
+      "evm_transaction_hash": "0x1bf16a6c9671e233fa975e85e317c81a65baece1c873bfb3d2e365d2fe11ab72",
+      "transaction_hash": "0x1bf16a6c9671e233fa975e85e317c81a65baece1c873bfb3d2e365d2fe11ab72",
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "finished_at": "2026-08-28T19:18:01.902617+00:00",
+      "leader_execution_result": "SUCCESS",
+      "emitted_transactions": [],
+      "triggered_transactions": [],
+      "checked": true
+    },
+    "challenge-loss-reject-maker-claim": {
+      "method": "claim",
+      "args": [
+        "sp2-3"
+      ],
+      "role": "maker",
+      "sender": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
+      "value_atto": "0",
+      "expected_error": "only the payout recipient can claim",
+      "started_at": "2026-08-28T19:18:05.140351+00:00",
+      "broadcast_attempted": true,
+      "evm_transaction_hash": "0x043d8c951ada1521fb139765a18d9aa846610118cb37e0a5136af253568008c9",
+      "transaction_hash": "0x043d8c951ada1521fb139765a18d9aa846610118cb37e0a5136af253568008c9",
+      "status": "FINALIZED",
+      "execution_succeeded": false,
+      "finished_at": "2026-08-28T19:18:49.706809+00:00",
+      "leader_execution_result": "ERROR",
+      "emitted_transactions": [],
+      "triggered_transactions": [],
+      "checked": true
+    },
+    "challenge-loss-claim": {
+      "method": "claim",
+      "args": [
+        "sp2-3"
+      ],
+      "role": "tester",
+      "sender": "0xBf46A84B8A4aF420543db043207AF0B93F9486a8",
+      "value_atto": "0",
+      "expected_error": null,
+      "started_at": "2026-08-28T19:18:49.716972+00:00",
+      "broadcast_attempted": true,
+      "evm_transaction_hash": "0xa05be7cd262a2bb30532aff41c070d79ef32fc9b8871b1b076abefc612be0e84",
+      "transaction_hash": "0xa05be7cd262a2bb30532aff41c070d79ef32fc9b8871b1b076abefc612be0e84",
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "finished_at": "2026-08-28T19:41:30.775119+00:00",
+      "leader_execution_result": "SUCCESS",
+      "emitted_transactions": [
+        {
+          "on": "finalized",
+          "value": 2000000000000000,
+          "address": "0xBf46A84B8A4aF420543db043207AF0B93F9486a8",
+          "is_eth_send": true
+        }
+      ],
+      "triggered_transactions": [
+        "0x4b881cfe9a7639f2a09ef16cd6699e6b5c4e572fabd24862b362856f4bdc377c"
+      ],
+      "checked": true
+    },
+    "challenge-win-finalize": {
+      "method": "finalize_settlement",
+      "args": [
+        "sp2-6"
+      ],
+      "role": "maker",
+      "sender": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
+      "value_atto": "0",
+      "expected_error": null,
+      "started_at": "2026-08-28T19:41:34.079319+00:00",
+      "broadcast_attempted": true,
+      "evm_transaction_hash": "0x91f6de1b811820be4b8557d72a799a6b438322bb516271914a08bf4e1ce6ef86",
+      "transaction_hash": "0x91f6de1b811820be4b8557d72a799a6b438322bb516271914a08bf4e1ce6ef86",
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "finished_at": "2026-08-28T19:42:19.781254+00:00",
+      "leader_execution_result": "SUCCESS",
+      "emitted_transactions": [],
+      "triggered_transactions": [],
+      "checked": true
+    },
+    "challenge-win-reject-taker-claim": {
+      "method": "claim",
+      "args": [
+        "sp2-6"
+      ],
+      "role": "tester",
+      "sender": "0xBf46A84B8A4aF420543db043207AF0B93F9486a8",
+      "value_atto": "0",
+      "expected_error": "only the payout recipient can claim",
+      "started_at": "2026-08-28T19:42:23.029339+00:00",
+      "broadcast_attempted": true,
+      "evm_transaction_hash": "0x37f76a3f522f5592c5bdc4d6ca9724a63efd499eda2d8d3e527dda009faf934d",
+      "transaction_hash": "0x37f76a3f522f5592c5bdc4d6ca9724a63efd499eda2d8d3e527dda009faf934d",
+      "status": "FINALIZED",
+      "execution_succeeded": false,
+      "finished_at": "2026-08-28T19:43:08.487736+00:00",
+      "leader_execution_result": "ERROR",
+      "emitted_transactions": [],
+      "triggered_transactions": [],
+      "checked": true
+    },
+    "challenge-win-claim": {
+      "method": "claim",
+      "args": [
+        "sp2-6"
+      ],
+      "role": "maker",
+      "sender": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
+      "value_atto": "0",
+      "expected_error": null,
+      "started_at": "2026-08-28T19:43:08.505787+00:00",
+      "broadcast_attempted": true,
+      "evm_transaction_hash": "0x971722a6fa3185fbf3b371dbb200b5cfbae8fd868aa738f9e97506d21f01ffee",
+      "transaction_hash": "0x971722a6fa3185fbf3b371dbb200b5cfbae8fd868aa738f9e97506d21f01ffee",
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "finished_at": "2026-08-28T19:43:55.020684+00:00",
+      "leader_execution_result": "SUCCESS",
+      "emitted_transactions": [
+        {
+          "on": "finalized",
+          "value": 2000000000000000,
+          "address": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
+          "is_eth_send": true
+        }
+      ],
+      "triggered_transactions": [
+        "0x2bc631ba1300d675ecae7d3ea62d672990945f31d64c98fcae311281f0c881c1"
+      ],
+      "checked": true
+    }
+  },
+  "wallets": {
+    "maker": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
+    "tester": "0xBf46A84B8A4aF420543db043207AF0B93F9486a8"
+  },
+  "preflight": {
+    "checked_at": "2026-08-28T19:41:29.547485+00:00",
+    "config": {
+      "appeal_window_secs": "300",
+      "evidence_policy": "CONTENT_ADDRESSED_ONLY",
+      "fee_bps": "0",
+      "max_page_size": "25",
+      "max_stake_atto": "100000000000000000000",
+      "min_stake_atto": "1000000000000000",
+      "period_secs": "60",
+      "treasury": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
+      "version": "2.0.0"
+    },
+    "source_matches": true
+  },
+  "updated_at": "2026-08-28T19:44:27.558869+00:00",
+  "pacts": {
+    "self-cancellation": "sp2-1",
+    "unmatched-cancellation": "sp2-2",
+    "challenge-loss": "sp2-3",
+    "self-loss": "sp2-4",
+    "self-win": "sp2-5",
+    "challenge-win": "sp2-6"
+  },
+  "assertions": {
+    "self-cancellation:status=VOIDED": {
+      "checked_at": "2026-08-28T18:33:35.283348+00:00",
+      "expected": {
+        "status": "VOIDED"
+      },
+      "observed": {
+        "allowed_misses": "1",
+        "appeal_deadline_unix": "0",
+        "appeal_open": false,
+        "created_at_iso": "2026-08-28T18:31:19+00:00",
+        "end_unix": "1787943850",
+        "failure_recipient": "0xBf46A84B8A4aF420543db043207AF0B93F9486a8",
+        "id": "sp2-1",
+        "kept_count": "0",
+        "maker": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
+        "miss_count": "0",
+        "mode": "SELF",
+        "next_period": "0",
+        "next_window_close": "1787943730",
+        "next_window_open": "1787943670",
+        "periods_total": "3",
+        "pot_atto": "1000000000000000",
+        "settleable": false,
+        "stake_atto": "1000000000000000",
+        "start_unix": "1787943670",
+        "status": "VOIDED",
+        "success_criteria": "For this StudioNet demonstration, accept a JSON reading log as evidence. The log must show activity reading, completed true, and duration_minutes at least 30. No identity, timestamp, or third-party attestation is required.",
+        "taker": "",
+        "title": "Release acceptance: self-cancellation",
+        "window_open_now": false
+      }
+    },
+    "unmatched-cancellation:status=OPEN": {
+      "checked_at": "2026-08-28T18:34:41.002931+00:00",
+      "expected": {
+        "status": "OPEN"
+      },
+      "observed": {
+        "allowed_misses": "1",
+        "appeal_deadline_unix": "0",
+        "appeal_open": false,
+        "created_at_iso": "2026-08-28T18:33:58+00:00",
+        "end_unix": "1787943995",
+        "failure_recipient": "0xBf46A84B8A4aF420543db043207AF0B93F9486a8",
+        "id": "sp2-2",
+        "kept_count": "0",
+        "maker": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
+        "miss_count": "0",
+        "mode": "CHALLENGE",
+        "next_period": "0",
+        "next_window_close": "1787943875",
+        "next_window_open": "1787943815",
+        "periods_total": "3",
+        "pot_atto": "2000000000000000",
+        "settleable": false,
+        "stake_atto": "1000000000000000",
+        "start_unix": "1787943815",
+        "status": "OPEN",
+        "success_criteria": "For this StudioNet demonstration, accept a JSON reading log as evidence. The log must show activity reading, completed true, and duration_minutes at least 30. No identity, timestamp, or third-party attestation is required.",
+        "taker": "",
+        "title": "Release acceptance: unmatched-cancellation",
+        "window_open_now": false
+      }
+    },
+    "unmatched-cancellation:status=VOIDED": {
+      "checked_at": "2026-08-28T18:35:29.824916+00:00",
+      "expected": {
+        "status": "VOIDED"
+      },
+      "observed": {
+        "allowed_misses": "1",
+        "appeal_deadline_unix": "0",
+        "appeal_open": false,
+        "created_at_iso": "2026-08-28T18:33:58+00:00",
+        "end_unix": "1787943995",
+        "failure_recipient": "0xBf46A84B8A4aF420543db043207AF0B93F9486a8",
+        "id": "sp2-2",
+        "kept_count": "0",
+        "maker": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
+        "miss_count": "0",
+        "mode": "CHALLENGE",
+        "next_period": "0",
+        "next_window_close": "1787943875",
+        "next_window_open": "1787943815",
+        "periods_total": "3",
+        "pot_atto": "2000000000000000",
+        "settleable": false,
+        "stake_atto": "1000000000000000",
+        "start_unix": "1787943815",
+        "status": "VOIDED",
+        "success_criteria": "For this StudioNet demonstration, accept a JSON reading log as evidence. The log must show activity reading, completed true, and duration_minutes at least 30. No identity, timestamp, or third-party attestation is required.",
+        "taker": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
+        "title": "Release acceptance: unmatched-cancellation",
+        "window_open_now": false
+      }
+    },
+    "challenge-open": {
+      "checked_at": "2026-08-28T18:38:28.048228+00:00",
+      "expected": {
+        "status": "OPEN"
+      },
+      "observed": {
+        "allowed_misses": "1",
+        "appeal_deadline_unix": "0",
+        "appeal_open": false,
+        "created_at_iso": "2026-08-28T18:37:40+00:00",
+        "end_unix": "1787943032",
+        "failure_recipient": "0xBf46A84B8A4aF420543db043207AF0B93F9486a8",
+        "id": "sp2-3",
+        "kept_count": "0",
+        "maker": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
+        "miss_count": "0",
+        "mode": "CHALLENGE",
+        "next_period": "0",
+        "next_window_close": "1787942912",
+        "next_window_open": "1787942852",
+        "periods_total": "3",
+        "pot_atto": "2000000000000000",
+        "settleable": false,
+        "stake_atto": "1000000000000000",
+        "start_unix": "1787942852",
+        "status": "OPEN",
+        "success_criteria": "For this StudioNet demonstration, accept a JSON reading log as evidence. The log must show activity reading, completed true, and duration_minutes at least 30. No identity, timestamp, or third-party attestation is required.",
+        "taker": "",
+        "title": "Release acceptance: challenge-loss",
+        "window_open_now": false
+      }
+    },
+    "challenge-matched": {
+      "checked_at": "2026-08-28T18:40:46.432615+00:00",
+      "expected": {
+        "status": "LIVE",
+        "taker": "0xBf46A84B8A4aF420543db043207AF0B93F9486a8",
+        "pot_atto": "2000000000000000"
+      },
+      "observed": {
+        "allowed_misses": "1",
+        "appeal_deadline_unix": "0",
+        "appeal_open": false,
+        "created_at_iso": "2026-08-28T18:37:40+00:00",
+        "end_unix": "1787943032",
+        "failure_recipient": "0xBf46A84B8A4aF420543db043207AF0B93F9486a8",
+        "id": "sp2-3",
+        "kept_count": "0",
+        "maker": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
+        "miss_count": "0",
+        "mode": "CHALLENGE",
+        "next_period": "0",
+        "next_window_close": "1787942912",
+        "next_window_open": "1787942852",
+        "periods_total": "3",
+        "pot_atto": "2000000000000000",
+        "settleable": false,
+        "stake_atto": "1000000000000000",
+        "start_unix": "1787942852",
+        "status": "LIVE",
+        "success_criteria": "For this StudioNet demonstration, accept a JSON reading log as evidence. The log must show activity reading, completed true, and duration_minutes at least 30. No identity, timestamp, or third-party attestation is required.",
+        "taker": "0xBf46A84B8A4aF420543db043207AF0B93F9486a8",
+        "title": "Release acceptance: challenge-loss",
+        "window_open_now": false
+      }
+    },
+    "self-win-created": {
+      "checked_at": "2026-08-28T18:44:50.326493+00:00",
+      "expected": {
+        "status": "LIVE",
+        "kept_count": "0"
+      },
+      "observed": {
+        "allowed_misses": "1",
+        "appeal_deadline_unix": "0",
+        "appeal_open": false,
+        "created_at_iso": "2026-08-28T18:44:07+00:00",
+        "end_unix": "1787942999",
+        "failure_recipient": "0xBf46A84B8A4aF420543db043207AF0B93F9486a8",
+        "id": "sp2-5",
+        "kept_count": "0",
+        "maker": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
+        "miss_count": "0",
+        "mode": "SELF",
+        "next_period": "0",
+        "next_window_close": "1787942879",
+        "next_window_open": "1787942819",
+        "periods_total": "3",
+        "pot_atto": "1000000000000000",
+        "settleable": false,
+        "stake_atto": "1000000000000000",
+        "start_unix": "1787942819",
+        "status": "LIVE",
+        "success_criteria": "For this StudioNet demonstration, accept a JSON reading log as evidence. The log must show activity reading, completed true, and duration_minutes at least 30. No identity, timestamp, or third-party attestation is required.",
+        "taker": "",
+        "title": "Release acceptance: self-win",
+        "window_open_now": false
+      }
+    },
+    "self-win-live-verdict": {
+      "checked_at": "2026-08-28T18:48:17.526040+00:00",
+      "expected": {
+        "verdict": "KEPT",
+        "method": "CONTENT_ADDRESSED_EVIDENCE",
+        "content_digest": "89abffa5a23120b59cf3d3faa08191d7047e001ab8b7b7f52ba104571650cc1f"
+      },
+      "observed": {
+        "appealed": false,
+        "confidence_bucket": "90",
+        "content_digest": "89abffa5a23120b59cf3d3faa08191d7047e001ab8b7b7f52ba104571650cc1f",
+        "evidence_url": "https://gateway.pinata.cloud/ipfs/bafkreiejvp72lirrec2zz46t7kqideoxar7aagvyw637kk5barlrmugmd4",
+        "judged_at_iso": "2026-08-28T18:47:09+00:00",
+        "method": "CONTENT_ADDRESSED_EVIDENCE",
+        "note": "Synthetic reading-log acceptance check.",
+        "period": "0",
+        "reason": "Evidence is a JSON reading log showing activity='reading', completed=true, and duration_minutes=35, which meets the stated acceptance criteria. No identity, timestamp, or third-party attestation is required.",
+        "verdict": "KEPT"
+      }
+    },
+    "self-win-expired-counts": {
+      "checked_at": "2026-08-28T18:50:50.227239+00:00",
+      "expected": {
+        "kept_count": "1",
+        "miss_count": "2"
+      },
+      "observed": {
+        "allowed_misses": "1",
+        "appeal_deadline_unix": "0",
+        "appeal_open": false,
+        "created_at_iso": "2026-08-28T18:44:07+00:00",
+        "end_unix": "1787942999",
+        "failure_recipient": "0xBf46A84B8A4aF420543db043207AF0B93F9486a8",
+        "id": "sp2-5",
+        "kept_count": "1",
+        "maker": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
+        "miss_count": "2",
+        "mode": "SELF",
+        "next_period": "3",
+        "next_window_close": "1787943059",
+        "next_window_open": "1787942999",
+        "periods_total": "3",
+        "pot_atto": "1000000000000000",
+        "settleable": true,
+        "stake_atto": "1000000000000000",
+        "start_unix": "1787942819",
+        "status": "LIVE",
+        "success_criteria": "For this StudioNet demonstration, accept a JSON reading log as evidence. The log must show activity reading, completed true, and duration_minutes at least 30. No identity, timestamp, or third-party attestation is required.",
+        "taker": "",
+        "title": "Release acceptance: self-win",
+        "window_open_now": false
+      }
+    },
+    "self-win-auto-miss": {
+      "checked_at": "2026-08-28T18:50:52.464686+00:00",
+      "expected": {
+        "verdict": "MISSED",
+        "method": "AUTO_MISS"
+      },
+      "observed": {
+        "appealed": false,
+        "confidence_bucket": "100",
+        "content_digest": "",
+        "evidence_url": "",
+        "judged_at_iso": "2026-08-28T18:50:09+00:00",
+        "method": "AUTO_MISS",
+        "note": "",
+        "period": "1",
+        "reason": "window expired without accepted evidence",
+        "verdict": "MISSED"
+      }
+    },
+    "self-win-provisional": {
+      "checked_at": "2026-08-28T18:51:41.341928+00:00",
+      "expected": {
+        "status": "PROVISIONAL_LOST"
+      },
+      "observed": {
+        "allowed_misses": "1",
+        "appeal_deadline_unix": "1787943360",
+        "appeal_open": true,
+        "created_at_iso": "2026-08-28T18:44:07+00:00",
+        "end_unix": "1787942999",
+        "failure_recipient": "0xBf46A84B8A4aF420543db043207AF0B93F9486a8",
+        "id": "sp2-5",
+        "kept_count": "1",
+        "maker": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
+        "miss_count": "2",
+        "mode": "SELF",
+        "next_period": "3",
+        "next_window_close": "1787943059",
+        "next_window_open": "1787942999",
+        "periods_total": "3",
+        "pot_atto": "1000000000000000",
+        "settleable": false,
+        "stake_atto": "1000000000000000",
+        "start_unix": "1787942819",
+        "status": "PROVISIONAL_LOST",
+        "success_criteria": "For this StudioNet demonstration, accept a JSON reading log as evidence. The log must show activity reading, completed true, and duration_minutes at least 30. No identity, timestamp, or third-party attestation is required.",
+        "taker": "",
+        "title": "Release acceptance: self-win",
+        "window_open_now": false
+      }
+    },
+    "self-win-appeal-verdict": {
+      "checked_at": "2026-08-28T18:53:38.533744+00:00",
+      "expected": {
+        "verdict": "KEPT",
+        "appealed": true,
+        "method": "APPEAL_EVIDENCE",
+        "content_digest": "89abffa5a23120b59cf3d3faa08191d7047e001ab8b7b7f52ba104571650cc1f"
+      },
+      "observed": {
+        "appealed": true,
+        "confidence_bucket": "100",
+        "content_digest": "89abffa5a23120b59cf3d3faa08191d7047e001ab8b7b7f52ba104571650cc1f",
+        "evidence_url": "https://gateway.pinata.cloud/ipfs/bafkreiejvp72lirrec2zz46t7kqideoxar7aagvyw637kk5barlrmugmd4",
+        "judged_at_iso": "2026-08-28T18:52:36+00:00",
+        "method": "APPEAL_EVIDENCE",
+        "note": "",
+        "period": "1",
+        "reason": "The evidence is a JSON log showing activity 'reading', completed true, and duration_minutes 35, which meets all stated success criteria.",
+        "verdict": "KEPT"
+      }
+    },
+    "self-win-appeal-counts": {
+      "checked_at": "2026-08-28T18:53:40.768057+00:00",
+      "expected": {
+        "status": "PROVISIONAL_WON",
+        "kept_count": "2",
+        "miss_count": "1",
+        "appeal_deadline_unix": "1787943360"
+      },
+      "observed": {
+        "allowed_misses": "1",
+        "appeal_deadline_unix": "1787943360",
+        "appeal_open": true,
+        "created_at_iso": "2026-08-28T18:44:07+00:00",
+        "end_unix": "1787942999",
+        "failure_recipient": "0xBf46A84B8A4aF420543db043207AF0B93F9486a8",
+        "id": "sp2-5",
+        "kept_count": "2",
+        "maker": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
+        "miss_count": "1",
+        "mode": "SELF",
+        "next_period": "3",
+        "next_window_close": "1787943059",
+        "next_window_open": "1787942999",
+        "periods_total": "3",
+        "pot_atto": "1000000000000000",
+        "settleable": false,
+        "stake_atto": "1000000000000000",
+        "start_unix": "1787942819",
+        "status": "PROVISIONAL_WON",
+        "success_criteria": "For this StudioNet demonstration, accept a JSON reading log as evidence. The log must show activity reading, completed true, and duration_minutes at least 30. No identity, timestamp, or third-party attestation is required.",
+        "taker": "",
+        "title": "Release acceptance: self-win",
+        "window_open_now": false
+      }
+    },
+    "self-win-finalized": {
+      "checked_at": "2026-08-28T18:56:56.527691+00:00",
+      "expected": {
+        "status": "WON"
+      },
+      "observed": {
+        "allowed_misses": "1",
+        "appeal_deadline_unix": "1787943360",
+        "appeal_open": false,
+        "created_at_iso": "2026-08-28T18:44:07+00:00",
+        "end_unix": "1787942999",
+        "failure_recipient": "0xBf46A84B8A4aF420543db043207AF0B93F9486a8",
+        "id": "sp2-5",
+        "kept_count": "2",
+        "maker": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
+        "miss_count": "1",
+        "mode": "SELF",
+        "next_period": "3",
+        "next_window_close": "1787943059",
+        "next_window_open": "1787942999",
+        "periods_total": "3",
+        "pot_atto": "1000000000000000",
+        "settleable": false,
+        "stake_atto": "1000000000000000",
+        "start_unix": "1787942819",
+        "status": "WON",
+        "success_criteria": "For this StudioNet demonstration, accept a JSON reading log as evidence. The log must show activity reading, completed true, and duration_minutes at least 30. No identity, timestamp, or third-party attestation is required.",
+        "taker": "",
+        "title": "Release acceptance: self-win",
+        "window_open_now": false
+      }
+    },
+    "self-win-settled": {
+      "checked_at": "2026-08-28T18:58:31.667652+00:00",
+      "expected": {
+        "status": "SETTLED"
+      },
+      "observed": {
+        "allowed_misses": "1",
+        "appeal_deadline_unix": "1787943360",
+        "appeal_open": false,
+        "created_at_iso": "2026-08-28T18:44:07+00:00",
+        "end_unix": "1787942999",
+        "failure_recipient": "0xBf46A84B8A4aF420543db043207AF0B93F9486a8",
+        "id": "sp2-5",
+        "kept_count": "2",
+        "maker": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
+        "miss_count": "1",
+        "mode": "SELF",
+        "next_period": "3",
+        "next_window_close": "1787943059",
+        "next_window_open": "1787942999",
+        "periods_total": "3",
+        "pot_atto": "1000000000000000",
+        "settleable": false,
+        "stake_atto": "1000000000000000",
+        "start_unix": "1787942819",
+        "status": "SETTLED",
+        "success_criteria": "For this StudioNet demonstration, accept a JSON reading log as evidence. The log must show activity reading, completed true, and duration_minutes at least 30. No identity, timestamp, or third-party attestation is required.",
+        "taker": "",
+        "title": "Release acceptance: self-win",
+        "window_open_now": false
+      }
+    },
+    "self-loss-provisional": {
+      "checked_at": "2026-08-28T19:03:17.577275+00:00",
+      "expected": {
+        "status": "PROVISIONAL_LOST",
+        "kept_count": "0",
+        "miss_count": "3"
+      },
+      "observed": {
+        "allowed_misses": "1",
+        "appeal_deadline_unix": "1787944058",
+        "appeal_open": true,
+        "created_at_iso": "2026-08-28T18:41:40+00:00",
+        "end_unix": "1787942790",
+        "failure_recipient": "0xBf46A84B8A4aF420543db043207AF0B93F9486a8",
+        "id": "sp2-4",
+        "kept_count": "0",
+        "maker": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
+        "miss_count": "3",
+        "mode": "SELF",
+        "next_period": "3",
+        "next_window_close": "1787942850",
+        "next_window_open": "1787942790",
+        "periods_total": "3",
+        "pot_atto": "1000000000000000",
+        "settleable": false,
+        "stake_atto": "1000000000000000",
+        "start_unix": "1787942610",
+        "status": "PROVISIONAL_LOST",
+        "success_criteria": "For this StudioNet demonstration, accept a JSON reading log as evidence. The log must show activity reading, completed true, and duration_minutes at least 30. No identity, timestamp, or third-party attestation is required.",
+        "taker": "",
+        "title": "Release acceptance: self-loss",
+        "window_open_now": false
+      }
+    },
+    "challenge-loss-provisional": {
+      "checked_at": "2026-08-28T19:04:07.467079+00:00",
+      "expected": {
+        "status": "PROVISIONAL_LOST",
+        "kept_count": "0",
+        "miss_count": "3"
+      },
+      "observed": {
+        "allowed_misses": "1",
+        "appeal_deadline_unix": "1787944108",
+        "appeal_open": true,
+        "created_at_iso": "2026-08-28T18:37:40+00:00",
+        "end_unix": "1787943032",
+        "failure_recipient": "0xBf46A84B8A4aF420543db043207AF0B93F9486a8",
+        "id": "sp2-3",
+        "kept_count": "0",
+        "maker": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
+        "miss_count": "3",
+        "mode": "CHALLENGE",
+        "next_period": "3",
+        "next_window_close": "1787943092",
+        "next_window_open": "1787943032",
+        "periods_total": "3",
+        "pot_atto": "2000000000000000",
+        "settleable": false,
+        "stake_atto": "1000000000000000",
+        "start_unix": "1787942852",
+        "status": "PROVISIONAL_LOST",
+        "success_criteria": "For this StudioNet demonstration, accept a JSON reading log as evidence. The log must show activity reading, completed true, and duration_minutes at least 30. No identity, timestamp, or third-party attestation is required.",
+        "taker": "0xBf46A84B8A4aF420543db043207AF0B93F9486a8",
+        "title": "Release acceptance: challenge-loss",
+        "window_open_now": false
+      }
+    },
+    "challenge-loss-reviewed-miss": {
+      "checked_at": "2026-08-28T19:05:11.249020+00:00",
+      "expected": {
+        "verdict": "MISSED",
+        "method": "APPEAL_EVIDENCE",
+        "appealed": true,
+        "content_digest": "5291f327561fb52c1069263727b4ab9ec9816d2f43a7b2a879061cbb41016915"
+      },
+      "observed": {
+        "appealed": true,
+        "confidence_bucket": "100",
+        "content_digest": "5291f327561fb52c1069263727b4ab9ec9816d2f43a7b2a879061cbb41016915",
+        "evidence_url": "https://gateway.pinata.cloud/ipfs/bafkreicsshzsovq7wuwba2jgg4t3jk46zgaw2l2du6zkq6igds5ucaljcu",
+        "judged_at_iso": "2026-08-28T19:04:16+00:00",
+        "method": "APPEAL_EVIDENCE",
+        "note": "",
+        "period": "0",
+        "reason": "The evidence fails the success criteria: 'completed' is false (required true) and 'duration_minutes' is 5 (required at least 30).",
+        "verdict": "MISSED"
+      }
+    },
+    "challenge-win-matched": {
+      "checked_at": "2026-08-28T19:06:47.324134+00:00",
+      "expected": {
+        "status": "LIVE",
+        "pot_atto": "2000000000000000"
+      },
+      "observed": {
+        "allowed_misses": "1",
+        "appeal_deadline_unix": "0",
+        "appeal_open": false,
+        "created_at_iso": "2026-08-28T19:05:19+00:00",
+        "end_unix": "1787944271",
+        "failure_recipient": "0xBf46A84B8A4aF420543db043207AF0B93F9486a8",
+        "id": "sp2-6",
+        "kept_count": "0",
+        "maker": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
+        "miss_count": "0",
+        "mode": "CHALLENGE",
+        "next_period": "0",
+        "next_window_close": "1787944151",
+        "next_window_open": "1787944091",
+        "periods_total": "3",
+        "pot_atto": "2000000000000000",
+        "settleable": false,
+        "stake_atto": "1000000000000000",
+        "start_unix": "1787944091",
+        "status": "LIVE",
+        "success_criteria": "For this StudioNet demonstration, accept a JSON reading log as evidence. The log must show activity reading, completed true, and duration_minutes at least 30. No identity, timestamp, or third-party attestation is required.",
+        "taker": "0xBf46A84B8A4aF420543db043207AF0B93F9486a8",
+        "title": "Release acceptance: challenge-win",
+        "window_open_now": false
+      }
+    },
+    "challenge-win-proof-verdict": {
+      "checked_at": "2026-08-28T19:09:48.598017+00:00",
+      "expected": {
+        "verdict": "KEPT",
+        "method": "CONTENT_ADDRESSED_EVIDENCE"
+      },
+      "observed": {
+        "appealed": false,
+        "confidence_bucket": "100",
+        "content_digest": "89abffa5a23120b59cf3d3faa08191d7047e001ab8b7b7f52ba104571650cc1f",
+        "evidence_url": "https://gateway.pinata.cloud/ipfs/bafkreiejvp72lirrec2zz46t7kqideoxar7aagvyw637kk5barlrmugmd4",
+        "judged_at_iso": "2026-08-28T19:08:21+00:00",
+        "method": "CONTENT_ADDRESSED_EVIDENCE",
+        "note": "Synthetic challenge reading-log acceptance.",
+        "period": "0",
+        "reason": "Evidence is a valid JSON reading log showing activity 'reading', completed true, and duration_minutes (35) >= 30, satisfying all success criteria.",
+        "verdict": "KEPT"
+      }
+    },
+    "challenge-win-initial-result": {
+      "checked_at": "2026-08-28T19:12:00.742977+00:00",
+      "expected": {
+        "status": "PROVISIONAL_LOST",
+        "kept_count": "1",
+        "miss_count": "2"
+      },
+      "observed": {
+        "allowed_misses": "1",
+        "appeal_deadline_unix": "1787944581",
+        "appeal_open": true,
+        "created_at_iso": "2026-08-28T19:05:19+00:00",
+        "end_unix": "1787944271",
+        "failure_recipient": "0xBf46A84B8A4aF420543db043207AF0B93F9486a8",
+        "id": "sp2-6",
+        "kept_count": "1",
+        "maker": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
+        "miss_count": "2",
+        "mode": "CHALLENGE",
+        "next_period": "3",
+        "next_window_close": "1787944331",
+        "next_window_open": "1787944271",
+        "periods_total": "3",
+        "pot_atto": "2000000000000000",
+        "settleable": false,
+        "stake_atto": "1000000000000000",
+        "start_unix": "1787944091",
+        "status": "PROVISIONAL_LOST",
+        "success_criteria": "For this StudioNet demonstration, accept a JSON reading log as evidence. The log must show activity reading, completed true, and duration_minutes at least 30. No identity, timestamp, or third-party attestation is required.",
+        "taker": "0xBf46A84B8A4aF420543db043207AF0B93F9486a8",
+        "title": "Release acceptance: challenge-win",
+        "window_open_now": false
+      }
+    },
+    "challenge-win-taker-review": {
+      "checked_at": "2026-08-28T19:13:30.714563+00:00",
+      "expected": {
+        "verdict": "KEPT",
+        "appealed": true,
+        "method": "APPEAL_EVIDENCE"
+      },
+      "observed": {
+        "appealed": true,
+        "confidence_bucket": "100",
+        "content_digest": "89abffa5a23120b59cf3d3faa08191d7047e001ab8b7b7f52ba104571650cc1f",
+        "evidence_url": "https://gateway.pinata.cloud/ipfs/bafkreiejvp72lirrec2zz46t7kqideoxar7aagvyw637kk5barlrmugmd4",
+        "judged_at_iso": "2026-08-28T19:12:09+00:00",
+        "method": "APPEAL_EVIDENCE",
+        "note": "Synthetic challenge reading-log acceptance.",
+        "period": "0",
+        "reason": "The evidence is a valid JSON object showing activity 'reading', completed true, and a duration of 35 minutes, which exceeds the minimum requirement of 30 minutes. All success criteria for this period are explicitly met.",
+        "verdict": "KEPT"
+      }
+    },
+    "challenge-win-provisional": {
+      "checked_at": "2026-08-28T19:14:50.543443+00:00",
+      "expected": {
+        "status": "PROVISIONAL_WON",
+        "kept_count": "2",
+        "miss_count": "1"
+      },
+      "observed": {
+        "allowed_misses": "1",
+        "appeal_deadline_unix": "1787944581",
+        "appeal_open": true,
+        "created_at_iso": "2026-08-28T19:05:19+00:00",
+        "end_unix": "1787944271",
+        "failure_recipient": "0xBf46A84B8A4aF420543db043207AF0B93F9486a8",
+        "id": "sp2-6",
+        "kept_count": "2",
+        "maker": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
+        "miss_count": "1",
+        "mode": "CHALLENGE",
+        "next_period": "3",
+        "next_window_close": "1787944331",
+        "next_window_open": "1787944271",
+        "periods_total": "3",
+        "pot_atto": "2000000000000000",
+        "settleable": false,
+        "stake_atto": "1000000000000000",
+        "start_unix": "1787944091",
+        "status": "PROVISIONAL_WON",
+        "success_criteria": "For this StudioNet demonstration, accept a JSON reading log as evidence. The log must show activity reading, completed true, and duration_minutes at least 30. No identity, timestamp, or third-party attestation is required.",
+        "taker": "0xBf46A84B8A4aF420543db043207AF0B93F9486a8",
+        "title": "Release acceptance: challenge-win",
+        "window_open_now": false
+      }
+    },
+    "self-loss-finalized": {
+      "checked_at": "2026-08-28T19:15:38.207539+00:00",
+      "expected": {
+        "status": "LOST"
+      },
+      "observed": {
+        "allowed_misses": "1",
+        "appeal_deadline_unix": "1787944058",
+        "appeal_open": false,
+        "created_at_iso": "2026-08-28T18:41:40+00:00",
+        "end_unix": "1787942790",
+        "failure_recipient": "0xBf46A84B8A4aF420543db043207AF0B93F9486a8",
+        "id": "sp2-4",
+        "kept_count": "0",
+        "maker": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
+        "miss_count": "3",
+        "mode": "SELF",
+        "next_period": "3",
+        "next_window_close": "1787942850",
+        "next_window_open": "1787942790",
+        "periods_total": "3",
+        "pot_atto": "1000000000000000",
+        "settleable": false,
+        "stake_atto": "1000000000000000",
+        "start_unix": "1787942610",
+        "status": "LOST",
+        "success_criteria": "For this StudioNet demonstration, accept a JSON reading log as evidence. The log must show activity reading, completed true, and duration_minutes at least 30. No identity, timestamp, or third-party attestation is required.",
+        "taker": "",
+        "title": "Release acceptance: self-loss",
+        "window_open_now": false
+      }
+    },
+    "self-loss-settled": {
+      "checked_at": "2026-08-28T19:17:12.402627+00:00",
+      "expected": {
+        "status": "SETTLED"
+      },
+      "observed": {
+        "allowed_misses": "1",
+        "appeal_deadline_unix": "1787944058",
+        "appeal_open": false,
+        "created_at_iso": "2026-08-28T18:41:40+00:00",
+        "end_unix": "1787942790",
+        "failure_recipient": "0xBf46A84B8A4aF420543db043207AF0B93F9486a8",
+        "id": "sp2-4",
+        "kept_count": "0",
+        "maker": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
+        "miss_count": "3",
+        "mode": "SELF",
+        "next_period": "3",
+        "next_window_close": "1787942850",
+        "next_window_open": "1787942790",
+        "periods_total": "3",
+        "pot_atto": "1000000000000000",
+        "settleable": false,
+        "stake_atto": "1000000000000000",
+        "start_unix": "1787942610",
+        "status": "SETTLED",
+        "success_criteria": "For this StudioNet demonstration, accept a JSON reading log as evidence. The log must show activity reading, completed true, and duration_minutes at least 30. No identity, timestamp, or third-party attestation is required.",
+        "taker": "",
+        "title": "Release acceptance: self-loss",
+        "window_open_now": false
+      }
+    },
+    "challenge-loss-finalized": {
+      "checked_at": "2026-08-28T19:18:05.124797+00:00",
+      "expected": {
+        "status": "LOST"
+      },
+      "observed": {
+        "allowed_misses": "1",
+        "appeal_deadline_unix": "1787944108",
+        "appeal_open": false,
+        "created_at_iso": "2026-08-28T18:37:40+00:00",
+        "end_unix": "1787943032",
+        "failure_recipient": "0xBf46A84B8A4aF420543db043207AF0B93F9486a8",
+        "id": "sp2-3",
+        "kept_count": "0",
+        "maker": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
+        "miss_count": "3",
+        "mode": "CHALLENGE",
+        "next_period": "3",
+        "next_window_close": "1787943092",
+        "next_window_open": "1787943032",
+        "periods_total": "3",
+        "pot_atto": "2000000000000000",
+        "settleable": false,
+        "stake_atto": "1000000000000000",
+        "start_unix": "1787942852",
+        "status": "LOST",
+        "success_criteria": "For this StudioNet demonstration, accept a JSON reading log as evidence. The log must show activity reading, completed true, and duration_minutes at least 30. No identity, timestamp, or third-party attestation is required.",
+        "taker": "0xBf46A84B8A4aF420543db043207AF0B93F9486a8",
+        "title": "Release acceptance: challenge-loss",
+        "window_open_now": false
+      }
+    },
+    "challenge-loss-settled": {
+      "checked_at": "2026-08-28T19:41:34.050953+00:00",
+      "expected": {
+        "status": "SETTLED"
+      },
+      "observed": {
+        "allowed_misses": "1",
+        "appeal_deadline_unix": "1787944108",
+        "appeal_open": false,
+        "created_at_iso": "2026-08-28T18:37:40+00:00",
+        "end_unix": "1787943032",
+        "failure_recipient": "0xBf46A84B8A4aF420543db043207AF0B93F9486a8",
+        "id": "sp2-3",
+        "kept_count": "0",
+        "maker": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
+        "miss_count": "3",
+        "mode": "CHALLENGE",
+        "next_period": "3",
+        "next_window_close": "1787943092",
+        "next_window_open": "1787943032",
+        "periods_total": "3",
+        "pot_atto": "2000000000000000",
+        "settleable": false,
+        "stake_atto": "1000000000000000",
+        "start_unix": "1787942852",
+        "status": "SETTLED",
+        "success_criteria": "For this StudioNet demonstration, accept a JSON reading log as evidence. The log must show activity reading, completed true, and duration_minutes at least 30. No identity, timestamp, or third-party attestation is required.",
+        "taker": "0xBf46A84B8A4aF420543db043207AF0B93F9486a8",
+        "title": "Release acceptance: challenge-loss",
+        "window_open_now": false
+      }
+    },
+    "challenge-win-finalized": {
+      "checked_at": "2026-08-28T19:42:23.022214+00:00",
+      "expected": {
+        "status": "WON"
+      },
+      "observed": {
+        "allowed_misses": "1",
+        "appeal_deadline_unix": "1787944581",
+        "appeal_open": false,
+        "created_at_iso": "2026-08-28T19:05:19+00:00",
+        "end_unix": "1787944271",
+        "failure_recipient": "0xBf46A84B8A4aF420543db043207AF0B93F9486a8",
+        "id": "sp2-6",
+        "kept_count": "2",
+        "maker": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
+        "miss_count": "1",
+        "mode": "CHALLENGE",
+        "next_period": "3",
+        "next_window_close": "1787944331",
+        "next_window_open": "1787944271",
+        "periods_total": "3",
+        "pot_atto": "2000000000000000",
+        "settleable": false,
+        "stake_atto": "1000000000000000",
+        "start_unix": "1787944091",
+        "status": "WON",
+        "success_criteria": "For this StudioNet demonstration, accept a JSON reading log as evidence. The log must show activity reading, completed true, and duration_minutes at least 30. No identity, timestamp, or third-party attestation is required.",
+        "taker": "0xBf46A84B8A4aF420543db043207AF0B93F9486a8",
+        "title": "Release acceptance: challenge-win",
+        "window_open_now": false
+      }
+    },
+    "challenge-win-settled": {
+      "checked_at": "2026-08-28T19:43:58.281583+00:00",
+      "expected": {
+        "status": "SETTLED"
+      },
+      "observed": {
+        "allowed_misses": "1",
+        "appeal_deadline_unix": "1787944581",
+        "appeal_open": false,
+        "created_at_iso": "2026-08-28T19:05:19+00:00",
+        "end_unix": "1787944271",
+        "failure_recipient": "0xBf46A84B8A4aF420543db043207AF0B93F9486a8",
+        "id": "sp2-6",
+        "kept_count": "2",
+        "maker": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
+        "miss_count": "1",
+        "mode": "CHALLENGE",
+        "next_period": "3",
+        "next_window_close": "1787944331",
+        "next_window_open": "1787944271",
+        "periods_total": "3",
+        "pot_atto": "2000000000000000",
+        "settleable": false,
+        "stake_atto": "1000000000000000",
+        "start_unix": "1787944091",
+        "status": "SETTLED",
+        "success_criteria": "For this StudioNet demonstration, accept a JSON reading log as evidence. The log must show activity reading, completed true, and duration_minutes at least 30. No identity, timestamp, or third-party attestation is required.",
+        "taker": "0xBf46A84B8A4aF420543db043207AF0B93F9486a8",
+        "title": "Release acceptance: challenge-win",
+        "window_open_now": false
+      }
+    }
+  },
+  "completed_phases": {
+    "cancellations": "2026-08-28T18:35:29.832907+00:00",
+    "prepare_losses": "2026-08-28T18:42:19.402757+00:00",
+    "self_win": "2026-08-28T18:59:17.186619+00:00",
+    "prepare_loss_settlements": "2026-08-28T19:05:11.258016+00:00",
+    "prepare_challenge_win": "2026-08-28T19:14:50.548788+00:00",
+    "settle_losses": "2026-08-28T19:41:34.062147+00:00",
+    "finish_challenge_win": "2026-08-28T19:43:58.292309+00:00",
+    "verify_transfers": "2026-08-28T19:44:27.558869+00:00"
+  },
+  "transfer_checks": {
+    "cancel-self": {
+      "checked_at": "2026-08-28T19:44:01.795963+00:00",
+      "parent": "0x08ff49409751f248c429caac74d0f10e9a7ca66c718b27e5c6f397a370601a89",
+      "transfer": "0xb27e4811b23a1a4dd553caad501dd39d01cfa64c55288cc3c2ef45f517b01cfc",
+      "recipient": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
+      "value_atto": "1000000000000000",
+      "status": "FINALIZED",
+      "value_credited": true
+    },
+    "cancel-unmatched-challenge": {
+      "checked_at": "2026-08-28T19:44:06.305872+00:00",
+      "parent": "0xa6f9c2c78620d68430a53cf9b3c527d52a5a583732bb36ffdb4201fc4cf0595c",
+      "transfer": "0xaef509b7f4977beafc17b43fd4f20ba8bcd990b6772abcd392544ce5ff972394",
+      "recipient": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
+      "value_atto": "1000000000000000",
+      "status": "FINALIZED",
+      "value_credited": true
+    },
+    "self-win-claim": {
+      "checked_at": "2026-08-28T19:44:10.776572+00:00",
+      "parent": "0x75150c29f989626d8cda1833552a70be7e9e167e66d5e09e40b862b428a14436",
+      "transfer": "0xb413a4ad8154709a15fde2cbcc6195cded4741dad8bd62612399f5a899b09a05",
+      "recipient": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
+      "value_atto": "1000000000000000",
+      "status": "FINALIZED",
+      "value_credited": true
+    },
+    "self-loss-claim": {
+      "checked_at": "2026-08-28T19:44:15.329889+00:00",
+      "parent": "0xef7f5cca889f69eb592ec38bd4fe32fe79f47543ed56c3b7136ba28b56e4bc0e",
+      "transfer": "0xccad7485d18619fa8fbfb7df9a030304492805dcd3dc522adc8773b9670fac0b",
+      "recipient": "0xBf46A84B8A4aF420543db043207AF0B93F9486a8",
+      "value_atto": "1000000000000000",
+      "status": "FINALIZED",
+      "value_credited": true
+    },
+    "challenge-loss-claim": {
+      "checked_at": "2026-08-28T19:44:19.835668+00:00",
+      "parent": "0xa05be7cd262a2bb30532aff41c070d79ef32fc9b8871b1b076abefc612be0e84",
+      "transfer": "0x4b881cfe9a7639f2a09ef16cd6699e6b5c4e572fabd24862b362856f4bdc377c",
+      "recipient": "0xBf46A84B8A4aF420543db043207AF0B93F9486a8",
+      "value_atto": "2000000000000000",
+      "status": "FINALIZED",
+      "value_credited": true
+    },
+    "challenge-win-claim": {
+      "checked_at": "2026-08-28T19:44:24.288798+00:00",
+      "parent": "0x971722a6fa3185fbf3b371dbb200b5cfbae8fd868aa738f9e97506d21f01ffee",
+      "transfer": "0x2bc631ba1300d675ecae7d3ea62d672990945f31d64c98fcae311281f0c881c1",
+      "recipient": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
+      "value_atto": "2000000000000000",
+      "status": "FINALIZED",
+      "value_credited": true
+    }
+  },
+  "final_stats": {
+    "total_challenge": "3",
+    "total_created": "6",
+    "total_kept": "4",
+    "total_missed": "8",
+    "total_self": "3",
+    "total_settled": "4"
+  }
+}
