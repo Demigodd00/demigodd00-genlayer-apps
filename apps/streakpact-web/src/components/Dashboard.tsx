@@ -153,7 +153,7 @@ export default function Dashboard({
     return (
       <div className="empty-panel error-panel">
         <p className="eyebrow">Couldn’t load your pacts</p>
-        <h2>Your data is still safe.</h2>
+        <h2>Try loading your pacts again.</h2>
         <p>{error}</p>
         <button className="button button-secondary" onClick={() => void load()}>Try again</button>
       </div>
@@ -165,8 +165,8 @@ export default function Dashboard({
       <div className="empty-panel">
         <span className="empty-orbit" aria-hidden="true" />
         <p className="eyebrow">Your dashboard</p>
-        <h2>Connect to see the pacts tied to your wallet.</h2>
-        <p>StreakPact never asks for or stores your private key.</p>
+        <h2>Connect your wallet to see your pacts.</h2>
+        <p>Your keys stay in your wallet.</p>
       </div>
     );
   }
@@ -176,8 +176,8 @@ export default function Dashboard({
       <div className="empty-panel">
         <span className="empty-orbit" aria-hidden="true" />
         <p className="eyebrow">No pacts yet</p>
-        <h2>Your next promise can be the first one you make visible.</h2>
-        <p>Create a self-stake pact or open a challenge for a friend.</p>
+        <h2>Start your first pact.</h2>
+        <p>Go solo or challenge a friend.</p>
       </div>
     );
   }
@@ -186,7 +186,7 @@ export default function Dashboard({
     <section className="dashboard-grid">
       <aside className="pact-list" aria-label="Your pacts">
         <div className="list-heading">
-          <div><p className="eyebrow">My pacts</p><h2>{items.length} active record{items.length === 1 ? "" : "s"}</h2></div>
+          <div><p className="eyebrow">My pacts</p><h2>{items.length} pact{items.length === 1 ? "" : "s"}</h2></div>
           <button className="icon-button" aria-label="Refresh pacts" onClick={() => void load()}>↻</button>
         </div>
         {!CONTRACT_READY ? <div className="preview-ribbon">Product preview</div> : null}
@@ -256,7 +256,7 @@ function PactDetail({
   async function run(action: () => Promise<unknown>) {
     setError("");
     if (!session || isPreview) {
-      setError(isPreview ? "Actions are disabled in product-preview mode." : "Connect your wallet to continue.");
+      setError(isPreview ? "Transactions are disabled in preview mode." : "Connect your wallet to continue.");
       return;
     }
     try {
@@ -338,13 +338,13 @@ function PactDetail({
 
       <div className="metric-row">
         <div><span>Progress</span><strong>{pact.kept_count} kept</strong><small>{completion}% of total</small></div>
-        <div><span>Grace used</span><strong>{pact.miss_count} / {pact.allowed_misses}</strong><small>misses</small></div>
-        <div><span>Test escrow</span><strong>{formatGen(pact.pot_atto)} GEN</strong><small>{pact.mode === "SELF" ? "self-stake" : "matched pot"}</small></div>
+        <div><span>Misses used</span><strong>{pact.miss_count} / {pact.allowed_misses}</strong><small>allowed</small></div>
+        <div><span>Test stake</span><strong>{formatGen(pact.pot_atto)} GEN</strong><small>{pact.mode === "SELF" ? "self-stake" : "matched pot"}</small></div>
         <div><span>Next window</span><strong>{pact.status === "LIVE" ? countdown(pact.next_window_close) : "—"}</strong><small>{pact.status === "LIVE" ? "remaining" : "not active"}</small></div>
       </div>
 
       <section className="timeline-section">
-        <div className="section-heading"><div><p className="eyebrow">Evidence timeline</p><h3>Every period, accounted for</h3></div><span>{checkins.length} / {pact.periods_total}</span></div>
+        <div className="section-heading"><div><p className="eyebrow">Progress</p><h3>Your streak</h3></div><span>{checkins.length} / {pact.periods_total}</span></div>
         <div className="streak-grid" aria-label="Period verdicts">
           {Array.from({ length: Number(pact.periods_total) }, (_, index) => {
             const item = checkins.find((checkin) => Number(checkin.period) === index);
@@ -362,15 +362,15 @@ function PactDetail({
               <div key={item.period}>
                 <span className={`verdict-mark verdict-${item.verdict.toLowerCase()}`}>{item.verdict === "KEPT" ? "✓" : "×"}</span>
                 <div><strong>Period {Number(item.period) + 1} · {item.verdict}</strong><p>{item.reason}</p></div>
-                <small>{item.method.replaceAll("_", " ")} · {item.confidence_bucket}%</small>
+                <small>{item.confidence_bucket}% confidence</small>
               </div>
             ))}
           </div>
-        ) : <p className="muted">No verdicts have been recorded yet.</p>}
+        ) : <p className="muted">No check-ins yet.</p>}
       </section>
 
       <section className="action-section">
-        <div className="section-heading"><div><p className="eyebrow">Recommended action</p><h3>{actionHeading(pact, isMaker)}</h3></div></div>
+        <div className="section-heading"><div><p className="eyebrow">Next step</p><h3>{actionHeading(pact, isMaker)}</h3></div></div>
 
         {pact.status === "OPEN" && isMaker ? (
           <div className="inline-actions">
@@ -387,7 +387,6 @@ function PactDetail({
 
         {pact.status === "LIVE" && isMaker && pact.window_open_now ? (
           <div className="evidence-form">
-            <div className="notice-box"><strong>Immutable, public evidence only</strong><p>Publish a small JSON or text record with no secrets. The app hashes the exact bytes before they reach GenLayer.</p></div>
             <EvidenceFilePicker
               idPrefix={`checkin-${pact.id}`}
               onDigest={setDigest}
@@ -396,15 +395,20 @@ function PactDetail({
                 setDigest(published.digest);
               }}
             />
-            <label><span>Evidence URL</span><input value={evidenceUrl} onChange={(event) => setEvidenceUrl(event.target.value)} placeholder="https://arweave.net/…" /></label>
-            <label><span>SHA-256 digest</span><input className="mono" value={digest} onChange={(event) => setDigest(event.target.value)} maxLength={64} placeholder="64 hexadecimal characters" /></label>
-            <label><span>Context for validators <em>optional</em></span><textarea value={note} onChange={(event) => setNote(event.target.value)} rows={3} maxLength={240} /></label>
-            <button className="button button-primary" onClick={sendCheckin}>Submit evidence to GenLayer</button>
+            <details className="evidence-details">
+              <summary>Proof link &amp; fingerprint</summary>
+              <div className="form-stack compact-form">
+                <label><span>IPFS or Arweave URL</span><input value={evidenceUrl} onChange={(event) => setEvidenceUrl(event.target.value)} placeholder="https://arweave.net/…" /></label>
+                <label><span>SHA-256 fingerprint</span><input className="mono" value={digest} onChange={(event) => setDigest(event.target.value)} maxLength={64} placeholder="64 hexadecimal characters" /></label>
+              </div>
+            </details>
+            <label><span>Note <em>optional</em></span><textarea value={note} onChange={(event) => setNote(event.target.value)} rows={3} maxLength={240} /></label>
+            <button className="button button-primary" onClick={sendCheckin}>Submit proof</button>
           </div>
         ) : null}
 
-        {canSync ? <button className="button button-secondary" onClick={() => void run(() => syncPact(session!, pact.id, setProgress))}>Account for elapsed periods</button> : null}
-        {pact.settleable ? <button className="button button-primary" onClick={() => void run(() => proposeSettlement(session!, pact.id, setProgress))}>Propose final result</button> : null}
+        {canSync ? <button className="button button-secondary" onClick={() => void run(() => syncPact(session!, pact.id, setProgress))}>Update missed periods</button> : null}
+        {pact.settleable ? <button className="button button-primary" onClick={() => void run(() => proposeSettlement(session!, pact.id, setProgress))}>Request result</button> : null}
 
         {(pact.status === "PROVISIONAL_WON" || pact.status === "PROVISIONAL_LOST") ? (
           <div className="appeal-panel">
@@ -412,7 +416,7 @@ function PactDetail({
             {pact.appeal_open && appealable.length > 0 ? (
               <div className="form-stack compact-form">
                 <label><span>Period to appeal</span><select value={appealPeriodNumber} onChange={(event) => setAppealPeriodNumber(event.target.value)}><option value="">Choose a period</option>{appealable.map((item) => <option value={item.period} key={item.period}>Period {Number(item.period) + 1} · {item.verdict}</option>)}</select></label>
-                <label><span>Why the verdict should change</span><textarea value={appealStatement} onChange={(event) => setAppealStatement(event.target.value)} rows={3} /></label>
+                <label><span>Reason for appeal</span><textarea value={appealStatement} onChange={(event) => setAppealStatement(event.target.value)} rows={3} /></label>
                 <EvidenceFilePicker
                   idPrefix={`appeal-${pact.id}`}
                   onDigest={setAppealDigest}
@@ -421,8 +425,13 @@ function PactDetail({
                     setAppealDigest(published.digest);
                   }}
                 />
-                <label><span>New immutable evidence URL</span><input value={appealUrl} onChange={(event) => setAppealUrl(event.target.value)} /></label>
-                <label><span>New SHA-256 digest</span><input className="mono" value={appealDigest} onChange={(event) => setAppealDigest(event.target.value)} /></label>
+                <details className="evidence-details">
+                  <summary>Proof link &amp; fingerprint</summary>
+                  <div className="form-stack compact-form">
+                    <label><span>New IPFS or Arweave URL</span><input value={appealUrl} onChange={(event) => setAppealUrl(event.target.value)} /></label>
+                    <label><span>SHA-256 fingerprint</span><input className="mono" value={appealDigest} onChange={(event) => setAppealDigest(event.target.value)} maxLength={64} /></label>
+                  </div>
+                </details>
                 <button className="button button-secondary" disabled={appealPeriodNumber === ""} onClick={sendAppeal}>Submit one-time appeal</button>
               </div>
             ) : null}
@@ -435,7 +444,7 @@ function PactDetail({
         ) : null}
 
         {!isPreview && session ? <p className="account-note">Acting as {shortenAddress(session.address)}</p> : null}
-        {isPreview ? <p className="preview-note">Preview data only. Transactions become available after a reviewed V2 deployment is configured.</p> : null}
+        {isPreview ? <p className="preview-note">Preview only. Transactions are disabled.</p> : null}
         {error ? <p className="form-error" role="alert">{error}</p> : null}
         <TxNotice progress={progress} />
       </section>
@@ -444,12 +453,12 @@ function PactDetail({
 }
 
 function actionHeading(pact: PactView, isMaker: boolean): string {
-  if (pact.status === "OPEN") return isMaker ? "Invite a challenger or cancel for a refund" : "Review the terms before matching the test stake";
-  if (pact.status === "LIVE" && isMaker && pact.window_open_now) return `Submit evidence for period ${Number(pact.next_period) + 1}`;
-  if (pact.status === "LIVE" && pact.settleable) return "All periods are ready for provisional settlement";
-  if (pact.status === "LIVE") return "Your next evidence window is on schedule";
-  if (pact.status.startsWith("PROVISIONAL")) return "Review the provisional verdict before payout";
-  if (pact.status === "WON" || pact.status === "LOST") return "The result is final and ready to claim";
-  if (pact.status === "SETTLED") return "This pact is complete";
+  if (pact.status === "OPEN") return isMaker ? "Invite a challenger" : "Review and join";
+  if (pact.status === "LIVE" && isMaker && pact.window_open_now) return `Submit proof for period ${Number(pact.next_period) + 1}`;
+  if (pact.status === "LIVE" && pact.settleable) return "Ready for a result";
+  if (pact.status === "LIVE") return "Awaiting the next check-in";
+  if (pact.status.startsWith("PROVISIONAL")) return "Review the result";
+  if (pact.status === "WON" || pact.status === "LOST") return "Test tokens ready to claim";
+  if (pact.status === "SETTLED") return "Pact complete";
   return statusLabel(pact.status);
 }

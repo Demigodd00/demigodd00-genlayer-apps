@@ -4,7 +4,7 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "StreakPact by demigodd00 — Put conviction behind your goals",
   description:
-    "Create evidence-backed accountability pacts settled by independent GenLayer validators.",
+    "Make a pact, share proof, and build your streak on GenLayer StudioNet.",
   authors: [{ name: "demigodd00" }],
   creator: "demigodd00",
 };

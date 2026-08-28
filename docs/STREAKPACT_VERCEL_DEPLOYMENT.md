@@ -14,7 +14,7 @@ This is a zero-fee StudioNet demonstration, not a real-money launch.
 - Create a restricted Pinata key with Files Write permission for public uploads.
   Store its JWT as `PINATA_JWT` in Vercel, not a `NEXT_PUBLIC_*` variable.
 
-## Deploy the permanent contract first
+## Deploy the release contract first
 
 Follow [the release runbook](STREAKPACT_STUDIONET_RELEASE.md). Keep preflight on:
 
@@ -47,7 +47,7 @@ Configure Production environment variables:
 
 | Variable | Value |
 | --- | --- |
-| `NEXT_PUBLIC_STREAKPACT_V2_ADDRESS` | Recorded permanent contract address |
+| `NEXT_PUBLIC_STREAKPACT_V2_ADDRESS` | Recorded release contract address |
 | `NEXT_PUBLIC_NETWORK_NAME` | `StudioNet` |
 | `PINATA_JWT` | Restricted server-only Pinata JWT |
 | `STREAKPACT_APP_ORIGIN` | Exact production HTTPS origin; no path or query |
@@ -81,11 +81,11 @@ See [Vercel WAF rate limiting](https://vercel.com/docs/vercel-firewall/vercel-wa
 3. Upload a non-sensitive text/JSON fixture through the real website. Download
    the returned public URL and verify its SHA-256 matches the uploaded bytes.
 4. Record the full two-wallet acceptance matrix from the release runbook against
-   the permanent address: transaction hashes, pact IDs, outcomes and dates.
+   the release address: transaction hashes, pact IDs, outcomes and dates.
 5. Verify cross-origin uploads fail, rate limiting returns 429, invite deep links
    work and the mobile layout/wallet recovery flows are usable.
 6. Retain the StudioNet/no-monetary-value warning and public-evidence warning.
 
-Record the final website URL, source revision, permanent address, acceptance
+Record the final website URL, source revision, release address, acceptance
 results and firewall status in the release record. A hosting build alone is not
 evidence of a finished end-to-end launch.

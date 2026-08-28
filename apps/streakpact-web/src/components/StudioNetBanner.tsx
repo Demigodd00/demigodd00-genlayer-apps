@@ -19,15 +19,15 @@ export default function StudioNetBanner() {
           `${formatDuration(config.period_secs)} periods · ${formatDuration(config.appeal_window_secs)} appeals`,
         );
       })
-      .catch(() => setTiming("contract metrics temporarily unavailable"));
+      .catch(() => setTiming("Timing unavailable"));
   }, []);
 
   return (
     <div className="studionet-banner" role="note">
       <span className="network-dot" aria-hidden="true" />
-      <strong>{NETWORK_NAME} test environment</strong>
+      <strong>{NETWORK_NAME} demo</strong>
       <span>Test GEN has no monetary value</span>
-      <span>{CONTRACT_READY ? timing || "reading contract configuration…" : "V2 contract setup pending"}</span>
+      <span>{CONTRACT_READY ? timing || "Loading timing…" : "Contract setup pending"}</span>
     </div>
   );
 }

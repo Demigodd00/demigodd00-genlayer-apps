@@ -18,14 +18,14 @@ const templates = [
   {
     name: "Strength training",
     kicker: "Fitness",
-    title: "Three strength sessions each week",
+    title: "Complete a 30-minute workout",
     criteria:
       "Complete one documented strength workout lasting at least 30 minutes during every pact period.",
     periods: 4,
     misses: 1,
   },
   {
-    name: "Daily reading",
+    name: "Focused reading",
     kicker: "Learning",
     title: "Read for 30 focused minutes",
     criteria:
@@ -92,8 +92,8 @@ export default function CreatePact({
     if (criteria.trim().length < 20) return "Success criteria need at least 20 characters.";
     if (periods < 3 || periods > 60) return "Choose between 3 and 60 periods.";
     if (misses < 0 || misses > Math.floor(periods / 3)) return "Allowed misses cannot exceed one third of the periods.";
-    if (stakeAtto < 10n ** 15n) return "The minimum stake is 0.001 GEN.";
-    if (stakeAtto > 100n * 10n ** 18n) return "The maximum stake is 100 GEN.";
+    if (stakeAtto < 10n ** 15n) return "The minimum stake is 0.001 test GEN.";
+    if (stakeAtto > 100n * 10n ** 18n) return "The maximum stake is 100 test GEN.";
     if (new Date(start).getTime() < Date.now() + 60_000) return "Start at least one minute from now.";
     if (mode === "SELF") {
       if (!isAddress(failureRecipient)) return "Enter a valid failure-recipient address.";
@@ -116,7 +116,7 @@ export default function CreatePact({
       return;
     }
     if (!CONTRACT_READY) {
-      setError("This environment is in product-preview mode. Configure the V2 contract to transact.");
+      setError("Transactions are unavailable in preview mode.");
       return;
     }
     const validationError = validate();
@@ -153,8 +153,8 @@ export default function CreatePact({
       <section className="success-panel">
         <span className="success-mark" aria-hidden="true">✓</span>
         <p className="eyebrow">Pact confirmed</p>
-        <h2>Your commitment is live.</h2>
-        <p>We’ll surface each evidence window, provisional verdict, and appeal deadline in your dashboard.</p>
+        <h2>Your pact is ready.</h2>
+        <p>Track your progress in My pacts.</p>
         <button className="button button-primary" onClick={() => { setCreated(false); setReviewing(false); }}>
           Create another pact
         </button>
@@ -165,9 +165,8 @@ export default function CreatePact({
   return (
     <section className="create-layout">
       <aside className="template-column">
-        <p className="eyebrow">Start with a proven shape</p>
-        <h2>Choose a pact template</h2>
-        <p className="muted">Templates keep evidence rules specific enough for independent validators to judge.</p>
+        <p className="eyebrow">Templates</p>
+        <h2>Pick a starting point</h2>
         <div className="template-list">
           {templates.map((template, index) => (
             <button className="template-card" key={template.name} onClick={() => applyTemplate(index)}>
@@ -182,8 +181,8 @@ export default function CreatePact({
       <div className="form-card">
         <div className="form-heading">
           <div>
-            <p className="eyebrow">{reviewing ? "Final review" : "Design your pact"}</p>
-            <h2>{reviewing ? "Know exactly what you’re signing" : "Turn intention into a clear agreement"}</h2>
+            <p className="eyebrow">{reviewing ? "Review" : "New pact"}</p>
+            <h2>{reviewing ? "Review your pact" : "Create your pact"}</h2>
           </div>
           <span className="step-pill">{reviewing ? "2 / 2" : "1 / 2"}</span>
         </div>
@@ -197,20 +196,20 @@ export default function CreatePact({
             </div>
             <dl className="review-grid">
               <div><dt>Schedule</dt><dd>{periods} periods</dd></div>
-              <div><dt>Grace</dt><dd>{misses} misses</dd></div>
+              <div><dt>Allowed misses</dt><dd>{misses}</dd></div>
               <div><dt>Your test stake</dt><dd>{formatGen(stakeAtto)} GEN</dd></div>
               <div><dt>Starts</dt><dd>{new Date(start).toLocaleString()}</dd></div>
-              <div className="review-wide"><dt>Evidence</dt><dd>Immutable IPFS or Arweave artifact + SHA-256 digest</dd></div>
-              {mode === "SELF" ? <div className="review-wide"><dt>If you miss</dt><dd className="mono">{failureRecipient}</dd></div> : null}
+              <div className="review-wide"><dt>Proof</dt><dd>Public file on IPFS or Arweave</dd></div>
+              {mode === "SELF" ? <div className="review-wide"><dt>If you lose</dt><dd className="mono">{failureRecipient}</dd></div> : null}
             </dl>
             <div className="notice-box">
-              <strong>Settlement safeguard</strong>
-              <p>Every elapsed period is counted. Payouts remain locked through the appeal window.</p>
+              <strong>Before you confirm</strong>
+              <p>Skipped periods count as misses. Claims open after appeals close.</p>
             </div>
             <div className="form-actions">
-              <button className="button button-secondary" onClick={() => setReviewing(false)}>Back to edit</button>
+              <button className="button button-secondary" onClick={() => setReviewing(false)}>Edit</button>
               <button className="button button-primary" onClick={submit} disabled={progress?.state === "finalizing"}>
-                {CONTRACT_READY ? "Confirm with StudioNet test GEN" : "Preview mode — deployment required"}
+                {CONTRACT_READY ? "Confirm test stake" : "Preview only"}
               </button>
             </div>
           </div>
@@ -220,10 +219,10 @@ export default function CreatePact({
               <legend>Pact style</legend>
               <div className="segmented">
                 <button className={mode === "SELF" ? "active" : ""} onClick={() => setMode("SELF")} type="button">
-                  <strong>Self-stake</strong><span>Put your own commitment on the line</span>
+                  <strong>Self-stake</strong><span>Your own goal</span>
                 </button>
                 <button className={mode === "CHALLENGE" ? "active" : ""} onClick={() => setMode("CHALLENGE")} type="button">
-                  <strong>Challenge</strong><span>Invite someone to match your stake</span>
+                  <strong>Challenge</strong><span>Invite a challenger</span>
                 </button>
               </div>
             </fieldset>
@@ -232,9 +231,9 @@ export default function CreatePact({
               <input value={title} onChange={(event) => setTitle(event.target.value)} maxLength={80} />
             </label>
             <label>
-              <span>Exact success criteria</span>
+              <span>Success criteria</span>
               <textarea value={criteria} onChange={(event) => setCriteria(event.target.value)} maxLength={600} rows={4} />
-              <small>Describe one period, the minimum result, and what the evidence must show.</small>
+              <small>What must your proof show each period?</small>
             </label>
             <div className="field-row">
               <label><span>Periods</span><input type="number" min={3} max={60} value={periods} onChange={(event) => setPeriods(Number(event.target.value))} /></label>
@@ -247,13 +246,13 @@ export default function CreatePact({
             {mode === "SELF" ? (
               <label>
                 <span>Failure recipient</span>
-                <input className="mono" placeholder="0x… charity, friend, or accountability pool" value={failureRecipient} onChange={(event) => setFailureRecipient(event.target.value)} />
-                <small>This address receives the stake only if the final result is lost.</small>
+                <input className="mono" placeholder="0x… recipient address" value={failureRecipient} onChange={(event) => setFailureRecipient(event.target.value)} />
+                <small>Receives your test stake if you lose.</small>
               </label>
             ) : (
-              <div className="notice-box"><strong>Invite after creation</strong><p>Your pact stays unfunded by the challenger until they open the share link and match your stake.</p></div>
+              <div className="notice-box"><strong>Invite after creation</strong><p>Share the invite. Your challenger matches the test stake.</p></div>
             )}
-            <button className="button button-primary button-wide" onClick={openReview}>Review pact terms</button>
+            <button className="button button-primary button-wide" onClick={openReview}>Review pact</button>
           </div>
         )}
         {error ? <p className="form-error" role="alert">{error}</p> : null}

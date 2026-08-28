@@ -47,7 +47,7 @@ export default function EvidenceFilePicker({
     try {
       const result = await publishEvidence(file);
       if (result.digest.toLowerCase() !== localDigest.toLowerCase()) {
-        throw new Error("The published bytes did not match the file you selected. Nothing was submitted onchain.");
+        throw new Error("File verification failed. Nothing was submitted onchain.");
       }
       onDigest(result.digest);
       onPublished(result);
@@ -63,14 +63,14 @@ export default function EvidenceFilePicker({
   return (
     <div className="evidence-publisher">
       <label htmlFor={inputId}>
-        <span>Choose the exact evidence file</span>
+        <span>Proof file</span>
         <input
           id={inputId}
           type="file"
           accept=".json,.txt,application/json,text/plain"
           onChange={(event) => void chooseFile(event.target.files?.[0])}
         />
-        <small>JSON or plain text, maximum 100 KB. Published evidence is public and should contain no secrets.</small>
+        <small>JSON or text · 100 KB max. Proof is public—don’t upload private information.</small>
       </label>
       {file ? (
         <div className="evidence-file-summary">
@@ -83,14 +83,19 @@ export default function EvidenceFilePicker({
           </span>
         </div>
       ) : null}
-      {localDigest ? <code className="evidence-digest-preview">SHA-256 {localDigest}</code> : null}
+      {localDigest ? (
+        <details className="evidence-details">
+          <summary>File fingerprint</summary>
+          <code className="evidence-digest-preview">SHA-256 {localDigest}</code>
+        </details>
+      ) : null}
       <button
         type="button"
         className="button button-secondary evidence-publish-button"
         disabled={!file || state === "hashing" || state === "publishing" || state === "published"}
         onClick={() => void publish()}
       >
-        {state === "publishing" ? "Publishing exact bytes…" : state === "published" ? "Published to public IPFS" : "Publish and fill fields"}
+        {state === "publishing" ? "Publishing…" : state === "published" ? "Published" : "Publish proof"}
       </button>
       {error ? <p className="form-error evidence-publish-error" role="alert">{error}</p> : null}
     </div>

@@ -7,7 +7,7 @@ export default function TxNotice({ progress }: { progress: TxProgress | null }) 
       <span className="tx-dot" aria-hidden="true" />
       <div>
         <strong>{progress.label}</strong>
-        {progress.hash ? <span className="mono">{progress.hash}</span> : null}
+        {progress.hash ? <details className="evidence-details"><summary>Transaction hash</summary><span className="mono">{progress.hash}</span></details> : null}
       </div>
     </div>
   );

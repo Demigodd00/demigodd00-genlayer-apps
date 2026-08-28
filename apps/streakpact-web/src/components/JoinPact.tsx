@@ -36,7 +36,7 @@ export default function JoinPact({
     setError("");
     setPact(null);
     if (!CONTRACT_READY) {
-      setError("Join links become active after the reviewed V2 contract is deployed.");
+      setError("Joining is unavailable in preview mode.");
       return;
     }
     if (!pactId.trim()) {
@@ -74,13 +74,8 @@ export default function JoinPact({
     <section className="join-layout">
       <div className="join-intro">
         <p className="eyebrow">Challenge invitation</p>
-        <h2>Read the commitment before you back the other side.</h2>
-        <p>Joining matches the maker’s StudioNet test stake. The rules, schedule, evidence policy, and appeal window cannot be changed afterward.</p>
-        <ol>
-          <li><span>01</span>Open the shared pact ID</li>
-          <li><span>02</span>Review the exact success criteria</li>
-          <li><span>03</span>Match the test stake with your wallet</li>
-        </ol>
+        <h2>Join a challenge</h2>
+        <p>Match the test stake. The rules are fixed.</p>
       </div>
       <div className="form-card join-card">
         <label><span>Pact ID</span><div className="input-action"><input value={pactId} onChange={(event) => setPactId(event.target.value)} placeholder="sp2-…" /><button className="button button-secondary" onClick={() => void review()}>{loading ? "Loading…" : "Review"}</button></div></label>
@@ -96,7 +91,7 @@ export default function JoinPact({
               <div><dt>Allowed misses</dt><dd>{pact.allowed_misses}</dd></div>
               <div className="review-wide"><dt>Starts</dt><dd>{new Date(Number(pact.start_unix) * 1000).toLocaleString()}</dd></div>
             </dl>
-            <button className="button button-primary button-wide" onClick={() => void join()}>Match test stake and join</button>
+            <button className="button button-primary button-wide" onClick={() => void join()}>Match stake &amp; join</button>
           </div>
         ) : null}
         {error ? <p className="form-error" role="alert">{error}</p> : null}
