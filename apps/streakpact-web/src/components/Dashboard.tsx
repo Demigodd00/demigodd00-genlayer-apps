@@ -379,6 +379,13 @@ export function PactDetail({
         <button className="button button-secondary" disabled={busy} onClick={() => void copyInvite()}>{pact.status === "OPEN" ? "Copy invite" : "Copy pact link"}</button>
       </header>
 
+      {pact.status === "VOIDED" ? (
+        <div className="notice-box pact-history-note">
+          <strong>Cancelled before start</strong>
+          <p>The test stake was refunded. Original rules remain visible onchain for auditability.</p>
+        </div>
+      ) : null}
+
       <div className="metric-row">
         <div><span>Progress</span><strong>{pact.kept_count} kept</strong><small>{completion}% of total</small></div>
         <div><span>Misses used</span><strong>{pact.miss_count} / {pact.allowed_misses}</strong><small>allowed</small></div>

@@ -35,9 +35,10 @@ The repository is private by design. Confirm that the Portal’s connected GitHu
 
 1. Open the live app and confirm the banner says StudioNet and that test GEN has no monetary value.
 2. Open **App status**. All four release gates should show **Configured**, and the contract card should open GenLayer Explorer.
-3. Open the public pact view at https://streakpact-zeta.vercel.app/?pact=sp2-7&view=dashboard. It is a deliberately cancelled MetaMask-created pact and should show `VOIDED`, `0.01 GEN`, and `refunded`.
-4. Connect MetaMask on StudioNet to create a self-pact. The hosted examples are designed for the deployed one-minute period configuration.
-5. Publish only synthetic, non-sensitive JSON or text evidence. Evidence files are public.
+3. Open https://streakpact-zeta.vercel.app/?pact=sp2-5&view=dashboard to inspect a completed synthetic acceptance fixture with real `KEPT` and `MISSED` GenLayer validator verdicts.
+4. Open https://streakpact-zeta.vercel.app/?pact=sp2-7&view=dashboard to inspect the real MetaMask-created cancellation path. It should show `VOIDED`, `0.01 GEN`, and `refunded`. Its original 30-minute title predates the corrected one-minute templates and remains visible because pact rules are immutable onchain.
+5. Connect MetaMask on StudioNet to create a self-pact. The current hosted examples are designed for the deployed one-minute period configuration.
+6. Publish only synthetic, non-sensitive JSON or text evidence. Evidence files are public.
 
 ## Release evidence
 

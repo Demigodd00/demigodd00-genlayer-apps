@@ -53,6 +53,8 @@ test("an unmatched voided challenge shows the refunded stake, not a theoretical 
   const html = render(voided, maker);
   assert.match(html, /0\.01 GEN/);
   assert.match(html, /refunded/);
+  assert.match(html, /Cancelled before start/);
+  assert.match(html, /Original rules remain visible onchain for auditability\./);
   assert.doesNotMatch(html, /0\.02 GEN/);
   assert.doesNotMatch(html, /matched pot/);
 });

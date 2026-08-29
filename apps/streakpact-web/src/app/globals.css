@@ -223,6 +223,7 @@ fieldset legend { margin-bottom: 9px; }
 .notice-box { border: 1px solid rgba(185,241,74,.14); border-radius: 12px; background: rgba(185,241,74,.035); padding: 14px 16px; }
 .notice-box strong { color: var(--lime-soft); font-size: 10px; }
 .notice-box p { color: var(--muted); font-size: 9px; line-height: 1.5; margin: 5px 0 0; }
+.pact-history-note { margin-top: 20px; }
 .review-hero { border-left: 2px solid var(--lime); padding: 3px 0 3px 19px; }
 .review-hero h3 { font-size: 24px; margin: 14px 0 8px; }
 .review-hero p { color: var(--muted); font-size: 12px; }
