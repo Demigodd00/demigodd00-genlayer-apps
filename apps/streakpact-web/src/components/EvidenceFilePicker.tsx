@@ -71,7 +71,7 @@ export default function EvidenceFilePicker({
   return (
     <div className="evidence-publisher">
       <label htmlFor={inputId}>
-        <span>Proof file</span>
+        <span>Evidence file</span>
         <input
           id={inputId}
           type="file"
@@ -79,7 +79,7 @@ export default function EvidenceFilePicker({
           accept=".json,.txt,application/json,text/plain"
           onChange={(event) => void chooseFile(event.target.files?.[0])}
         />
-        <small>JSON or text · 100 KB max. Proof is public—don’t upload private information.</small>
+        <small>JSON or text · 100 KB max. Evidence is public—don’t upload private information.</small>
       </label>
       {file ? (
         <div className="evidence-file-summary">
@@ -104,7 +104,7 @@ export default function EvidenceFilePicker({
         disabled={!file || state === "hashing" || state === "publishing" || state === "published"}
         onClick={() => void publish()}
       >
-        {state === "publishing" ? "Publishing…" : state === "published" ? "Published" : "Publish proof"}
+        {state === "publishing" ? "Publishing…" : state === "published" ? "Published" : "Publish evidence"}
       </button>
       {error ? <p className="form-error evidence-publish-error" role="alert">{error}</p> : null}
     </div>

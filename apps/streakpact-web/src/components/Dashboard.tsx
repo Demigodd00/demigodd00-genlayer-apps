@@ -33,8 +33,8 @@ const demoPact: PactView = {
   id: "sp2-preview",
   mode: "SELF",
   status: "LIVE",
-  title: "Read for 30 focused minutes",
-  success_criteria: "Provide an immutable reading record showing at least 30 minutes during every pact period.",
+  title: "Read one page",
+  success_criteria: "Provide a public, timestamped reading log naming at least one page completed during each pact period.",
   maker: "0x8a7F943b8C9B22D9aA8D3c05F44A2221090Be710",
   taker: "",
   failure_recipient: "0x4B17A8A66eE160B7a7354429e62DE8b98C7eD210",
@@ -44,12 +44,12 @@ const demoPact: PactView = {
   miss_count: "0",
   stake_atto: "10000000000000000",
   pot_atto: "10000000000000000",
-  start_unix: String(Math.floor(Date.now() / 1000) - 3 * 86400),
-  end_unix: String(Math.floor(Date.now() / 1000) + 4 * 86400),
-  created_at_iso: new Date(Date.now() - 4 * 86400_000).toISOString(),
+  start_unix: String(Math.floor(Date.now() / 1000) - 3 * 60),
+  end_unix: String(Math.floor(Date.now() / 1000) + 4 * 60),
+  created_at_iso: new Date(Date.now() - 4 * 60_000).toISOString(),
   next_period: "3",
-  next_window_open: String(Math.floor(Date.now() / 1000) - 1800),
-  next_window_close: String(Math.floor(Date.now() / 1000) + 84600),
+  next_window_open: String(Math.floor(Date.now() / 1000) - 30),
+  next_window_close: String(Math.floor(Date.now() / 1000) + 30),
   window_open_now: true,
   settleable: false,
   appeal_deadline_unix: "0",
@@ -68,6 +68,13 @@ const demoCheckins: CheckinView[] = [0, 1, 2].map((period) => ({
 
 function statusLabel(status: string): string {
   return status.replaceAll("_", " ").toLowerCase().replace(/^./, (letter) => letter.toUpperCase());
+}
+
+export function pactStakePresentation(pact: PactView): { amountAtto: string; label: string } {
+  if (pact.status === "VOIDED") return { amountAtto: pact.stake_atto, label: "refunded" };
+  if (pact.mode === "SELF") return { amountAtto: pact.stake_atto, label: "self-stake" };
+  if (pact.status === "OPEN") return { amountAtto: pact.stake_atto, label: "awaiting match" };
+  return { amountAtto: pact.pot_atto, label: "matched pot" };
 }
 
 export default function Dashboard({
@@ -263,6 +270,7 @@ export function PactDetail({
   }, []);
   // Update time-based actions locally without polling StudioNet every second.
   const pact = { ...storedPact, ...pactTiming(storedPact, now) };
+  const stakePresentation = pactStakePresentation(pact);
   const busy = transactionPending(progress);
 
   const account = session?.address.toLowerCase() ?? "";
@@ -374,7 +382,7 @@ export function PactDetail({
       <div className="metric-row">
         <div><span>Progress</span><strong>{pact.kept_count} kept</strong><small>{completion}% of total</small></div>
         <div><span>Misses used</span><strong>{pact.miss_count} / {pact.allowed_misses}</strong><small>allowed</small></div>
-        <div><span>Test stake</span><strong>{formatGen(pact.status === "OPEN" ? pact.stake_atto : pact.pot_atto)} GEN</strong><small>{pact.mode === "SELF" ? "self-stake" : pact.status === "OPEN" ? "awaiting match" : "matched pot"}</small></div>
+        <div><span>Test stake</span><strong>{formatGen(stakePresentation.amountAtto)} GEN</strong><small>{stakePresentation.label}</small></div>
         <div><span>Next window</span><strong>{pact.status === "LIVE" ? formatCountdown(now < Number(pact.next_window_open) ? pact.next_window_open : pact.next_window_close, now) : "—"}</strong><small>{pact.status === "LIVE" ? now < Number(pact.next_window_open) ? "until open" : "remaining" : "not active"}</small></div>
       </div>
 
@@ -384,7 +392,7 @@ export function PactDetail({
           {Array.from({ length: Number(pact.periods_total) }, (_, index) => {
             const item = checkins.find((checkin) => Number(checkin.period) === index);
             return (
-              <div className={`streak-cell ${item ? `cell-${item.verdict.toLowerCase()}` : "cell-upcoming"}`} key={index} title={item?.reason ?? "Upcoming period"}>
+              <div className={`streak-cell ${item ? `cell-${item.verdict.toLowerCase()}` : "cell-upcoming"}`} key={index} title={item?.reason ?? (pact.status === "VOIDED" ? "Voided period" : "Upcoming period")}>
                 <span>{item?.verdict === "KEPT" ? "✓" : item?.verdict === "MISSED" ? "×" : index + 1}</span>
                 <small>P{index + 1}</small>
               </div>
@@ -437,14 +445,14 @@ export function PactDetail({
               }}
             />
             <details className="evidence-details">
-              <summary>Proof link &amp; fingerprint</summary>
+              <summary>Evidence link &amp; fingerprint</summary>
               <div className="form-stack compact-form">
                 <label><span>IPFS or Arweave URL</span><input value={evidenceUrl} onChange={(event) => setEvidenceUrl(event.target.value)} placeholder="https://arweave.net/…" /></label>
                 <label><span>SHA-256 fingerprint</span><input className="mono" value={digest} onChange={(event) => setDigest(event.target.value)} maxLength={64} placeholder="64 hexadecimal characters" /></label>
               </div>
             </details>
             <label><span>Note <em>optional</em></span><textarea value={note} onChange={(event) => setNote(event.target.value)} rows={3} maxLength={240} /></label>
-            <button className="button button-primary" onClick={sendCheckin}>Submit proof</button>
+            <button className="button button-primary" onClick={sendCheckin}>Submit evidence</button>
           </div>
         ) : null}
 
@@ -470,7 +478,7 @@ export function PactDetail({
                   }}
                 />
                 <details className="evidence-details">
-                  <summary>Proof link &amp; fingerprint</summary>
+                  <summary>Evidence link &amp; fingerprint</summary>
                   <div className="form-stack compact-form">
                     <label><span>New IPFS or Arweave URL</span><input value={appealUrl} onChange={(event) => setAppealUrl(event.target.value)} /></label>
                     <label><span>SHA-256 fingerprint</span><input className="mono" value={appealDigest} onChange={(event) => setAppealDigest(event.target.value)} maxLength={64} /></label>
@@ -499,7 +507,7 @@ export function PactDetail({
 
 function actionHeading(pact: PactView, isMaker: boolean): string {
   if (pact.status === "OPEN") return isMaker ? "Invite a challenger" : "Review and join";
-  if (pact.status === "LIVE" && isMaker && pact.window_open_now) return `Submit proof for period ${Number(pact.next_period) + 1}`;
+  if (pact.status === "LIVE" && isMaker && pact.window_open_now) return `Submit evidence for period ${Number(pact.next_period) + 1}`;
   if (pact.status === "LIVE" && pact.settleable) return "Ready for a result";
   if (pact.status === "LIVE") return "Awaiting the next check-in";
   if (pact.status.startsWith("PROVISIONAL")) return "Review the result";

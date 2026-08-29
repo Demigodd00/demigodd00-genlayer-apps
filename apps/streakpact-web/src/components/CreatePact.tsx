@@ -19,27 +19,27 @@ const templates = [
   {
     name: "Strength training",
     kicker: "Fitness",
-    title: "Complete a 30-minute workout",
+    title: "Complete 10 squats",
     criteria:
-      "Complete one documented strength workout lasting at least 30 minutes during every pact period.",
+      "Provide a public, timestamped activity log stating that at least 10 squats were completed during each pact period.",
     periods: 4,
     misses: 1,
   },
   {
     name: "Focused reading",
     kicker: "Learning",
-    title: "Read for 30 focused minutes",
+    title: "Read one page",
     criteria:
-      "Provide an immutable reading record showing at least 30 minutes of focused reading during every pact period.",
+      "Provide a public, timestamped reading log naming at least one page completed during each pact period.",
     periods: 7,
     misses: 1,
   },
   {
     name: "Consistent shipping",
     kicker: "Building",
-    title: "Ship one meaningful code change",
+    title: "Record one coding step",
     criteria:
-      "Provide an immutable repository activity record showing one meaningful authored code change during every pact period.",
+      "Provide a public, timestamped work log naming one specific coding step completed during each pact period.",
     periods: 7,
     misses: 1,
   },
@@ -199,11 +199,11 @@ export default function CreatePact({
               <p>{criteria}</p>
             </div>
             <dl className="review-grid">
-              <div><dt>Schedule</dt><dd>{periods} periods</dd></div>
+              <div><dt>Schedule</dt><dd>{periods} × 1 minute</dd></div>
               <div><dt>Allowed misses</dt><dd>{misses}</dd></div>
               <div><dt>Your test stake</dt><dd>{formatGen(stakeAtto)} GEN</dd></div>
               <div><dt>Starts</dt><dd>{new Date(start).toLocaleString()}</dd></div>
-              <div className="review-wide"><dt>Proof</dt><dd>Public file on IPFS or Arweave</dd></div>
+              <div className="review-wide"><dt>Evidence</dt><dd>Public file on IPFS or Arweave</dd></div>
               {mode === "SELF" ? <div className="review-wide"><dt>If you lose</dt><dd className="mono">{failureRecipient}</dd></div> : null}
             </dl>
             <div className="notice-box">
@@ -237,10 +237,10 @@ export default function CreatePact({
             <label>
               <span>Success criteria</span>
               <textarea value={criteria} onChange={(event) => setCriteria(event.target.value)} maxLength={600} rows={4} />
-              <small>What must your proof show each period?</small>
+              <small>What must your evidence show each period?</small>
             </label>
             <div className="field-row">
-              <label><span>Periods</span><input type="number" min={3} max={60} value={periods} onChange={(event) => setPeriods(Number(event.target.value))} /></label>
+              <label><span>Periods</span><input type="number" min={3} max={60} value={periods} onChange={(event) => setPeriods(Number(event.target.value))} /><small>One minute each on StudioNet.</small></label>
               <label><span>Allowed misses</span><input type="number" min={0} max={Math.floor(periods / 3)} value={misses} onChange={(event) => setMisses(Number(event.target.value))} /></label>
             </div>
             <div className="field-row">

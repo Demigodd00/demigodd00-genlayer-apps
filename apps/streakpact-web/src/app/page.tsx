@@ -71,9 +71,9 @@ export default function Home() {
 
         <header className="hero">
           <div className="hero-copy">
-            <div className="hero-kicker"><span />Goals, backed by proof</div>
+            <div className="hero-kicker"><span />Goals, backed by public evidence</div>
             <h1>Put conviction<br />behind your goals.</h1>
-            <p>Make a pact. Share proof. Let GenLayer verify it.</p>
+            <p>Make a pact. Share public evidence. Let GenLayer validators judge it.</p>
             <div className="hero-actions">
               <button className="button button-primary button-large" onClick={() => setView("create")}>Create a pact <span>→</span></button>
               <button className="button button-ghost button-large" onClick={() => setView("join")}>Open an invite</button>
@@ -85,18 +85,18 @@ export default function Home() {
             <div className="orbit orbit-one" /><div className="orbit orbit-two" />
             <div className="commitment-card">
               <div className="commitment-top"><span className="live-dot" />EXAMPLE PACT <small>SP2</small></div>
-              <p>READ FOR 30 FOCUSED MINUTES</p>
+              <p>READ ONE PAGE</p>
               <div className="hero-streak">{[1, 2, 3, 4, 5, 6, 7].map((day) => <span className={day <= 3 ? "done" : day === 4 ? "today" : ""} key={day}>{day <= 3 ? "✓" : day}</span>)}</div>
               <div className="commitment-meta"><div><small>TEST STAKE</small><strong>0.01 GEN</strong></div><div><small>PROGRESS</small><strong>3 / 7</strong></div></div>
             </div>
-            <div className="validator-card validator-a"><span>✓</span><div><small>VALIDATOR VERDICT</small><strong>Evidence verified</strong></div></div>
+            <div className="validator-card validator-a"><span>✓</span><div><small>VALIDATOR VERDICT</small><strong>Criteria met</strong></div></div>
             <div className="validator-card validator-b"><span>◎</span><div><small>SETTLEMENT</small><strong>Appeal protected</strong></div></div>
           </div>
         </header>
 
         <section className="trust-strip" aria-label="Protocol protections">
           <div><strong>Clear rules</strong></div>
-          <div><strong>Verified proof</strong></div>
+          <div><strong>Public evidence</strong></div>
           <div><strong>Time to appeal</strong></div>
         </section>
 
@@ -128,16 +128,16 @@ function HowItWorks() {
 
   return (
     <section className="protocol-section">
-      <div className="protocol-heading"><p className="eyebrow">How it works</p><h2>Commit. Prove. Repeat.</h2></div>
+      <div className="protocol-heading"><p className="eyebrow">How it works</p><h2>Commit. Submit. Repeat.</h2></div>
       <div className="protocol-flow">
         <article><span>01</span><h3>Set your pact</h3><p>Choose a goal, rules, and test stake. Go solo or invite a challenger.</p></article>
-        <article><span>02</span><h3>Submit proof</h3><p>Share proof each period for GenLayer to verify. Skipped periods count as misses.</p></article>
+        <article><span>02</span><h3>Submit evidence</h3><p>Publish a small evidence file each period. Validators compare it with your criteria.</p></article>
         <article><span>03</span><h3>Review and claim</h3><p>Appeal a result if needed. Test tokens unlock after the appeal window closes.</p></article>
       </div>
       <div className="protocol-evidence-lab">
         <div>
           <p className="eyebrow">Try it</p>
-          <h3>Prepare your proof.</h3>
+          <h3>Prepare evidence.</h3>
           <p>No wallet needed. This won’t submit a check-in.</p>
         </div>
         <div>
@@ -154,7 +154,7 @@ function HowItWorks() {
           />
           {preparedDigest ? (
             <details className="evidence-details">
-              <summary>Proof details</summary>
+              <summary>Evidence details</summary>
               <dl className="prepared-evidence">
                 <div><dt>SHA-256</dt><dd>{preparedDigest}</dd></div>
                 <div><dt>Public URL</dt><dd>{preparedUrl || "Not published yet"}</dd></div>

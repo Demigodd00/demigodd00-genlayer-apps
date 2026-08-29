@@ -1,9 +1,10 @@
 # StreakPact by demigodd00: StudioNet deployment status
 
-Checked on 2026-08-28. The website is live at
+Checked on 2026-08-29. The website is live at
 [streakpact-zeta.vercel.app](https://streakpact-zeta.vercel.app).
 Hosting, evidence publishing, and the exact-release two-wallet contract matrix
-have passed. Real MetaMask/device sign-off remains a separate manual check.
+have passed. Real MetaMask pact creation has also passed; rejection recovery,
+account switching, and physical-phone layout remain separate manual checks.
 
 ## Release identity
 
@@ -88,7 +89,7 @@ matrix is not a MetaMask browser test.
 - GenVM lint/validation, pinned runner verification, and 13 direct contract tests.
 - `check_streakpact_release.py --require-deployment --skip-web` passed all
   deployment provenance and contract gates; web gates were run separately.
-- 63 web tests, TypeScript checking, and the production build passed.
+- 67 web tests, TypeScript checking, and the production build passed.
 - Production dependency audit: no known vulnerabilities reported.
 - The saved wallet key and upload JWT had zero matches across 17 browser assets
   and 12 release files. Neither ignored environment file is included in Git.
@@ -104,15 +105,23 @@ matrix is not a MetaMask browser test.
   controls have regression coverage.
 - Hosted home, invitation, shared-pact and status views were checked at the
   available 624-pixel browser width without horizontal overflow.
+- MetaMask submitted transaction
+  `0x627ab1c09f1626df2b49fe37745ce77fdc68079cf084715c048e606e08772339`
+  on StudioNet and created `sp2-7`. The pact was then cancelled and now reads
+  `VOIDED`. Its reviewer view reports the 0.01 test GEN stake as refunded rather
+  than displaying the challenge's theoretical 0.02 matched pot.
+- Read-only StudioNet calls retry bounded transient transport failures. A raw
+  `Failed to fetch`/Viem message no longer reaches the user; transaction writes
+  are never automatically retried.
 
 Local checks used Node.js `24.19.0` and emitted the expected engine warning;
 the hosted production runtime is Node.js `22.x`.
 
 ## Remaining manual sign-off
 
-1. In the real MetaMask browser, open the public URL, connect to StudioNet,
-   reject one request, then create a test pact and verify its confirmed result.
-   Refresh and switch accounts to check recovery with the actual wallet.
+1. In the real MetaMask browser, reject one request, then refresh and switch
+   accounts to check recovery with the actual wallet. Pact creation is already
+   recorded as passed above.
 2. Open an invite/shared pact on a physical phone, preferably in MetaMask's
    built-in browser, and check layout, proof selection and wallet approvals.
 

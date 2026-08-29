@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { CONTRACT_ADDRESS, CONTRACT_READY, NETWORK_NAME, friendlyError, getAdminData, shortenAddress } from "@/lib/contract";
+import { CONTRACT_ADDRESS, CONTRACT_EXPLORER_URL, CONTRACT_READY, NETWORK_NAME, friendlyError, getAdminData, shortenAddress } from "@/lib/contract";
 
 interface ReleaseHealth {
   contractConfigured: boolean;
@@ -32,13 +32,13 @@ export default function AdminDashboard() {
       </header>
       <section className="admin-hero">
         <div><p className="eyebrow">StudioNet · Read-only</p><h1>App status</h1><p>Test GEN has no monetary value.</p></div>
-        <div className="contract-identity"><span className={CONTRACT_READY ? "network-dot" : "network-dot offline"} /><div><small>{NETWORK_NAME}</small><strong>{CONTRACT_READY ? shortenAddress(CONTRACT_ADDRESS) : "Not configured"}</strong></div></div>
+        <a className="contract-identity" href={CONTRACT_EXPLORER_URL} target="_blank" rel="noreferrer" aria-label="View the StreakPact contract in GenLayer Explorer"><span className={CONTRACT_READY ? "network-dot" : "network-dot offline"} /><div><small>{NETWORK_NAME} · Explorer ↗</small><strong>{CONTRACT_READY ? shortenAddress(CONTRACT_ADDRESS) : "Not configured"}</strong></div></a>
       </section>
       <section className="release-health" aria-label="Runtime release configuration">
         <ConfigurationGate label="Contract" configured={health?.contractConfigured} />
         <ConfigurationGate label="Evidence uploads" configured={health?.evidencePublishingConfigured} />
         <ConfigurationGate label="Origin protection" configured={health?.originProtectionConfigured} />
-        <ConfigurationGate label="Complete setup" configured={health?.readyForStudioNetTesting} />
+        <ConfigurationGate label="StudioNet configuration" configured={health?.readyForStudioNetTesting} />
       </section>
       {!CONTRACT_READY ? (
         <div className="admin-notice"><strong>Contract setup is incomplete.</strong></div>

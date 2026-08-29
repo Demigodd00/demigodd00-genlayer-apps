@@ -1,12 +1,35 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 
+const appUrl = "https://streakpact-zeta.vercel.app";
+
 export const metadata: Metadata = {
-  title: "StreakPact by demigodd00 — Put conviction behind your goals",
+  metadataBase: new URL(appUrl),
+  title: {
+    default: "StreakPact by demigodd00",
+    template: "%s · StreakPact",
+  },
   description:
-    "Make a pact, share proof, and build your streak on GenLayer StudioNet.",
+    "Evidence-backed accountability pacts judged by GenLayer validators on StudioNet.",
+  applicationName: "StreakPact",
   authors: [{ name: "demigodd00" }],
   creator: "demigodd00",
+  alternates: { canonical: "/" },
+  icons: { icon: "/icon.svg" },
+  manifest: "/manifest.webmanifest",
+  openGraph: {
+    type: "website",
+    url: "/",
+    siteName: "StreakPact",
+    title: "StreakPact by demigodd00",
+    description: "Make a pact, publish evidence, and let GenLayer validators judge the result.",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "StreakPact by demigodd00",
+    description: "Evidence-backed accountability on GenLayer StudioNet.",
+  },
+  category: "technology",
 };
 
 export const viewport: Viewport = {

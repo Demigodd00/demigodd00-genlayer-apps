@@ -8,13 +8,17 @@ See [`LICENSE`](LICENSE) for the complete terms.
 
 StreakPact V2 is the primary StudioNet product in this repository. It supports self-stake pacts by default and optional matched challenges. Users define structured success criteria, submit content-addressed evidence, receive a provisional validator verdict, and retain a bounded appeal window before test-token settlement.
 
-> **Release status:** tested StudioNet release candidate. StudioNet GEN used by these demos has no monetary value. V2 still needs a recorded deployment and frontend address configuration.
+**Live release:** [StreakPact app](https://streakpact-zeta.vercel.app) · [GenLayer Explorer contract](https://explorer-studio.genlayer.com/address/0xae785A6DF3a2AA204A5E64FC02246d17b3fc38a6) · [`StreakPactV2` source](contracts/streak_pact_v2.py)
+
+> **Release status:** deployed and tested on GenLayer StudioNet at `0xae785A6DF3a2AA204A5E64FC02246d17b3fc38a6`. The frontend is configured for that exact release. StudioNet GEN has no monetary value.
+
+> **Portal submission scope:** StreakPact V2 is the product being submitted. The historical StreakPact V1, MicroWagers lab, and other experiments in this repository are not part of that submission. See the [paste-ready Portal submission](docs/STREAKPACT_PORTAL_SUBMISSION.md).
 
 ## Products
 
 | Product | GenLayer fit | Status |
 |---|---|---|
-| StreakPact V2 | Strong: subjective external evidence directly controls escrow settlement | Primary StudioNet release candidate |
+| StreakPact V2 | Strong: subjective external evidence directly controls escrow settlement | Live StudioNet build |
 | StreakPact V1 | Strong concept, unsafe period accounting | Historical deployed prototype; do not promote |
 | MicroWagers | Strong StudioNet demonstration of source-bound AI resolution | Supported test-token lab |
 
@@ -135,7 +139,7 @@ Keep preflight enabled for both deployments.
 
 The `/admin` surface is read-only. It exposes configuration, protocol counts, and StudioNet completion gates. Owners cannot rewrite verdicts, move test escrow, or block legitimate claims.
 
-See [`docs/STREAKPACT_STUDIONET_RELEASE.md`](docs/STREAKPACT_STUDIONET_RELEASE.md), [`docs/architecture/streakpact-v2.md`](docs/architecture/streakpact-v2.md), and [`docs/product/genlayer-fit.md`](docs/product/genlayer-fit.md) for the release procedure and full rationale.
+See [`docs/STREAKPACT_PORTAL_SUBMISSION.md`](docs/STREAKPACT_PORTAL_SUBMISSION.md), [`docs/STREAKPACT_STUDIONET_RELEASE.md`](docs/STREAKPACT_STUDIONET_RELEASE.md), [`docs/architecture/streakpact-v2.md`](docs/architecture/streakpact-v2.md), and [`docs/product/genlayer-fit.md`](docs/product/genlayer-fit.md) for the submission, release procedure, and rationale.
 
 ---
 

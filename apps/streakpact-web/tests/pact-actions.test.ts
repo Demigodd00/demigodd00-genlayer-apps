@@ -41,3 +41,18 @@ test("a shared pact is readable without a wallet and has a share button", () => 
   assert.match(html, /Copy pact link/);
   assert.doesNotMatch(html, /Acting as/);
 });
+
+test("an unmatched voided challenge shows the refunded stake, not a theoretical matched pot", () => {
+  const voided = {
+    ...pact,
+    mode: "CHALLENGE" as const,
+    status: "VOIDED",
+    stake_atto: "10000000000000000",
+    pot_atto: "20000000000000000",
+  };
+  const html = render(voided, maker);
+  assert.match(html, /0\.01 GEN/);
+  assert.match(html, /refunded/);
+  assert.doesNotMatch(html, /0\.02 GEN/);
+  assert.doesNotMatch(html, /matched pot/);
+});

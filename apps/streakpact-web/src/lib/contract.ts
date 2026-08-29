@@ -69,6 +69,9 @@ export const CONTRACT_ADDRESS = process.env.NEXT_PUBLIC_STREAKPACT_V2_ADDRESS ??
 export const NETWORK_NAME = process.env.NEXT_PUBLIC_NETWORK_NAME ?? "StudioNet";
 export const CONTRACT_READY = /^0x[0-9a-fA-F]{40}$/.test(CONTRACT_ADDRESS)
   && !/^0x0{40}$/i.test(CONTRACT_ADDRESS);
+export const CONTRACT_EXPLORER_URL = CONTRACT_READY
+  ? `https://explorer-studio.genlayer.com/address/${CONTRACT_ADDRESS}`
+  : "https://explorer-studio.genlayer.com";
 
 const EVIDENCE_PREFIXES = [
   "https://ipfs.io/ipfs/",
@@ -146,10 +149,34 @@ export function friendlyError(error: unknown): string {
   if (/wrong chain|configured for chain/i.test(message)) {
     return `Switch your wallet to ${NETWORK_NAME} and try again.`;
   }
+  if (/failed to fetch|fetch failed|network error|econn|socket hang up|service unavailable|\b(?:502|503|504)\b/i.test(message)) {
+    return "StudioNet is temporarily unreachable. If you just submitted a transaction, check your wallet activity before retrying, then refresh.";
+  }
   if (/timeout|timed out/i.test(message)) {
     return "Confirmation is taking longer than expected. Check the transaction before retrying.";
   }
   return message.length > 220 ? `${message.slice(0, 217)}…` : message;
+}
+
+export function isTransientReadError(error: unknown): boolean {
+  const message = error instanceof Error ? error.message : String(error);
+  return /failed to fetch|fetch failed|network error|timeout|timed out|econn|socket hang up|service unavailable|\b(?:502|503|504)\b/i.test(message);
+}
+
+const readRetryDelays = [300, 900] as const;
+
+export async function withReadRetry<T>(
+  operation: () => Promise<T>,
+  wait: (delayMs: number) => Promise<void> = (delayMs) => new Promise((resolve) => setTimeout(resolve, delayMs)),
+): Promise<T> {
+  for (let attempt = 0; ; attempt += 1) {
+    try {
+      return await operation();
+    } catch (error) {
+      if (!isTransientReadError(error) || attempt >= readRetryDelays.length) throw error;
+      await wait(readRetryDelays[attempt]);
+    }
+  }
 }
 
 export async function connectWallet(): Promise<WalletSession> {
@@ -207,36 +234,40 @@ async function write(
 }
 
 export async function listUserPacts(user: Address): Promise<PactSummary[]> {
-  return readRecentPage(async (offset, count) => (await readClient.readContract({
-    address: contractAddress(),
-    functionName: "list_user_pacts",
-    args: [user, offset, count],
-  })) as unknown as { total: string; items: PactSummary[] });
+  return readRecentPage(async (offset, count) => (
+    await withReadRetry(() => readClient.readContract({
+      address: contractAddress(),
+      functionName: "list_user_pacts",
+      args: [user, offset, count],
+    }))
+  ) as unknown as { total: string; items: PactSummary[] });
 }
 
 export async function listPacts(): Promise<PactSummary[]> {
-  const result = (await readClient.readContract({
+  const result = (await withReadRetry(() => readClient.readContract({
     address: contractAddress(),
     functionName: "list_pacts",
     args: [0, 25],
-  })) as unknown as { items: PactSummary[] };
+  }))) as unknown as { items: PactSummary[] };
   return result.items;
 }
 
 export async function getPact(pactId: string): Promise<PactView> {
-  return (await readClient.readContract({
+  return (await withReadRetry(() => readClient.readContract({
     address: contractAddress(),
     functionName: "get_pact",
     args: [pactId],
-  })) as unknown as PactView;
+  }))) as unknown as PactView;
 }
 
 export async function listCheckins(pactId: string): Promise<CheckinView[]> {
-  return readAllPages(async (offset, count) => (await readClient.readContract({
-    address: contractAddress(),
-    functionName: "list_checkins",
-    args: [pactId, offset, count],
-  })) as unknown as { total: string; items: CheckinView[] }, 60);
+  return readAllPages(async (offset, count) => (
+    await withReadRetry(() => readClient.readContract({
+      address: contractAddress(),
+      functionName: "list_checkins",
+      args: [pactId, offset, count],
+    }))
+  ) as unknown as { total: string; items: CheckinView[] }, 60);
 }
 
 export async function getAdminData(): Promise<{
@@ -244,8 +275,8 @@ export async function getAdminData(): Promise<{
   stats: Record<string, string>;
 }> {
   const [config, stats] = await Promise.all([
-    readClient.readContract({ address: contractAddress(), functionName: "get_config", args: [] }),
-    readClient.readContract({ address: contractAddress(), functionName: "get_stats", args: [] }),
+    withReadRetry(() => readClient.readContract({ address: contractAddress(), functionName: "get_config", args: [] })),
+    withReadRetry(() => readClient.readContract({ address: contractAddress(), functionName: "get_stats", args: [] })),
   ]);
   return { config: config as Record<string, string>, stats: stats as Record<string, string> };
 }

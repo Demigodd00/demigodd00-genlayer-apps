@@ -13,6 +13,9 @@ test("the home screen identifies the demo, creator, and illustrative pact", () =
   assert.match(html, /by demigodd00/);
   assert.match(html, /Test GEN has no monetary value/);
   assert.match(html, /EXAMPLE PACT/);
+  assert.match(html, /READ ONE PAGE/);
+  assert.match(html, /Criteria met/);
+  assert.doesNotMatch(html, /Evidence verified/);
   assert.doesNotMatch(html, /LIVE PACT|18h 42m/);
 });
 
@@ -25,6 +28,9 @@ test("the shorter create form preserves stake and failure-recipient disclosures"
   assert.match(html, /Receives your test stake if you lose\./);
   assert.match(html, /Success criteria/);
   assert.match(html, /Allowed misses/);
+  assert.match(html, /One minute each on StudioNet\./);
+  assert.match(html, /Complete 10 squats/);
+  assert.doesNotMatch(html, /30-minute|30 focused minutes/);
 });
 
 test("the invitation still discloses the matched test stake and fixed rules", () => {
@@ -42,8 +48,8 @@ test("the upload privacy warning stays visible before file selection", () => {
     onPublished: () => {},
   }));
   assert.match(html, /100 KB max/);
-  assert.match(html, /Proof is public—don’t upload private information\./);
-  assert.match(html, /<button[^>]*disabled=""[^>]*>Publish proof<\/button>/);
+  assert.match(html, /Evidence is public—don’t upload private information\./);
+  assert.match(html, /<button[^>]*disabled=""[^>]*>Publish evidence<\/button>/);
   assert.doesNotMatch(html, /<details/);
 });
 
