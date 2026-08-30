@@ -22,6 +22,8 @@ StreakPact V2 is the primary StudioNet product in this repository. It supports s
 | StreakPact V1 | Strong concept, unsafe period accounting | Historical deployed prototype; do not promote |
 | MicroWagers | Strong: public-source interpretation directly controls peer escrow settlement | Verified StudioNet test-token release |
 
+**MicroWagers release:** [live app](https://microwagers.vercel.app) · [read-only status](https://microwagers.vercel.app/status) · [GenLayer Explorer contract](https://explorer-studio.genlayer.com/address/0x5D2679a7277D05E5bE9a6Bf60526D0fC7C1d477C) · [paste-ready Portal submission](docs/MICROWAGERS_SUBMISSION.md)
+
 ## Why GenLayer
 
 The frontend owns wallet connection, templates, reminders, transaction feedback, indexing, and evidence preparation. The contract owns only the consensus-critical boundary: evidence inputs, validator comparison, period accounting, provisional settlement, appeals, and payout eligibility.
@@ -146,7 +148,7 @@ Keep preflight enabled for both deployments.
 
 StreakPact's `/admin` and MicroWagers' `/status` surfaces are read-only. They expose configuration and public activity only. Owners cannot rewrite verdicts, move test escrow, block appeals, or block legitimate claims.
 
-See [`docs/STREAKPACT_PORTAL_SUBMISSION.md`](docs/STREAKPACT_PORTAL_SUBMISSION.md), [`docs/STREAKPACT_STUDIONET_RELEASE.md`](docs/STREAKPACT_STUDIONET_RELEASE.md), [`docs/architecture/streakpact-v2.md`](docs/architecture/streakpact-v2.md), and [`docs/product/genlayer-fit.md`](docs/product/genlayer-fit.md) for the submission, release procedure, and rationale.
+See [`docs/STREAKPACT_PORTAL_SUBMISSION.md`](docs/STREAKPACT_PORTAL_SUBMISSION.md), [`docs/STREAKPACT_STUDIONET_RELEASE.md`](docs/STREAKPACT_STUDIONET_RELEASE.md), [`docs/MICROWAGERS_SUBMISSION.md`](docs/MICROWAGERS_SUBMISSION.md), [`docs/MICROWAGERS_RELEASE.md`](docs/MICROWAGERS_RELEASE.md), and [`docs/product/genlayer-fit.md`](docs/product/genlayer-fit.md) for the submission packs, release procedures, and rationale.
 
 ---
 
