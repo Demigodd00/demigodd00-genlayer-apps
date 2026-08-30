@@ -1,0 +1,15 @@
+{
+  "contract": "HackathonJudge",
+  "version": "1.0.0",
+  "network": "studionet",
+  "address": "0x25623fE19fCe2882CFdF28695423cb352d3F4DEf",
+  "transaction_hash": "0xa74c9ad42e537ac186532da31732e86d6833b0e5b91b37fb72998d50535247b8",
+  "deployer": "0x5098852BC9a206Abc639909f90B13F3A6d044501",
+  "deployer_role": "deployment_only_no_privileged_access",
+  "signer_mode": "disposable_studionet_deployment_only",
+  "source_sha256": "45e4bb74e3fde4e5d09381d8f27db035a94838a3aac7fa45adf9f93942f71894",
+  "receipt_status": "FINALIZED",
+  "execution_result": "SUCCESS",
+  "verified_source_and_config": true,
+  "deployed_at": "2026-08-30T06:44:47.315151+00:00"
+}
