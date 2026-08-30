@@ -3,11 +3,11 @@
   "project_name": "microwagers",
   "vercel_team": "demi17",
   "production_url": "https://microwagers.vercel.app",
-  "deployment_url": "https://microwagers-h0bblvy2i-demi17.vercel.app",
-  "deployment_id": "dpl_3Pis2FgUgJEe74pQe7XdfYnMcakw",
+  "deployment_url": "https://microwagers-1huh8hang-demi17.vercel.app",
+  "deployment_id": "dpl_C2v5z57UpQ6buBp7anHfkvQLTZrh",
   "source_repository": "https://github.com/Demigodd00/streakpact",
   "source_branch": "main",
-  "source_commit": "4b6b88802b86ef9a76013cc4705e13c0a53a1e02",
+  "source_commit": "b73007a2a1da7dcfe9d5b986230b279fe5c313e9",
   "root_directory": "apps/microwagers-web",
   "framework": "Next.js",
   "node_engine": "22.x",
@@ -34,5 +34,5 @@
     "mobile_layout_checked": true,
     "security_headers_checked": true
   },
-  "verified_at": "2026-08-30T07:42:24.1496950Z"
+  "verified_at": "2026-08-30T07:48:59.6461310Z"
 }
