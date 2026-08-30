@@ -5,8 +5,8 @@
   "status": "publicly_deployed_manual_wallet_and_device_signoff_pending",
   "public_url": "https://streakpact-zeta.vercel.app",
   "repository": {
-    "url": "https://github.com/Demigodd00/streakpact",
-    "private": true,
+    "url": "https://github.com/Demigodd00/demigodd00-genlayer-apps",
+    "private": false,
     "production_branch": "main"
   },
   "hosting": {
@@ -88,7 +88,7 @@
     "github_ci": {
       "conclusion": "success",
       "commit": "6e1e2857790107dc57cb56015c9440f325661609",
-      "url": "https://github.com/Demigodd00/streakpact/actions/runs/33205326108"
+      "url": "https://github.com/Demigodd00/demigodd00-genlayer-apps/actions/runs/33205326108"
     },
     "exact_release_acceptance": {
       "status": "passed",

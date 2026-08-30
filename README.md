@@ -1,12 +1,13 @@
-# StreakPact by demigodd00
+# GenLayer Apps by demigodd00
 
-Evidence-backed accountability escrow settled by independent GenLayer validators.
+A portfolio monorepo of separate GenLayer StudioNet products built by demigodd00.
+Each product has its own contract, frontend, deployment evidence, and Portal submission pack.
 
 Copyright (c) 2026 demigodd00. This is proprietary software; no permission is
 granted to copy, modify, distribute, host, publish, or create derivative works.
 See [`LICENSE`](LICENSE) for the complete terms.
 
-StreakPact V2 is the primary StudioNet product in this repository. It supports self-stake pacts by default and optional matched challenges. Users define structured success criteria, submit content-addressed evidence, receive a provisional validator verdict, and retain a bounded appeal window before test-token settlement.
+StreakPact V2 is one product in this repository. It supports self-stake pacts by default and optional matched challenges. Users define structured success criteria, submit content-addressed evidence, receive a provisional validator verdict, and retain a bounded appeal window before test-token settlement.
 
 **Live release:** [StreakPact app](https://streakpact-zeta.vercel.app) · [GenLayer Explorer contract](https://explorer-studio.genlayer.com/address/0xae785A6DF3a2AA204A5E64FC02246d17b3fc38a6) · [`StreakPactV2` source](contracts/streak_pact_v2.py)
 

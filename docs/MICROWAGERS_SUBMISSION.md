@@ -19,7 +19,7 @@ MicroWagers by demigodd00 is a two-sided prediction market built for GenLayer St
 ## Evidence to add
 
 1. **GitHub Repository**
-   https://github.com/Demigodd00/streakpact
+   https://github.com/Demigodd00/demigodd00-genlayer-apps
 
 2. **GenLayer Explorer Contract**
    https://explorer-studio.genlayer.com/address/0x5D2679a7277D05E5bE9a6Bf60526D0fC7C1d477C
@@ -28,13 +28,13 @@ MicroWagers by demigodd00 is a two-sided prediction market built for GenLayer St
    https://microwagers.vercel.app
 
 4. **GitHub File** — intelligent contract
-   https://github.com/Demigodd00/streakpact/blob/main/contracts/micro_wagers.py
+   https://github.com/Demigodd00/demigodd00-genlayer-apps/blob/main/contracts/micro_wagers.py
 
 5. **GitHub File** — exact StudioNet deployment record
-   https://github.com/Demigodd00/streakpact/blob/main/deployments/micro_wagers_studionet.json
+   https://github.com/Demigodd00/demigodd00-genlayer-apps/blob/main/deployments/micro_wagers_studionet.json
 
 6. **GitHub File** — exact-release acceptance journal
-   https://github.com/Demigodd00/streakpact/blob/main/deployments/micro_wagers_acceptance.json
+   https://github.com/Demigodd00/demigodd00-genlayer-apps/blob/main/deployments/micro_wagers_acceptance.json
 
 Only one evidence link is required by the form, but the repository, Explorer contract, and live product together make review much easier.
 

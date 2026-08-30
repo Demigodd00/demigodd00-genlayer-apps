@@ -24,12 +24,12 @@ This is a StudioNet demonstration. Test GEN has no monetary value, and validator
 
 Add these separately in the Portal:
 
-1. **GitHub Repository — required:** https://github.com/Demigodd00/streakpact
+1. **GitHub Repository — required:** https://github.com/Demigodd00/demigodd00-genlayer-apps
 2. **GenLayer Explorer Contract:** https://explorer-studio.genlayer.com/address/0xae785A6DF3a2AA204A5E64FC02246d17b3fc38a6
-3. **GitHub File:** https://github.com/Demigodd00/streakpact/blob/main/contracts/streak_pact_v2.py
+3. **GitHub File:** https://github.com/Demigodd00/demigodd00-genlayer-apps/blob/main/contracts/streak_pact_v2.py
 4. **Other — live product:** https://streakpact-zeta.vercel.app
 
-The repository is private by design. Confirm that the Portal’s connected GitHub account or assigned reviewers can open it before submitting. If the Portal cannot validate the link, grant reviewer access; do not change repository visibility without the owner’s explicit approval.
+The repository is public so Portal reviewers can verify the source and deployment evidence without requesting access. It is a portfolio monorepo; use the product-specific contract, Explorer, and live-app links above when reviewing this StreakPact contribution.
 
 ## Reviewer quick check
 
