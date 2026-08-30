@@ -14,8 +14,8 @@ MicroWagers by demigodd00 is a source-bound, two-sided prediction market for Gen
 | Source SHA-256 | `86fd9fc88f96bbf49886d24cfa1f9deb5d74c10db01cc2114369b7bd804e7b25` |
 | Fee | `0` basis points |
 | Appeal window | `300` seconds |
-| Web deployment | `dpl_C2v5z57UpQ6buBp7anHfkvQLTZrh` |
-| Source commit | `b73007a2a1da7dcfe9d5b986230b279fe5c313e9` |
+| Web deployment | `dpl_At2YWxBvfrVFFjTcz11hHjuF658T` |
+| Source commit | `c1833fe3d9560c878122ff87bee24575d62e49cf` |
 
 The deployment record is in [`deployments/micro_wagers_studionet.json`](../deployments/micro_wagers_studionet.json), the exact-release acceptance journal is in [`deployments/micro_wagers_acceptance.json`](../deployments/micro_wagers_acceptance.json), and the hosting record is in [`deployments/micro_wagers_vercel.json`](../deployments/micro_wagers_vercel.json).
 

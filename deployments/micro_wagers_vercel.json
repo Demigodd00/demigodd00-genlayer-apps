@@ -3,11 +3,11 @@
   "project_name": "microwagers",
   "vercel_team": "demi17",
   "production_url": "https://microwagers.vercel.app",
-  "deployment_url": "https://microwagers-1huh8hang-demi17.vercel.app",
-  "deployment_id": "dpl_C2v5z57UpQ6buBp7anHfkvQLTZrh",
+  "deployment_url": "https://microwagers-p19nd2253-demi17.vercel.app",
+  "deployment_id": "dpl_At2YWxBvfrVFFjTcz11hHjuF658T",
   "source_repository": "https://github.com/Demigodd00/streakpact",
   "source_branch": "main",
-  "source_commit": "b73007a2a1da7dcfe9d5b986230b279fe5c313e9",
+  "source_commit": "c1833fe3d9560c878122ff87bee24575d62e49cf",
   "root_directory": "apps/microwagers-web",
   "framework": "Next.js",
   "node_engine": "22.x",
@@ -20,7 +20,8 @@
   "secret_environment_uploaded": false,
   "monorepo_build_scope": {
     "include_files_outside_root": false,
-    "skip_unaffected_deployments": true
+    "skip_unaffected_deployments": true,
+    "ignored_build_step": "git diff HEAD^ HEAD --quiet -- \":(top)apps/microwagers-web\""
   },
   "verification": {
     "home_status": 200,
@@ -34,5 +35,5 @@
     "mobile_layout_checked": true,
     "security_headers_checked": true
   },
-  "verified_at": "2026-08-30T07:48:59.6461310Z"
+  "verified_at": "2026-08-30T07:53:40.4213868Z"
 }
