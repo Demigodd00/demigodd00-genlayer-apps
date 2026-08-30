@@ -12,7 +12,7 @@ StreakPact V2 is the primary StudioNet product in this repository. It supports s
 
 > **Release status:** deployed and tested on GenLayer StudioNet at `0xae785A6DF3a2AA204A5E64FC02246d17b3fc38a6`. The frontend is configured for that exact release. StudioNet GEN has no monetary value.
 
-> **Portal submission scope:** StreakPact V2 is the product being submitted. The historical StreakPact V1, MicroWagers lab, and other experiments in this repository are not part of that submission. See the [paste-ready Portal submission](docs/STREAKPACT_PORTAL_SUBMISSION.md).
+> **Portal submission scope:** StreakPact V2 and MicroWagers are separate products with separate deployment evidence and submission packs. Do not combine them into one Portal contribution. The historical StreakPact V1 is not a submission candidate.
 
 ## Products
 
@@ -20,7 +20,7 @@ StreakPact V2 is the primary StudioNet product in this repository. It supports s
 |---|---|---|
 | StreakPact V2 | Strong: subjective external evidence directly controls escrow settlement | Live StudioNet build |
 | StreakPact V1 | Strong concept, unsafe period accounting | Historical deployed prototype; do not promote |
-| MicroWagers | Strong StudioNet demonstration of source-bound AI resolution | Supported test-token lab |
+| MicroWagers | Strong: public-source interpretation directly controls peer escrow settlement | Verified StudioNet test-token release |
 
 ## Why GenLayer
 
@@ -45,6 +45,7 @@ GenLayer is not used as a generic AI backend. Its judgment changes an escrow sta
 
 ```text
 apps/streakpact-web/                 Next.js 16 consumer + read-only operations app
+apps/microwagers-web/                Next.js 16 MicroWagers product app
 contracts/streak_pact_v2.py         primary StudioNet intelligent contract
 contracts/streak_pact.py            historical V1 contract
 contracts/micro_wagers.py           hardened StudioNet demo contract
@@ -52,7 +53,6 @@ tests/direct/                        deterministic and adversarial contract test
 tests/integration/                   manual StudioNet consensus smoke tests
 scripts/deploy_streak_pact_v2.py     gated V2 deployment and provenance record
 deployments/                         immutable deployment records
-frontend/                            MicroWagers StudioNet static app
 docs/                                product and architecture decisions
 ```
 
@@ -125,19 +125,26 @@ export STREAKPACT_TEST_EVIDENCE_URL=https://gateway.pinata.cloud/ipfs/...
 gltest tests/integration/test_streak_pact_v2_evidence_studionet.py --network studionet -v -s
 ```
 
-Deploy MicroWagers with a short StudioNet appeal window, then place the recorded address in the contract field or the `micro-wagers-contract` meta tag in `frontend/index.html`:
+Deploy MicroWagers with a short StudioNet appeal window. The script records the transaction only after finality, successful execution, source verification, and configuration verification. Then configure `apps/microwagers-web/.env.local` with the recorded address and run the exact-release acceptance:
 
 ```bash
 export MICROWAGERS_PRIVATE_KEY=0x...
 export MICROWAGERS_NETWORK=studionet
 python scripts/deploy_micro_wagers.py --fee-bps 0 --appeal-window-secs 300
+python scripts/microwagers_acceptance.py
+```
+
+```text
+NEXT_PUBLIC_MICROWAGERS_ADDRESS=0x...
+NEXT_PUBLIC_NETWORK_NAME=StudioNet
+NEXT_PUBLIC_SITE_URL=https://your-microwagers-host.example
 ```
 
 Keep preflight enabled for both deployments.
 
 ## Owner boundary
 
-The `/admin` surface is read-only. It exposes configuration, protocol counts, and StudioNet completion gates. Owners cannot rewrite verdicts, move test escrow, or block legitimate claims.
+StreakPact's `/admin` and MicroWagers' `/status` surfaces are read-only. They expose configuration and public activity only. Owners cannot rewrite verdicts, move test escrow, block appeals, or block legitimate claims.
 
 See [`docs/STREAKPACT_PORTAL_SUBMISSION.md`](docs/STREAKPACT_PORTAL_SUBMISSION.md), [`docs/STREAKPACT_STUDIONET_RELEASE.md`](docs/STREAKPACT_STUDIONET_RELEASE.md), [`docs/architecture/streakpact-v2.md`](docs/architecture/streakpact-v2.md), and [`docs/product/genlayer-fit.md`](docs/product/genlayer-fit.md) for the submission, release procedure, and rationale.
 
