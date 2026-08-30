@@ -18,7 +18,7 @@ import {
   type WagerView,
   type WalletSession,
 } from "@/lib/contract";
-import { formatCountdown, marketShareUrl, transactionPending } from "@/lib/ui-state";
+import { formatCountdown, marketShareUrl, rereadUntilStatusMatches, transactionPending } from "@/lib/ui-state";
 import TxNotice from "./TxNotice";
 
 const demoWager: WagerView = {
@@ -90,7 +90,9 @@ export default function MarketBoard({ session }: { session: WalletSession | null
       const nextId = selectedId.current || sharedId || nextItems[0]?.id;
       if (nextId) {
         if (!/^w-\d+$/.test(nextId)) throw new Error("Enter a wager ID such as w-3.");
-        const details = await getWager(nextId);
+        const firstDetails = await getWager(nextId);
+        const expectedStatus = nextItems.find((item) => item.id === nextId)?.status;
+        const details = await rereadUntilStatusMatches(firstDetails, expectedStatus, () => getWager(nextId));
         if (version !== requestVersion.current) return;
         selectedId.current = nextId;
         setLookupId(nextId);
@@ -187,6 +189,7 @@ export function MarketDetail({ session, wager: storedWager, onRefresh }: { sessi
   const account = session?.address.toLowerCase() ?? "";
   const creator = wager.creator.toLowerCase();
   const taker = wager.taker.toLowerCase();
+  const unmatched = taker === creator;
   const winner = wager.winner.toLowerCase();
   const isCreator = account !== "" && account === creator;
   const isTaker = account !== "" && account === taker && taker !== creator;
@@ -226,7 +229,7 @@ export function MarketDetail({ session, wager: storedWager, onRefresh }: { sessi
 
       <div className="sides-grid">
         <div className={wager.outcome_label === wager.creator_side ? "winning-side" : ""}><span>Creator · {shortenAddress(wager.creator)}</span><strong>{wager.creator_side}</strong></div>
-        <div className={wager.outcome_label === wager.taker_side ? "winning-side" : ""}><span>{wager.status === "OPEN" ? "Open side" : `Taker · ${shortenAddress(wager.taker)}`}</span><strong>{wager.taker_side}</strong></div>
+        <div className={wager.outcome_label === wager.taker_side ? "winning-side" : ""}><span>{wager.status === "OPEN" ? "Open side" : unmatched ? "No taker" : `Taker · ${shortenAddress(wager.taker)}`}</span><strong>{wager.taker_side}</strong></div>
       </div>
 
       {wager.status === "VOIDED" ? <div className="callout"><strong>Wager voided</strong><p>{wager.verdict_reason || "The wager was cancelled or could not be determined. Test stakes were refunded."}</p></div> : null}

@@ -45,6 +45,8 @@ test("an unmatched cancellation shows the refunded stake rather than a theoretic
   const html = renderDetail(voided, creator);
   assert.match(html, /0\.001/);
   assert.match(html, /refunded/);
+  assert.match(html, /No taker/);
+  assert.doesNotMatch(html, /Taker ·/);
   assert.doesNotMatch(html, /0\.002/);
 });
 

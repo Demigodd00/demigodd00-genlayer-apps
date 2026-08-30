@@ -20,6 +20,24 @@ export function formatCountdown(unix: string, now: number): string {
   return hours >= 24 ? `${Math.floor(hours / 24)}d ${hours % 24}h` : `${hours}h ${Math.floor((seconds % 3600) / 60)}m`;
 }
 
+const statusSyncDelays = [350, 900] as const;
+
+export async function rereadUntilStatusMatches<T extends { status: string }>(
+  initial: T,
+  expectedStatus: string | undefined,
+  read: () => Promise<T>,
+  wait: (delayMs: number) => Promise<void> = (delayMs) => new Promise((resolve) => setTimeout(resolve, delayMs)),
+): Promise<T> {
+  if (!expectedStatus || initial.status === expectedStatus) return initial;
+  let latest = initial;
+  for (const delay of statusSyncDelays) {
+    await wait(delay);
+    latest = await read();
+    if (latest.status === expectedStatus) break;
+  }
+  return latest;
+}
+
 export function watchWalletSession(provider: EthereumProvider | undefined, address: string | undefined, reset: () => void): () => void {
   if (!provider?.on || !address) return () => {};
   const accountsChanged = (...args: unknown[]) => {

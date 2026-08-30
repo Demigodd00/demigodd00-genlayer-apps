@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { formatCountdown, marketShareUrl, oneTransactionAtATime, transactionPending, watchWalletSession } from "../src/lib/ui-state";
+import { formatCountdown, marketShareUrl, oneTransactionAtATime, rereadUntilStatusMatches, transactionPending, watchWalletSession } from "../src/lib/ui-state";
 import type { EthereumProvider } from "../src/lib/wallet";
 
 test("share links and short countdowns are reviewer-friendly", () => {
@@ -12,6 +12,19 @@ test("share links and short countdowns are reviewer-friendly", () => {
 test("all pending stages disable duplicate actions", () => {
   for (const state of ["awaiting-signature", "submitted", "finalizing"] as const) assert.equal(transactionPending({ state, label: "pending" }), true);
   assert.equal(transactionPending({ state: "confirmed", label: "done" }), false);
+});
+
+test("a stale wager detail is reread until it matches the market summary", async () => {
+  const statuses = ["OPEN", "VOIDED"];
+  let reads = 0;
+  const result = await rereadUntilStatusMatches(
+    { status: "OPEN", id: "w-3" },
+    "VOIDED",
+    async () => ({ status: statuses[Math.min(reads++, statuses.length - 1)], id: "w-3" }),
+    async () => {},
+  );
+  assert.equal(result.status, "VOIDED");
+  assert.equal(reads, 2);
 });
 
 test("only one write per account can run at a time", async () => {
