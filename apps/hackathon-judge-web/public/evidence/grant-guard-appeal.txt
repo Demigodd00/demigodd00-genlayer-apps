@@ -1,0 +1,14 @@
+PROJECT: Grant Guard
+TRACK: Best verifiable agent
+APPEAL EVIDENCE: Deployment and reproducibility addendum
+
+NEW PUBLIC EVIDENCE
+The intelligent contract is now deployed on GenLayer StudioNet. The public demonstration includes a complete milestone submission, validator decision, escrow release, and explorer transaction. The source shown in the demo matches the deployed contract digest.
+
+REPRODUCTION
+1. Open the public interface.
+2. Select the sample grant.
+3. Inspect its saved milestone evidence.
+4. Compare the exact release decision fields while allowing rationale prose to differ.
+
+This addendum addresses the original missing-deployment concern. It does not ask reviewers to ignore the rulebook or assume private functionality.

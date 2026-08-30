@@ -1,0 +1,15 @@
+PROJECT: Grant Guard
+TRACK: Best verifiable agent
+BUILD WINDOW: Created during Open Intelligence Build Week
+
+PUBLIC DEMONSTRATION
+Grant Guard evaluates milestone reports against plain-English grant terms. The demo contains one example report and a proposed release decision.
+
+IMPLEMENTATION EVIDENCE
+- A user interface mockup is shown.
+- The page describes validator review and milestone escrow.
+- No deployed intelligent-contract address is provided.
+- No transaction, source-code link, or reproducible execution is shown.
+
+RUBRIC CLAIM
+The concept is relevant and clearly explained, but this evidence page does not establish that the core judging or escrow behavior is live. Reviewers should not infer unshown functionality.

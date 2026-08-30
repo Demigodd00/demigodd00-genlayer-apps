@@ -1,0 +1,14 @@
+PROJECT: Appeal Recovery Fixture
+TRACK: Best Verifiable Agent
+BUILD WINDOW: Built for Open Intelligence Build Week — Verified Jury
+
+PUBLIC IDENTIFIERS
+- Live application: https://hackathon-judge-studionet.blazekingsley2.chatgpt.site/
+- StudioNet contract: 0x0bAE6f3aE56E02A50f5Bed0051F56ec28725a58F
+- Public contract source: https://github.com/Demigodd00/streakpact/blob/main/contracts/hackathon_judge.py
+
+INTENTIONAL EVIDENCE GAP
+This fixture deliberately omits the exact deployment transaction hash required by the event rulebook. Reviewers must not infer it from a contract address, source page, private material, or prior knowledge. The correct original decision is INCONCLUSIVE with score zero.
+
+PURPOSE
+The fixture exists to demonstrate that missing material evidence does not become a fabricated pass and that the entrant's single appeal can add a separately frozen public record.

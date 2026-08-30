@@ -1,0 +1,69 @@
+{
+  "network": "studionet",
+  "contract": "0x0bAE6f3aE56E02A50f5Bed0051F56ec28725a58F",
+  "contract_version": "2.1.0",
+  "site_url": "https://hackathon-judge-studionet.blazekingsley2.chatgpt.site",
+  "event_name": "Open Intelligence Build Week \u2014 Verified Jury Complete",
+  "started_at": "2026-08-30T09:21:06.598188+00:00",
+  "wallets": {
+    "organizer": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
+    "entrant_one": "0x585b4429B8B6B1BB69BbDacbC9D0f1cCe4d7a579",
+    "entrant_two": "0x9fC5896680745A067dD988be15978C04ebC31CC3"
+  },
+  "transactions": {
+    "deposit_prize": {
+      "method": "deposit",
+      "args": [],
+      "role": "organizer",
+      "sender": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
+      "value_atto": "1000000000000000",
+      "transaction_hash": "0xdb2d127965973e1cd6c738a1cb0c9c6986f260e8d0e58e150fcde3be39c03623",
+      "submitted_at": "2026-08-30T09:21:18.487502+00:00",
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "finalized_at": "2026-08-30T09:21:57.471001+00:00"
+    },
+    "create_event": {
+      "method": "create_hackathon",
+      "args": [
+        "Open Intelligence Build Week \u2014 Verified Jury Complete",
+        "Best Verifiable Agent",
+        "Projects must be newly built during this event and provide all of these exact public identifiers: a GenLayer StudioNet contract address, its deployment transaction hash, the public contract source URL, and the live application URL. Missing identifiers are inconclusive; clear pre-existing work is ineligible.",
+        "Score 100 when every required exact identifier is present and the evidence explains the complete consensus, appeal, and settlement flow. Score 80 when all identifiers are supplied only through a valid appeal. Missing identifiers must receive zero and INCONCLUSIVE; a clear build-window violation is INELIGIBLE.",
+        1788081957,
+        3,
+        60,
+        60,
+        1000000000000000
+      ],
+      "role": "organizer",
+      "sender": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
+      "value_atto": "0",
+      "transaction_hash": "0x02c7caf9f02b464b6477c7e715ba26def5bcb6fa38037008caeb9f634baa491b",
+      "submitted_at": "2026-08-30T09:22:04.259896+00:00",
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "finalized_at": "2026-08-30T09:22:41.387751+00:00"
+    },
+    "recovery_cancel_hj-2": {
+      "method": "cancel_hackathon",
+      "args": [
+        "hj-2"
+      ],
+      "role": "organizer",
+      "sender": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
+      "value_atto": "0",
+      "transaction_hash": "0x85a7adb41135b41419ac494e468350568de9523cb75e76240d37793cc33a19f7",
+      "submitted_at": "2026-08-30T09:23:47.933289+00:00",
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "finalized_at": "2026-08-30T09:24:22.682757+00:00"
+    }
+  },
+  "assertions": {},
+  "updated_at": "2026-08-30T09:24:22.690673+00:00",
+  "funding_transaction_hash": "0xb9dbb8cee3fd38a05959c39f331e33c0e5761ded591e64a628e951965a7b471a",
+  "submission_deadline_unix": 1788081957,
+  "hackathon_id": "hj-2",
+  "recovery_status": "CANCELLED"
+}

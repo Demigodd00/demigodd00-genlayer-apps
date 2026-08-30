@@ -1,0 +1,17 @@
+PROJECT: Appeal Recovery Fixture
+TRACK: Best Verifiable Agent
+APPEAL EVIDENCE: Exact deployment and reproducibility addendum
+
+COMPLETE PUBLIC IDENTIFIERS
+- Live application: https://hackathon-judge-studionet.blazekingsley2.chatgpt.site/
+- StudioNet contract: 0x0bAE6f3aE56E02A50f5Bed0051F56ec28725a58F
+- Deployment transaction: 0x78362bdfad4abbedde0e153befc2276ecaf2db1dd00f8b5378b46a3f44e8f048
+- Public contract source: https://github.com/Demigodd00/streakpact/blob/main/contracts/hackathon_judge.py
+- Public deployment record: https://github.com/Demigodd00/streakpact/blob/main/deployments/hackathon_judge_studionet.json
+- Deployed source SHA-256: 821f6be09d63e097593457b5a0f5080c93277aedf2be38b81302c9976ec77c07
+
+APPEAL BASIS
+The original record intentionally lacked the deployment transaction. This addendum supplies that exact missing identifier. It also points to the live app, contract, public source, deployment record, and deployed source digest, allowing independent reproduction without assuming private evidence.
+
+EXPECTED APPLICATION OF THE RUBRIC
+All required identifiers are now present through one valid appeal, so the event rubric calls for ELIGIBLE at the 80-point band. This text does not ask validators to ignore the rulebook or output schema.

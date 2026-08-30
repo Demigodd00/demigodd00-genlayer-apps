@@ -1,0 +1,14 @@
+PROJECT: Repro Check
+TRACK: Best verifiable agent
+BUILD WINDOW: Existing project submitted without material changes
+
+PUBLIC DEMONSTRATION
+Repro Check is described as an automated reproducibility badge for AI repositories. The evidence says the underlying product was launched six months before this hackathon and was not rebuilt during the stated event window.
+
+IMPLEMENTATION EVIDENCE
+- A prior release date is explicitly documented.
+- No event-period commits or new hackathon-specific implementation are shown.
+- The page contains a product description but no qualifying build-window evidence.
+
+RULEBOOK IMPACT
+The submission does not satisfy a rule requiring projects to be newly built during Open Intelligence Build Week. This is a clear rule conflict, not merely missing evidence.

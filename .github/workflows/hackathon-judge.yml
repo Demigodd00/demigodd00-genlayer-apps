@@ -1,0 +1,74 @@
+name: Hackathon Judge
+
+on:
+  push:
+    paths:
+      - "contracts/hackathon_judge.py"
+      - "tests/direct/test_hackathon_judge.py"
+      - "tests/integration/test_hackathon_judge_studionet.py"
+      - "scripts/deploy_hackathon_judge.py"
+      - "scripts/seed_hackathon_judge_demo.py"
+      - "apps/hackathon-judge-web/**"
+      - ".github/workflows/hackathon-judge.yml"
+  pull_request:
+    paths:
+      - "contracts/hackathon_judge.py"
+      - "tests/direct/test_hackathon_judge.py"
+      - "tests/integration/test_hackathon_judge_studionet.py"
+      - "scripts/deploy_hackathon_judge.py"
+      - "scripts/seed_hackathon_judge_demo.py"
+      - "apps/hackathon-judge-web/**"
+      - ".github/workflows/hackathon-judge.yml"
+  workflow_dispatch:
+
+jobs:
+  contract-release-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - name: Install GenLayer toolchain
+        run: pip install -r requirements-deploy.txt
+      - name: Prepare pinned GenVM runner
+        run: python scripts/prepare_gltest_runner.py
+      - name: Validate contract and scripts
+        run: |
+          genvm-lint check contracts/hackathon_judge.py
+          python -m compileall -q scripts/deploy_hackathon_judge.py scripts/seed_hackathon_judge_demo.py
+      - name: Run direct lifecycle and adversarial tests
+        run: pytest tests/direct/test_hackathon_judge.py -v
+
+  dapp-release-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 11.19.0
+      - name: Install locked dependencies
+        working-directory: apps/hackathon-judge-web
+        run: pnpm install --frozen-lockfile
+      - name: Typecheck, test, lint, and build
+        working-directory: apps/hackathon-judge-web
+        run: pnpm check
+      - name: Audit production dependencies
+        working-directory: apps/hackathon-judge-web
+        run: pnpm audit:prod
+
+  studionet-consensus-smoke:
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - name: Install GenLayer toolchain
+        run: pip install -r requirements-deploy.txt
+      - name: Run real renderer and LLM consensus flow
+        run: gltest tests/integration/test_hackathon_judge_studionet.py --network studionet -v -s

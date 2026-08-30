@@ -1,0 +1,15 @@
+PROJECT: Consensus Canvas
+TRACK: Best verifiable agent
+BUILD WINDOW: Created during Open Intelligence Build Week
+
+PUBLIC DEMONSTRATION
+Consensus Canvas collects three independent model reviews of a design brief and exposes both the stable decision fields and the dissenting prose. The published demo shows a complete request, three validator responses, a normalized PASS decision, and an audit trail linking every response to its prompt digest.
+
+IMPLEMENTATION EVIDENCE
+- GenLayer intelligent contract source and deployment address are visible in the demo.
+- Evidence is fetched from public HTTPS pages and stored with a SHA-256 digest.
+- Validators compare only pass/fail, score band, and bounded confidence.
+- The demo includes a successful finalization transaction on StudioNet.
+
+RUBRIC CLAIM
+The project demonstrates a complete, original, and usable consensus workflow. All core behavior is publicly reviewable; no private repository or unevidenced capability is claimed.

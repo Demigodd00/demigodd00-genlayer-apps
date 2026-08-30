@@ -1,0 +1,206 @@
+{
+  "network": "studionet",
+  "contract": "0x473f7DE2690Fb5B6ec5A8092cFE93116ffd82Ede",
+  "contract_version": "2.0.0",
+  "site_url": "https://hackathon-judge-studionet.blazekingsley2.chatgpt.site",
+  "event_name": "Open Intelligence Build Week \u2014 Live Jury",
+  "started_at": "2026-08-30T07:50:33.311204+00:00",
+  "wallets": {
+    "organizer": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
+    "entrant_one": "0xC27D6f1d1970F317010ccd42f7a61B306193f9cF",
+    "entrant_two": "0x2429d840b3b6983315886Ee55E517D8cf547c49D"
+  },
+  "transactions": {
+    "deposit_prize": {
+      "method": "deposit",
+      "args": [],
+      "role": "organizer",
+      "sender": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
+      "value_atto": "1000000000000000",
+      "transaction_hash": "0x70763c4b62e5d5832df0f6bbb2a90f42a7aaae55f51220a4e4a5c5652862261f",
+      "submitted_at": "2026-08-30T07:50:50.095719+00:00",
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "finalized_at": "2026-08-30T07:51:23.424837+00:00"
+    },
+    "create_event": {
+      "method": "create_hackathon",
+      "args": [
+        "Open Intelligence Build Week \u2014 Live Jury",
+        "Best Verifiable Agent",
+        "Projects must be newly built during this event, identify a public GenLayer intelligent contract, and show a complete real transaction. Missing proof is inconclusive; clear pre-existing work is ineligible.",
+        "Score 100 for a complete, original, reproducible flow with immutable evidence; 80 for a complete live flow with less extensive evidence; 60 for a functional minimum; otherwise return zero with the proper eligibility.",
+        1788076883,
+        3,
+        60,
+        600,
+        1000000000000000
+      ],
+      "role": "organizer",
+      "sender": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
+      "value_atto": "0",
+      "transaction_hash": "0x56bbb6139f89b4d19c276326f6e206aca9f6bdd2ab29cfcf0afb3c54a454666c",
+      "submitted_at": "2026-08-30T07:51:36.835021+00:00",
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "finalized_at": "2026-08-30T07:52:12.265179+00:00"
+    },
+    "submit_consensus_canvas": {
+      "method": "submit_project",
+      "args": [
+        "hj-1",
+        "Consensus Canvas",
+        "https://hackathon-judge-studionet.blazekingsley2.chatgpt.site/evidence/consensus-canvas.txt",
+        "A complete validator-consensus product with immutable public evidence and a finalized StudioNet flow."
+      ],
+      "role": "entrant_one",
+      "sender": "0xC27D6f1d1970F317010ccd42f7a61B306193f9cF",
+      "value_atto": "0",
+      "transaction_hash": "0xa21f7c6f7324e96251880ff6a88c3d51748e0f54e789ba412864f0cc10e69d6a",
+      "submitted_at": "2026-08-30T07:52:38.714304+00:00",
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "finalized_at": "2026-08-30T07:53:22.829482+00:00"
+    },
+    "submit_grant_guard": {
+      "method": "submit_project",
+      "args": [
+        "hj-1",
+        "Grant Guard",
+        "https://hackathon-judge-studionet.blazekingsley2.chatgpt.site/evidence/grant-guard.txt",
+        "A milestone judging and escrow concept submitted with a public evidence page for independent review."
+      ],
+      "role": "entrant_two",
+      "sender": "0x2429d840b3b6983315886Ee55E517D8cf547c49D",
+      "value_atto": "0",
+      "transaction_hash": "0xaa2c352bf2783be051f2364f19dd877835e6c26843a5662e7807ec59e750d671",
+      "submitted_at": "2026-08-30T07:53:29.938810+00:00",
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "finalized_at": "2026-08-30T07:54:09.689276+00:00"
+    },
+    "evaluate_0": {
+      "method": "evaluate_submission",
+      "args": [
+        "hj-1",
+        0
+      ],
+      "role": "organizer",
+      "sender": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
+      "value_atto": "0",
+      "transaction_hash": "0xf2e70d815b260e6ba43cbfba10ddf1c0d27b89d16309a53218db01b8ae9d9343",
+      "submitted_at": "2026-08-30T08:01:37.387709+00:00",
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "finalized_at": "2026-08-30T08:02:28.194367+00:00"
+    },
+    "evaluate_1": {
+      "method": "evaluate_submission",
+      "args": [
+        "hj-1",
+        1
+      ],
+      "role": "organizer",
+      "sender": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
+      "value_atto": "0",
+      "transaction_hash": "0xe5179e389ad9d4be004101dbc8a003faa287f6cd982e16806c6fb4c3c7e260d5",
+      "submitted_at": "2026-08-30T08:02:35.175526+00:00",
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "finalized_at": "2026-08-30T08:03:46.788520+00:00"
+    },
+    "appeal_grant_guard": {
+      "method": "appeal_submission",
+      "args": [
+        "hj-1",
+        1,
+        "The first evidence page omitted the deployment proof. This addendum supplies the live contract and reproducible transaction flow required by the rulebook.",
+        "https://hackathon-judge-studionet.blazekingsley2.chatgpt.site/evidence/grant-guard-appeal.txt"
+      ],
+      "role": "entrant_two",
+      "sender": "0x2429d840b3b6983315886Ee55E517D8cf547c49D",
+      "value_atto": "0",
+      "transaction_hash": "0x4d540099d335ffd7ff3294d7fe70f6b38bb40e9d3c9ab51cc48d3ce34ca21118",
+      "submitted_at": "2026-08-30T08:03:59.794117+00:00",
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "finalized_at": "2026-08-30T08:04:39.926755+00:00"
+    },
+    "resolve_grant_guard_appeal": {
+      "method": "resolve_appeal",
+      "args": [
+        "hj-1",
+        1
+      ],
+      "role": "organizer",
+      "sender": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
+      "value_atto": "0",
+      "transaction_hash": "0x4b0fa9d9612fc860bf719648de6a848799e41dfe9b0cebb95bda5e5ef611b2c5",
+      "submitted_at": "2026-08-30T08:04:52.818359+00:00",
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "finalized_at": "2026-08-30T08:05:51.427177+00:00"
+    },
+    "finalize_event": {
+      "method": "finalize_hackathon",
+      "args": [
+        "hj-1"
+      ],
+      "role": "organizer",
+      "sender": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
+      "value_atto": "0",
+      "transaction_hash": "0x10df3e07e92b87af67f6bdaa0bbb6091561e8e2032787ba6767492f418424720",
+      "submitted_at": "2026-08-30T08:06:02.889638+00:00",
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "finalized_at": "2026-08-30T08:06:35.739151+00:00"
+    },
+    "withdraw_winner_prize": {
+      "method": "withdraw_credit",
+      "args": [],
+      "role": "entrant_one",
+      "sender": "0xC27D6f1d1970F317010ccd42f7a61B306193f9cF",
+      "value_atto": "0",
+      "transaction_hash": "0xbef2550ca5d09854346e7d1cab2f8db61246882a2d1c3ceb3d14a3e3ce07b8de",
+      "submitted_at": "2026-08-30T08:06:47.396683+00:00",
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "finalized_at": "2026-08-30T08:07:21.924711+00:00"
+    }
+  },
+  "assertions": {
+    "status": "FINALIZED",
+    "winner": "0xC27D6f1d1970F317010ccd42f7a61B306193f9cF",
+    "winner_project": "Consensus Canvas",
+    "prize_atto": "1000000000000000",
+    "prize_released": true,
+    "submission_count": "2",
+    "evaluated_count": "2",
+    "appeal_demonstrated": true,
+    "evidence_digests": {
+      "Consensus Canvas": "ee249e906ea3099d2ccc679ce42b29e46b9c220306853807858e75bb96755920",
+      "Grant Guard": "fea2d1122637b06723950e6bb0efcdbff4f59cfb3cbbecad324c3830a5ae5143"
+    },
+    "decisions": {
+      "Consensus Canvas": {
+        "status": "WINNER",
+        "eligibility": "ELIGIBLE",
+        "score_band": "100",
+        "confidence_bucket": "90",
+        "reasoning": "Complete, original, and reproducible consensus workflow with immutable public evidence. Includes GenLayer contract, SHA-256 digests, validator responses, and a finalized StudioNet transaction. All core behavior is publicly reviewable."
+      },
+      "Grant Guard": {
+        "status": "NOT_SELECTED",
+        "eligibility": "ELIGIBLE",
+        "score_band": "80",
+        "confidence_bucket": "80",
+        "reasoning": "Appeal evidence directly addresses the prior gap: it states the contract is deployed on GenLayer StudioNet and the public demo shows a complete flow including milestone submission, validator decision, escrow release, and explorer transaction, with matching source digest. Rulebook-required live transaction and public contract are now evidenced."
+      }
+    }
+  },
+  "updated_at": "2026-08-30T08:20:48.399675+00:00",
+  "funding_transaction_hash": "0xf0a2d95378ed22efa899f9bb1fb5a7a64ba104082b90f25afc5d413d5e577ba0",
+  "submission_deadline_unix": 1788076883,
+  "hackathon_id": "hj-1",
+  "completed_at": "2026-08-30T08:20:48.399675+00:00"
+}
