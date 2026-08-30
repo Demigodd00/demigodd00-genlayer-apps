@@ -46,6 +46,6 @@ Only one evidence link is required by the form, but the repository, Explorer con
 4. Open the Explorer contract and compare it with the deployment and acceptance records.
 5. Connect MetaMask on GenLayer StudioNet only if a fresh test transaction is desired.
 
-## Private repository note
+## Public repository note
 
-The repository is intentionally private to protect authorship. Before submitting, ensure the Portal account or assigned reviewer can access it. If private-repository access is unavailable, keep the Explorer contract and live product evidence attached and grant the reviewer explicit GitHub access; do not make the repository public without a deliberate decision.
+The repository is public so Portal reviewers can verify the source, deployment records, and acceptance evidence without requesting access. Authorship is documented by the Git history, the demigodd00 attribution throughout the product, and the repository's proprietary license and notice. Public visibility does not grant permission to copy, republish, or present the work as someone else's.

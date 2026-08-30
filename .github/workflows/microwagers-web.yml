@@ -22,7 +22,7 @@ jobs:
       run:
         working-directory: apps/microwagers-web
     env:
-      NEXT_PUBLIC_MICROWAGERS_ADDRESS: 0x5D2679a7277D05E5bE9a6Bf60526D0fC7C1d477C
+      NEXT_PUBLIC_MICROWAGERS_ADDRESS: "0x5D2679a7277D05E5bE9a6Bf60526D0fC7C1d477C"
       NEXT_PUBLIC_NETWORK_NAME: StudioNet
       NEXT_PUBLIC_SITE_URL: https://microwagers.vercel.app
     steps:
