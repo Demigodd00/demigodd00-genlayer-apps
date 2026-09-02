@@ -15,9 +15,11 @@ MicroWagers by demigodd00 is a source-bound, two-sided prediction market for Gen
 | Fee | `0` basis points |
 | Appeal window | `300` seconds |
 | Web deployment | `dpl_dvcf6zXys9NB5KyKLQ8mVuixRhXk` |
-| Source commit | `ae5327c4ec2ec88e3200dacb108597de328da146` |
+| Application source commit | `ae5327c4ec2ec88e3200dacb108597de328da146` |
 
 The deployment record is in [`deployments/micro_wagers_studionet.json`](../deployments/micro_wagers_studionet.json), the exact-release acceptance journal is in [`deployments/micro_wagers_acceptance.json`](../deployments/micro_wagers_acceptance.json), and the hosting record is in [`deployments/micro_wagers_vercel.json`](../deployments/micro_wagers_vercel.json).
+
+The hosting record identifies the deployment built from the application-code commit above. Later evidence-only commits may create an equivalent Vercel deployment without changing the shipped app.
 
 ## Why this is GenLayer-native
 

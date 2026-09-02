@@ -1,8 +1,10 @@
 # StreakPact by demigodd00: Vercel launch
 
-The GitHub repository stays private. The production website, browser JavaScript,
-StudioNet contract source and published IPFS evidence are publicly inspectable.
-This is a zero-fee StudioNet demonstration, not a real-money launch.
+The public portfolio monorepo lets reviewers verify source and provenance. The
+production website, browser JavaScript, StudioNet contract source and published
+IPFS evidence are publicly inspectable. Public visibility does not transfer
+authorship or grant permission to misrepresent the work. This is a zero-fee
+StudioNet demonstration, not a real-money launch.
 
 The current deployment is live at
 [streakpact-zeta.vercel.app](https://streakpact-zeta.vercel.app).
@@ -36,8 +38,8 @@ use for this website. Temporary integration-test contracts are not the release.
 
 ## Vercel project
 
-Import `Demigodd00/streakpact` using the owner's GitHub account. If installing the
-Vercel GitHub integration, grant access only to this repository when possible.
+Import `Demigodd00/demigodd00-genlayer-apps` using the owner's GitHub account.
+The Vercel project must keep `apps/streakpact-web` as its root directory.
 
 | Setting | Value |
 | --- | --- |

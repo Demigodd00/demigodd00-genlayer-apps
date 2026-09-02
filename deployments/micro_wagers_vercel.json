@@ -23,6 +23,7 @@
     "skip_unaffected_deployments": true,
     "ignored_build_step": "git diff HEAD^ HEAD --quiet -- \":(top)apps/microwagers-web\""
   },
+  "provenance_note": "This record identifies the verified application-code deployment; later evidence-only commits may trigger an equivalent deployment with unchanged app code.",
   "verification": {
     "home_status": 200,
     "status_page_status": 200,
