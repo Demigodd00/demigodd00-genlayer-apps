@@ -1,6 +1,6 @@
 # StreakPact by demigodd00: StudioNet deployment status
 
-Checked on 2026-08-29. The website is live at
+Checked on 2026-09-02. The website is live at
 [streakpact-zeta.vercel.app](https://streakpact-zeta.vercel.app).
 Hosting, evidence publishing, and the exact-release two-wallet contract matrix
 have passed. Real MetaMask pact creation has also passed; rejection recovery,
@@ -24,10 +24,10 @@ See the [official network comparison](https://docs.genlayer.com/developers/netwo
 
 ## Hosting and evidence: passed
 
-- Vercel project `demi17/streakpact`, Hobby plan, private GitHub repository
-  `Demigodd00/streakpact`, production branch `main`.
+- Vercel project `demi17/streakpact`, Hobby plan, public portfolio monorepo
+  `Demigodd00/demigodd00-genlayer-apps`, production branch `main`.
 - Root directory `apps/streakpact-web`; Node.js `22.x`; pnpm `11.19.0`.
-- Final application revision: `6e1e2857790107dc57cb56015c9440f325661609`.
+- Final application revision: `ae5327c4ec2ec88e3200dacb108597de328da146`.
   Later acceptance-record/documentation commits may create additional deployments.
 - Production environment contains the release address, StudioNet label, exact
   HTTPS origin, and a sensitive server-only `PINATA_JWT`. No wallet key was
@@ -89,7 +89,7 @@ matrix is not a MetaMask browser test.
 - GenVM lint/validation, pinned runner verification, and 13 direct contract tests.
 - `check_streakpact_release.py --require-deployment --skip-web` passed all
   deployment provenance and contract gates; web gates were run separately.
-- 67 web tests, TypeScript checking, and the production build passed.
+- 69 web tests, TypeScript checking, and the production build passed.
 - Production dependency audit: no known vulnerabilities reported.
 - The saved wallet key and upload JWT had zero matches across 17 browser assets
   and 12 release files. Neither ignored environment file is included in Git.
@@ -97,8 +97,10 @@ matrix is not a MetaMask browser test.
   JavaScript SDK. The UI now uses actual leader execution results when the SDK
   omits its normalized field; `FINALIZED` alone never means success.
 - Wallet connection uses standard account/network requests, verifies StudioNet,
-  and does not require a MetaMask Snap. Mock-provider tests cover switching,
-  unknown-network setup, rejection, account changes and wrong-network refusal.
+  and does not require a MetaMask Snap. EIP-6963 and legacy provider discovery
+  present each enabled wallet explicitly. Mock-provider tests cover multi-wallet
+  selection, switching, unknown-network setup, rejection, account changes and
+  wrong-network refusal.
 - Shorter UI copy retains the StudioNet/no-value and public-proof warnings.
   Shared pact links work without a wallet, failure recipients can open their
   pact, and cancellation, pagination, stale-proof, timing and duplicate-submit
@@ -113,6 +115,9 @@ matrix is not a MetaMask browser test.
 - Read-only StudioNet calls retry bounded transient transport failures. A raw
   `Failed to fetch`/Viem message no longer reaches the user; transaction writes
   are never automatically retried.
+- My pacts, creation, joining, and protocol guidance now have distinct,
+  reload-safe URLs. Earlier query-string submission links redirect to the new
+  reviewer routes and the recorded `sp2-5` and `sp2-7` fixtures still load.
 
 Local checks used Node.js `24.19.0` and emitted the expected engine warning;
 the hosted production runtime is Node.js `22.x`.
@@ -131,7 +136,8 @@ remaining Vercel account, origin, upload-secret, firewall or contract deployment
 setup required. A custom domain is optional; the public Vercel URL already works.
 
 This is a tested StudioNet demo, not a mainnet security certification. The
-private repository does not make delivered JavaScript, contract source or
-published IPFS proofs private. Use only valueless test GEN and non-sensitive
-proofs. See the [Vercel checklist](STREAKPACT_VERCEL_DEPLOYMENT.md) and
+public repository makes the source and provenance directly reviewable but does
+not transfer authorship or permission to misrepresent the work. Delivered
+JavaScript and published IPFS proofs are public. Use only valueless test GEN and
+non-sensitive proofs. See the [Vercel checklist](STREAKPACT_VERCEL_DEPLOYMENT.md) and
 [release runbook](STREAKPACT_STUDIONET_RELEASE.md) for repeatable checks.

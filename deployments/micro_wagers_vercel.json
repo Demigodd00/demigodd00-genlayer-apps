@@ -3,11 +3,11 @@
   "project_name": "microwagers",
   "vercel_team": "demi17",
   "production_url": "https://microwagers.vercel.app",
-  "deployment_url": "https://microwagers-aumler2fv-demi17.vercel.app",
-  "deployment_id": "dpl_AMo335yx2eUmv2GsEZjrwwYYhipa",
+  "deployment_url": "https://microwagers-dotu2b7gy-demi17.vercel.app",
+  "deployment_id": "dpl_dvcf6zXys9NB5KyKLQ8mVuixRhXk",
   "source_repository": "https://github.com/Demigodd00/demigodd00-genlayer-apps",
   "source_branch": "main",
-  "source_commit": "6fbd3a8a42f011cbece887a1a9f4b8bfbc67227e",
+  "source_commit": "ae5327c4ec2ec88e3200dacb108597de328da146",
   "root_directory": "apps/microwagers-web",
   "framework": "Next.js",
   "node_engine": "22.x",
@@ -33,7 +33,16 @@
     "canonical_url": "https://microwagers.vercel.app/",
     "desktop_contract_read": true,
     "mobile_layout_checked": true,
-    "security_headers_checked": true
+    "security_headers_checked": true,
+    "durable_workflow_routes_checked": true,
+    "legacy_reviewer_link_redirects_checked": true,
+    "multi_wallet_discovery_tests_passed": true,
+    "github_ci": {
+      "conclusion": "success",
+      "commit": "ae5327c4ec2ec88e3200dacb108597de328da146",
+      "release_gate_url": "https://github.com/Demigodd00/demigodd00-genlayer-apps/actions/runs/33608231361",
+      "repository_tests_url": "https://github.com/Demigodd00/demigodd00-genlayer-apps/actions/runs/33608231432"
+    }
   },
-  "verified_at": "2026-08-30T10:01:21.1257955Z"
+  "verified_at": "2026-09-02T08:22:32Z"
 }

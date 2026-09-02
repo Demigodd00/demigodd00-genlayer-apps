@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "product": "StreakPact by demigodd00",
-  "verified_on": "2026-08-28",
+  "verified_on": "2026-09-02",
   "status": "publicly_deployed_manual_wallet_and_device_signoff_pending",
   "public_url": "https://streakpact-zeta.vercel.app",
   "repository": {
@@ -18,14 +18,14 @@
     "framework": "Next.js",
     "node_version": "22.x",
     "package_manager": "pnpm@11.19.0",
-    "verified_application_commit": "6e1e2857790107dc57cb56015c9440f325661609",
+    "verified_application_commit": "ae5327c4ec2ec88e3200dacb108597de328da146",
     "verified_application_deployment": {
-      "id": "CkkkCDDSK8j4cLuTPPrWBEkocKvg",
-      "url": "https://streakpact-gpgk7loai-demi17.vercel.app",
-      "dashboard_url": "https://vercel.com/demi17/streakpact/CkkkCDDSK8j4cLuTPPrWBEkocKvg",
+      "id": "44etAdSzmbCgLZWTaEbyBND6ncJH",
+      "url": "https://streakpact-mkek9veut-demi17.vercel.app",
+      "dashboard_url": "https://vercel.com/demi17/streakpact/44etAdSzmbCgLZWTaEbyBND6ncJH",
       "state": "READY",
-      "build_duration_seconds": 35,
-      "verified_at": "2026-08-28T19:48:55Z"
+      "build_duration_seconds": 33,
+      "verified_at": "2026-09-02T08:21:37Z"
     },
     "provenance_note": "Subsequent documentation and acceptance-record commits may trigger newer deployments with the same application code."
   },
@@ -81,14 +81,14 @@
   "validation": {
     "genvm_validation": "passed",
     "direct_contract_tests_passed": 13,
-    "web_tests_passed": 63,
+    "web_tests_passed": 69,
     "typescript": "passed",
     "production_build": "passed",
     "production_dependency_audit": "no_known_vulnerabilities_reported",
     "github_ci": {
       "conclusion": "success",
-      "commit": "6e1e2857790107dc57cb56015c9440f325661609",
-      "url": "https://github.com/Demigodd00/demigodd00-genlayer-apps/actions/runs/33205326108"
+      "commit": "ae5327c4ec2ec88e3200dacb108597de328da146",
+      "url": "https://github.com/Demigodd00/demigodd00-genlayer-apps/actions/runs/33608231432"
     },
     "exact_release_acceptance": {
       "status": "passed",
@@ -117,7 +117,9 @@
       "checked_viewport_width_px": 624,
       "horizontal_overflow_observed": false,
       "deployed_missing_wallet_fallback": "passed",
-      "wallet_provider_regression_tests": "passed_mocked_provider",
+      "wallet_provider_regression_tests": "passed_mocked_provider_and_multi_wallet_discovery",
+      "durable_workflow_routes": "passed",
+      "legacy_reviewer_link_redirects": "passed",
       "real_metamask_connect_sign_reject": "pending_manual",
       "physical_phone": "pending_manual",
       "limitation": "The available browser has no installed wallet; a connected desktop Chrome or physical phone was unavailable. SDK signer tests do not prove MetaMask behavior."

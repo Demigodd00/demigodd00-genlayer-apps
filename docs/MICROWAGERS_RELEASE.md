@@ -14,8 +14,8 @@ MicroWagers by demigodd00 is a source-bound, two-sided prediction market for Gen
 | Source SHA-256 | `86fd9fc88f96bbf49886d24cfa1f9deb5d74c10db01cc2114369b7bd804e7b25` |
 | Fee | `0` basis points |
 | Appeal window | `300` seconds |
-| Web deployment | `dpl_AMo335yx2eUmv2GsEZjrwwYYhipa` |
-| Source commit | `6fbd3a8a42f011cbece887a1a9f4b8bfbc67227e` |
+| Web deployment | `dpl_dvcf6zXys9NB5KyKLQ8mVuixRhXk` |
+| Source commit | `ae5327c4ec2ec88e3200dacb108597de328da146` |
 
 The deployment record is in [`deployments/micro_wagers_studionet.json`](../deployments/micro_wagers_studionet.json), the exact-release acceptance journal is in [`deployments/micro_wagers_acceptance.json`](../deployments/micro_wagers_acceptance.json), and the hosting record is in [`deployments/micro_wagers_vercel.json`](../deployments/micro_wagers_vercel.json).
 
@@ -49,7 +49,7 @@ The release was exercised against the exact deployed address with two StudioNet 
 - the winner claimed after the appeal window, and the `0.003` test-GEN pot was credited;
 - final state was `SETTLED`, with two created acceptance markets and one settled market.
 
-The frontend also passed 27 automated tests, TypeScript validation, a Next.js production build, a production dependency audit with no known vulnerabilities, desktop QA, mobile QA, health checks, metadata checks, and security-header checks.
+The frontend also passed 27 automated tests, TypeScript validation, a Next.js production build, a production dependency audit with no known vulnerabilities, desktop QA, mobile QA, health checks, metadata checks, and security-header checks. Wallet discovery now presents each EIP-6963 or legacy-injected provider explicitly, and the market, creation, and explanation workflows use reload-safe routes.
 
 ## Repeat the release gate
 
