@@ -6,7 +6,7 @@ IPFS evidence are publicly inspectable. Public visibility does not transfer
 authorship or grant permission to misrepresent the work. This is a zero-fee
 StudioNet demonstration, not a real-money launch.
 
-The current deployment is live at
+The production URL is
 [streakpact-zeta.vercel.app](https://streakpact-zeta.vercel.app).
 The project is on Vercel Hobby with the origin lock, sensitive upload secret,
 and published edge rate limit configured. See the
@@ -88,10 +88,15 @@ See [Vercel WAF rate limiting](https://vercel.com/docs/vercel-firewall/vercel-wa
 1. Request the production `/api/health`; all configuration gates should be true.
    This verifies configuration only, not contract execution or Pinata access.
 2. Open `/admin`; read the actual contract configuration and verify zero fees.
+   For V2.1, also verify `CONTENT_ADDRESSED_AND_WALLET_ATTESTED`, attestation
+   schema `streakpact.wallet-attestation.v1`, and immutable separate original
+   and appeal records.
 3. Upload a non-sensitive text/JSON fixture through the real website. Download
    the returned public URL and verify its SHA-256 matches the uploaded bytes.
 4. Record the full two-wallet acceptance matrix from the release runbook against
    the release address: transaction hashes, pact IDs, outcomes and dates.
+   Confirm the configured attestor is enforced and that an appeal adds a second
+   signed record without replacing the original adjudication.
 5. Verify cross-origin uploads fail, rate limiting returns 429, invite deep links
    work and the mobile layout/wallet recovery flows are usable.
 6. Retain the StudioNet/no-monetary-value warning and public-evidence warning.

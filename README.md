@@ -7,19 +7,19 @@ Copyright (c) 2026 demigodd00. This is proprietary software; no permission is
 granted to copy, modify, distribute, host, publish, or create derivative works.
 See [`LICENSE`](LICENSE) for the complete terms.
 
-StreakPact V2 is one product in this repository. It supports self-stake pacts by default and optional matched challenges. Users define structured success criteria, submit content-addressed evidence, receive a provisional validator verdict, and retain a bounded appeal window before test-token settlement.
+StreakPact V2.1 is one product in this repository. It supports self-stake pacts by default and optional matched challenges. Users define structured success criteria and a fixed evidence-attestor wallet. Each check-in binds that wallet, the subject, activity statement, observed time, and content-addressed evidence before validators decide a provisional result.
 
-**Live release:** [StreakPact app](https://streakpact-zeta.vercel.app) · [GenLayer Explorer contract](https://explorer-studio.genlayer.com/address/0xae785A6DF3a2AA204A5E64FC02246d17b3fc38a6) · [`StreakPactV2` source](contracts/streak_pact_v2.py)
+**Live release:** [StreakPact app](https://streakpact-zeta.vercel.app) · [GenLayer Explorer contract](https://explorer-studio.genlayer.com/address/0xa878379DE7398da0F6Ac6cF1AE32d6CA4e9062c2) · [`StreakPactV2` source](contracts/streak_pact_v2.py)
 
-> **Release status:** deployed and tested on GenLayer StudioNet at `0xae785A6DF3a2AA204A5E64FC02246d17b3fc38a6`. The frontend is configured for that exact release. StudioNet GEN has no monetary value.
+> **Release status:** V2.1 is deployed and fully acceptance-tested on GenLayer StudioNet at `0xa878379DE7398da0F6Ac6cF1AE32d6CA4e9062c2`. StudioNet GEN has no monetary value.
 
-> **Portal submission scope:** StreakPact V2 and MicroWagers are separate products with separate deployment evidence and submission packs. Do not combine them into one Portal contribution. The historical StreakPact V1 is not a submission candidate.
+> **Portal submission scope:** StreakPact V2.1 and MicroWagers are separate products with separate deployment evidence and submission packs. Do not combine them into one Portal contribution. The historical StreakPact V1 is not a submission candidate.
 
 ## Products
 
 | Product | GenLayer fit | Status |
 |---|---|---|
-| StreakPact V2 | Strong: subjective external evidence directly controls escrow settlement | Live StudioNet build |
+| StreakPact V2.1 | Strong: authenticated external-evidence claims directly control escrow settlement | Live StudioNet build |
 | StreakPact V1 | Strong concept, unsafe period accounting | Historical deployed prototype; do not promote |
 | MicroWagers | Strong: public-source interpretation directly controls peer escrow settlement | Verified StudioNet test-token release |
 
@@ -31,15 +31,17 @@ The frontend owns wallet connection, templates, reminders, transaction feedback,
 
 GenLayer is not used as a generic AI backend. Its judgment changes an escrow state that independent validators must reproduce.
 
-## V2 safeguards
+## V2.1 safeguards
 
 - Every elapsed period is accounted for in bounded contract logic; zero check-ins cannot win.
 - Self-stake is the default product mode; head-to-head challenges are optional.
-- Evidence must use an approved IPFS/Arweave gateway and include a SHA-256 digest.
+- Each pact fixes a self or independent verifier wallet as its evidence attestor.
+- The attestor's GenLayer transaction binds the subject, statement, observed time, and exact IPFS/Arweave SHA-256 digest.
 - Validators agree on verdict, evidence digest, and a bounded confidence bucket.
 - Low-confidence evidence is inconclusive and cannot create a financial verdict.
 - Payouts remain locked through a provisional appeal window.
 - Only the adversely affected participant may appeal a period, once.
+- Appeals create a second adjudication record; they never overwrite the original verdict or evidence provenance.
 - Pagination and financial inputs are capped.
 - The web app uses an injected wallet and never requests or stores a private key.
 - Transactions are shown as successful only after finalized execution succeeds.
@@ -93,18 +95,18 @@ STREAKPACT_APP_ORIGIN=https://your-streakpact-host.example
 
 Without an address, the web app deliberately runs in non-transactional product-preview mode. Without `PINATA_JWT`, manual IPFS/Arweave URLs still work, but the built-in publisher clearly reports that owner configuration is pending. The Pinata token stays server-side and should be restricted to `org:files:write`.
 
-## V2 execution flow
+## V2.1 execution flow
 
 ```text
 connect wallet
   → choose structured template and mode
-  → review exact rules and payout path
+  → choose and review the evidence attestor
   → fund escrow
-  → submit content-addressed evidence each period
+  → attestor signs the activity claim + exact public evidence each period
   → validators agree on verdict + digest + confidence bucket
   → deterministic accounting fills every expired period
   → provisional settlement
-  → one-time period appeals by adversely affected participants
+  → one-time signed appeals preserved beside the original record
   → final settlement
   → eligible recipient claims
 ```

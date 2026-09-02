@@ -1,6 +1,6 @@
-# StreakPact V2 StudioNet release runbook
+# StreakPact V2.1 StudioNet release runbook
 
-StreakPact is a zero-value StudioNet application. “Deployable” means the source and UI pass their repeatable gates. A deployed release has a recorded contract address and hosted website; launch acceptance additionally requires the real two-wallet checks against that exact address. StudioNet is temporary and may reset, so a release address is not a promise of permanent state.
+StreakPact is a zero-value StudioNet application. “Deployable” means the source and UI pass their repeatable gates. A deployed release has a recorded contract address and hosted website; launch acceptance additionally requires the real two-wallet checks against that exact address. V2.1 also requires wallet-authenticated evidence provenance and immutable original/appeal records. StudioNet is temporary and may reset, so a release address is not a promise of permanent state.
 
 For the website setup, use the [Vercel deployment checklist](STREAKPACT_VERCEL_DEPLOYMENT.md).
 
@@ -16,7 +16,7 @@ cd ../..
 python scripts/check_streakpact_release.py
 ```
 
-This runs GenVM lint/validation, all StreakPact V2 direct tests, deployment-script compilation, web API and interface safeguard tests, web type checking, a production build, and the production dependency audit. A missing release deployment is reported as pending rather than failing the pre-deployment gate.
+This runs GenVM lint/validation, all StreakPact V2.1 direct tests, deployment-script compilation, web API and interface safeguard tests, web type checking, a production build, and the production dependency audit. A missing release deployment is reported as pending rather than failing the pre-deployment gate.
 
 ## 2. Evidence publisher
 
@@ -30,7 +30,7 @@ STREAKPACT_APP_ORIGIN=https://the-exact-production-origin.example
 NEXT_PUBLIC_NETWORK_NAME=StudioNet
 ```
 
-The publisher accepts only non-empty JSON or plain text up to 100,000 bytes, applies a basic per-instance rate limit, removes the original filename, and never returns the JWT. Because IPFS evidence is public and content-addressed, testers must not upload secrets, personal identifiers, or sensitive health data. Add a platform/WAF rate limit before distributing the app broadly; the in-process limit is only a first layer.
+The publisher accepts only non-empty JSON or plain text up to 100,000 bytes, applies a basic per-instance rate limit, removes the original filename, and never returns the JWT. Because IPFS evidence is public and content-addressed, testers must not upload secrets, personal identifiers, or sensitive health data. The pact fixes an evidence-attestor wallet; that wallet submits the public URL, digest, activity statement, and observation time in its GenLayer transaction. Add a platform/WAF rate limit before distributing the app broadly; the in-process limit is only a first layer.
 
 ## 3. Recorded StudioNet deployment
 
@@ -95,7 +95,7 @@ Record the wallet addresses, transaction hashes, pact IDs, and observed result f
 - Self pact: create, successful evidence period, elapsed-period misses, provisional loss, finalization, recipient claim.
 - Challenge: create, invite link, exact-stake join from a second wallet, success and failure payout paths.
 - Cancellation: self pact before start and unmatched challenge cancellation/refund.
-- Appeal: adversely affected participant submits one replacement artifact; unauthorized and second appeals fail.
+- Appeal: adversely affected participant submits one signed replacement record; the original record remains readable, while unauthorized and second appeals fail.
 - Wallet/UI: rejection, execution failure, refresh recovery, account switch, mobile layout, and direct invite-link opening.
 - Operations: contract config reads correctly; fee is zero; evidence service, address, and origin gates are green; no outcome-changing owner action exists.
 
@@ -109,8 +109,9 @@ The owner can call the product finished for StudioNet when:
    paths without deploying temporary contracts.
 3. The hosted `/api/health` reports the contract, evidence publisher, origin lock, and tester readiness as configured.
 4. The two-wallet acceptance matrix is recorded against the exact release address.
-5. Every tester entry point says StudioNet test GEN has no monetary value.
-6. Real wallet-provider and physical-device checks are signed off separately;
+5. The contract and UI expose each evidence signer and preserve original and appealed adjudication records separately.
+6. Every tester entry point says StudioNet test GEN has no monetary value.
+7. Real wallet-provider and physical-device checks are signed off separately;
    mocked providers and SDK signer tests do not substitute for these checks.
 
 Moving beyond StudioNet requires a fresh security, legal, economic, privacy, and operations review; this runbook does not claim mainnet readiness.
@@ -137,11 +138,12 @@ from the saved owner signer with a separate test-account context; no private key
 is printed or stored in the public records. Preserve the owner's ignored `.env`
 and the transaction journal. Do not delete the journal to retry pending writes.
 
-Results are stored in `deployments/streak_pact_v2_acceptance.json` and
+Results are stored in `deployments/streak_pact_v2_1_acceptance.json` and
 `deployments/streak_pact_v2_hosted_checks.json`. They include actual execution
 outcomes and credited native-transfer receipts, not finality alone. The public
-test records intentionally accept synthetic reading logs; they are not claims
-that real-world activities were independently observed.
+test records use synthetic reading logs plus wallet-authenticated attestations.
+The wallet transaction proves who attested to the subject, statement, time and
+digest; it does not by itself prove that the real-world activity occurred.
 
 The browser uses StudioNet's `consensus_data.leader_receipt.execution_result`
 when the SDK's normalized execution field is absent. Regression tests retain
