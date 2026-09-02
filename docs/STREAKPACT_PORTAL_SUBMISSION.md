@@ -35,7 +35,7 @@ The repository is a public portfolio monorepo. Review this contribution using th
 
 1. Open the live app and confirm it identifies StudioNet and valueless test GEN.
 2. Open **App status** and verify contract version `2.1.0`, zero fee, wallet-attested evidence, immutable original/appeal records, and the Explorer address above.
-3. Open https://streakpact-zeta.vercel.app/pacts?pact=sp2-5. Period 0 shows an independent verifier wallet and `WALLET_VERIFIED`; period 1 preserves an original `MISSED / AUTO_MISS` record beside the maker's signed successful appeal.
+3. Open https://streakpact-zeta.vercel.app/pacts?pact=sp2-5. P1 shows evidence signed by an independent verifier wallet; P2 preserves the original `MISSED / AUTO_MISS` record beside the maker's signed successful appeal.
 4. Open https://streakpact-zeta.vercel.app/pacts?pact=sp2-6. This is a settled two-wallet challenge with signed maker and challenger appeal records.
 5. Compare the app views with the public exact-release journal linked below. It records 42 finalized contract transactions, 29 successful executions, 13 expected rejections, 29 state assertions, and six credited transfer receipts.
 6. If creating a new pact, select the wallet allowed to attest evidence. Publish only synthetic, non-sensitive JSON or text because evidence files are public.
