@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import { WalletProvider } from "@/components/WalletProvider";
 import "./globals.css";
 
 const appUrl = "https://streakpact-zeta.vercel.app";
@@ -14,7 +15,6 @@ export const metadata: Metadata = {
   applicationName: "StreakPact",
   authors: [{ name: "demigodd00" }],
   creator: "demigodd00",
-  alternates: { canonical: "/" },
   icons: { icon: "/icon.svg" },
   manifest: "/manifest.webmanifest",
   openGraph: {
@@ -41,7 +41,7 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body><WalletProvider>{children}</WalletProvider></body>
     </html>
   );
 }

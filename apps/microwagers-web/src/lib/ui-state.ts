@@ -5,8 +5,16 @@ export function transactionPending(progress: TxProgress | null): boolean {
   return progress !== null && ["awaiting-signature", "submitted", "finalizing"].includes(progress.state);
 }
 
+export function legacyMarketRoute(search: string): string | null {
+  const params = new URLSearchParams(search);
+  const wagerId = params.get("wager")?.trim();
+  if (wagerId) return `/markets?wager=${encodeURIComponent(wagerId)}`;
+  if (params.get("create") === "1") return "/markets/new";
+  return null;
+}
+
 export function marketShareUrl(origin: string, wagerId: string): string {
-  const url = new URL("/", origin);
+  const url = new URL("/markets", origin);
   url.searchParams.set("wager", wagerId);
   return url.toString();
 }

@@ -1,19 +1,21 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import type { EthereumProvider, PactView, TxProgress } from "../src/lib/contract";
-import { formatCountdown, initialWorkspace, oneTransactionAtATime, pactShareUrl, pactTiming, readAllPages, readRecentPage, transactionPending, watchWalletSession } from "../src/lib/ui-state";
+import { formatCountdown, legacyWorkspaceRoute, oneTransactionAtATime, pactShareUrl, pactTiming, readAllPages, readRecentPage, transactionPending, watchWalletSession } from "../src/lib/ui-state";
 
 const timed = {
   status: "LIVE", next_period: "0", periods_total: "3", next_window_open: "1000",
   next_window_close: "1060", end_unix: "1180", appeal_deadline_unix: "1500",
 } as PactView;
 
-test("shared pact links open the dashboard while legacy invitation links still work", () => {
-  assert.equal(initialWorkspace("?pact=sp2-5&view=dashboard"), "dashboard");
-  assert.equal(initialWorkspace("?pact=sp2-5&view=join"), "join");
-  assert.equal(initialWorkspace("?pact=sp2-5"), "join");
-  assert.equal(initialWorkspace(""), "dashboard");
-  assert.equal(pactShareUrl("https://streakpact.example", "sp2-5"), "https://streakpact.example/?pact=sp2-5&view=dashboard");
+test("shared pact links use durable routes while legacy links redirect safely", () => {
+  assert.equal(legacyWorkspaceRoute("?pact=sp2-5&view=dashboard"), "/pacts?pact=sp2-5");
+  assert.equal(legacyWorkspaceRoute("?pact=sp2-5&view=join"), "/join?pact=sp2-5");
+  assert.equal(legacyWorkspaceRoute("?pact=sp2-5"), "/join?pact=sp2-5");
+  assert.equal(legacyWorkspaceRoute("?view=create"), "/pacts/new");
+  assert.equal(legacyWorkspaceRoute(""), null);
+  assert.equal(pactShareUrl("https://streakpact.example", "sp2-5"), "https://streakpact.example/pacts?pact=sp2-5");
+  assert.equal(pactShareUrl("https://streakpact.example", "sp2-5", true), "https://streakpact.example/join?pact=sp2-5");
 });
 
 test("proof controls open and close at the correct local-clock boundaries", () => {

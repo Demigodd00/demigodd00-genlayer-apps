@@ -2,21 +2,17 @@ import { chains, createClient } from "genlayer-js";
 import { TransactionStatus } from "genlayer-js/types";
 import { oneTransactionAtATime, readAllPages, readRecentPage } from "./ui-state";
 import { assertSuccessfulExecution } from "./receipt";
-import { connectStudioWallet, type EthereumProvider } from "./wallet";
+import { connectStudioWallet, type EthereumProvider, type WalletOption } from "./wallet";
 
 export type { EthereumProvider } from "./wallet";
 
 export type Address = `0x${string}`;
 
-declare global {
-  interface Window {
-    ethereum?: EthereumProvider;
-  }
-}
-
 export interface WalletSession {
   address: Address;
   client: ReturnType<typeof createClient>;
+  provider: EthereumProvider;
+  walletName: string;
 }
 
 export interface PactSummary {
@@ -179,15 +175,14 @@ export async function withReadRetry<T>(
   }
 }
 
-export async function connectWallet(): Promise<WalletSession> {
-  const provider = window.ethereum;
-  const address = await connectStudioWallet(provider);
+export async function connectWallet(wallet: WalletOption): Promise<WalletSession> {
+  const address = await connectStudioWallet(wallet.provider);
   const client = createClient({
     chain: chains.studionet,
     account: address,
-    provider: provider as never,
+    provider: wallet.provider as never,
   });
-  return { address, client };
+  return { address, client, provider: wallet.provider, walletName: wallet.name };
 }
 
 async function waitForSuccess(

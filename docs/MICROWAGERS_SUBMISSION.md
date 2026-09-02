@@ -41,7 +41,7 @@ Only one evidence link is required by the form, but the repository, Explorer con
 ## Reviewer path
 
 1. Open the live product without connecting a wallet.
-2. Open settled market `w-2` to see its public source, two participant positions, confidence bucket, validator reason, appeal statement, and settled state.
+2. Open https://microwagers.vercel.app/markets?wager=w-2 to see its public source, two participant positions, confidence bucket, validator reason, appeal statement, and settled state.
 3. Open `/status` to confirm the exact contract, zero fee, five-minute appeal window, and the absence of admin settlement controls.
 4. Open the Explorer contract and compare it with the deployment and acceptance records.
 5. Connect MetaMask on GenLayer StudioNet only if a fresh test transaction is desired.

@@ -49,7 +49,7 @@ The release was exercised against the exact deployed address with two StudioNet 
 - the winner claimed after the appeal window, and the `0.003` test-GEN pot was credited;
 - final state was `SETTLED`, with two created acceptance markets and one settled market.
 
-The frontend also passed 25 automated tests, TypeScript validation, a Next.js production build, a production dependency audit with no known vulnerabilities, desktop QA, mobile QA, health checks, metadata checks, and security-header checks.
+The frontend also passed 27 automated tests, TypeScript validation, a Next.js production build, a production dependency audit with no known vulnerabilities, desktop QA, mobile QA, health checks, metadata checks, and security-header checks.
 
 ## Repeat the release gate
 

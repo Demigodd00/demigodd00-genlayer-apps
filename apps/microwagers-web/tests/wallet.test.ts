@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { connectStudioWallet, type EthereumProvider } from "../src/lib/wallet";
+import { connectStudioWallet, discoverWalletProviders, type EthereumProvider, type WalletDiscoveryHost } from "../src/lib/wallet";
 
 const account = `0x${"1".repeat(40)}` as const;
 const otherAccount = `0x${"2".repeat(40)}` as const;
@@ -58,8 +58,42 @@ test("the current account is re-read after network approval", async () => {
 });
 
 test("missing wallets and invalid accounts fail clearly", async () => {
-  await assert.rejects(connectStudioWallet(undefined), /Open this site in MetaMask/);
+  await assert.rejects(connectStudioWallet(undefined), /No compatible browser wallet/);
   for (const accounts of [[], ["invalid"], [`0x${"0".repeat(40)}`]]) {
     await assert.rejects(connectStudioWallet(mockWallet({ accounts }).provider), /invalid account/);
   }
+});
+
+test("multiple injected wallets are returned separately with MetaMask first", async () => {
+  const metaMask = { ...mockWallet().provider, isMetaMask: true };
+  const rabby = { ...mockWallet().provider, isRabby: true };
+  const host = {
+    ethereum: { request: async () => null, providers: [rabby, metaMask] },
+    addEventListener: () => {},
+    removeEventListener: () => {},
+    dispatchEvent: () => true,
+  } as WalletDiscoveryHost;
+  const choices = await discoverWalletProviders(host, async () => {});
+  assert.deepEqual(choices.map(({ name }) => name), ["MetaMask", "Rabby Wallet"]);
+  assert.equal(choices[0].provider, metaMask);
+  assert.equal(choices[1].provider, rabby);
+});
+
+test("EIP-6963 announcements are discovered and deduplicated against legacy injection", async () => {
+  const metaMask = { ...mockWallet().provider, isMetaMask: true };
+  let listener: EventListener | undefined;
+  const host = {
+    ethereum: metaMask,
+    addEventListener: (_type: string, next: EventListener) => { listener = next; },
+    removeEventListener: (_type: string, next: EventListener) => { if (listener === next) listener = undefined; },
+    dispatchEvent: () => {
+      listener?.({ detail: { info: { uuid: "metamask-1", name: "MetaMask", rdns: "io.metamask" }, provider: metaMask } } as CustomEvent);
+      return true;
+    },
+  } as WalletDiscoveryHost;
+  const choices = await discoverWalletProviders(host, async () => {});
+  assert.equal(choices.length, 1);
+  assert.equal(choices[0].id, "eip6963:metamask-1");
+  assert.equal(choices[0].rdns, "io.metamask");
+  assert.equal(listener, undefined);
 });

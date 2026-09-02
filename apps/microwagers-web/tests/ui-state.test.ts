@@ -1,10 +1,13 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { formatCountdown, marketShareUrl, oneTransactionAtATime, rereadUntilStatusMatches, transactionPending, watchWalletSession } from "../src/lib/ui-state";
+import { formatCountdown, legacyMarketRoute, marketShareUrl, oneTransactionAtATime, rereadUntilStatusMatches, transactionPending, watchWalletSession } from "../src/lib/ui-state";
 import type { EthereumProvider } from "../src/lib/wallet";
 
 test("share links and short countdowns are reviewer-friendly", () => {
-  assert.equal(marketShareUrl("https://microwagers.example", "w-7"), "https://microwagers.example/?wager=w-7");
+  assert.equal(marketShareUrl("https://microwagers.example", "w-7"), "https://microwagers.example/markets?wager=w-7");
+  assert.equal(legacyMarketRoute("?wager=w-7"), "/markets?wager=w-7");
+  assert.equal(legacyMarketRoute("?create=1"), "/markets/new");
+  assert.equal(legacyMarketRoute(""), null);
   assert.equal(formatCountdown("125", 100), "25s");
   assert.equal(formatCountdown("225", 100), "2m 5s");
 });

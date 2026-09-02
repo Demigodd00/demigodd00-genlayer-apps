@@ -4,16 +4,24 @@ export function transactionPending(progress: TxProgress | null): boolean {
   return progress !== null && ["awaiting-signature", "submitted", "finalizing"].includes(progress.state);
 }
 
-export function initialWorkspace(search: string): "dashboard" | "join" {
+export function legacyWorkspaceRoute(search: string): string | null {
   const params = new URLSearchParams(search);
-  if (params.get("view") === "dashboard") return "dashboard";
-  return params.get("view") === "join" || params.has("pact") ? "join" : "dashboard";
+  const pactId = params.get("pact")?.trim();
+  const view = params.get("view");
+  if (pactId) {
+    const destination = view === "dashboard" ? "/pacts" : "/join";
+    return `${destination}?pact=${encodeURIComponent(pactId)}`;
+  }
+  if (view === "create") return "/pacts/new";
+  if (view === "join") return "/join";
+  if (view === "how") return "/how-it-works";
+  if (view === "dashboard") return "/pacts";
+  return null;
 }
 
 export function pactShareUrl(origin: string, pactId: string, invite = false): string {
-  const url = new URL("/", origin);
+  const url = new URL(invite ? "/join" : "/pacts", origin);
   url.searchParams.set("pact", pactId);
-  url.searchParams.set("view", invite ? "join" : "dashboard");
   return url.toString();
 }
 

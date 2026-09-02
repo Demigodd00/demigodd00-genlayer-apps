@@ -2,14 +2,14 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
-import Home from "../src/app/page";
+import StreakPactLanding from "../src/components/StreakPactLanding";
 import CreatePact from "../src/components/CreatePact";
 import JoinPact from "../src/components/JoinPact";
 import EvidenceFilePicker from "../src/components/EvidenceFilePicker";
 import TxNotice from "../src/components/TxNotice";
 
 test("the home screen identifies the demo, creator, and illustrative pact", () => {
-  const html = renderToStaticMarkup(createElement(Home));
+  const html = renderToStaticMarkup(createElement(StreakPactLanding));
   assert.match(html, /by demigodd00/);
   assert.match(html, /Test GEN has no monetary value/);
   assert.match(html, /EXAMPLE PACT/);

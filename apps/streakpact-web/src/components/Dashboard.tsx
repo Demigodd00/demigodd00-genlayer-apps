@@ -109,7 +109,7 @@ export default function Dashboard({
       if (version !== requestVersion.current) return;
       setItems(nextItems);
       const params = new URLSearchParams(window.location.search);
-      const sharedId = params.get("view") === "dashboard" ? params.get("pact") : null;
+      const sharedId = params.get("pact");
       const nextId = selectedId.current || sharedId || nextItems[0]?.id;
       if (nextId) {
         if (!/^sp2-\d+$/.test(nextId)) throw new Error("Enter a pact ID such as sp2-5.");

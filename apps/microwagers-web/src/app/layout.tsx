@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import { WalletProvider } from "@/components/WalletProvider";
 import { getSiteUrl } from "@/lib/site-url";
 import "./globals.css";
 
@@ -11,7 +12,6 @@ export const metadata: Metadata = {
   applicationName: "MicroWagers",
   authors: [{ name: "demigodd00" }],
   creator: "demigodd00",
-  alternates: { canonical: "/" },
   icons: { icon: "/icon.svg" },
   manifest: "/manifest.webmanifest",
   openGraph: {
@@ -32,5 +32,5 @@ export const metadata: Metadata = {
 export const viewport: Viewport = { width: "device-width", initialScale: 1, themeColor: "#0b0912" };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <html lang="en"><body>{children}</body></html>;
+  return <html lang="en"><body><WalletProvider>{children}</WalletProvider></body></html>;
 }

@@ -57,11 +57,26 @@ h1, h2, h3, p { margin-top: 0; }
 .topbar-links { display: flex; gap: 32px; align-items: center; }
 .topbar-links button, .topbar-links a { border: 0; background: none; color: var(--muted); font-size: 13px; font-weight: 700; cursor: pointer; padding: 10px 0; }
 .topbar-links button:hover, .topbar-links button.active, .topbar-links a:hover { color: var(--ink); }
+.wallet-control { position: relative; justify-self: end; }
 .wallet-button, .wallet-connected { justify-self: end; }
-.wallet-connected { display: flex; align-items: center; gap: 10px; border: 1px solid var(--line); border-radius: 14px; padding: 9px 13px; background: rgba(255,255,255,.02); }
+.wallet-connected { display: flex; align-items: center; gap: 10px; border: 1px solid var(--line); border-radius: 14px; padding: 9px 13px; background: rgba(255,255,255,.02); cursor: pointer; }
+.wallet-connected:hover { border-color: var(--line-strong); }
 .wallet-connected > span:last-child { display: flex; flex-direction: column; }
 .wallet-connected small { color: var(--quiet); font-size: 9px; text-transform: uppercase; letter-spacing: .12em; }
 .wallet-connected strong { font: 500 12px "DM Mono", monospace; }
+.wallet-picker { position: absolute; z-index: 20; top: calc(100% + 10px); right: 0; width: min(290px, calc(100vw - 32px)); padding: 12px; border: 1px solid var(--line-strong); border-radius: 15px; background: #111813; box-shadow: var(--shadow); }
+.wallet-picker-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 15px; padding: 4px 4px 11px; }
+.wallet-picker-heading > div { display: flex; flex-direction: column; gap: 4px; }
+.wallet-picker-heading strong { font-size: 12px; }
+.wallet-picker-heading small { color: var(--quiet); font-size: 9px; }
+.wallet-picker-heading > button { width: 29px; height: 29px; flex: 0 0 auto; border: 1px solid var(--line); border-radius: 9px; color: var(--muted); background: transparent; cursor: pointer; }
+.wallet-picker-list { display: grid; gap: 7px; }
+.wallet-picker-list > button { width: 100%; display: grid; grid-template-columns: 34px 1fr; align-items: center; gap: 10px; padding: 10px; border: 1px solid var(--line); border-radius: 11px; color: var(--ink); background: #0c120e; text-align: left; cursor: pointer; }
+.wallet-picker-list > button:hover { border-color: var(--lime); background: rgba(185,241,74,.04); }
+.wallet-picker-list > button > span:first-child { width: 34px; height: 34px; display: grid; place-items: center; border-radius: 10px; color: #101510; background: var(--lime); font-weight: 800; }
+.wallet-picker-list > button > span:last-child { min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+.wallet-picker-list strong { font-size: 10px; }
+.wallet-picker-list small { overflow: hidden; color: var(--quiet); font-size: 8px; text-overflow: ellipsis; white-space: nowrap; }
 .network-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--mint); box-shadow: 0 0 12px var(--mint); flex: 0 0 auto; }
 .network-dot.offline { background: var(--quiet); box-shadow: none; }
 .studionet-banner { min-height: 38px; display: flex; align-items: center; justify-content: center; gap: 12px; border-bottom: 1px solid rgba(131,183,255,.14); color: var(--quiet); background: rgba(131,183,255,.045); font: 500 9px "DM Mono", monospace; letter-spacing: .04em; }
@@ -126,9 +141,10 @@ h1, h2, h3, p { margin-top: 0; }
 
 .workspace { padding-bottom: 100px; }
 .workspace-tabs { height: 62px; display: flex; gap: 28px; border-bottom: 1px solid var(--line); margin-bottom: 30px; }
-.workspace-tabs button { position: relative; border: 0; background: none; color: var(--quiet); cursor: pointer; font-weight: 800; font-size: 12px; padding: 0 2px; }
-.workspace-tabs button.active { color: var(--ink); }
-.workspace-tabs button.active::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; background: var(--lime); }
+.workspace-tabs button, .workspace-tabs a { position: relative; display: flex; align-items: center; border: 0; background: none; color: var(--quiet); cursor: pointer; font-weight: 800; font-size: 12px; padding: 0 2px; }
+.workspace-tabs button.active, .workspace-tabs a.active { color: var(--ink); }
+.workspace-tabs button.active::after, .workspace-tabs a.active::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; background: var(--lime); }
+.wallet-error-shell { margin: 0 0 24px !important; }
 
 .dashboard-grid { display: grid; grid-template-columns: 330px 1fr; min-height: 690px; border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; background: rgba(17,24,19,.58); box-shadow: var(--shadow); }
 .pact-list { border-right: 1px solid var(--line); background: rgba(10,15,11,.6); }
@@ -386,7 +402,7 @@ footer { border-top: 1px solid var(--line); background: #080c09; }
   .trust-strip { grid-template-columns: 1fr; margin-bottom: 45px; }
   .trust-strip > div + div { border-left: 0; border-top: 1px solid var(--line); }
   .workspace-tabs { gap: 4px; overflow-x: auto; }
-  .workspace-tabs button { min-width: max-content; padding: 0 13px; }
+  .workspace-tabs button, .workspace-tabs a { min-width: max-content; padding: 0 13px; }
   .dashboard-grid { grid-template-columns: 1fr; }
   .pact-list { border-right: 0; border-bottom: 1px solid var(--line); max-height: 310px; overflow: auto; }
   .pact-detail { padding: 22px 17px; }
