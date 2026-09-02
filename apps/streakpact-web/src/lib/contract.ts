@@ -109,7 +109,7 @@ const readClient = createClient({ chain: chains.studionet });
 
 function contractAddress(): Address {
   if (!CONTRACT_READY) {
-    throw new Error("StreakPact V2 has not been configured for this environment.");
+    throw new Error("StreakPact V2.1 has not been configured for this environment.");
   }
   return CONTRACT_ADDRESS as Address;
 }

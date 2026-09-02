@@ -12,7 +12,7 @@ export async function GET() {
 
   return NextResponse.json(
     {
-      product: "StreakPact V2",
+      product: "StreakPact V2.1",
       network,
       contractConfigured,
       evidencePublishingConfigured,
