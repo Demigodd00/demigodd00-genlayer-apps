@@ -1,10 +1,10 @@
 {
   "origin": "https://streakpact-zeta.vercel.app",
   "health": {
-    "checked_at": "2026-08-28T19:45:49.190001+00:00",
+    "checked_at": "2026-09-02T15:11:35.853970+00:00",
     "status": 200,
     "body": {
-      "product": "StreakPact V2",
+      "product": "StreakPact V2.1",
       "network": "StudioNet",
       "contractConfigured": true,
       "evidencePublishingConfigured": true,
@@ -12,7 +12,7 @@
       "readyForStudioNetTesting": true
     }
   },
-  "updated_at": "2026-08-28T19:45:52.127027+00:00",
+  "updated_at": "2026-09-02T15:11:51.106358+00:00",
   "fixtures": {
     "kept": {
       "cid": "bafkreiejvp72lirrec2zz46t7kqideoxar7aagvyw637kk5barlrmugmd4",
@@ -29,7 +29,7 @@
       "upload_status": 201,
       "download_verified": true,
       "download_status": 200,
-      "verified_at": "2026-08-28T19:45:37.122974+00:00"
+      "verified_at": "2026-09-02T15:11:45.160461+00:00"
     },
     "missed": {
       "cid": "bafkreicsshzsovq7wuwba2jgg4t3jk46zgaw2l2du6zkq6igds5ucaljcu",
@@ -46,7 +46,7 @@
       "upload_status": 201,
       "download_verified": true,
       "download_status": 200,
-      "verified_at": "2026-08-28T19:45:42.617965+00:00"
+      "verified_at": "2026-09-02T15:11:51.106358+00:00"
     }
   },
   "protection": {
