@@ -73,6 +73,7 @@ def verify_deployment(require_deployment: bool) -> bool:
     constructor = record.get("constructor_args", {})
     checks = {
         "contract name is StreakPactV2": record.get("contract") == "StreakPactV2",
+        "version is 2.1.0": record.get("version") == "2.1.0",
         "network is StudioNet": record.get("network") == "studionet",
         "address is valid": ADDRESS_PATTERN.fullmatch(address) is not None,
         "source hash matches": record.get("source_sha256") == expected_hash,

@@ -25,6 +25,7 @@ def test_two_wallet_challenge_join_locks_the_matched_pot_on_studionet():
             1,
             start,
             bob.address,
+            alice.address,
         ]
     ).transact(value=STAKE)
     assert tx_execution_succeeded(create_tx)

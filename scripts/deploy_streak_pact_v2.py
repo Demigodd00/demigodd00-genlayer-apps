@@ -17,6 +17,7 @@ import hashlib
 import json
 import os
 import re
+import shutil
 import subprocess
 import sys
 from datetime import datetime, timezone
@@ -48,7 +49,7 @@ MAX_APPEAL_WINDOW_SECS = 7 * 24 * 60 * 60
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Deploy a preflighted StreakPact V2 contract")
+    parser = argparse.ArgumentParser(description="Deploy a preflighted StreakPact V2.1 contract")
     parser.add_argument("--fee-bps", type=int, default=0)
     parser.add_argument("--period-secs", type=int, default=86400)
     parser.add_argument("--appeal-window-secs", type=int, default=86400)
@@ -203,7 +204,7 @@ def main() -> None:
 
     record = {
         "contract": "StreakPactV2",
-        "version": "2.0.0",
+        "version": "2.1.0",
         "network": network_name,
         "address": contract_address,
         "transaction_hash": str(tx_hash),
@@ -222,6 +223,14 @@ def main() -> None:
     }
     DEPLOYMENTS_DIR.mkdir(exist_ok=True)
     output_path = DEPLOYMENTS_DIR / f"streak_pact_v2_{network_name}.json"
+    if output_path.exists():
+        previous = json.loads(output_path.read_text(encoding="utf-8"))
+        previous_address = str(previous.get("address", "unknown")).lower()
+        history_dir = DEPLOYMENTS_DIR / "history"
+        history_dir.mkdir(exist_ok=True)
+        history_path = history_dir / f"streak_pact_v2_{network_name}_{previous_address}.json"
+        if not history_path.exists():
+            shutil.copy2(output_path, history_path)
     output_path.write_text(json.dumps(record, indent=2) + "\n", encoding="utf-8")
     if args.configure_frontend:
         upsert_frontend_environment(contract_address)

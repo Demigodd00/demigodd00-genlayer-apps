@@ -6,9 +6,9 @@ export default function StreakPactLanding() {
     <>
       <header className="hero">
         <div className="hero-copy">
-          <div className="hero-kicker"><span />StreakPact by demigodd00 · goals backed by public evidence</div>
+          <div className="hero-kicker"><span />StreakPact by demigodd00 · wallet-attested evidence</div>
           <h1>Put conviction<br />behind your goals.</h1>
-          <p>Make a pact. Share public evidence. Let GenLayer validators judge it.</p>
+          <p>Make a pact. Sign public evidence. Let GenLayer validators judge it.</p>
           <div className="hero-actions">
             <Link className="button button-primary button-large" href="/pacts/new">Create a pact <span>→</span></Link>
             <Link className="button button-ghost button-large" href="/join">Open an invite</Link>
@@ -29,8 +29,8 @@ export default function StreakPactLanding() {
       </header>
       <section className="trust-strip" aria-label="Protocol protections">
         <div><strong>Clear rules</strong></div>
-        <div><strong>Public evidence</strong></div>
-        <div><strong>Time to appeal</strong></div>
+        <div><strong>Signed evidence</strong></div>
+        <div><strong>Appeal history</strong></div>
       </section>
     </>
   );

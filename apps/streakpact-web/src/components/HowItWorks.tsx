@@ -12,8 +12,8 @@ export default function HowItWorks() {
       <div className="protocol-heading"><p className="eyebrow">How it works</p><h1>Commit. Submit. Repeat.</h1></div>
       <div className="protocol-flow">
         <article><span>01</span><h3>Set your pact</h3><p>Choose a goal, rules, and test stake. Go solo or invite a challenger.</p></article>
-        <article><span>02</span><h3>Submit evidence</h3><p>Publish a small evidence file each period. Validators compare it with your criteria.</p></article>
-        <article><span>03</span><h3>Review and claim</h3><p>Appeal a result if needed. Test tokens unlock after the appeal window closes.</p></article>
+        <article><span>02</span><h3>Sign evidence</h3><p>The chosen wallet attests to the activity and exact public file.</p></article>
+        <article><span>03</span><h3>Review and claim</h3><p>Validators judge it. Appeals keep both decisions onchain.</p></article>
       </div>
       <div className="protocol-evidence-lab">
         <div><p className="eyebrow">Try it</p><h3>Prepare evidence.</h3><p>No wallet needed. This won’t submit a check-in.</p></div>

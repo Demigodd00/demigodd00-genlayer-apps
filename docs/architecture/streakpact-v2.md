@@ -1,4 +1,4 @@
-# StreakPact V2 architecture and launch gates
+# StreakPact V2.1 architecture and launch gates
 
 ## Responsibility boundary
 
@@ -6,7 +6,7 @@
 |---|---|---|
 | Web app | Wallet session, templates, local timezone, reminders, indexing, evidence preparation, transaction state | Private keys, authoritative verdicts, payout decisions |
 | GenLayer contract | Escrow, period accounting, evidence policy, validator comparison, provisional/final state, appeal eligibility, claims | Notifications, search, analytics, mutable content hosting |
-| Evidence layer | Immutable IPFS/Arweave artifacts | Instructions to validators or payout logic |
+| Evidence layer | Immutable IPFS/Arweave artifacts plus wallet-authenticated claims | Instructions to validators or payout logic |
 | Operations | Deployment records, metrics, alerts, support lookup | Outcome editing, arbitrary withdrawals, claim blocking |
 
 ## State machine
@@ -16,7 +16,7 @@ SELF:       create → LIVE
 CHALLENGE:  create → OPEN → join → LIVE
 
 LIVE
-  → submit evidence for current period
+  → configured wallet attests to the activity, observed time, and exact evidence digest
   → automatically record every elapsed empty period as MISSED
   → once all periods are judged: PROVISIONAL_WON | PROVISIONAL_LOST
   → permitted one-time period appeals until deadline
@@ -30,11 +30,13 @@ There is no path from `LIVE` to a winning result while periods remain unaccounte
 
 ## Consensus design
 
-Each evidence transaction supplies an approved IPFS or Arweave gateway URL, a lowercase SHA-256 digest of the exact response body, and optional participant context that is explicitly marked untrusted.
+Each pact fixes an evidence-attestor wallet at creation. If it is the maker, the policy is `SELF_ATTESTED`; otherwise it is `WALLET_VERIFIED`. Only that wallet can submit a period check-in. Its authenticated GenLayer transaction binds the subject, pact, period, activity statement, observed time, and exact SHA-256 evidence digest into a canonical `streakpact.wallet-attestation.v1` identifier.
 
-The leader fetches the evidence, enforces the response bound, verifies the digest, and produces `KEPT`, `MISSED`, or `INCONCLUSIVE` with a quantized confidence bucket. Validators independently rerun the same process and must agree on the digest and verdict, with at most one confidence bucket of difference.
+The transaction proves who attested to those exact fields; it does not make the off-chain claim true. The leader fetches the artifact, enforces the response bound, verifies the digest, and judges the signed claim and evidence together. Validators independently repeat that work and must agree on the digest and `KEPT`, `MISSED`, or `INCONCLUSIVE` verdict, with at most one confidence bucket of difference. A bare self-assertion is explicitly insufficient.
 
 `INCONCLUSIVE` and confidence below 70 do not change financial state. The participant can submit stronger evidence while the period remains open.
+
+An appeal creates a second wallet-authenticated record. The original verdict, reason, digest, evidence URL, confidence, attestor, statement, observed time, and adjudication time are never overwritten. Views expose both records plus the appeal-adjusted effective verdict.
 
 ## Product modes
 
@@ -50,13 +52,15 @@ The maker funds a stake and shares an invite. A challenger must match it before 
 
 1. Escrow cannot be claimed before final settlement.
 2. Final settlement cannot occur during the appeal window.
-3. Every period is represented by exactly one current check-in record.
+3. Every period has one immutable original adjudication and at most one separate appeal adjudication.
 4. A period can be appealed at most once.
 5. Only the maker can appeal `MISSED`; only the matched challenger can appeal `KEPT`.
-6. An evidence verdict cannot be stored unless its body matches the supplied digest.
-7. Page reads and collection scans are bounded.
-8. Treasury and timing configuration are immutable after deployment.
-9. Admin software has no contract method for changing outcomes or moving user escrow.
+6. Only the pact's configured attestor can submit the original wallet-authenticated claim.
+7. An evidence verdict cannot be stored unless its body matches the supplied digest and its observed time belongs to that period.
+8. Original adjudication fields cannot be rewritten by an appeal.
+9. Page reads and collection scans are bounded.
+10. Treasury and timing configuration are immutable after deployment.
+11. Admin software has no contract method for changing outcomes or moving user escrow.
 
 ## Evidence publishing boundary
 
@@ -64,7 +68,7 @@ The web app now includes a narrow server-side publisher for public IPFS. It acce
 
 The publisher is convenience infrastructure, not an authority: the GenLayer leader and validators still re-fetch the artifact, enforce the same size bound, and verify the digest before adjudication. Production hosting must configure an exact allowed origin and platform-level rate limiting.
 
-A future source-adapter service could further simplify evidence collection without becoming authoritative:
+A future source-specific adapter could complement the shipped wallet attestations without becoming authoritative:
 
 1. User connects a supported source such as GitHub or a fitness provider.
 2. The service normalizes the selected activity into a small canonical JSON record.
@@ -93,7 +97,7 @@ The service must have per-source adapters, explicit scopes, deletion/privacy doc
 
 ### Gate C — acceptance flows
 
-- StreakPact: create, join, cancel, submit evidence, synchronize misses, settle, appeal, finalize, and claim are exercised.
+- StreakPact: create, join, cancel, authenticated evidence, verifier-only access, synchronize misses, preserved appeal history, finalize, and claim are exercised.
 - MicroWagers: create, accept, cancel, resolve, appeal, and claim are exercised.
 - At least one inconclusive/void path is confirmed for each relevant AI judgment.
 - Desktop and mobile wallet flows are checked against the configured deployments.

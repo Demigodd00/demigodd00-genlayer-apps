@@ -12,9 +12,9 @@ from streakpact_acceptance import Acceptance, ROOT, output, timestamp
 
 STAKE = 10**15
 CRITERIA = (
-    "For this StudioNet demonstration, accept a JSON reading log as evidence. "
-    "The log must show activity reading, completed true, and duration_minutes "
-    "at least 30. No identity, timestamp, or third-party attestation is required."
+    "For this StudioNet demonstration, require a wallet-authenticated attestation "
+    "to the exact JSON digest. The artifact must show activity reading, completed "
+    "true, and duration_minutes of at least 30 for the observed pact period."
 )
 
 
@@ -73,7 +73,7 @@ class Suite:
             self.check(key + ":" + ":".join(f"{k}={v}" for k, v in expected.items()), value, expected)
         return value
 
-    def create(self, key, mode="SELF", lead=900, allowed_misses=1):
+    def create(self, key, mode="SELF", lead=900, allowed_misses=1, attestor_role="maker"):
         pacts = self.runner.record.setdefault("pacts", {})
         step = "create-" + key
         existing = self.runner.record["transactions"].get(step)
@@ -81,6 +81,7 @@ class Suite:
         args = existing["args"] if existing else [
             mode, title, CRITERIA, 3, allowed_misses, int(time.time()) + lead,
             self.runner.accounts["tester"].address,
+            self.runner.accounts[attestor_role].address,
         ]
         self.write(step, "create_pact", args, value=STAKE)
         if key not in pacts:
@@ -126,15 +127,23 @@ class Suite:
 
     def self_win(self):
         proof = self.proof()
-        pact_id = self.create("self-win", lead=180)
-        created = self.snapshot("self-win-created", "get_pact", [pact_id], {"status": "LIVE", "kept_count": "0"})
+        pact_id = self.create("self-win", lead=180, attestor_role="tester")
+        created = self.snapshot("self-win-created", "get_pact", [pact_id], {
+            "status": "LIVE", "kept_count": "0", "provenance_policy": "WALLET_VERIFIED",
+            "evidence_attestor": self.runner.accounts["tester"].address,
+        })
         if not self.runner.record["transactions"].get("self-win-live-proof", {}).get("transaction_hash"):
             self.wait_until(int(created["start_unix"]) + 3, "first evidence window")
             if time.time() >= int(created["start_unix"]) + 45:
                 raise RuntimeError("First proof window is too close to expiry; inspect the existing pact before proceeding")
-        self.write("self-win-live-proof", "submit_checkin", [pact_id, proof["url"], proof["digest"], "Synthetic reading-log acceptance check."])
+        self.write("self-win-live-proof", "submit_checkin", [
+            pact_id, proof["url"], proof["digest"],
+            "I independently attest that the subject completed this reading activity.",
+            int(created["start_unix"]) + 1,
+        ], role="tester")
         self.snapshot("self-win-live-verdict", "get_checkin", [pact_id, 0], {
-            "verdict": "KEPT", "method": "CONTENT_ADDRESSED_EVIDENCE", "content_digest": proof["digest"],
+            "verdict": "KEPT", "method": "SIGNED_CONTENT_EVIDENCE", "content_digest": proof["digest"],
+            "attestor": self.runner.accounts["tester"].address, "provenance": "WALLET_VERIFIED",
         })
         self.write("reject-claim-before-finality", "claim", [pact_id], error="pact is not finalized")
         self.wait_until(int(created["end_unix"]) + 3, "remaining periods to expire")
@@ -143,11 +152,34 @@ class Suite:
         self.snapshot("self-win-auto-miss", "get_checkin", [pact_id, 1], {"verdict": "MISSED", "method": "AUTO_MISS"})
         self.write("self-win-propose", "propose_settlement", [pact_id])
         provisional = self.snapshot("self-win-provisional", "get_pact", [pact_id], {"status": "PROVISIONAL_LOST"})
-        appeal = [pact_id, 1, "This synthetic reading log meets the explicitly agreed demonstration criteria.", proof["url"], proof["digest"]]
+        appeal = [
+            pact_id, 1,
+            "I attest that this reading log meets the explicitly agreed criteria.",
+            proof["url"], proof["digest"], int(created["start_unix"]) + 61,
+        ]
         self.write("reject-unauthorized-appeal", "appeal_period", appeal, role="tester", error="only the maker can appeal a missed period")
         self.write("self-win-appeal", "appeal_period", appeal)
-        self.snapshot("self-win-appeal-verdict", "get_checkin", [pact_id, 1], {
-            "verdict": "KEPT", "appealed": True, "method": "APPEAL_EVIDENCE", "content_digest": proof["digest"],
+        appealed = self.snapshot("self-win-appeal-verdict", "get_checkin", [pact_id, 1], {
+            "verdict": "KEPT", "appealed": True, "method": "SIGNED_APPEAL_EVIDENCE", "content_digest": proof["digest"],
+        })
+        self.check("self-win-original-and-appeal-preserved", {
+            "original_verdict": appealed["original_record"]["verdict"],
+            "original_method": appealed["original_record"]["method"],
+            "original_digest": appealed["original_record"]["content_digest"],
+            "appeal_verdict": appealed["appeal_record"]["verdict"],
+            "appeal_method": appealed["appeal_record"]["method"],
+            "appeal_digest": appealed["appeal_record"]["content_digest"],
+            "appeal_attestor": appealed["appeal_record"]["attestor"],
+            "appeal_attestation_id_length": len(appealed["appeal_record"]["attestation_id"]),
+        }, {
+            "original_verdict": "MISSED",
+            "original_method": "AUTO_MISS",
+            "original_digest": "",
+            "appeal_verdict": "KEPT",
+            "appeal_method": "SIGNED_APPEAL_EVIDENCE",
+            "appeal_digest": proof["digest"],
+            "appeal_attestor": self.runner.accounts["maker"].address,
+            "appeal_attestation_id_length": 64,
         })
         self.snapshot("self-win-appeal-counts", "get_pact", [pact_id], {
             "status": "PROVISIONAL_WON", "kept_count": "2", "miss_count": "1",
@@ -179,12 +211,13 @@ class Suite:
             deadlines.append(int(provisional["appeal_deadline_unix"]))
         failed_proof = self.proof("missed")
         challenge_id = self.runner.record["pacts"]["challenge-loss"]
+        challenge = self.runner.read("get_pact", [challenge_id])
         self.write("challenge-loss-evidence-review", "appeal_period", [
             challenge_id, 0, "Please evaluate this synthetic log against the agreed reading requirements.",
-            failed_proof["url"], failed_proof["digest"],
+            failed_proof["url"], failed_proof["digest"], int(challenge["start_unix"]) + 1,
         ])
         self.snapshot("challenge-loss-reviewed-miss", "get_checkin", [challenge_id, 0], {
-            "verdict": "MISSED", "method": "APPEAL_EVIDENCE", "appealed": True,
+            "verdict": "MISSED", "method": "SIGNED_APPEAL_EVIDENCE", "appealed": True,
             "content_digest": failed_proof["digest"],
         })
         self.complete("prepare_loss_settlements")
@@ -211,19 +244,23 @@ class Suite:
             self.wait_until(int(created["start_unix"]) + 3, "challenge evidence window")
             if time.time() >= int(created["start_unix"]) + 45:
                 raise RuntimeError("Challenge proof window is too close to expiry; inspect the existing pact")
-        self.write("challenge-win-proof", "submit_checkin", [pact_id, proof["url"], proof["digest"], "Synthetic challenge reading-log acceptance."])
-        self.snapshot("challenge-win-proof-verdict", "get_checkin", [pact_id, 0], {"verdict": "KEPT", "method": "CONTENT_ADDRESSED_EVIDENCE"})
+        self.write("challenge-win-proof", "submit_checkin", [
+            pact_id, proof["url"], proof["digest"],
+            "I attest that the subject completed the challenge reading activity.",
+            int(created["start_unix"]) + 1,
+        ])
+        self.snapshot("challenge-win-proof-verdict", "get_checkin", [pact_id, 0], {"verdict": "KEPT", "method": "SIGNED_CONTENT_EVIDENCE"})
         self.wait_until(int(created["end_unix"]) + 3, "remaining challenge periods")
         self.write("challenge-win-propose", "propose_settlement", [pact_id])
         self.snapshot("challenge-win-initial-result", "get_pact", [pact_id], {"status": "PROVISIONAL_LOST", "kept_count": "1", "miss_count": "2"})
         self.write("challenge-win-taker-appeal", "appeal_period", [
             pact_id, 0, "As the challenger, I request an independent review of this reading log against the agreed criteria.",
-            proof["url"], proof["digest"],
+            proof["url"], proof["digest"], int(created["start_unix"]) + 1,
         ], role="tester")
-        self.snapshot("challenge-win-taker-review", "get_checkin", [pact_id, 0], {"verdict": "KEPT", "appealed": True, "method": "APPEAL_EVIDENCE"})
+        self.snapshot("challenge-win-taker-review", "get_checkin", [pact_id, 0], {"verdict": "KEPT", "appealed": True, "method": "SIGNED_APPEAL_EVIDENCE"})
         self.write("challenge-win-maker-appeal", "appeal_period", [
             pact_id, 1, "This synthetic log satisfies the agreed demonstration criteria for the missed period.",
-            proof["url"], proof["digest"],
+            proof["url"], proof["digest"], int(created["start_unix"]) + 61,
         ])
         self.snapshot("challenge-win-provisional", "get_pact", [pact_id], {"status": "PROVISIONAL_WON", "kept_count": "2", "miss_count": "1"})
         self.complete("prepare_challenge_win")

@@ -41,6 +41,7 @@ def _create(
     periods=3,
     misses=1,
     start=None,
+    attestor=None,
 ):
     direct_vm.sender = maker
     direct_vm.value = STAKE
@@ -52,6 +53,7 @@ def _create(
         misses,
         start if start is not None else _start(),
         "0x" + failure_recipient.hex(),
+        "0x" + (attestor if attestor is not None else maker).hex(),
     )
     direct_vm.value = 0
     return pact_id
@@ -90,6 +92,8 @@ def test_self_pact_is_live_and_indexed(direct_vm, direct_deploy, direct_alice, d
     assert pact["mode"] == "SELF"
     assert pact["status"] == "LIVE"
     assert pact["taker"] == ""
+    assert pact["evidence_attestor"].lower() == pact["maker"].lower()
+    assert pact["provenance_policy"] == "SELF_ATTESTED"
     assert pact["window_open_now"] is False
     assert mine["total"] == "1"
     assert mine["items"][0]["id"] == pact_id
@@ -190,7 +194,8 @@ def test_checkin_catches_up_expired_periods_in_one_transaction(
         pact_id,
         EVIDENCE_URL,
         EVIDENCE_DIGEST,
-        "Second period evidence after missing the first period.",
+        "I attest that the second-period strength workout was completed.",
+        start + DAY + 30,
     )
 
     pact = contract.get_pact(pact_id)
@@ -212,7 +217,74 @@ def test_digest_is_required_and_verified(
     _warp_to(direct_vm, start + 60)
     direct_vm.sender = direct_alice
     with pytest.raises(Exception, match="digest mismatch"):
-        contract.submit_checkin(pact_id, EVIDENCE_URL, "0" * 64, "Valid-looking note")
+        contract.submit_checkin(
+            pact_id,
+            EVIDENCE_URL,
+            "0" * 64,
+            "I attest that this period's strength workout was completed.",
+            start + 30,
+        )
+
+
+def test_configured_verifier_wallet_authenticates_the_exact_claim(
+    direct_vm, direct_deploy, direct_alice, direct_bob, direct_charlie
+):
+    contract = _deploy(direct_deploy, direct_charlie)
+    start = _start()
+    pact_id = _create(
+        direct_vm,
+        contract,
+        direct_alice,
+        direct_charlie,
+        start=start,
+        attestor=direct_bob,
+    )
+    _mock_evidence(direct_vm)
+    _warp_to(direct_vm, start + 60)
+    args = (
+        pact_id,
+        EVIDENCE_URL,
+        EVIDENCE_DIGEST,
+        "I independently attest that the subject completed this period's workout.",
+        start + 30,
+    )
+
+    direct_vm.sender = direct_alice
+    with pytest.raises(Exception, match="configured evidence attestor"):
+        contract.submit_checkin(*args)
+
+    direct_vm.sender = direct_bob
+    contract.submit_checkin(*args)
+    pact = contract.get_pact(pact_id)
+    checkin = contract.get_checkin(pact_id, 0)
+    original = checkin["original_record"]
+    assert pact["provenance_policy"] == "WALLET_VERIFIED"
+    assert pact["evidence_attestor"].lower() == ("0x" + direct_bob.hex()).lower()
+    assert checkin["subject"].lower() == ("0x" + direct_alice.hex()).lower()
+    assert original["attestor"].lower() == ("0x" + direct_bob.hex()).lower()
+    assert original["provenance"] == "WALLET_VERIFIED"
+    assert original["content_digest"] == EVIDENCE_DIGEST
+    assert len(original["attestation_id"]) == 64
+    assert checkin["attestation_id"] == original["attestation_id"]
+
+
+def test_observed_time_must_belong_to_the_judged_period(
+    direct_vm, direct_deploy, direct_alice, direct_bob
+):
+    contract = _deploy(direct_deploy, direct_bob)
+    start = _start()
+    pact_id = _create(direct_vm, contract, direct_alice, direct_bob, start=start)
+    _mock_evidence(direct_vm)
+    _warp_to(direct_vm, start + 60)
+    direct_vm.sender = direct_alice
+    with pytest.raises(Exception, match="observed time must be inside"):
+        contract.submit_checkin(
+            pact_id,
+            EVIDENCE_URL,
+            EVIDENCE_DIGEST,
+            "I attest that this period's strength workout was completed.",
+            start - 1,
+        )
 
 
 def test_arbitrary_web_evidence_is_rejected(
@@ -228,7 +300,8 @@ def test_arbitrary_web_evidence_is_rejected(
             pact_id,
             "https://example.com/mutable-page",
             EVIDENCE_DIGEST,
-            "This source is not content-addressed.",
+            "I attest that this source documents the completed workout.",
+            start + 30,
         )
 
 
@@ -242,7 +315,13 @@ def test_low_confidence_does_not_record_a_financial_verdict(
     _warp_to(direct_vm, start + 60)
     direct_vm.sender = direct_alice
     with pytest.raises(Exception, match="inconclusive"):
-        contract.submit_checkin(pact_id, EVIDENCE_URL, EVIDENCE_DIGEST, "Weak evidence")
+        contract.submit_checkin(
+            pact_id,
+            EVIDENCE_URL,
+            EVIDENCE_DIGEST,
+            "I attest that this period's strength workout was completed.",
+            start + 30,
+        )
     assert contract.get_pact(pact_id)["kept_count"] == "0"
 
 
@@ -302,6 +381,7 @@ def test_only_adversely_affected_participant_can_appeal(
             "I am an unrelated account attempting to interfere.",
             EVIDENCE_URL,
             EVIDENCE_DIGEST,
+            start + 30,
         )
 
 
@@ -329,6 +409,7 @@ def test_successful_appeal_reconciles_aggregate_verdict_stats(
         "This immutable record proves the first period was completed.",
         EVIDENCE_URL,
         EVIDENCE_DIGEST,
+        start + 30,
     )
 
     pact = contract.get_pact(pact_id)
@@ -338,6 +419,16 @@ def test_successful_appeal_reconciles_aggregate_verdict_stats(
     assert pact["miss_count"] == "2"
     assert stats["total_kept"] == "1"
     assert stats["total_missed"] == "2"
+    checkin = contract.get_checkin(pact_id, 0)
+    assert checkin["verdict"] == "KEPT"
+    assert checkin["method"] == "SIGNED_APPEAL_EVIDENCE"
+    assert checkin["original_record"]["verdict"] == "MISSED"
+    assert checkin["original_record"]["method"] == "AUTO_MISS"
+    assert checkin["original_record"]["content_digest"] == ""
+    assert checkin["appeal_record"]["verdict"] == "KEPT"
+    assert checkin["appeal_record"]["content_digest"] == EVIDENCE_DIGEST
+    assert checkin["appeal_record"]["attestor"].lower() == pact["maker"].lower()
+    assert len(checkin["appeal_record"]["attestation_id"]) == 64
 
 
 def test_page_size_is_capped(direct_vm, direct_deploy, direct_alice, direct_bob):
@@ -346,4 +437,8 @@ def test_page_size_is_capped(direct_vm, direct_deploy, direct_alice, direct_bob)
     result = contract.list_pacts(0, 10_000)
     assert result["total"] == "1"
     assert len(result["items"]) == 1
-    assert contract.get_config()["max_page_size"] == "25"
+    config = contract.get_config()
+    assert config["max_page_size"] == "25"
+    assert config["version"] == "2.1.0"
+    assert config["evidence_policy"] == "CONTENT_ADDRESSED_AND_WALLET_ATTESTED"
+    assert config["original_appeal_records"] == "IMMUTABLE_SEPARATE_RECORDS"

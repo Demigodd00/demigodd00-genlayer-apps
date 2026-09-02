@@ -66,6 +66,8 @@ export default function CreatePact({
   const [stake, setStake] = useState("0.01");
   const [start, setStart] = useState(defaultStart);
   const [failureRecipient, setFailureRecipient] = useState("");
+  const [attestorMode, setAttestorMode] = useState<"SELF" | "VERIFIER">("SELF");
+  const [verifierAddress, setVerifierAddress] = useState("");
   const [reviewing, setReviewing] = useState(false);
   const [error, setError] = useState("");
   const [progress, setProgress] = useState<TxProgress | null>(null);
@@ -102,6 +104,12 @@ export default function CreatePact({
       if (!isAddress(failureRecipient)) return "Enter a valid failure-recipient address.";
       if (session && failureRecipient.toLowerCase() === session.address.toLowerCase()) {
         return "The failure recipient must be different from your wallet.";
+      }
+    }
+    if (attestorMode === "VERIFIER") {
+      if (!isAddress(verifierAddress)) return "Enter a valid verifier wallet address.";
+      if (session && verifierAddress.toLowerCase() === session.address.toLowerCase()) {
+        return "Choose My wallet for self-attested evidence.";
       }
     }
     return "";
@@ -141,6 +149,7 @@ export default function CreatePact({
           allowedMisses: misses,
           startUnix: Math.floor(new Date(start).getTime() / 1000),
           failureRecipient: (mode === "SELF" ? failureRecipient : session.address) as Address,
+          evidenceAttestor: (attestorMode === "SELF" ? session.address : verifierAddress) as Address,
           stakeAtto,
         },
         setProgress,
@@ -204,6 +213,7 @@ export default function CreatePact({
               <div><dt>Your test stake</dt><dd>{formatGen(stakeAtto)} GEN</dd></div>
               <div><dt>Starts</dt><dd>{new Date(start).toLocaleString()}</dd></div>
               <div className="review-wide"><dt>Evidence</dt><dd>Public file on IPFS or Arweave</dd></div>
+              <div className="review-wide"><dt>Signed by</dt><dd className="mono">{attestorMode === "SELF" ? session?.address ?? "Your wallet" : verifierAddress}</dd></div>
               {mode === "SELF" ? <div className="review-wide"><dt>If you lose</dt><dd className="mono">{failureRecipient}</dd></div> : null}
             </dl>
             <div className="notice-box">
@@ -239,6 +249,24 @@ export default function CreatePact({
               <textarea value={criteria} onChange={(event) => setCriteria(event.target.value)} maxLength={600} rows={4} />
               <small>What must your evidence show each period?</small>
             </label>
+            <fieldset>
+              <legend>Evidence attestor</legend>
+              <div className="segmented">
+                <button className={attestorMode === "SELF" ? "active" : ""} onClick={() => setAttestorMode("SELF")} type="button">
+                  <strong>My wallet</strong><span>Self-attested</span>
+                </button>
+                <button className={attestorMode === "VERIFIER" ? "active" : ""} onClick={() => setAttestorMode("VERIFIER")} type="button">
+                  <strong>Verifier wallet</strong><span>Independent attestor</span>
+                </button>
+              </div>
+            </fieldset>
+            {attestorMode === "VERIFIER" ? (
+              <label>
+                <span>Verifier address</span>
+                <input className="mono" placeholder="0x… verifier wallet" value={verifierAddress} onChange={(event) => setVerifierAddress(event.target.value)} />
+                <small>This wallet must submit each check-in.</small>
+              </label>
+            ) : null}
             <div className="field-row">
               <label><span>Periods</span><input type="number" min={3} max={60} value={periods} onChange={(event) => setPeriods(Number(event.target.value))} /><small>One minute each on StudioNet.</small></label>
               <label><span>Allowed misses</span><input type="number" min={0} max={Math.floor(periods / 3)} value={misses} onChange={(event) => setMisses(Number(event.target.value))} /></label>

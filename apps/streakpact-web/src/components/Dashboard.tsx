@@ -19,6 +19,7 @@ import {
   shortenAddress,
   submitCheckin,
   syncPact,
+  type AdjudicationRecord,
   type CheckinView,
   type PactSummary,
   type PactView,
@@ -38,6 +39,8 @@ const demoPact: PactView = {
   maker: "0x8a7F943b8C9B22D9aA8D3c05F44A2221090Be710",
   taker: "",
   failure_recipient: "0x4B17A8A66eE160B7a7354429e62DE8b98C7eD210",
+  evidence_attestor: "0x8a7F943b8C9B22D9aA8D3c05F44A2221090Be710",
+  provenance_policy: "SELF_ATTESTED",
   periods_total: "7",
   allowed_misses: "1",
   kept_count: "3",
@@ -56,15 +59,38 @@ const demoPact: PactView = {
   appeal_open: false,
 };
 
-const demoCheckins: CheckinView[] = [0, 1, 2].map((period) => ({
-  period: String(period),
-  verdict: "KEPT",
-  method: "CONTENT_ADDRESSED_EVIDENCE",
-  content_digest: `94b${period}7d8f7c1119c35e1d93b7a42ca4f8f8d6b2b451b6592bded9ac39b72b`,
-  confidence_bucket: "90",
-  reason: "The immutable activity record satisfies the period criteria.",
-  appealed: false,
-}));
+const demoCheckins: CheckinView[] = [0, 1, 2].map((period) => {
+  const digest = `94b${period}7d8f7c1119c35e1d93b7a42ca4f8f8d6b2b451b6592bded9ac39b72b`;
+  const record = {
+    verdict: "KEPT" as const,
+    method: "SIGNED_CONTENT_EVIDENCE",
+    statement: "I attest that I completed this period's reading goal.",
+    evidence_url: "https://arweave.net/streakpact-preview",
+    content_digest: digest,
+    confidence_bucket: "90",
+    reason: "The signed activity record satisfies the period criteria.",
+    judged_at_iso: new Date(Date.now() - (3 - period) * 60_000).toISOString(),
+    attestor: demoPact.maker,
+    observed_at_iso: new Date(Date.now() - (3 - period) * 60_000 - 5_000).toISOString(),
+    attestation_id: digest,
+    provenance: "SELF_ATTESTED",
+  };
+  return {
+    period: String(period),
+    ...record,
+    subject: demoPact.maker,
+    configured_attestor: demoPact.evidence_attestor,
+    attestation_schema: "streakpact.wallet-attestation.v1",
+    appealed: false,
+    original_record: record,
+    appeal_record: {},
+  };
+});
+
+function localDateTime(unixSeconds = Math.floor(Date.now() / 1000)): string {
+  const date = new Date(unixSeconds * 1000);
+  return new Date(date.getTime() - date.getTimezoneOffset() * 60_000).toISOString().slice(0, 16);
+}
 
 function statusLabel(status: string): string {
   return status.replaceAll("_", " ").toLowerCase().replace(/^./, (letter) => letter.toUpperCase());
@@ -256,11 +282,13 @@ export function PactDetail({
 }) {
   const [evidenceUrl, setEvidenceUrl] = useState("");
   const [digest, setDigest] = useState("");
-  const [note, setNote] = useState("");
+  const [statement, setStatement] = useState("");
+  const [observedAt, setObservedAt] = useState(localDateTime);
   const [appealPeriodNumber, setAppealPeriodNumber] = useState("");
   const [appealStatement, setAppealStatement] = useState("");
   const [appealUrl, setAppealUrl] = useState("");
   const [appealDigest, setAppealDigest] = useState("");
+  const [appealObservedAt, setAppealObservedAt] = useState(localDateTime);
   const [progress, setProgress] = useState<TxProgress | null>(null);
   const [error, setError] = useState("");
   const [now, setNow] = useState(() => Math.floor(Date.now() / 1000));
@@ -270,6 +298,13 @@ export function PactDetail({
   }, []);
   // Update time-based actions locally without polling StudioNet every second.
   const pact = { ...storedPact, ...pactTiming(storedPact, now) };
+  useEffect(() => {
+    if (!pact.window_open_now) return;
+    const selectedUnix = Math.floor(new Date(observedAt).getTime() / 1000);
+    if (!Number.isFinite(selectedUnix) || selectedUnix < Number(pact.next_window_open) || selectedUnix > now) {
+      setObservedAt(localDateTime(now));
+    }
+  }, [now, observedAt, pact.next_window_open, pact.window_open_now]);
   const stakePresentation = pactStakePresentation(pact);
   const busy = transactionPending(progress);
 
@@ -278,6 +313,7 @@ export function PactDetail({
   const taker = pact.taker.toLowerCase();
   const isMaker = account !== "" && account === maker;
   const isTaker = account !== "" && account === taker;
+  const isEvidenceAttestor = account !== "" && account === pact.evidence_attestor.toLowerCase();
   const isPreview = !CONTRACT_READY;
   const canSync = pact.status === "LIVE" && now >= Number(pact.next_window_close) && Number(pact.next_period) < Number(pact.periods_total);
   const payoutRecipient = pact.status === "WON"
@@ -332,24 +368,39 @@ export function PactDetail({
       setError(validationError);
       return;
     }
+    if (statement.trim().length < 20) {
+      setError("Describe what you are attesting in at least 20 characters.");
+      return;
+    }
+    const observedAtUnix = Math.floor(new Date(observedAt).getTime() / 1000);
+    if (!Number.isFinite(observedAtUnix)) {
+      setError("Choose when the activity was observed.");
+      return;
+    }
     void run(() => submitCheckin(
       session!,
       pact.id,
       evidenceUrl.trim(),
       digest.trim().toLowerCase(),
-      note,
+      statement.trim(),
+      observedAtUnix,
       setProgress,
     ));
   }
 
   function sendAppeal() {
-    if (appealStatement.trim().length < 10) {
-      setError("Explain the appeal in at least 10 characters.");
+    if (appealStatement.trim().length < 20) {
+      setError("Explain the appeal in at least 20 characters.");
       return;
     }
     const validationError = evidenceValidation(appealUrl, appealDigest);
     if (validationError) {
       setError(validationError);
+      return;
+    }
+    const observedAtUnix = Math.floor(new Date(appealObservedAt).getTime() / 1000);
+    if (!Number.isFinite(observedAtUnix)) {
+      setError("Choose when the appealed activity occurred.");
       return;
     }
     void run(() => appealPeriod(
@@ -359,6 +410,7 @@ export function PactDetail({
       appealStatement.trim(),
       appealUrl.trim(),
       appealDigest.trim().toLowerCase(),
+      observedAtUnix,
       setProgress,
     ));
   }
@@ -386,6 +438,11 @@ export function PactDetail({
         </div>
       ) : null}
 
+      <div className="notice-box provenance-note">
+        <strong>{pact.provenance_policy === "WALLET_VERIFIED" ? "Verifier-attested evidence" : "Self-attested evidence"}</strong>
+        <p>Attestor · <span className="mono">{shortenAddress(pact.evidence_attestor)}</span></p>
+      </div>
+
       <div className="metric-row">
         <div><span>Progress</span><strong>{pact.kept_count} kept</strong><small>{completion}% of total</small></div>
         <div><span>Misses used</span><strong>{pact.miss_count} / {pact.allowed_misses}</strong><small>allowed</small></div>
@@ -411,7 +468,17 @@ export function PactDetail({
             {checkins.slice().reverse().slice(0, 4).map((item) => (
               <div key={item.period}>
                 <span className={`verdict-mark verdict-${item.verdict.toLowerCase()}`}>{item.verdict === "KEPT" ? "✓" : "×"}</span>
-                <div><strong>Period {Number(item.period) + 1} · {item.verdict}</strong><p>{item.reason}</p></div>
+                <div>
+                  <strong>Period {Number(item.period) + 1} · {item.verdict}{item.appealed ? " after appeal" : ""}</strong>
+                  <p>{item.reason}</p>
+                  <details className="evidence-details audit-details">
+                    <summary>{item.appealed ? "Original + appeal records" : "Audit record"}</summary>
+                    <div className="audit-records">
+                      <AdjudicationAudit label="Original" record={item.original_record} />
+                      {item.appealed ? <AdjudicationAudit label="Appeal" record={item.appeal_record as AdjudicationRecord} /> : null}
+                    </div>
+                  </details>
+                </div>
                 <small>{item.confidence_bucket}% confidence</small>
               </div>
             ))}
@@ -420,7 +487,7 @@ export function PactDetail({
       </section>
 
       <section className="action-section">
-        <div className="section-heading"><div><p className="eyebrow">Next step</p><h3>{actionHeading(pact, isMaker)}</h3></div></div>
+        <div className="section-heading"><div><p className="eyebrow">Next step</p><h3>{actionHeading(pact, isMaker, isEvidenceAttestor)}</h3></div></div>
         <fieldset className="action-controls" disabled={busy}>
         {pact.status === "LIVE" && pact.mode === "SELF" && isMaker && now < Number(pact.start_unix) && Number(pact.next_period) === 0 ? (
           <button className="button button-danger" onClick={() => void run(() => cancelPact(session!, pact.id, setProgress))}>Cancel and refund</button>
@@ -438,7 +505,7 @@ export function PactDetail({
           </button>
         ) : null}
 
-        {pact.status === "LIVE" && isMaker && pact.window_open_now ? (
+        {pact.status === "LIVE" && isEvidenceAttestor && pact.window_open_now ? (
           <div className="evidence-form">
             <EvidenceFilePicker
               idPrefix={`checkin-${pact.id}`}
@@ -458,9 +525,17 @@ export function PactDetail({
                 <label><span>SHA-256 fingerprint</span><input className="mono" value={digest} onChange={(event) => setDigest(event.target.value)} maxLength={64} placeholder="64 hexadecimal characters" /></label>
               </div>
             </details>
-            <label><span>Note <em>optional</em></span><textarea value={note} onChange={(event) => setNote(event.target.value)} rows={3} maxLength={240} /></label>
-            <button className="button button-primary" onClick={sendCheckin}>Submit evidence</button>
+            <div className="field-row">
+              <label><span>Observed in your timezone</span><input type="datetime-local" value={observedAt} onChange={(event) => setObservedAt(event.target.value)} /></label>
+              <label><span>Signing wallet</span><input className="mono" value={shortenAddress(pact.evidence_attestor)} readOnly /></label>
+            </div>
+            <label><span>Attestation</span><textarea value={statement} onChange={(event) => setStatement(event.target.value)} rows={3} maxLength={240} placeholder="I attest that the subject completed…" /></label>
+            <button className="button button-primary" onClick={sendCheckin}>Sign and submit</button>
           </div>
+        ) : null}
+
+        {pact.status === "LIVE" && isMaker && !isEvidenceAttestor && pact.window_open_now ? (
+          <div className="notice-box"><strong>Waiting for verifier</strong><p>{shortenAddress(pact.evidence_attestor)} must sign this period’s evidence.</p></div>
         ) : null}
 
         {canSync ? <button className="button button-secondary" onClick={() => void run(() => syncPact(session!, pact.id, setProgress))}>Update missed periods</button> : null}
@@ -471,8 +546,16 @@ export function PactDetail({
             <div className="notice-box"><strong>Payout is locked</strong><p>Appeals close {new Date(Number(pact.appeal_deadline_unix) * 1000).toLocaleString()}.</p></div>
             {pact.appeal_open && appealable.length > 0 ? (
               <div className="form-stack compact-form">
-                <label><span>Period to appeal</span><select value={appealPeriodNumber} onChange={(event) => setAppealPeriodNumber(event.target.value)}><option value="">Choose a period</option>{appealable.map((item) => <option value={item.period} key={item.period}>Period {Number(item.period) + 1} · {item.verdict}</option>)}</select></label>
+                <label><span>Period to appeal</span><select value={appealPeriodNumber} onChange={(event) => {
+                  const value = event.target.value;
+                  setAppealPeriodNumber(value);
+                  if (value !== "") {
+                    const duration = (Number(pact.end_unix) - Number(pact.start_unix)) / Number(pact.periods_total);
+                    setAppealObservedAt(localDateTime(Number(pact.start_unix) + Number(value) * duration + Math.max(1, Math.floor(duration / 2))));
+                  }
+                }}><option value="">Choose a period</option>{appealable.map((item) => <option value={item.period} key={item.period}>Period {Number(item.period) + 1} · {item.verdict}</option>)}</select></label>
                 <label><span>Reason for appeal</span><textarea value={appealStatement} onChange={(event) => setAppealStatement(event.target.value)} rows={3} /></label>
+                <label><span>Activity time</span><input type="datetime-local" value={appealObservedAt} onChange={(event) => setAppealObservedAt(event.target.value)} /></label>
                 <EvidenceFilePicker
                   idPrefix={`appeal-${pact.id}`}
                   onDigest={(nextDigest) => {
@@ -512,9 +595,25 @@ export function PactDetail({
   );
 }
 
-function actionHeading(pact: PactView, isMaker: boolean): string {
+function AdjudicationAudit({ label, record }: { label: string; record: AdjudicationRecord }) {
+  return (
+    <section className="audit-record">
+      <strong>{label} · {record.verdict}</strong>
+      <dl>
+        <div><dt>Signed by</dt><dd className="mono">{shortenAddress(record.attestor)}</dd></div>
+        <div><dt>Observed</dt><dd>{record.observed_at_iso ? new Date(record.observed_at_iso).toLocaleString() : "Protocol timer"}</dd></div>
+        {record.evidence_url ? <div><dt>Evidence</dt><dd><a href={record.evidence_url} target="_blank" rel="noreferrer">Open file ↗</a></dd></div> : null}
+        {record.content_digest ? <div><dt>File SHA-256</dt><dd className="mono">{record.content_digest}</dd></div> : null}
+        {record.attestation_id ? <div><dt>Attestation</dt><dd className="mono">{record.attestation_id}</dd></div> : null}
+      </dl>
+    </section>
+  );
+}
+
+function actionHeading(pact: PactView, isMaker: boolean, isEvidenceAttestor: boolean): string {
   if (pact.status === "OPEN") return isMaker ? "Invite a challenger" : "Review and join";
-  if (pact.status === "LIVE" && isMaker && pact.window_open_now) return `Submit evidence for period ${Number(pact.next_period) + 1}`;
+  if (pact.status === "LIVE" && isEvidenceAttestor && pact.window_open_now) return `Sign period ${Number(pact.next_period) + 1}`;
+  if (pact.status === "LIVE" && isMaker && pact.window_open_now) return "Waiting for the verifier";
   if (pact.status === "LIVE" && pact.settleable) return "Ready for a result";
   if (pact.status === "LIVE") return "Awaiting the next check-in";
   if (pact.status.startsWith("PROVISIONAL")) return "Review the result";

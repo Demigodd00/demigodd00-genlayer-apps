@@ -29,6 +29,7 @@ def test_v2_zero_checkins_becomes_provisional_loss_on_studionet():
             0,
             start,
             bob.address,
+            alice.address,
         ]
     ).transact(value=STAKE)
     assert tx_execution_succeeded(create_tx)

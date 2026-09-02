@@ -73,6 +73,7 @@ def test_real_content_addressed_evidence_reaches_consensus_on_studionet():
             1,
             start,
             bob.address,
+            alice.address,
         ]
     ).transact(value=STAKE)
     assert tx_execution_succeeded(create_tx)
@@ -87,6 +88,7 @@ def test_real_content_addressed_evidence_reaches_consensus_on_studionet():
             EVIDENCE_URL,
             digest,
             EVIDENCE_NOTE,
+            start + 1,
         ]
     ).transact()
     assert tx_execution_succeeded(checkin_tx)
@@ -96,3 +98,5 @@ def test_real_content_addressed_evidence_reaches_consensus_on_studionet():
     assert pact["kept_count"] == "1"
     assert checkin["verdict"] == "KEPT"
     assert checkin["content_digest"] == digest
+    assert checkin["original_record"]["attestor"].lower() == alice.address.lower()
+    assert len(checkin["original_record"]["attestation_id"]) == 64

@@ -94,6 +94,7 @@ export default function JoinPact({
               <div><dt>You match</dt><dd>{formatGen(pact.stake_atto)} test GEN</dd></div>
               <div><dt>Periods</dt><dd>{pact.periods_total}</dd></div>
               <div><dt>Allowed misses</dt><dd>{pact.allowed_misses}</dd></div>
+              <div className="review-wide"><dt>Evidence attestor</dt><dd>{shortenAddress(pact.evidence_attestor)} · {pact.provenance_policy === "WALLET_VERIFIED" ? "verifier" : "self"}</dd></div>
               <div className="review-wide"><dt>Starts</dt><dd>{new Date(Number(pact.start_unix) * 1000).toLocaleString()}</dd></div>
             </dl>
             <button className="button button-primary button-wide" disabled={busy} onClick={() => void join()}>Match stake &amp; join</button>

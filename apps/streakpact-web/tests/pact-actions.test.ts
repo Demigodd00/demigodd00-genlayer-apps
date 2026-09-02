@@ -7,10 +7,12 @@ import type { PactView, WalletSession } from "../src/lib/contract";
 
 const maker = `0x${"1".repeat(40)}` as const;
 const recipient = `0x${"2".repeat(40)}` as const;
+const verifier = `0x${"3".repeat(40)}` as const;
 const later = String(Math.floor(Date.now() / 1000) + 3600);
 const pact: PactView = {
   id: "sp2-5", mode: "SELF", status: "LIVE", title: "UI acceptance", success_criteria: "A public synthetic reading record.",
-  maker, taker: "", failure_recipient: recipient, periods_total: "3", allowed_misses: "1",
+  maker, taker: "", failure_recipient: recipient, evidence_attestor: maker, provenance_policy: "SELF_ATTESTED",
+  periods_total: "3", allowed_misses: "1",
   stake_atto: "1000000000000000", pot_atto: "1000000000000000", start_unix: later, end_unix: later,
   created_at_iso: new Date().toISOString(), kept_count: "0", miss_count: "0", next_period: "0",
   next_window_open: later, next_window_close: later, window_open_now: false, settleable: false,
@@ -57,4 +59,21 @@ test("an unmatched voided challenge shows the refunded stake, not a theoretical 
   assert.match(html, /Original rules remain visible onchain for auditability\./);
   assert.doesNotMatch(html, /0\.02 GEN/);
   assert.doesNotMatch(html, /matched pot/);
+});
+
+test("only the configured verifier gets the signed check-in controls", () => {
+  const now = Math.floor(Date.now() / 1000);
+  const verified = {
+    ...pact,
+    evidence_attestor: verifier,
+    provenance_policy: "WALLET_VERIFIED" as const,
+    start_unix: String(now - 10),
+    end_unix: String(now + 170),
+    next_window_open: String(now - 10),
+    next_window_close: String(now + 50),
+    window_open_now: true,
+  };
+  assert.match(render(verified, maker), /Waiting for verifier/);
+  assert.doesNotMatch(render(verified, maker), /Sign and submit/);
+  assert.match(render(verified, verifier), /Sign and submit/);
 });

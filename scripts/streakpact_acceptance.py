@@ -29,7 +29,7 @@ from deploy_streak_pact_v2 import load_deploy_environment
 
 ROOT = Path(__file__).resolve().parents[1]
 DEPLOYMENT = ROOT / "deployments/streak_pact_v2_studionet.json"
-RECORD = ROOT / "deployments/streak_pact_v2_acceptance.json"
+RECORD = ROOT / "deployments/streak_pact_v2_1_acceptance.json"
 RPC_URL = "https://studio.genlayer.com/api"
 
 
@@ -97,7 +97,14 @@ class Acceptance:
         self.record["updated_at"] = timestamp()
         temp = RECORD.with_suffix(".json.tmp")
         temp.write_text(json.dumps(self.record, indent=2, default=str) + "\n", encoding="utf-8")
-        temp.replace(RECORD)
+        for attempt in range(10):
+            try:
+                temp.replace(RECORD)
+                return
+            except PermissionError:
+                if attempt == 9:
+                    raise
+                time.sleep(0.1 * (attempt + 1))
 
     def rpc(self, method, params):
         delay = 2.25 - (time.monotonic() - self.last_request)
@@ -132,7 +139,14 @@ class Acceptance:
         if digest != self.deployment["source_sha256"]:
             raise RuntimeError("Deployed source differs from the recorded release")
         config = self.read("get_config", [])
-        if config["fee_bps"] != "0" or config["period_secs"] != "60" or config["appeal_window_secs"] != "300":
+        if (
+            config["version"] != "2.1.0"
+            or config["fee_bps"] != "0"
+            or config["period_secs"] != "60"
+            or config["appeal_window_secs"] != "300"
+            or config["evidence_policy"] != "CONTENT_ADDRESSED_AND_WALLET_ATTESTED"
+            or config["original_appeal_records"] != "IMMUTABLE_SEPARATE_RECORDS"
+        ):
             raise RuntimeError("Unexpected StudioNet release configuration")
         self.record["preflight"] = {"checked_at": timestamp(), "config": config, "source_matches": True}
         self.save()

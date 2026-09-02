@@ -32,6 +32,8 @@ export interface PactView extends PactSummary {
   maker: string;
   taker: string;
   failure_recipient: string;
+  evidence_attestor: string;
+  provenance_policy: "SELF_ATTESTED" | "WALLET_VERIFIED";
   success_criteria: string;
   allowed_misses: string;
   pot_atto: string;
@@ -45,14 +47,41 @@ export interface PactView extends PactSummary {
   appeal_open: boolean;
 }
 
+export interface AdjudicationRecord {
+  verdict: "KEPT" | "MISSED";
+  method: string;
+  statement: string;
+  evidence_url: string;
+  content_digest: string;
+  confidence_bucket: string;
+  reason: string;
+  judged_at_iso: string;
+  attestor: string;
+  observed_at_iso: string;
+  attestation_id: string;
+  provenance: string;
+}
+
 export interface CheckinView {
   period: string;
   verdict: "KEPT" | "MISSED";
   method: string;
+  statement: string;
+  evidence_url: string;
   content_digest: string;
   confidence_bucket: string;
   reason: string;
+  judged_at_iso: string;
+  subject: string;
+  configured_attestor: string;
+  attestor: string;
+  observed_at_iso: string;
+  attestation_id: string;
+  attestation_schema: string;
+  provenance: string;
   appealed: boolean;
+  original_record: AdjudicationRecord;
+  appeal_record: Partial<AdjudicationRecord>;
 }
 
 export interface TxProgress {
@@ -286,6 +315,7 @@ export function createPact(
     allowedMisses: number;
     startUnix: number;
     failureRecipient: Address;
+    evidenceAttestor: Address;
     stakeAtto: bigint;
   },
   onProgress: (progress: TxProgress) => void,
@@ -301,6 +331,7 @@ export function createPact(
       input.allowedMisses,
       input.startUnix,
       input.failureRecipient,
+      input.evidenceAttestor,
     ],
     input.stakeAtto,
     onProgress,
@@ -331,9 +362,16 @@ export const submitCheckin = (
   pactId: string,
   evidenceUrl: string,
   evidenceDigest: string,
-  note: string,
+  statement: string,
+  observedAtUnix: number,
   onProgress: (progress: TxProgress) => void,
-) => write(session, "submit_checkin", [pactId, evidenceUrl, evidenceDigest, note], 0n, onProgress);
+) => write(
+  session,
+  "submit_checkin",
+  [pactId, evidenceUrl, evidenceDigest, statement, observedAtUnix],
+  0n,
+  onProgress,
+);
 
 export const proposeSettlement = (
   session: WalletSession,
@@ -348,11 +386,12 @@ export const appealPeriod = (
   statement: string,
   evidenceUrl: string,
   evidenceDigest: string,
+  observedAtUnix: number,
   onProgress: (progress: TxProgress) => void,
 ) => write(
   session,
   "appeal_period",
-  [pactId, period, statement, evidenceUrl, evidenceDigest],
+  [pactId, period, statement, evidenceUrl, evidenceDigest, observedAtUnix],
   0n,
   onProgress,
 );
