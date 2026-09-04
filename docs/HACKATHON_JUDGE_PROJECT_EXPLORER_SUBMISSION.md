@@ -6,10 +6,8 @@
 - Project name: `Hackathon Judge`
 - Logo upload: [`docs/assets/hackathon-judge/hackathon-judge-logo.png`](assets/hackathon-judge/hackathon-judge-logo.png)
 - Primary tag: `AI & Agents`
-- Tag 1: choose `Evaluation` or the closest exact option if offered; otherwise leave blank.
-- Tag 2: choose `Verification` or the closest exact option if offered; otherwise leave blank.
-
-The secondary tags are optional. Do not select an unrelated label merely to fill them.
+- Tag 1: `Verifiable Inference`
+- Tag 2: `Source Verification`
 
 ## One-liner
 
