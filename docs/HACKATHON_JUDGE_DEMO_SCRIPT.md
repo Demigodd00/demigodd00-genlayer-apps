@@ -22,7 +22,7 @@ Show the Jury Console and a judged submission.
 
 ## 30–41s — Appeal
 
-Show Grant Guard’s original adverse result, appeal marker, and appeal evidence digest.
+Show the Appeal Recovery Fixture’s original adverse result, appeal marker, and appeal evidence digest.
 
 > The Appeal Recovery Fixture first omits its deployment transaction and becomes inconclusive. Its one appeal adds that exact identifier as a second immutable snapshot, then validators reassess the complete record.
 

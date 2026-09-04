@@ -4,6 +4,16 @@
 
 Hackathon Judge turns a prose rulebook, public project evidence, and independent validator judgment into a deterministic on-chain winner, appeal record, prize settlement, and portable builder credential.
 
+## Paste-ready contribution form
+
+**Title:** Hackathon Judge — GenLayer-native jury protocol
+
+**Notes / Description:**
+
+> Built Hackathon Judge, a GenLayer-native protocol that turns prose hackathon rules and public project evidence into an auditable on-chain verdict and prize settlement. Validators first use `gl.nondet.web.render()` to agree on an immutable evidence snapshot and SHA-256 digest. They then independently judge that snapshot against the stored rulebook. Consensus compares only settlement-critical fields: exact eligibility, exact 20-point score band, and bounded confidence; free-form rationale is exempt. The contract also enforces one evidence-based appeal, permissionless judging/finalization, a 24-hour inconclusive fallback, deterministic ranking, withdrawable prize credit, refunds, and portable address-based winner credentials. A finalized StudioNet demo proves two judgments, one successful appeal, winner selection, and prize withdrawal.
+
+**Required GitHub evidence:** <https://github.com/Demigodd00/demigodd00-genlayer-apps>
+
 ## Links
 
 - Live app: [hackathon-judge-studionet.blazekingsley2.chatgpt.site](https://hackathon-judge-studionet.blazekingsley2.chatgpt.site)
@@ -61,14 +71,14 @@ Consensus compares only the fields that affect settlement:
 
 ## Live StudioNet result
 
-Event `hj-3`, **Open Intelligence Build Week — Verified Jury Final**, is the preserved finalized demonstration from the v2.1 contract. Its historical receipt remains available while a fresh v2.2 demonstration is prepared on the hardened release contract.
+Event `hj-1`, **Open Intelligence Build Week — Verified Jury Final**, is finalized on the hardened v2.2 contract.
 
 | Project | Final eligibility | Score | Confidence | Outcome |
 |---|---:|---:|---:|---|
-| Hackathon Judge Protocol | `ELIGIBLE` | 100 | 100 | Winner; prize released and withdrawn |
-| Appeal Recovery Fixture | `ELIGIBLE` | 80 | 100 | Initially inconclusive; one evidence appeal resolved; not selected |
+| Hackathon Judge Protocol | `ELIGIBLE` | 100 | 80 | Winner; prize released and withdrawn |
+| Appeal Recovery Fixture | `ELIGIBLE` | 80 | 80 | Initially inconclusive; one evidence appeal resolved; not selected |
 
-The evidence digests, every transaction hash, final representative rationale, winner address, and payout assertions are preserved in the [machine-readable demo receipt](../deployments/hackathon_judge_demo.json). The decisive finalization transaction is `0x24daa241067b6b634aa4c983316b1d8b790ea31acdcfc0d774307dbb098b9bad`; the winner withdrawal is `0x93720f66dd221259f039baf99b9c7e9730f927fbb3b8f4eea243e0d9748b24f9`. Refunded organizer credit was also withdrawn, leaving zero app credit in the demo organizer account.
+The evidence digests, every transaction hash, final representative rationale, winner address, and payout assertions are preserved in the [machine-readable demo receipt](../deployments/hackathon_judge_demo.json). The decisive finalization transaction is `0x34af0a90352270921714e6721fe60c860d19ca67ebfab1e84da6361fde6b22c8`; the winner withdrawal is `0xd5ee6c83994cba1e64b37151aa6b15c5bf37bc1eb71e730dc3e19bbb6cb2874b`. The organizer has zero app credit after settlement.
 
 ## Verification evidence
 
