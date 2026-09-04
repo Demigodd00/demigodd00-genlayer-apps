@@ -17,6 +17,7 @@ MicroWagers by demigodd00 is a source-bound, two-sided prediction market for Gen
 | Unresolved-market recovery | `600` seconds after deadline |
 | Web deployment | `dpl_w2LqVe8i3JiX8vfUREQue8PrRV8b` |
 | Application source commit | `793fcec27d554500d2f10ae66fbcc58cf53a0f4d` |
+| Release records commit | `0c6fb509401801588f4e96d5c8f01b28d68c45ed` |
 
 The exact deployment, acceptance, and hosting records are in [`deployments/micro_wagers_studionet.json`](../deployments/micro_wagers_studionet.json), [`deployments/micro_wagers_acceptance.json`](../deployments/micro_wagers_acceptance.json), and [`deployments/micro_wagers_vercel.json`](../deployments/micro_wagers_vercel.json). Superseded V1.1 records are retained under `deployments/history/`.
 

@@ -31,10 +31,10 @@ MicroWagers by demigodd00 is a two-sided prediction product for GenLayer StudioN
    https://github.com/Demigodd00/demigodd00-genlayer-apps/blob/793fcec27d554500d2f10ae66fbcc58cf53a0f4d/contracts/micro_wagers.py
 
 5. **GitHub File** — exact StudioNet deployment record
-   https://github.com/Demigodd00/demigodd00-genlayer-apps/blob/main/deployments/micro_wagers_studionet.json
+   https://github.com/Demigodd00/demigodd00-genlayer-apps/blob/0c6fb509401801588f4e96d5c8f01b28d68c45ed/deployments/micro_wagers_studionet.json
 
 6. **GitHub File** — exact-address acceptance journal
-   https://github.com/Demigodd00/demigodd00-genlayer-apps/blob/main/deployments/micro_wagers_acceptance.json
+   https://github.com/Demigodd00/demigodd00-genlayer-apps/blob/0c6fb509401801588f4e96d5c8f01b28d68c45ed/deployments/micro_wagers_acceptance.json
 
 The form requires only one evidence link, but submit the repository, Explorer contract, live product, contract source, deployment record, and acceptance journal so a steward can reproduce the review quickly.
 
