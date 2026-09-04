@@ -22,26 +22,26 @@ MicroWagers by demigodd00 is a two-sided prediction product for GenLayer StudioN
    https://github.com/Demigodd00/demigodd00-genlayer-apps
 
 2. **GenLayer Explorer Contract**
-   https://explorer-studio.genlayer.com/address/0xe7B8E25a7608176168d4cfA84691B53d1715bADE
+   https://explorer-studio.genlayer.com/address/0xbe655aa17d1b4d31021791F0640a8c4677A11899
 
 3. **Other** — live product
    https://microwagers.vercel.app
 
 4. **GitHub File** — exact intelligent-contract source
-   https://github.com/Demigodd00/demigodd00-genlayer-apps/blob/793fcec27d554500d2f10ae66fbcc58cf53a0f4d/contracts/micro_wagers.py
+   https://github.com/Demigodd00/demigodd00-genlayer-apps/blob/c3a083804004871d37d65bb6f2f1370753cfc9de/contracts/micro_wagers.py
 
 5. **GitHub File** — exact StudioNet deployment record
-   https://github.com/Demigodd00/demigodd00-genlayer-apps/blob/0c6fb509401801588f4e96d5c8f01b28d68c45ed/deployments/micro_wagers_studionet.json
+   https://github.com/Demigodd00/demigodd00-genlayer-apps/blob/main/deployments/micro_wagers_studionet.json
 
 6. **GitHub File** — exact-address acceptance journal
-   https://github.com/Demigodd00/demigodd00-genlayer-apps/blob/0c6fb509401801588f4e96d5c8f01b28d68c45ed/deployments/micro_wagers_acceptance.json
+   https://github.com/Demigodd00/demigodd00-genlayer-apps/blob/main/deployments/micro_wagers_acceptance.json
 
 The form requires only one evidence link, but submit the repository, Explorer contract, live product, contract source, deployment record, and acceptance journal so a steward can reproduce the review quickly.
 
 ## Reviewer path
 
 1. Open the live product without connecting a wallet.
-2. Open https://microwagers.vercel.app/markets?wager=w-4 to inspect the settled and appealed flow, including the separately preserved original and appeal snapshots and SHA-256 digests.
+2. Open https://microwagers.vercel.app/markets?wager=w-3 to inspect the settled and appealed flow, including the separately preserved original and appeal snapshots and SHA-256 digests.
 3. Open https://microwagers.vercel.app/markets?wager=w-2 to inspect the permissionless resolution-timeout refund. It intentionally has no adjudication record because validators never finalized one.
 4. Open https://microwagers.vercel.app/status to confirm the exact contract, zero fee, five-minute appeal window, ten-minute recovery period, and absence of admin settlement controls.
 5. Compare the Explorer contract with the immutable source, deployment record, and acceptance journal.
@@ -50,7 +50,7 @@ The form requires only one evidence link, but submit the repository, Explorer co
 ## If the Portal asks “What did you change?”
 
 ```text
-Upgraded MicroWagers to V1.2 and deployed a new verified StudioNet contract. Each validator adjudication now preserves the exact strict-UTF-8 source snapshot, SHA-256 digest, URL, byte and character counts, judgment time, outcome, confidence, reason, and winner. Original and appealed adjudications are stored as separate immutable records and displayed publicly in the app. The wording now states accurately that validators fetch the source when adjudication runs after the deadline; it no longer implies a deadline-time snapshot. Invalid, private, malformed, oversized, NUL-containing, or non-UTF-8 sources are rejected. I also added permissionless timeout recovery so any wallet can void an unresolved matched wager after ten minutes and refund both original test stakes. The exact new address was tested with three wallets through negative cases, settlement, appeal, payout, and timeout recovery, and the live Vercel app now points to that deployment.
+Upgraded MicroWagers to V1.2.1 and deployed a new verified StudioNet contract. Each adjudication now preserves the exact strict-UTF-8 source snapshot, SHA-256 digest, URL, sizes, judgment time, outcome, confidence, reason, and winner. Original and appeal records remain separate and public. The UI accurately says validators fetch the source when adjudication runs after the deadline; it does not claim a deadline-time snapshot. Invalid, private, malformed, oversized, NUL-containing, or non-UTF-8 sources are rejected. Any wallet can recover an unresolved matched wager after ten minutes and refund both original stakes. Public reads no longer expose internal Address placeholders as a taker or winner before those roles exist. Three wallets tested the exact address through negative cases, settlement, appeal, payout, and timeout recovery, and the live Vercel app points to it.
 ```
 
 ## Public repository note

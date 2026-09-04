@@ -8,18 +8,17 @@ MicroWagers by demigodd00 is a source-bound, two-sided prediction market for Gen
 |---|---|
 | Live app | https://microwagers.vercel.app |
 | Read-only status | https://microwagers.vercel.app/status |
-| Contract | `0xe7B8E25a7608176168d4cfA84691B53d1715bADE` |
-| Explorer | https://explorer-studio.genlayer.com/address/0xe7B8E25a7608176168d4cfA84691B53d1715bADE |
-| Deployment transaction | `0xf15e83775086b60e015365b76df056dfb1e7a9c9f836afb26f8bae8bd7e0d0d8` |
-| Source SHA-256 | `e15382ce97e3ecfddcd2789597a0e54b302293e0e8a736011319c6ede30ea7d9` |
+| Contract | `0xbe655aa17d1b4d31021791F0640a8c4677A11899` |
+| Explorer | https://explorer-studio.genlayer.com/address/0xbe655aa17d1b4d31021791F0640a8c4677A11899 |
+| Deployment transaction | `0xe096d44ab3ad194760cc71c9c1c22331eaebffcdf94ac9e4ab2455965a7ff7e5` |
+| Source SHA-256 | `3c786a3e74a6579b66438782e5443d1981c4e3fcef76d5b4ce818ad4835dfe46` |
 | Fee | `0` basis points |
 | Appeal window | `300` seconds |
 | Unresolved-market recovery | `600` seconds after deadline |
-| Web deployment | `dpl_w2LqVe8i3JiX8vfUREQue8PrRV8b` |
-| Application source commit | `793fcec27d554500d2f10ae66fbcc58cf53a0f4d` |
-| Release records commit | `0c6fb509401801588f4e96d5c8f01b28d68c45ed` |
+| Web deployment | `dpl_GyMk3AvTFtkUcMcoPB5URcQrZZmm` |
+| Application source commit | `c3a083804004871d37d65bb6f2f1370753cfc9de` |
 
-The exact deployment, acceptance, and hosting records are in [`deployments/micro_wagers_studionet.json`](../deployments/micro_wagers_studionet.json), [`deployments/micro_wagers_acceptance.json`](../deployments/micro_wagers_acceptance.json), and [`deployments/micro_wagers_vercel.json`](../deployments/micro_wagers_vercel.json). Superseded V1.1 records are retained under `deployments/history/`.
+The exact deployment, acceptance, and hosting records are in [`deployments/micro_wagers_studionet.json`](../deployments/micro_wagers_studionet.json), [`deployments/micro_wagers_acceptance.json`](../deployments/micro_wagers_acceptance.json), and [`deployments/micro_wagers_vercel.json`](../deployments/micro_wagers_vercel.json). Superseded V1.1 and V1.2 records are retained under `deployments/history/`.
 
 ## Why this is GenLayer-native
 
@@ -39,28 +38,27 @@ If no adjudication finalizes within ten minutes after the deadline, any wallet c
 
 Users can create, match, cancel an unmatched wager, request resolution after the deadline, appeal a provisional loss, claim after the appeal window, or trigger timeout recovery. The interface checks network, role, amount, deadline, and finality, while the contract independently enforces every rule.
 
-The deployer is only the deployment account and zero-fee treasury. `/status` is read-only and exposes the contract address, release configuration, and public activity totals. It has no settlement controls.
+The deployer is only the deployment account and zero-fee treasury. `/status` is read-only and exposes the contract address, release configuration, and public activity totals. It has no settlement controls. V1.2.1 also keeps unassigned Address placeholders private: unmatched wagers return an empty taker, and LIVE or VOIDED wagers return an empty winner until a decisive settlement exists.
 
 ## Exact-address acceptance
 
-The V1.2 release was exercised against the exact deployed address with creator, taker, and independent observer wallets:
+The V1.2.1 release was exercised against the exact deployed address with creator, taker, and independent observer wallets:
 
 - deployment source and all constructor settings matched the validated local release;
 - a non-creator cancellation failed, then creator cancellation returned the unmatched `0.001` test-GEN stake;
 - self-matching, incorrect stake, early resolution, early timeout recovery, invalid appeal roles, duplicate appeal, premature claim, and non-winner claim all failed as intended;
 - the observer permissionlessly recovered matched unresolved wager `w-2`, and both `0.001` test-GEN stakes were credited;
-- validators resolved `w-4` from Example Domain, storing its exact 559-byte snapshot and SHA-256 digest;
+- validators resolved `w-3` from Example Domain, storing its exact 559-byte snapshot and SHA-256 digest;
 - the losing wallet appealed, validators independently refetched the source, and the original and appeal records remained separately visible;
 - after the appeal window, the winner claimed the credited `0.003` test-GEN pot;
-- final contract statistics were four created wagers and one settled wager.
+- OPEN, LIVE, and VOIDED reads exposed no false taker or winner assignments;
+- final contract statistics were three created wagers and one settled wager.
 
-One initial positive-match acceptance transaction reached contract execution after its deliberately short test deadline. The contract correctly rejected it, the harness classified the timing event, the unmatched stake was refunded, and the script created `w-4` with a longer deadline to complete the positive lifecycle. This is retained in the journal rather than hidden.
-
-The release also passed 37 direct contract tests, 30 frontend tests, TypeScript validation, a Next.js production build, a production dependency audit with no known high-severity vulnerabilities, production route and health checks, security-header checks, and both GitHub workflows for source commit `793fcec27d554500d2f10ae66fbcc58cf53a0f4d`.
+The release also passed 37 direct contract tests, 30 frontend tests, TypeScript validation, a Next.js production build, a production dependency audit with no known high-severity vulnerabilities, production route and health checks, security-header checks, and both GitHub workflows for source commit `c3a083804004871d37d65bb6f2f1370753cfc9de`.
 
 ## Reviewer path
 
-1. Open https://microwagers.vercel.app/markets?wager=w-4 for the settled and appealed lifecycle, including both immutable adjudication records.
+1. Open https://microwagers.vercel.app/markets?wager=w-3 for the settled and appealed lifecycle, including both immutable adjudication records.
 2. Open https://microwagers.vercel.app/markets?wager=w-2 for permissionless timeout recovery and both refunded stakes.
 3. Open https://microwagers.vercel.app/status to compare the live address and release settings with the Explorer and JSON records.
 

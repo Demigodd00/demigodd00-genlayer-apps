@@ -1,9 +1,9 @@
 {
   "contract": "MicroWagers",
-  "version": "1.2.1-studionet",
+  "version": "1.2.0-studionet",
   "network": "studionet",
-  "address": "0xbe655aa17d1b4d31021791F0640a8c4677A11899",
-  "transaction_hash": "0xe096d44ab3ad194760cc71c9c1c22331eaebffcdf94ac9e4ab2455965a7ff7e5",
+  "address": "0xe7B8E25a7608176168d4cfA84691B53d1715bADE",
+  "transaction_hash": "0xf15e83775086b60e015365b76df056dfb1e7a9c9f836afb26f8bae8bd7e0d0d8",
   "deployer": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
   "deployer_role": "deployment_and_zero_fee_treasury_only_no_admin_controls",
   "treasury": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
@@ -12,7 +12,7 @@
     "appeal_window_secs": 300,
     "resolution_timeout_secs": 600
   },
-  "source_sha256": "3c786a3e74a6579b66438782e5443d1981c4e3fcef76d5b4ce818ad4835dfe46",
+  "source_sha256": "e15382ce97e3ecfddcd2789597a0e54b302293e0e8a736011319c6ede30ea7d9",
   "runner_dependency": "# { \"Depends\": \"py-genlayer:1jb45aa8ynh2a9c9xn3b7qqh8sm5q93hwfp7jqmwsfhh8jpz09h6\" }",
   "preflight_skipped": false,
   "receipt_status": "FINALIZED",
@@ -30,8 +30,8 @@
     "total_created": "0",
     "total_settled": "0",
     "treasury": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
-    "version": "1.2.1-studionet"
+    "version": "1.2.0-studionet"
   },
-  "deployed_at": "2026-09-04T22:06:34.391574+00:00",
-  "previous_address": "0xe7B8E25a7608176168d4cfA84691B53d1715bADE"
+  "deployed_at": "2026-09-04T21:05:42.588437+00:00",
+  "previous_address": "0x5D2679a7277D05E5bE9a6Bf60526D0fC7C1d477C"
 }

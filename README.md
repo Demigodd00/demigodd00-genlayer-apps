@@ -23,7 +23,7 @@ StreakPact V2.2 is one product in this repository. It supports self-stake pacts 
 | StreakPact V1 | Strong concept, unsafe period accounting | Historical deployed prototype; do not promote |
 | MicroWagers | Strong: public-source interpretation directly controls peer escrow settlement | Verified StudioNet test-token release |
 
-**MicroWagers release:** [live app](https://microwagers.vercel.app) · [read-only status](https://microwagers.vercel.app/status) · [GenLayer Explorer contract](https://explorer-studio.genlayer.com/address/0xe7B8E25a7608176168d4cfA84691B53d1715bADE) · [paste-ready Portal submission](docs/MICROWAGERS_SUBMISSION.md)
+**MicroWagers release:** [live app](https://microwagers.vercel.app) · [read-only status](https://microwagers.vercel.app/status) · [GenLayer Explorer contract](https://explorer-studio.genlayer.com/address/0xbe655aa17d1b4d31021791F0640a8c4677A11899) · [paste-ready Portal submission](docs/MICROWAGERS_SUBMISSION.md)
 
 ## Why GenLayer
 

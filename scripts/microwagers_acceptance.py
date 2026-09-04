@@ -417,7 +417,11 @@ class Acceptance:
 
         cancellation_question = "Release acceptance: cancel an unmatched MicroWagers market?"
         cancelled_id = self.create("cancellation", cancellation_question, 900)
-        self.assert_fields("cancellation-open", self.read("get_wager", [cancelled_id]), {"status": "OPEN"})
+        self.assert_fields(
+            "cancellation-open",
+            self.read("get_wager", [cancelled_id]),
+            {"status": "OPEN", "taker": "", "winner": ""},
+        )
         self.write(
             "reject-noncreator-cancel",
             "cancel_wager",
@@ -426,7 +430,11 @@ class Acceptance:
             expected_error="only the creator can cancel",
         )
         self.write("cancel-open-wager", "cancel_wager", [cancelled_id])
-        self.assert_fields("cancellation-voided", self.read("get_wager", [cancelled_id]), {"status": "VOIDED"})
+        self.assert_fields(
+            "cancellation-voided",
+            self.read("get_wager", [cancelled_id]),
+            {"status": "VOIDED", "taker": "", "winner": ""},
+        )
         self.verify_transfer("cancel-open-wager", self.accounts["creator"].address, STAKE)
         output({"phase": "cancellation", "passed": True})
 
@@ -441,7 +449,7 @@ class Acceptance:
         recovery_live = self.assert_fields(
             "recovery-live",
             self.read("get_wager", [recovery_id]),
-            {"status": "LIVE", "recoverable": False},
+            {"status": "LIVE", "recoverable": False, "winner": ""},
         )
         self.write(
             "reject-early-recovery",
@@ -453,7 +461,11 @@ class Acceptance:
 
         lifecycle_question = "Release acceptance: when resolved, does Example Domain say it is for illustrative examples?"
         wager_id = self.create("lifecycle", lifecycle_question, 600)
-        self.assert_fields("lifecycle-open", self.read("get_wager", [wager_id]), {"status": "OPEN", "stake_atto": str(STAKE)})
+        self.assert_fields(
+            "lifecycle-open",
+            self.read("get_wager", [wager_id]),
+            {"status": "OPEN", "stake_atto": str(STAKE), "taker": "", "winner": ""},
+        )
         self.write(
             "reject-creator-self-accept",
             "accept_wager",
@@ -486,14 +498,14 @@ class Acceptance:
             self.assert_fields(
                 "lifecycle-final-open",
                 self.read("get_wager", [wager_id]),
-                {"status": "OPEN", "stake_atto": str(STAKE)},
+                {"status": "OPEN", "stake_atto": str(STAKE), "taker": "", "winner": ""},
             )
             accept_step = "accept-wager-final"
         self.write(accept_step, "accept_wager", [wager_id], value=STAKE, role="tester")
         live = self.assert_fields(
             "lifecycle-live",
             self.read("get_wager", [wager_id]),
-            {"status": "LIVE", "taker": self.accounts["tester"].address},
+            {"status": "LIVE", "taker": self.accounts["tester"].address, "winner": ""},
         )
         self.write(
             "reject-early-resolution",
@@ -617,7 +629,7 @@ class Acceptance:
         recovered = self.assert_fields(
             "recovery-voided",
             self.read("get_wager", [recovery_id]),
-            {"status": "VOIDED", "recoverable": False},
+            {"status": "VOIDED", "recoverable": False, "winner": ""},
         )
         if recovered.get("original_record", {}).get("exists") is not False:
             raise AssertionError("Timeout recovery must not fabricate an adjudication record")
