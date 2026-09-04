@@ -5,15 +5,15 @@ The codebase is ready for zero-value StudioNet acceptance testing. The remaining
 ## 1. Deploy the current contracts
 
 - Deploy StreakPact V2 with `fee_bps=0`, `period_secs=60`, and `appeal_window_secs=300`.
-- Deploy MicroWagers with `fee_bps=0` and `appeal_window_secs=300`.
+- Deploy MicroWagers with `fee_bps=0`, `appeal_window_secs=300`, and `resolution_timeout_secs=600`.
 - Keep script preflight enabled and commit the generated `deployments/*.json` records.
 
 ## 2. Configure the apps
 
 - Put the recorded StreakPact address in `apps/streakpact-web/.env.local` as `NEXT_PUBLIC_STREAKPACT_V2_ADDRESS`.
 - Set a server-only, file-write-restricted `PINATA_JWT` and lock uploads to the exact hosted `STREAKPACT_APP_ORIGIN`.
-- Put the recorded MicroWagers address in its HTML meta tag, paste it into the contract field, or open the app with `?contract=0x...`.
-- Build and publish the Next.js app and the static MicroWagers folder.
+- Put the recorded MicroWagers address in `apps/microwagers-web/.env.local` as `NEXT_PUBLIC_MICROWAGERS_ADDRESS`.
+- Build and publish both Next.js apps from their own project roots.
 
 ## 3. Provide evidence for StreakPact
 
@@ -25,7 +25,7 @@ The codebase is ready for zero-value StudioNet acceptance testing. The remaining
 
 - StreakPact self-stake success and failure.
 - StreakPact challenge join, cancellation, missed-window synchronization, appeal, finalization, and claim.
-- MicroWagers creation, acceptance, creator cancellation, resolution, appeal, void, and claim.
+- MicroWagers creation, acceptance, creator cancellation, strict-source resolution, immutable original and appeal records, permissionless timeout refund, and claim.
 - Wallet rejection, failed execution, refresh, mobile layout, and invite-link behavior.
 
 ## 5. Seed and hand to testers

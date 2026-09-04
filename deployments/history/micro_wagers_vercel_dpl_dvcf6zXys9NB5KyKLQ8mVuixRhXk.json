@@ -3,18 +3,18 @@
   "project_name": "microwagers",
   "vercel_team": "demi17",
   "production_url": "https://microwagers.vercel.app",
-  "deployment_url": "https://microwagers-8ipe5rj9p-demi17.vercel.app",
-  "deployment_id": "dpl_w2LqVe8i3JiX8vfUREQue8PrRV8b",
+  "deployment_url": "https://microwagers-dotu2b7gy-demi17.vercel.app",
+  "deployment_id": "dpl_dvcf6zXys9NB5KyKLQ8mVuixRhXk",
   "source_repository": "https://github.com/Demigodd00/demigodd00-genlayer-apps",
   "source_branch": "main",
-  "source_commit": "793fcec27d554500d2f10ae66fbcc58cf53a0f4d",
+  "source_commit": "ae5327c4ec2ec88e3200dacb108597de328da146",
   "root_directory": "apps/microwagers-web",
   "framework": "Next.js",
   "node_engine": "22.x",
-  "contract_address": "0xe7B8E25a7608176168d4cfA84691B53d1715bADE",
+  "contract_address": "0x5D2679a7277D05E5bE9a6Bf60526D0fC7C1d477C",
   "network": "StudioNet",
   "public_environment": {
-    "NEXT_PUBLIC_MICROWAGERS_ADDRESS": "0xe7B8E25a7608176168d4cfA84691B53d1715bADE",
+    "NEXT_PUBLIC_MICROWAGERS_ADDRESS": "0x5D2679a7277D05E5bE9a6Bf60526D0fC7C1d477C",
     "NEXT_PUBLIC_NETWORK_NAME": "StudioNet"
   },
   "secret_environment_uploaded": false,
@@ -23,7 +23,7 @@
     "skip_unaffected_deployments": true,
     "ignored_build_step": "git diff HEAD^ HEAD --quiet -- \":(top)apps/microwagers-web\""
   },
-  "provenance_note": "This record identifies the verified V1.2 application-code deployment. Later evidence-only commits do not change the shipped app or contract source.",
+  "provenance_note": "Archived V1.1 hosting record. Superseded by the V1.2 provenance and refund-recovery release.",
   "verification": {
     "home_status": 200,
     "status_page_status": 200,
@@ -33,19 +33,17 @@
     "sitemap_status": 200,
     "canonical_url": "https://microwagers.vercel.app/",
     "desktop_contract_read": true,
-    "settled_audit_trail_checked": true,
-    "timeout_refund_state_checked": true,
-    "source_wording_checked": true,
+    "mobile_layout_checked": true,
     "security_headers_checked": true,
     "durable_workflow_routes_checked": true,
     "legacy_reviewer_link_redirects_checked": true,
     "multi_wallet_discovery_tests_passed": true,
     "github_ci": {
       "conclusion": "success",
-      "commit": "793fcec27d554500d2f10ae66fbcc58cf53a0f4d",
-      "release_gate_url": "https://github.com/Demigodd00/demigodd00-genlayer-apps/actions/runs/33919353013",
-      "repository_tests_url": "https://github.com/Demigodd00/demigodd00-genlayer-apps/actions/runs/33919353031"
+      "commit": "ae5327c4ec2ec88e3200dacb108597de328da146",
+      "release_gate_url": "https://github.com/Demigodd00/demigodd00-genlayer-apps/actions/runs/33608231361",
+      "repository_tests_url": "https://github.com/Demigodd00/demigodd00-genlayer-apps/actions/runs/33608231432"
     }
   },
-  "verified_at": "2026-09-04T21:48:00Z"
+  "verified_at": "2026-09-02T08:22:32Z"
 }

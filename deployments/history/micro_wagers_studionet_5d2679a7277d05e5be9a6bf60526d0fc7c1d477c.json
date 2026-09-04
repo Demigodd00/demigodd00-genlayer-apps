@@ -1,18 +1,17 @@
 {
   "contract": "MicroWagers",
-  "version": "1.2.0-studionet",
+  "version": "1.1.0-studionet",
   "network": "studionet",
-  "address": "0xe7B8E25a7608176168d4cfA84691B53d1715bADE",
-  "transaction_hash": "0xf15e83775086b60e015365b76df056dfb1e7a9c9f836afb26f8bae8bd7e0d0d8",
+  "address": "0x5D2679a7277D05E5bE9a6Bf60526D0fC7C1d477C",
+  "transaction_hash": "0xde75d1627f2eb2666930615ec4d54eed6d5ac33d7a4c7ce449740ecab3a61e09",
   "deployer": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
   "deployer_role": "deployment_and_zero_fee_treasury_only_no_admin_controls",
   "treasury": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
   "constructor_args": {
     "fee_bps": 0,
-    "appeal_window_secs": 300,
-    "resolution_timeout_secs": 600
+    "appeal_window_secs": 300
   },
-  "source_sha256": "e15382ce97e3ecfddcd2789597a0e54b302293e0e8a736011319c6ede30ea7d9",
+  "source_sha256": "86fd9fc88f96bbf49886d24cfa1f9deb5d74c10db01cc2114369b7bd804e7b25",
   "runner_dependency": "# { \"Depends\": \"py-genlayer:1jb45aa8ynh2a9c9xn3b7qqh8sm5q93hwfp7jqmwsfhh8jpz09h6\" }",
   "preflight_skipped": false,
   "receipt_status": "FINALIZED",
@@ -23,15 +22,9 @@
     "experimental": true,
     "fee_bps": "0",
     "max_page_size": "25",
-    "max_source_bytes": "100000",
-    "max_source_chars": "8000",
-    "resolution_timeout_secs": "600",
-    "source_policy": "STRICT_UTF8_SHA256_VALIDATOR_FETCH_AND_SNAPSHOT",
     "total_created": "0",
     "total_settled": "0",
-    "treasury": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
-    "version": "1.2.0-studionet"
+    "treasury": "0x1adf37F016384714F683CaC4d0a261A6d4e27033"
   },
-  "deployed_at": "2026-09-04T21:05:42.588437+00:00",
-  "previous_address": "0x5D2679a7277D05E5bE9a6Bf60526D0fC7C1d477C"
+  "deployed_at": "2026-08-30T07:01:49.952654+00:00"
 }

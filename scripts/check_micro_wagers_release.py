@@ -76,6 +76,8 @@ def verify_records() -> tuple[bool, dict | None]:
         "reject-noncreator-cancel",
         "cancel-open-wager",
         "create-lifecycle",
+        "cancel-expired-lifecycle",
+        "create-lifecycle-final",
         "create-recovery",
         "accept-recovery-wager",
         "reject-early-recovery",
@@ -83,6 +85,7 @@ def verify_records() -> tuple[bool, dict | None]:
         "reject-creator-self-accept",
         "reject-wrong-accept-stake",
         "accept-wager",
+        "accept-wager-final",
         "reject-early-resolution",
         "resolve-wager",
         "reject-claim-during-appeal-window",
@@ -116,6 +119,10 @@ def verify_records() -> tuple[bool, dict | None]:
         and re.fullmatch(r"[0-9a-f]{64}", str(appeal_record.get("source_digest", ""))) is not None,
         "required acceptance steps": required_steps.issubset(transactions)
         and all(transactions[step].get("checked") is True for step in required_steps),
+        "positive matched acceptance": transactions.get("accept-wager-final", {}).get("execution_succeeded") is True,
+        "expired harness wager recovered": transactions.get("accept-wager", {}).get("classification")
+        == "EXPECTED_CONTRACT_REJECTION_AFTER_HARNESS_DEADLINE_EXPIRED"
+        and acceptance.get("transfer_checks", {}).get("cancel-expired-lifecycle", {}).get("value_credited") is True,
         "cancellation refund verified": acceptance.get("transfer_checks", {}).get("cancel-open-wager", {}).get("value_credited") is True,
         "resolution timeout refunds verified": acceptance.get("transfer_checks", {}).get("void-unresolved", {}).get("all_value_credited") is True,
         "winner payout verified": acceptance.get("transfer_checks", {}).get("claim-wager", {}).get("value_credited") is True,

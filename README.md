@@ -23,7 +23,7 @@ StreakPact V2.2 is one product in this repository. It supports self-stake pacts 
 | StreakPact V1 | Strong concept, unsafe period accounting | Historical deployed prototype; do not promote |
 | MicroWagers | Strong: public-source interpretation directly controls peer escrow settlement | Verified StudioNet test-token release |
 
-**MicroWagers release:** [live app](https://microwagers.vercel.app) · [read-only status](https://microwagers.vercel.app/status) · [GenLayer Explorer contract](https://explorer-studio.genlayer.com/address/0x5D2679a7277D05E5bE9a6Bf60526D0fC7C1d477C) · [paste-ready Portal submission](docs/MICROWAGERS_SUBMISSION.md)
+**MicroWagers release:** [live app](https://microwagers.vercel.app) · [read-only status](https://microwagers.vercel.app/status) · [GenLayer Explorer contract](https://explorer-studio.genlayer.com/address/0xe7B8E25a7608176168d4cfA84691B53d1715bADE) · [paste-ready Portal submission](docs/MICROWAGERS_SUBMISSION.md)
 
 ## Why GenLayer
 
@@ -133,12 +133,12 @@ export STREAKPACT_TEST_EVIDENCE_URL=https://gateway.pinata.cloud/ipfs/...
 gltest tests/integration/test_streak_pact_v2_evidence_studionet.py --network studionet -v -s
 ```
 
-Deploy MicroWagers with a short StudioNet appeal window. The script records the transaction only after finality, successful execution, source verification, and configuration verification. Then configure `apps/microwagers-web/.env.local` with the recorded address and run the exact-release acceptance:
+Deploy MicroWagers with a short StudioNet appeal window and bounded unresolved-market recovery. The script records the transaction only after finality, successful execution, source verification, and configuration verification. Then configure `apps/microwagers-web/.env.local` with the recorded address and run the exact-release acceptance:
 
 ```bash
 export MICROWAGERS_PRIVATE_KEY=0x...
 export MICROWAGERS_NETWORK=studionet
-python scripts/deploy_micro_wagers.py --fee-bps 0 --appeal-window-secs 300
+python scripts/deploy_micro_wagers.py --fee-bps 0 --appeal-window-secs 300 --resolution-timeout-secs 600
 python scripts/microwagers_acceptance.py
 ```
 

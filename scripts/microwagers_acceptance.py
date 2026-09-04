@@ -120,25 +120,45 @@ class Acceptance:
         self.record["updated_at"] = timestamp()
         pending = RECORD_PATH.with_suffix(".json.tmp")
         pending.write_text(json.dumps(self.record, indent=2, default=str) + "\n", encoding="utf-8")
-        pending.replace(RECORD_PATH)
+        for attempt in range(6):
+            try:
+                pending.replace(RECORD_PATH)
+                return
+            except PermissionError:
+                if attempt == 5:
+                    raise
+                time.sleep(0.25 * (attempt + 1))
 
     def rpc(self, method: str, params: list) -> dict:
-        delay = 2.25 - (time.monotonic() - self.last_request)
-        if delay > 0:
-            time.sleep(delay)
         if method == "eth_sendRawTransaction" and self.active_step:
             entry = self.record["transactions"][self.active_step]
             entry["broadcast_attempted"] = True
             entry["evm_transaction_hash"] = Web3.to_hex(Web3.keccak(hexstr=params[0]))
             self.save()
-        self.last_request = time.monotonic()
-        response = self.http.post(
-            RPC_URL,
-            json={"jsonrpc": "2.0", "id": int(time.time() * 1000), "method": method, "params": params},
-            timeout=(10, 120),
-        )
-        response.raise_for_status()
-        payload = response.json()
+        attempts = 1 if method == "eth_sendRawTransaction" else 5
+        payload = None
+        last_error = None
+        for attempt in range(attempts):
+            delay = 2.25 - (time.monotonic() - self.last_request)
+            if delay > 0:
+                time.sleep(delay)
+            self.last_request = time.monotonic()
+            try:
+                response = self.http.post(
+                    RPC_URL,
+                    json={"jsonrpc": "2.0", "id": int(time.time() * 1000), "method": method, "params": params},
+                    timeout=(10, 120),
+                )
+                response.raise_for_status()
+                payload = response.json()
+                break
+            except (requests.RequestException, ValueError) as error:
+                last_error = error
+                if attempt + 1 == attempts:
+                    raise
+                time.sleep(min(10, 2 ** attempt))
+        if payload is None:
+            raise RuntimeError(f"{method}: RPC failed after retries: {last_error}")
         if payload.get("error"):
             error = payload["error"]
             raise RuntimeError(f"{method}: RPC {error.get('code')}: {error.get('message')}")
@@ -432,7 +452,7 @@ class Acceptance:
         )
 
         lifecycle_question = "Release acceptance: when resolved, does Example Domain say it is for illustrative examples?"
-        wager_id = self.create("lifecycle", lifecycle_question, 300)
+        wager_id = self.create("lifecycle", lifecycle_question, 600)
         self.assert_fields("lifecycle-open", self.read("get_wager", [wager_id]), {"status": "OPEN", "stake_atto": str(STAKE)})
         self.write(
             "reject-creator-self-accept",
@@ -449,7 +469,27 @@ class Acceptance:
             role="tester",
             expected_error="must stake exactly",
         )
-        self.write("accept-wager", "accept_wager", [wager_id], value=STAKE, role="tester")
+        accept_step = "accept-wager"
+        prior_accept = self.record["transactions"].get(accept_step)
+        if prior_accept and prior_accept.get("status") == "FINALIZED" and prior_accept.get("execution_succeeded") is False:
+            expired = self.read("get_wager", [wager_id])
+            if expired.get("status") != "OPEN" or int(expired["deadline_unix"]) >= int(time.time()):
+                raise RuntimeError("Failed acceptance cannot be classified as a deadline-expired harness attempt")
+            prior_accept["checked"] = True
+            prior_accept["classification"] = "EXPECTED_CONTRACT_REJECTION_AFTER_HARNESS_DEADLINE_EXPIRED"
+            prior_accept["expected_error"] = "deadline elapsed before the positive match reached execution"
+            self.save()
+            self.write("cancel-expired-lifecycle", "cancel_wager", [wager_id])
+            self.verify_transfer("cancel-expired-lifecycle", self.accounts["creator"].address, STAKE)
+            lifecycle_question = "Release acceptance final: when resolved, does Example Domain describe illustrative examples?"
+            wager_id = self.create("lifecycle-final", lifecycle_question, 600)
+            self.assert_fields(
+                "lifecycle-final-open",
+                self.read("get_wager", [wager_id]),
+                {"status": "OPEN", "stake_atto": str(STAKE)},
+            )
+            accept_step = "accept-wager-final"
+        self.write(accept_step, "accept_wager", [wager_id], value=STAKE, role="tester")
         live = self.assert_fields(
             "lifecycle-live",
             self.read("get_wager", [wager_id]),
