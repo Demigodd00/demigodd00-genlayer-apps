@@ -9,6 +9,7 @@ export async function GET() {
   const studioNetConfigured = network.toLowerCase() === "studionet";
   return NextResponse.json({
     product: "MicroWagers",
+    release: "1.2.0",
     network: network || "Not configured",
     contractConfigured,
     studioNetConfigured,

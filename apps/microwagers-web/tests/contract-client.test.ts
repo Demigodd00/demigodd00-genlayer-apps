@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { formatGen, friendlyError, parseGen, withReadRetry } from "../src/lib/contract";
+import { formatGen, friendlyError, isPublicHttpsSource, parseGen, withReadRetry } from "../src/lib/contract";
 
 test("GEN parsing and formatting preserve 18-decimal integer values", () => {
   assert.equal(parseGen("0.001"), 10n ** 15n);
@@ -32,4 +32,16 @@ test("contract errors are not retried and expected reasons are cleaned", async (
 test("raw network and wallet errors become useful messages", () => {
   assert.match(friendlyError(new Error("Failed to fetch Version: viem@2.55.19")), /StudioNet is temporarily unreachable/);
   assert.equal(friendlyError(new Error("User rejected request")), "The wallet request was cancelled.");
+});
+
+test("resolution sources match the contract's public HTTPS boundary", () => {
+  assert.equal(isPublicHttpsSource("https://example.com/results"), true);
+  assert.equal(isPublicHttpsSource("http://example.com/results"), false);
+  assert.equal(isPublicHttpsSource("HTTPS://example.com/results"), false);
+  assert.equal(isPublicHttpsSource("https://localhost/results"), false);
+  assert.equal(isPublicHttpsSource("https://127.0.0.1/results"), false);
+  assert.equal(isPublicHttpsSource("https://user@example.com/results"), false);
+  assert.equal(isPublicHttpsSource("https://example..com/results"), false);
+  assert.equal(isPublicHttpsSource("https://example.com:invalid/results"), false);
+  assert.equal(isPublicHttpsSource("https://example.com/bad path"), false);
 });

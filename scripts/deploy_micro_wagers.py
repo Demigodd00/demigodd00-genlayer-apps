@@ -5,7 +5,7 @@ Environment:
     MICROWAGERS_NETWORK        studionet (default) | localnet
 
 Example:
-    python scripts/deploy_micro_wagers.py --fee-bps 0 --appeal-window-secs 300
+    python scripts/deploy_micro_wagers.py --fee-bps 0 --appeal-window-secs 300 --resolution-timeout-secs 600
 """
 
 import argparse
@@ -36,6 +36,8 @@ ADDRESS_PATTERN = re.compile(r"^0x[0-9a-fA-F]{40}$")
 FEE_BPS_CAP = 1000
 MIN_APPEAL_WINDOW_SECS = 5 * 60
 MAX_APPEAL_WINDOW_SECS = 7 * 24 * 60 * 60
+MIN_RESOLUTION_TIMEOUT_SECS = 5 * 60
+MAX_RESOLUTION_TIMEOUT_SECS = 7 * 24 * 60 * 60
 
 
 def parse_args() -> argparse.Namespace:
@@ -44,6 +46,7 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument("--fee-bps", type=int, default=0)
     parser.add_argument("--appeal-window-secs", type=int, default=300)
+    parser.add_argument("--resolution-timeout-secs", type=int, default=600)
     parser.add_argument(
         "--resume-transaction",
         help="Verify and record an already-submitted deployment instead of deploying again",
@@ -62,6 +65,10 @@ def validate_configuration(args: argparse.Namespace, network_name: str) -> None:
     if not MIN_APPEAL_WINDOW_SECS <= args.appeal_window_secs <= MAX_APPEAL_WINDOW_SECS:
         raise ValueError(
             f"appeal_window_secs must be {MIN_APPEAL_WINDOW_SECS}..{MAX_APPEAL_WINDOW_SECS} seconds"
+        )
+    if not MIN_RESOLUTION_TIMEOUT_SECS <= args.resolution_timeout_secs <= MAX_RESOLUTION_TIMEOUT_SECS:
+        raise ValueError(
+            f"resolution_timeout_secs must be {MIN_RESOLUTION_TIMEOUT_SECS}..{MAX_RESOLUTION_TIMEOUT_SECS} seconds"
         )
     if network_name == "studionet" and args.fee_bps != 0:
         raise ValueError("MicroWagers StudioNet releases must use --fee-bps 0")
@@ -145,8 +152,13 @@ def verify_deployed_configuration(client, address: str, account, args: argparse.
     expected = {
         "fee_bps": str(args.fee_bps),
         "appeal_window_secs": str(args.appeal_window_secs),
+        "resolution_timeout_secs": str(args.resolution_timeout_secs),
         "experimental": True,
         "max_page_size": "25",
+        "max_source_bytes": "100000",
+        "max_source_chars": "8000",
+        "source_policy": "STRICT_UTF8_SHA256_VALIDATOR_FETCH_AND_SNAPSHOT",
+        "version": "1.2.0-studionet",
     }
     if not isinstance(stats, dict) or any(stats.get(key) != value for key, value in expected.items()):
         raise RuntimeError("deployed settings do not match the requested release")
@@ -205,7 +217,7 @@ def main() -> None:
     runner_dependency = code.splitlines()[0]
     account = Account.from_key(private_key)
     client = create_client(chain=chains[network_name], account=account)
-    constructor_args = [args.fee_bps, args.appeal_window_secs]
+    constructor_args = [args.fee_bps, args.appeal_window_secs, args.resolution_timeout_secs]
 
     print(
         f"network={network_name} deployer={account.address} "
@@ -232,7 +244,7 @@ def main() -> None:
 
     record = {
         "contract": "MicroWagers",
-        "version": "1.1.0-studionet",
+        "version": "1.2.0-studionet",
         "network": network_name,
         "address": contract_address,
         "transaction_hash": str(tx_hash),
@@ -242,6 +254,7 @@ def main() -> None:
         "constructor_args": {
             "fee_bps": args.fee_bps,
             "appeal_window_secs": args.appeal_window_secs,
+            "resolution_timeout_secs": args.resolution_timeout_secs,
         },
         "source_sha256": source_sha256,
         "runner_dependency": runner_dependency,

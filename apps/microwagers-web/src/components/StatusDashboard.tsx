@@ -34,7 +34,7 @@ export default function StatusDashboard() {
       <section className="health-grid" aria-label="Runtime release configuration"><Health label="Contract" ready={health?.contractConfigured} /><Health label="StudioNet" ready={health?.studioNetConfigured} /><Health label="Release configuration" ready={health?.readyForStudioNetTesting} /></section>
       {error ? <div className="status-notice"><strong>Metrics unavailable</strong><p>{error}</p></div> : !stats ? <div className="loading-panel"><span />Loading contract activity…</div> : (
         <>
-          <section className="status-metrics"><Metric label="Wagers created" value={stats.total_created} /><Metric label="Wagers settled" value={stats.total_settled} /><Metric label="Protocol fee" value={`${Number(stats.fee_bps) / 100}%`} /><Metric label="Appeal window" value={duration(stats.appeal_window_secs)} /></section>
+          <section className="status-metrics"><Metric label="Wagers created" value={stats.total_created} /><Metric label="Wagers settled" value={stats.total_settled} /><Metric label="Protocol fee" value={`${Number(stats.fee_bps) / 100}%`} /><Metric label="Appeal window" value={duration(stats.appeal_window_secs)} /><Metric label="Refund timeout" value={duration(stats.resolution_timeout_secs)} /></section>
           <section className="owner-boundary"><div><p className="eyebrow">Owner boundary</p><h2>No settlement controls.</h2></div><p>The deployer cannot rewrite questions, choose winners, block appeals, or move participant stakes. This page only reads public configuration and activity.</p></section>
         </>
       )}

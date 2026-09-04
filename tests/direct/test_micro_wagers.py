@@ -1,4 +1,5 @@
 ﻿import json
+import hashlib
 from datetime import datetime, timezone
 
 import pytest
@@ -6,6 +7,8 @@ import pytest
 STAKE = 10**18
 APPEAL_WINDOW = 3 * 24 * 60 * 60
 TEST_NOW_UNIX = 2_000_000_000
+SOURCE_BODY = "Team X won the grand final 3-1."
+SOURCE_DIGEST = hashlib.sha256(SOURCE_BODY.encode("utf-8")).hexdigest()
 
 
 def _addr_hex(a) -> str:
@@ -40,10 +43,10 @@ def _mock_verdict(direct_vm, outcome: str, confidence: int = 80, reason: str = "
     )
 
 
-def _mock_source(direct_vm) -> None:
+def _mock_source(direct_vm, body=SOURCE_BODY, status: int = 200) -> None:
     direct_vm.mock_web(
         r".*example\.com/.*",
-        {"status": 200, "body": "Team X won the grand final 3-1."},
+        {"status": status, "body": body},
     )
 
 
@@ -74,13 +77,44 @@ def test_create_wager_stores_terms(direct_vm, direct_deploy, direct_alice):
 
 
 def test_studionet_appeal_window_is_configurable(direct_deploy):
-    contract = direct_deploy("contracts/micro_wagers.py", 0, 300)
+    contract = direct_deploy("contracts/micro_wagers.py", 0, 300, 600)
     assert contract.get_stats()["appeal_window_secs"] == "300"
+    assert contract.get_stats()["resolution_timeout_secs"] == "600"
 
 
 def test_rejects_appeal_window_below_contract_minimum(direct_deploy):
     with pytest.raises(Exception, match="appeal window must be"):
         direct_deploy("contracts/micro_wagers.py", 0, 299)
+
+
+def test_rejects_resolution_timeout_below_contract_minimum(direct_deploy):
+    with pytest.raises(Exception, match="resolution timeout must be"):
+        direct_deploy("contracts/micro_wagers.py", 0, 300, 299)
+
+
+@pytest.mark.parametrize(
+    "source_url",
+    [
+        "https://",
+        "http://example.com/results",
+        "HTTPS://example.com/results",
+        "https://localhost/results",
+        "https://127.0.0.1/results",
+        "https://user@example.com/results",
+        "https://example..com/results",
+        "https://example.com:invalid/results",
+        "https://example.com/bad path",
+    ],
+)
+def test_create_rejects_non_public_or_malformed_sources(
+    source_url, direct_vm, direct_deploy, direct_alice
+):
+    contract = direct_deploy("contracts/micro_wagers.py")
+    direct_vm.sender = direct_alice
+    direct_vm.value = STAKE
+    with pytest.raises(Exception, match="resolution source"):
+        contract.create_wager("question", "side a", "side b", source_url, _deadline(120))
+    direct_vm.value = 0
 
 
 def test_create_rejects_zero_stake(direct_vm, direct_deploy, direct_alice):
@@ -206,6 +240,137 @@ def test_resolve_creator_wins(direct_vm, direct_deploy, direct_alice, direct_bob
     assert w["outcome_label"] == "Team X wins"
     assert w["confidence_bucket"] == "70"
     assert "[APPEAL" not in w["verdict_reason"]
+    assert w["original_record"]["source_digest"] == SOURCE_DIGEST
+    assert w["original_record"]["source_bytes"] == str(len(SOURCE_BODY.encode("utf-8")))
+    assert w["original_record"]["source_chars"] == str(len(SOURCE_BODY))
+    assert w["original_record"]["provenance"] == "GENLAYER_VALIDATOR_FETCH_AT_ADJUDICATION"
+
+
+def test_validator_receives_complete_source_and_records_exact_digest(
+    direct_vm, direct_deploy, direct_alice, direct_bob
+):
+    direct_vm.check_pickling = True
+    contract = direct_deploy("contracts/micro_wagers.py")
+    wid = _create(direct_vm, contract, direct_alice)
+    direct_vm.sender = direct_bob
+    direct_vm.value = STAKE
+    contract.accept_wager(wid)
+    direct_vm.value = 0
+
+    marker = "FULL_SOURCE_TAIL"
+    page = ("é" * (8_000 - len(marker))) + marker
+    body = page.encode("utf-8")
+    _warp_past(_deadline(120), direct_vm)
+    _mock_source(direct_vm, page)
+    direct_vm.mock_llm(
+        r"(?s).*FULL_SOURCE_TAIL.*",
+        json.dumps(
+            {
+                "outcome": "A",
+                "confidence": 90,
+                "reason": "The complete source, including its tail, supports side A.",
+            }
+        ),
+    )
+    contract.resolve_wager(wid)
+
+    record = contract.get_wager(wid)["original_record"]
+    assert record["source_digest"] == hashlib.sha256(body).hexdigest()
+    assert record["source_snapshot"] == page
+    assert record["source_bytes"] == str(len(body))
+    assert record["source_chars"] == "8000"
+
+
+@pytest.mark.parametrize(
+    ("body", "message"),
+    [
+        ("x" * 8_001, "8000 character limit"),
+        ("x" * 100_001, "100000 byte limit"),
+        (b"\xff\xfe", "valid UTF-8"),
+        ("valid prefix\x00invalid suffix", "contains invalid text"),
+    ],
+    ids=["character-limit", "byte-limit", "invalid-utf8", "nul-text"],
+)
+def test_invalid_source_bodies_are_rejected_without_truncation(
+    body, message, direct_vm, direct_deploy, direct_alice, direct_bob
+):
+    contract = direct_deploy("contracts/micro_wagers.py")
+    wid = _create(direct_vm, contract, direct_alice)
+    direct_vm.sender = direct_bob
+    direct_vm.value = STAKE
+    contract.accept_wager(wid)
+    direct_vm.value = 0
+    _warp_past(_deadline(120), direct_vm)
+    _mock_source(direct_vm, body)
+
+    with pytest.raises(Exception, match=message):
+        contract.resolve_wager(wid)
+    wager = contract.get_wager(wid)
+    assert wager["status"] == "LIVE"
+    assert wager["original_record"]["exists"] is False
+
+
+def test_validator_rejects_a_different_source_snapshot(
+    direct_vm, direct_deploy, direct_alice, direct_bob
+):
+    contract = direct_deploy("contracts/micro_wagers.py")
+    wid = _create(direct_vm, contract, direct_alice)
+    direct_vm.sender = direct_bob
+    direct_vm.value = STAKE
+    contract.accept_wager(wid)
+    direct_vm.value = 0
+    _warp_past(_deadline(120), direct_vm)
+    _mock_source(direct_vm)
+    _mock_verdict(direct_vm, "A", confidence=90)
+    contract.resolve_wager(wid)
+
+    direct_vm.clear_mocks()
+    _mock_source(direct_vm, "A validator fetched different source bytes.")
+    _mock_verdict(direct_vm, "A", confidence=90)
+    assert direct_vm.run_validator() is False
+
+
+def test_resolution_timeout_allows_permissionless_two_party_refund(
+    direct_vm, direct_deploy, direct_alice, direct_bob, direct_charlie
+):
+    transfers = []
+
+    def capture(_vm, request):
+        if "EthSend" in request:
+            transfer = request["EthSend"]
+            transfers.append((str(transfer["address"]).lower(), int(transfer["value"])))
+            return {"ok": None}
+        return None
+
+    direct_vm._gl_call_hook = capture
+    contract = direct_deploy("contracts/micro_wagers.py", 0, 300, 300)
+    deadline = _deadline(120)
+    wid = _create(direct_vm, contract, direct_alice, deadline=deadline)
+    direct_vm.sender = direct_bob
+    direct_vm.value = STAKE
+    contract.accept_wager(wid)
+    direct_vm.value = 0
+    _warp_past(deadline, direct_vm)
+    _mock_source(direct_vm, "unavailable", status=503)
+
+    with pytest.raises(Exception, match="source temporarily unavailable"):
+        contract.resolve_wager(wid)
+    with pytest.raises(Exception, match="recovery window is still open"):
+        contract.void_unresolved(wid)
+    assert contract.get_wager(wid)["status"] == "LIVE"
+
+    direct_vm.warp(datetime.fromtimestamp(deadline + 301, tz=timezone.utc).isoformat())
+    direct_vm.sender = direct_charlie
+    contract.void_unresolved(wid)
+    wager = contract.get_wager(wid)
+    assert wager["status"] == "VOIDED"
+    assert wager["recoverable"] is False
+    assert wager["original_record"]["exists"] is False
+    assert wager["verdict_reason"].startswith("[RESOLUTION TIMEOUT]")
+    assert transfers == [
+        (_addr_hex(direct_alice).lower(), STAKE),
+        (_addr_hex(direct_bob).lower(), STAKE),
+    ]
 
 
 def test_resolve_taker_wins(direct_vm, direct_deploy, direct_alice, direct_bob):
@@ -305,6 +470,7 @@ def test_appeal_upheld_keeps_winner_adds_bonus(direct_vm, direct_deploy, direct_
     _mock_verdict(direct_vm, "A", confidence=70)
     _mock_source(direct_vm)
     contract.resolve_wager(wid)
+    original = contract.get_wager(wid)["original_record"].copy()
 
     direct_vm.sender = direct_bob
     direct_vm.value = STAKE
@@ -316,6 +482,10 @@ def test_appeal_upheld_keeps_winner_adds_bonus(direct_vm, direct_deploy, direct_
     assert w["winner"].lower() == _addr_hex(direct_alice).lower()
     assert w["pot_bonus_atto"] == str(STAKE)
     assert w["verdict_reason"].startswith("[APPEAL UPHELD]")
+    assert w["original_record"] == original
+    assert w["appeal_record"]["exists"] is True
+    assert w["appeal_record"]["source_digest"] == SOURCE_DIGEST
+    assert w["appeal_record"]["provenance"] == "GENLAYER_VALIDATOR_REFETCH_AT_APPEAL"
 
 
 def test_appeal_overturned_flips_winner(direct_vm, direct_deploy, direct_alice, direct_bob):
@@ -330,10 +500,12 @@ def test_appeal_overturned_flips_winner(direct_vm, direct_deploy, direct_alice, 
     _mock_verdict(direct_vm, "A")
     _mock_source(direct_vm)
     contract.resolve_wager(wid)
+    original = contract.get_wager(wid)["original_record"].copy()
 
     direct_vm.clear_mocks()
     _mock_verdict(direct_vm, "B", confidence=85)
-    _mock_source(direct_vm)
+    appeal_body = "Official federation records show Team X lost the final."
+    _mock_source(direct_vm, appeal_body)
 
     direct_vm.sender = direct_bob
     direct_vm.value = STAKE
@@ -344,6 +516,10 @@ def test_appeal_overturned_flips_winner(direct_vm, direct_deploy, direct_alice, 
     assert w["winner"].lower() == _addr_hex(direct_bob).lower()
     assert w["verdict_reason"].startswith("[OVERTURNED ON APPEAL]")
     assert w["pot_bonus_atto"] == "0"
+    assert w["original_record"] == original
+    assert w["appeal_record"]["exists"] is True
+    assert w["appeal_record"]["source_digest"] == hashlib.sha256(appeal_body.encode("utf-8")).hexdigest()
+    assert w["appeal_record"]["source_digest"] != w["original_record"]["source_digest"]
 
     _warp_past_appeal(contract, wid, direct_vm)
     direct_vm.sender = direct_bob
@@ -428,5 +604,9 @@ def test_list_and_stats_views(direct_vm, direct_deploy, direct_alice, direct_bob
     stats = contract.get_stats()
     assert stats["total_created"] == "2"
     assert stats["total_settled"] == "0"
+    assert stats["version"] == "1.2.0-studionet"
+    assert stats["max_source_bytes"] == "100000"
+    assert stats["max_source_chars"] == "8000"
+    assert stats["source_policy"] == "STRICT_UTF8_SHA256_VALIDATOR_FETCH_AND_SNAPSHOT"
 
 

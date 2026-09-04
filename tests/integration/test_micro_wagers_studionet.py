@@ -5,6 +5,7 @@ from gltest.assertions import tx_execution_succeeded
 
 STAKE = 10**15
 APPEAL_WINDOW_SECS = 300
+RESOLUTION_TIMEOUT_SECS = 600
 
 
 def _wait_until(unix_ts: int) -> None:
@@ -34,7 +35,7 @@ def _resolve(anyone_contract, wid):
 
 def test_resolvable_wager_creator_wins_on_studionet():
     factory = get_contract_factory("MicroWagers")
-    contract = factory.deploy(args=[0, APPEAL_WINDOW_SECS])
+    contract = factory.deploy(args=[0, APPEAL_WINDOW_SECS, RESOLUTION_TIMEOUT_SECS])
 
     accounts = get_accounts()
     alice, bob = accounts[0], accounts[1]
@@ -43,7 +44,7 @@ def test_resolvable_wager_creator_wins_on_studionet():
     deadline = int(time.time()) + 70
     wid = _create(
         contract,
-        "Open the source page. Does the page itself state that this domain is reserved for use in illustrative examples in documents?",
+        "When validators resolve after the deadline, does the source page state that this domain is reserved for use in illustrative examples in documents?",
         "Yes, the page states it is for use in illustrative examples",
         "No, the page states something different",
         "https://example.com/",
@@ -67,6 +68,8 @@ def test_resolvable_wager_creator_wins_on_studionet():
     assert w["outcome_label"] == "Yes, the page states it is for use in illustrative examples"
     assert w["winner"].lower() == alice.address.lower()
     assert len(w["verdict_reason"]) > 0
+    assert len(w["original_record"]["source_digest"]) == 64
+    assert w["original_record"]["provenance"] == "GENLAYER_VALIDATOR_FETCH_AT_ADJUDICATION"
 
     # Payout remains locked for the configured StudioNet appeal window.
     claim_tx = contract.claim(args=[wid]).transact()
@@ -80,7 +83,7 @@ def test_resolvable_wager_creator_wins_on_studionet():
 
 def test_undeterminable_wager_voids_on_studionet():
     factory = get_contract_factory("MicroWagers")
-    contract = factory.deploy(args=[0, APPEAL_WINDOW_SECS])
+    contract = factory.deploy(args=[0, APPEAL_WINDOW_SECS, RESOLUTION_TIMEOUT_SECS])
 
     accounts = get_accounts()
     bob = accounts[1]

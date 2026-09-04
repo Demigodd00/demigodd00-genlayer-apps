@@ -5,6 +5,7 @@ from gltest.assertions import tx_execution_succeeded
 
 STAKE = 10**15
 APPEAL_WINDOW_SECS = 300
+RESOLUTION_TIMEOUT_SECS = 600
 
 
 def _wait_until(unix_ts: int) -> None:
@@ -14,7 +15,7 @@ def _wait_until(unix_ts: int) -> None:
 
 def test_appeal_flow_with_bond_on_studionet():
     factory = get_contract_factory("MicroWagers")
-    contract = factory.deploy(args=[0, APPEAL_WINDOW_SECS])
+    contract = factory.deploy(args=[0, APPEAL_WINDOW_SECS, RESOLUTION_TIMEOUT_SECS])
 
     accounts = get_accounts()
     alice, bob = accounts[0], accounts[1]
@@ -24,7 +25,7 @@ def test_appeal_flow_with_bond_on_studionet():
 
     create_tx = contract.create_wager(
         args=[
-            "Open the source page. Does the page itself state that this domain is reserved for use in illustrative examples in documents?",
+            "When validators resolve after the deadline, does the source page state that this domain is reserved for use in illustrative examples in documents?",
             "Yes, the page states it is for use in illustrative examples",
             "No, the page states something different",
             "https://example.com/",
@@ -48,6 +49,8 @@ def test_appeal_flow_with_bond_on_studionet():
     assert w_before["status"] == "PROVISIONAL"
     original_winner = w_before["winner"].lower()
     assert w_before["appealed"] is False
+    original_record = w_before["original_record"]
+    assert len(original_record["source_digest"]) == 64
 
     # Loser appeals with a bond equal to the stake
     appealer_is_loser = bob.address.lower() == original_winner is False
@@ -65,6 +68,9 @@ def test_appeal_flow_with_bond_on_studionet():
     assert w_after["appealed"] is True
     assert len(w_after["appeal_statement"]) > 0
     assert w_after["status"] in ("PROVISIONAL", "VOIDED")
+    assert w_after["original_record"] == original_record
+    assert w_after["appeal_record"]["exists"] is True
+    assert len(w_after["appeal_record"]["source_digest"]) == 64
 
     if w_after["status"] == "VOIDED":
         # Appeal overturned into refund: no winner, no pot bonus

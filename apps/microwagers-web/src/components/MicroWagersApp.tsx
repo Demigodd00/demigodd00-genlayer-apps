@@ -8,7 +8,7 @@ export default function MicroWagersApp() {
         <div className="hero-copy">
           <div className="hero-kicker"><span />MicroWagers by demigodd00 · source-bound peer predictions</div>
           <h1>Make a call.<br />Name the source.</h1>
-          <p>Two sides stake test GEN. GenLayer validators read the chosen source and settle the result.</p>
+          <p>Two sides stake test GEN. After the deadline, GenLayer validators fetch the chosen source and settle the result.</p>
           <div className="hero-actions">
             <Link className="button button-primary button-large" href="/markets/new">Post a wager <span>→</span></Link>
             <Link className="button button-secondary button-large" href="/markets">Browse markets</Link>
@@ -27,7 +27,7 @@ export default function MicroWagersApp() {
           <div className="float-card appeal-float"><small>SETTLEMENT</small><strong>Appeal protected</strong></div>
         </div>
       </header>
-      <section className="trust-strip" aria-label="Product boundaries"><div><strong>Exact source</strong></div><div><strong>Two fixed sides</strong></div><div><strong>Time to appeal</strong></div></section>
+      <section className="trust-strip" aria-label="Product boundaries"><div><strong>Hashed source bytes</strong></div><div><strong>Two fixed sides</strong></div><div><strong>Timeout refunds</strong></div></section>
     </>
   );
 }

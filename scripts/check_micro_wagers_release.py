@@ -66,11 +66,20 @@ def verify_records() -> tuple[bool, dict | None]:
     address = str(deployment.get("address", ""))
     constructor = deployment.get("constructor_args", {})
     transactions = acceptance.get("transactions", {})
+    assertions = acceptance.get("assertions", {})
+    resolved_observed = assertions.get("resolved-decisively", {}).get("observed", {})
+    appealed_observed = assertions.get("appeal-reviewed", {}).get("observed", {})
+    original_record = resolved_observed.get("original_record", {})
+    appeal_record = appealed_observed.get("appeal_record", {})
     required_steps = {
         "create-cancellation",
         "reject-noncreator-cancel",
         "cancel-open-wager",
         "create-lifecycle",
+        "create-recovery",
+        "accept-recovery-wager",
+        "reject-early-recovery",
+        "void-unresolved",
         "reject-creator-self-accept",
         "reject-wrong-accept-stake",
         "accept-wager",
@@ -94,13 +103,21 @@ def verify_records() -> tuple[bool, dict | None]:
         "source and config verified": deployment.get("verified_source_and_config") is True,
         "zero fee": isinstance(constructor, dict) and constructor.get("fee_bps") == 0,
         "five-minute appeal": isinstance(constructor, dict) and constructor.get("appeal_window_secs") == 300,
+        "ten-minute resolution recovery": isinstance(constructor, dict) and constructor.get("resolution_timeout_secs") == 600,
+        "release version": deployment.get("version") == "1.2.0-studionet",
         "frontend exact address": read_frontend_address().lower() == address.lower(),
         "acceptance exact address": acceptance.get("contract", "").lower() == address.lower(),
         "acceptance source": acceptance.get("source_sha256") == deployment.get("source_sha256"),
         "acceptance passed": acceptance.get("result") == "PASS",
+        "original source fingerprint recorded": original_record.get("exists") is True
+        and re.fullmatch(r"[0-9a-f]{64}", str(original_record.get("source_digest", ""))) is not None,
+        "appeal record preserved separately": appealed_observed.get("original_record") == original_record
+        and appeal_record.get("exists") is True
+        and re.fullmatch(r"[0-9a-f]{64}", str(appeal_record.get("source_digest", ""))) is not None,
         "required acceptance steps": required_steps.issubset(transactions)
         and all(transactions[step].get("checked") is True for step in required_steps),
         "cancellation refund verified": acceptance.get("transfer_checks", {}).get("cancel-open-wager", {}).get("value_credited") is True,
+        "resolution timeout refunds verified": acceptance.get("transfer_checks", {}).get("void-unresolved", {}).get("all_value_credited") is True,
         "winner payout verified": acceptance.get("transfer_checks", {}).get("claim-wager", {}).get("value_credited") is True,
     }
     for label, passed in checks.items():
@@ -135,6 +152,7 @@ def verify_hosting(required: bool, deployment: dict | None) -> bool:
         "correct source commit": re.fullmatch(r"[0-9a-f]{40}", str(hosting.get("source_commit", ""))) is not None,
         "matching contract": hosting.get("contract_address", "").lower() == expected_address.lower(),
         "health identifies product": health.get("product") == "MicroWagers",
+        "health identifies release": health.get("release") == "1.2.0",
         "health identifies StudioNet": health.get("network") == "StudioNet",
         "health is release-ready": health.get("readyForStudioNetTesting") is True,
     }

@@ -86,7 +86,10 @@ class Acceptance:
         tester = Account.from_key(
             hmac.new(owner.key, b"microwagers/studionet/acceptance/tester/v1", hashlib.sha256).digest()
         )
-        self.accounts = {"creator": owner, "tester": tester}
+        observer = Account.from_key(
+            hmac.new(owner.key, b"microwagers/studionet/acceptance/observer/v1", hashlib.sha256).digest()
+        )
+        self.accounts = {"creator": owner, "tester": tester, "observer": observer}
         self.address = self.deployment["address"]
         self.role = "creator"
         self.active_step: str | None = None
@@ -168,8 +171,13 @@ class Acceptance:
         expected = {
             "fee_bps": "0",
             "appeal_window_secs": "300",
+            "resolution_timeout_secs": "600",
             "experimental": True,
             "max_page_size": "25",
+            "max_source_bytes": "100000",
+            "max_source_chars": "8000",
+            "source_policy": "STRICT_UTF8_SHA256_VALIDATOR_FETCH_AND_SNAPSHOT",
+            "version": "1.2.0-studionet",
         }
         if any(stats.get(key) != value for key, value in expected.items()):
             raise RuntimeError("The exact-release configuration is not active")
@@ -298,14 +306,20 @@ class Acceptance:
             raise RuntimeError(f"Could not uniquely identify acceptance wager: {question}")
         return matches[0]["id"]
 
-    def create(self, key: str, question: str, deadline_lead: int) -> str:
+    def create(
+        self,
+        key: str,
+        question: str,
+        deadline_lead: int,
+        source_url: str = "https://example.com/",
+    ) -> str:
         step = f"create-{key}"
         existing = self.record["transactions"].get(step)
         args = existing["args"] if existing else [
             question,
             "Yes — the source states it is for illustrative examples",
             "No — the source states something different",
-            "https://example.com/",
+            source_url,
             int(time.time()) + deadline_lead,
         ]
         self.write(step, "create_wager", args, value=STAKE)
@@ -343,6 +357,38 @@ class Acceptance:
         self.save()
         output({"transfer": step, "passed": True, "recipient": recipient, "value_atto": str(value)})
 
+    def verify_transfers(self, step: str, expected: list[tuple[str, int]]) -> None:
+        entry = self.record["transactions"][step]
+        receipt = self.rpc("eth_getTransactionByHash", [entry["transaction_hash"]])["result"]
+        children = receipt.get("triggered_transactions", [])
+        if len(children) != len(expected):
+            raise AssertionError(f"{step}: expected {len(expected)} native transfers")
+        observed = []
+        for child_hash in children:
+            child = self.rpc("eth_getTransactionByHash", [child_hash])["result"]
+            if not child or child.get("status") != "FINALIZED" or child.get("value_credited") is not True:
+                raise AssertionError(f"{step}: a native transfer did not finalize and credit")
+            observed.append((child.get("to_address", "").lower(), int(child.get("value", 0)), child_hash))
+        expected_normalized = sorted((recipient.lower(), value) for recipient, value in expected)
+        if sorted((recipient, value) for recipient, value, _ in observed) != expected_normalized:
+            raise AssertionError(f"{step}: refund recipients or values differ")
+        self.record.setdefault("transfer_checks", {})[step] = {
+            "checked_at": timestamp(),
+            "transfers": [
+                {
+                    "transaction": child_hash,
+                    "recipient": recipient,
+                    "value_atto": str(value),
+                    "status": "FINALIZED",
+                    "value_credited": True,
+                }
+                for recipient, value, child_hash in observed
+            ],
+            "all_value_credited": True,
+        }
+        self.save()
+        output({"transfers": step, "passed": True, "count": len(observed)})
+
     def run(self) -> None:
         self.preflight()
         if self.record.get("result") == "PASS":
@@ -364,7 +410,28 @@ class Acceptance:
         self.verify_transfer("cancel-open-wager", self.accounts["creator"].address, STAKE)
         output({"phase": "cancellation", "passed": True})
 
-        lifecycle_question = "Release acceptance: does Example Domain say it is for illustrative examples?"
+        recovery_question = "Release acceptance: can an unresolved market recover both test stakes?"
+        recovery_id = self.create(
+            "recovery",
+            recovery_question,
+            300,
+            source_url="https://unavailable.example/microwagers",
+        )
+        self.write("accept-recovery-wager", "accept_wager", [recovery_id], value=STAKE, role="tester")
+        recovery_live = self.assert_fields(
+            "recovery-live",
+            self.read("get_wager", [recovery_id]),
+            {"status": "LIVE", "recoverable": False},
+        )
+        self.write(
+            "reject-early-recovery",
+            "void_unresolved",
+            [recovery_id],
+            role="observer",
+            expected_error="resolution recovery window is still open",
+        )
+
+        lifecycle_question = "Release acceptance: when resolved, does Example Domain say it is for illustrative examples?"
         wager_id = self.create("lifecycle", lifecycle_question, 300)
         self.assert_fields("lifecycle-open", self.read("get_wager", [wager_id]), {"status": "OPEN", "stake_atto": str(STAKE)})
         self.write(
@@ -404,8 +471,19 @@ class Acceptance:
             resolved = self.read("get_wager", [wager_id])
             if resolved["status"] != "PROVISIONAL":
                 raise AssertionError(f"Expected a decisive provisional verdict, received {resolved['status']}")
-            if resolved["winner"].lower() not in {account.address.lower() for account in self.accounts.values()}:
+            participant_addresses = {
+                self.accounts["creator"].address.lower(),
+                self.accounts["tester"].address.lower(),
+            }
+            if resolved["winner"].lower() not in participant_addresses:
                 raise AssertionError("The validator returned a winner outside the two participants")
+            original_record = resolved.get("original_record", {})
+            if (
+                original_record.get("exists") is not True
+                or re.fullmatch(r"[0-9a-f]{64}", str(original_record.get("source_digest", ""))) is None
+                or original_record.get("provenance") != "GENLAYER_VALIDATOR_FETCH_AT_ADJUDICATION"
+            ):
+                raise AssertionError("Original adjudication provenance was not recorded")
             self.record["assertions"]["resolved-decisively"] = {
                 "checked_at": timestamp(),
                 "expected": {"status": "PROVISIONAL", "participant_winner": True},
@@ -445,6 +523,15 @@ class Acceptance:
             appealed = self.read("get_wager", [wager_id])
             if appealed.get("appealed") is not True or appealed["status"] not in {"PROVISIONAL", "VOIDED"}:
                 raise AssertionError("Appeal did not record a valid reviewed state")
+            if appealed.get("original_record") != resolved.get("original_record"):
+                raise AssertionError("Appeal overwrote the original adjudication record")
+            appeal_record = appealed.get("appeal_record", {})
+            if (
+                appeal_record.get("exists") is not True
+                or re.fullmatch(r"[0-9a-f]{64}", str(appeal_record.get("source_digest", ""))) is None
+                or appeal_record.get("provenance") != "GENLAYER_VALIDATOR_REFETCH_AT_APPEAL"
+            ):
+                raise AssertionError("Appeal adjudication provenance was not recorded")
             self.record["assertions"]["appeal-reviewed"] = {
                 "checked_at": timestamp(),
                 "expected": {"appealed": True, "status": "PROVISIONAL_OR_VOIDED"},
@@ -485,9 +572,27 @@ class Acceptance:
         else:
             output({"phase": "settlement", "passed": True, "result": "VOIDED_AND_REFUNDED"})
 
+        self.wait_until(int(recovery_live["resolution_recovery_unix"]) + 2, "resolution recovery timeout")
+        self.write("void-unresolved", "void_unresolved", [recovery_id], role="observer")
+        recovered = self.assert_fields(
+            "recovery-voided",
+            self.read("get_wager", [recovery_id]),
+            {"status": "VOIDED", "recoverable": False},
+        )
+        if recovered.get("original_record", {}).get("exists") is not False:
+            raise AssertionError("Timeout recovery must not fabricate an adjudication record")
+        self.verify_transfers(
+            "void-unresolved",
+            [
+                (self.accounts["creator"].address, STAKE),
+                (self.accounts["tester"].address, STAKE),
+            ],
+        )
+        output({"phase": "resolution-recovery", "passed": True, "caller": self.accounts["observer"].address})
+
         stats = self.read("get_stats", [])
-        if int(stats["total_created"]) < 2:
-            raise AssertionError("Exact release did not retain the two acceptance markets")
+        if int(stats["total_created"]) < 3:
+            raise AssertionError("Exact release did not retain the three acceptance markets")
         self.record["final_stats"] = stats
         self.record["completed_at"] = timestamp()
         self.record["result"] = "PASS"

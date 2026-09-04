@@ -25,6 +25,23 @@ export interface WagerSummary {
   appealed: boolean;
 }
 
+export interface AdjudicationRecord {
+  exists: boolean;
+  outcome: string;
+  outcome_label: string;
+  winner: string;
+  confidence_bucket: string;
+  reason: string;
+  source_url: string;
+  source_digest: string;
+  source_snapshot: string;
+  source_bytes: string;
+  source_chars: string;
+  judged_at_unix: string;
+  judged_at_iso: string;
+  provenance: string;
+}
+
 export interface WagerView extends WagerSummary {
   source_url: string;
   creator: string;
@@ -37,10 +54,14 @@ export interface WagerView extends WagerSummary {
   resolved_at_unix: string;
   resolved_at_iso: string;
   appeal_deadline_unix: string;
+  resolution_recovery_unix: string;
+  recoverable: boolean;
   claimable: boolean;
   appeal_statement: string;
   pot_bonus_atto: string;
   pot_atto: string;
+  original_record: AdjudicationRecord;
+  appeal_record: AdjudicationRecord;
 }
 
 export interface MarketStats {
@@ -49,8 +70,13 @@ export interface MarketStats {
   fee_bps: string;
   treasury: string;
   appeal_window_secs: string;
+  resolution_timeout_secs: string;
   experimental: boolean;
   max_page_size: string;
+  max_source_bytes: string;
+  max_source_chars: string;
+  source_policy: string;
+  version: string;
 }
 
 export interface TxProgress {
@@ -86,6 +112,20 @@ export function parseGen(value: string): bigint {
   if (!/^\d+(\.\d{0,18})?$/.test(trimmed)) throw new Error("Enter a valid GEN amount with at most 18 decimal places.");
   const [whole, fraction = ""] = trimmed.split(".");
   return BigInt(whole) * 10n ** 18n + BigInt(fraction.padEnd(18, "0"));
+}
+
+export function isPublicHttpsSource(value: string): boolean {
+  const source = value.trim();
+  if (source.length < 12 || source.length > 360 || /\s|\0/.test(source)) return false;
+  if (!/^https:\/\/[^/]+(?:\/.*)?$/.test(source)) return false;
+  const authority = source.slice(8).split("/", 1)[0];
+  if (!authority || /@|\[|\]/.test(authority)) return false;
+  const [rawHost, port] = authority.split(":", 2);
+  if (port !== undefined && (!/^\d{1,5}$/.test(port) || Number(port) > 65535)) return false;
+  const host = rawHost.toLowerCase().replace(/\.$/, "");
+  if (!host.includes(".") || host === "localhost" || host.endsWith(".local")) return false;
+  if (/^\d{1,3}(?:\.\d{1,3}){3}$/.test(host)) return false;
+  return /^[a-z0-9.-]+$/.test(host) && !host.includes("..");
 }
 
 export function shortenAddress(value: string): string {
@@ -178,5 +218,6 @@ export const createWager = (session: WalletSession, input: { question: string; c
 export const acceptWager = (session: WalletSession, wagerId: string, stakeAtto: bigint, onProgress: (progress: TxProgress) => void) => write(session, "accept_wager", [wagerId], stakeAtto, onProgress);
 export const cancelWager = (session: WalletSession, wagerId: string, onProgress: (progress: TxProgress) => void) => write(session, "cancel_wager", [wagerId], 0n, onProgress);
 export const resolveWager = (session: WalletSession, wagerId: string, onProgress: (progress: TxProgress) => void) => write(session, "resolve_wager", [wagerId], 0n, onProgress);
+export const voidUnresolvedWager = (session: WalletSession, wagerId: string, onProgress: (progress: TxProgress) => void) => write(session, "void_unresolved", [wagerId], 0n, onProgress);
 export const appealWager = (session: WalletSession, wagerId: string, statement: string, bondAtto: bigint, onProgress: (progress: TxProgress) => void) => write(session, "appeal_wager", [wagerId, statement], bondAtto, onProgress);
 export const claimWager = (session: WalletSession, wagerId: string, onProgress: (progress: TxProgress) => void) => write(session, "claim", [wagerId], 0n, onProgress);

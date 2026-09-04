@@ -13,6 +13,8 @@ import {
   listWagers,
   resolveWager,
   shortenAddress,
+  voidUnresolvedWager,
+  type AdjudicationRecord,
   type TxProgress,
   type WagerSummary,
   type WagerView,
@@ -21,10 +23,27 @@ import {
 import { formatCountdown, marketShareUrl, rereadUntilStatusMatches, transactionPending } from "@/lib/ui-state";
 import TxNotice from "./TxNotice";
 
+const emptyRecord: AdjudicationRecord = {
+  exists: false,
+  outcome: "",
+  outcome_label: "",
+  winner: "",
+  confidence_bucket: "0",
+  reason: "",
+  source_url: "https://example.com/",
+  source_digest: "",
+  source_snapshot: "",
+  source_bytes: "0",
+  source_chars: "0",
+  judged_at_unix: "0",
+  judged_at_iso: "",
+  provenance: "",
+};
+
 const demoWager: WagerView = {
   id: "w-preview",
   status: "OPEN",
-  question: "At the deadline, does the source page state that this domain is reserved for illustrative examples?",
+  question: "When validators resolve this wager after the deadline, does the source page state that this domain is reserved for illustrative examples?",
   creator_side: "Yes, the page says it is for illustrative examples",
   taker_side: "No, the page says something different",
   stake_atto: "1000000000000000",
@@ -41,10 +60,14 @@ const demoWager: WagerView = {
   resolved_at_unix: "0",
   resolved_at_iso: "",
   appeal_deadline_unix: "0",
+  resolution_recovery_unix: String(Math.floor(Date.now() / 1000) + 1200),
+  recoverable: false,
   claimable: false,
   appeal_statement: "",
   pot_bonus_atto: "0",
   pot_atto: "2000000000000000",
+  original_record: emptyRecord,
+  appeal_record: emptyRecord,
 };
 
 function statusLabel(status: string): string {
@@ -184,6 +207,9 @@ export function MarketDetail({ session, wager: storedWager, onRefresh }: { sessi
 
   const wager = {
     ...storedWager,
+    original_record: storedWager.original_record ?? emptyRecord,
+    appeal_record: storedWager.appeal_record ?? emptyRecord,
+    resolution_recovery_unix: storedWager.resolution_recovery_unix ?? "0",
     claimable: storedWager.status === "PROVISIONAL" && now > Number(storedWager.appeal_deadline_unix),
   };
   const account = session?.address.toLowerCase() ?? "";
@@ -196,6 +222,7 @@ export function MarketDetail({ session, wager: storedWager, onRefresh }: { sessi
   const isWinner = account !== "" && account === winner;
   const isLoser = (isCreator || isTaker) && !isWinner;
   const pastDeadline = now >= Number(wager.deadline_unix);
+  const recoveryAvailable = wager.status === "LIVE" && Number(wager.resolution_recovery_unix) > 0 && now > Number(wager.resolution_recovery_unix);
   const appealOpen = wager.status === "PROVISIONAL" && now <= Number(wager.appeal_deadline_unix);
   const stake = stakePresentation(wager);
 
@@ -225,7 +252,7 @@ export function MarketDetail({ session, wager: storedWager, onRefresh }: { sessi
         <button className="button button-secondary" onClick={() => void copyLink()} disabled={busy}>Copy link</button>
       </header>
 
-      <div className="source-card"><span>Resolution source</span><a href={wager.source_url} target="_blank" rel="noreferrer">{wager.source_url} ↗</a><small>Validators fetch this public page after the deadline.</small></div>
+      <div className="source-card"><span>Resolution source</span><a href={wager.source_url} target="_blank" rel="noreferrer">{wager.source_url} ↗</a><small>Fetched when adjudication runs after the deadline—not snapshotted at the deadline.</small></div>
 
       <div className="sides-grid">
         <div className={wager.outcome_label === wager.creator_side ? "winning-side" : ""}><span>Creator · {shortenAddress(wager.creator)}</span><strong>{wager.creator_side}</strong></div>
@@ -242,12 +269,25 @@ export function MarketDetail({ session, wager: storedWager, onRefresh }: { sessi
 
       {wager.verdict_reason ? <section className="verdict-card"><p className="eyebrow">Validator verdict</p><h3>{wager.outcome_label || "Undetermined"}</h3><p>{wager.verdict_reason}</p>{wager.appeal_statement ? <blockquote><strong>Appeal:</strong> {wager.appeal_statement}</blockquote> : null}</section> : null}
 
+      {wager.original_record.exists || wager.appeal_record.exists ? (
+        <section className="audit-trail" aria-label="Adjudication audit trail">
+          <div><p className="eyebrow">Audit trail</p><h3>Immutable adjudication records</h3></div>
+          <div className="audit-grid">
+            {wager.original_record.exists ? <AuditRecord label="Original" record={wager.original_record} /> : null}
+            {wager.appeal_record.exists ? <AuditRecord label="Appeal" record={wager.appeal_record} /> : null}
+          </div>
+        </section>
+      ) : null}
+
       <section className="action-panel">
-        <div><p className="eyebrow">Next step</p><h3>{actionHeading(wager, isCreator, pastDeadline, appealOpen)}</h3></div>
+        <div><p className="eyebrow">Next step</p><h3>{actionHeading(wager, isCreator, pastDeadline, appealOpen, recoveryAvailable)}</h3></div>
         <fieldset disabled={busy}>
           {wager.status === "OPEN" && isCreator ? <button className="button button-danger" onClick={() => void run(() => cancelWager(session!, wager.id, setProgress))}>Cancel and refund</button> : null}
-          {wager.status === "OPEN" && !isCreator ? <button className="button button-primary" onClick={() => void run(() => acceptWager(session!, wager.id, BigInt(wager.stake_atto), setProgress))}>Match {formatGen(wager.stake_atto)} test GEN</button> : null}
+          {wager.status === "OPEN" && !isCreator && !pastDeadline ? <button className="button button-primary" onClick={() => void run(() => acceptWager(session!, wager.id, BigInt(wager.stake_atto), setProgress))}>Match {formatGen(wager.stake_atto)} test GEN</button> : null}
+          {wager.status === "OPEN" && !isCreator && pastDeadline ? <p className="muted">The matching deadline has passed.</p> : null}
           {wager.status === "LIVE" && pastDeadline ? <button className="button button-primary" onClick={() => void run(() => resolveWager(session!, wager.id, setProgress))}>Ask validators to resolve</button> : null}
+          {recoveryAvailable ? <button className="button button-secondary" onClick={() => void run(() => voidUnresolvedWager(session!, wager.id, setProgress))}>Refund both test stakes</button> : null}
+          {wager.status === "LIVE" && pastDeadline && !recoveryAvailable ? <p className="muted">Timeout refund opens in {formatCountdown(wager.resolution_recovery_unix, now)}.</p> : null}
           {wager.status === "LIVE" && !pastDeadline ? <p className="muted">Resolution opens in {formatCountdown(wager.deadline_unix, now)}.</p> : null}
           {wager.status === "PROVISIONAL" && appealOpen && isLoser && !wager.appealed ? <div className="appeal-form"><label><span>Appeal statement</span><textarea rows={3} maxLength={800} value={appealStatement} onChange={(event) => setAppealStatement(event.target.value)} placeholder="Explain what the source or verdict got wrong." /></label><button className="button button-secondary" onClick={submitAppeal}>Appeal with {formatGen(wager.stake_atto)} test GEN bond</button></div> : null}
           {wager.status === "PROVISIONAL" && appealOpen && !isLoser ? <p className="muted">Payout remains locked for {formatCountdown(wager.appeal_deadline_unix, now)}.</p> : null}
@@ -262,10 +302,24 @@ export function MarketDetail({ session, wager: storedWager, onRefresh }: { sessi
   );
 }
 
-function actionHeading(wager: WagerView, isCreator: boolean, pastDeadline: boolean, appealOpen: boolean): string {
-  if (wager.status === "OPEN") return isCreator ? "Share or cancel" : "Take the other side";
-  if (wager.status === "LIVE") return pastDeadline ? "Ready for validator resolution" : "Waiting for the deadline";
+function actionHeading(wager: WagerView, isCreator: boolean, pastDeadline: boolean, appealOpen: boolean, recoveryAvailable: boolean): string {
+  if (wager.status === "OPEN") return isCreator ? "Share or cancel" : pastDeadline ? "Closed to matching" : "Take the other side";
+  if (wager.status === "LIVE") return recoveryAvailable ? "Resolve or recover the stakes" : pastDeadline ? "Ready for validator resolution" : "Waiting for the deadline";
   if (wager.status === "PROVISIONAL") return appealOpen ? "Verdict open to appeal" : "Winner can claim";
   if (wager.status === "SETTLED") return "Wager settled";
   return "No action required";
+}
+
+function AuditRecord({ label, record }: { label: string; record: AdjudicationRecord }) {
+  const digest = record.source_digest ? `${record.source_digest.slice(0, 12)}…${record.source_digest.slice(-8)}` : "—";
+  return (
+    <article>
+      <span>{label}</span>
+      <strong>{record.outcome_label || "Refund"} · {record.confidence_bucket}%</strong>
+      <code title={record.source_digest}>SHA-256 {digest}</code>
+      <small>{record.judged_at_iso ? new Date(record.judged_at_iso).toLocaleString() : ""} · {record.source_bytes} bytes</small>
+      <p>{record.reason}</p>
+      {record.source_snapshot ? <details><summary>Stored source snapshot</summary><pre>{record.source_snapshot}</pre></details> : null}
+    </article>
+  );
 }

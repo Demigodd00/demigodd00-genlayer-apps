@@ -1,12 +1,12 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { CONTRACT_READY, createWager, formatGen, friendlyError, parseGen, type TxProgress, type WalletSession } from "@/lib/contract";
+import { CONTRACT_READY, createWager, formatGen, friendlyError, isPublicHttpsSource, parseGen, type TxProgress, type WalletSession } from "@/lib/contract";
 import { transactionPending } from "@/lib/ui-state";
 import TxNotice from "./TxNotice";
 
 const demoTemplate = {
-  question: "At the deadline, does the source page state that this domain is reserved for illustrative examples?",
+  question: "When validators resolve this wager after the deadline, does the source page state that this domain is reserved for illustrative examples?",
   creatorSide: "Yes, the page says it is for illustrative examples",
   takerSide: "No, the page says something different",
   sourceUrl: "https://example.com/",
@@ -50,10 +50,7 @@ export default function CreateMarket({ session, onCreated }: { session: WalletSe
     if (!creatorSide.trim() || creatorSide.trim().length > 80) return "Describe your side in no more than 80 characters.";
     if (!takerSide.trim() || takerSide.trim().length > 80) return "Describe the other side in no more than 80 characters.";
     if (creatorSide.trim().toLowerCase() === takerSide.trim().toLowerCase()) return "The two sides must be different.";
-    try {
-      const parsed = new URL(sourceUrl.trim());
-      if (parsed.protocol !== "https:" || parsed.username || parsed.password || sourceUrl.trim().length > 360) throw new Error();
-    } catch { return "Use a public HTTPS source without embedded credentials."; }
+    if (!isPublicHttpsSource(sourceUrl)) return "Use a public HTTPS source with a valid domain and no embedded credentials.";
     if (stakeAtto < 10n ** 15n || stakeAtto > 10n * 10n ** 18n) return "Choose a test stake between 0.001 and 10 GEN.";
     if (new Date(deadline).getTime() < Date.now() + 2 * 60_000) return "Set the deadline at least two minutes from now.";
     return "";
@@ -109,7 +106,7 @@ export default function CreateMarket({ session, onCreated }: { session: WalletSe
           <strong>Example Domain</strong>
           <small>Objective page text · 10-minute deadline</small>
         </button>
-        <div className="callout"><strong>Public-source rule</strong><p>Validators fetch the exact HTTPS page you provide. Avoid logins, private data, and pages that block automated access.</p></div>
+        <div className="callout"><strong>Public-source rule</strong><p>Use a static UTF-8 text page up to 8,000 characters. Validators store the agreed snapshot and SHA-256 fingerprint.</p></div>
       </aside>
 
       <div className="form-card">
@@ -126,7 +123,7 @@ export default function CreateMarket({ session, onCreated }: { session: WalletSe
               <div><dt>Deadline</dt><dd>{new Date(deadline).toLocaleString()}</dd></div>
               <div className="review-wide"><dt>Resolution source</dt><dd>{sourceUrl}</dd></div>
             </dl>
-            <div className="callout"><strong>Rules become permanent</strong><p>After posting, only an unmatched wager can be cancelled. Matched wagers wait for the deadline and validator resolution.</p></div>
+            <div className="callout"><strong>Rules become permanent</strong><p>Matched wagers resolve after the deadline. A timed-out resolution can be refunded by anyone.</p></div>
             <div className="form-actions"><button className="button button-secondary" onClick={() => setReviewing(false)} disabled={busy}>Edit</button><button className="button button-primary" onClick={() => void submit()} disabled={busy}>{CONTRACT_READY ? "Confirm test stake" : "Preview only"}</button></div>
           </div>
         ) : (
@@ -136,7 +133,7 @@ export default function CreateMarket({ session, onCreated }: { session: WalletSe
               <label><span>Your side</span><input maxLength={80} value={creatorSide} onChange={(event) => setCreatorSide(event.target.value)} /></label>
               <label><span>Other side</span><input maxLength={80} value={takerSide} onChange={(event) => setTakerSide(event.target.value)} /></label>
             </div>
-            <label><span>Public HTTPS resolution source</span><input type="url" value={sourceUrl} onChange={(event) => setSourceUrl(event.target.value)} /><small>Validators read this page after the deadline.</small></label>
+            <label><span>Public HTTPS resolution source</span><input type="url" value={sourceUrl} onChange={(event) => setSourceUrl(event.target.value)} /><small>Validators fetch this page when resolution is requested after the deadline.</small></label>
             <div className="field-row">
               <label><span>Deadline in your timezone</span><input type="datetime-local" value={deadline} onChange={(event) => setDeadline(event.target.value)} /></label>
               <label><span>Test stake in GEN</span><input inputMode="decimal" value={stake} onChange={(event) => setStake(event.target.value)} /></label>
