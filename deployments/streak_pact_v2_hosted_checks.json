@@ -1,10 +1,10 @@
 {
   "origin": "https://streakpact-zeta.vercel.app",
   "health": {
-    "checked_at": "2026-09-02T15:11:35.853970+00:00",
+    "checked_at": "2026-09-04T19:24:49.991072+00:00",
     "status": 200,
     "body": {
-      "product": "StreakPact V2.1",
+      "product": "StreakPact V2.2",
       "network": "StudioNet",
       "contractConfigured": true,
       "evidencePublishingConfigured": true,
@@ -12,7 +12,14 @@
       "readyForStudioNetTesting": true
     }
   },
-  "updated_at": "2026-09-02T15:11:51.106358+00:00",
+  "updated_at": "2026-09-04T19:24:52.339149+00:00",
+  "evidence_character_limit": {
+    "checked_at": "2026-09-04T19:40:17.762000+00:00",
+    "submitted_characters": 8001,
+    "status": 413,
+    "rejected_before_upload": true,
+    "body_excerpt": "Evidence must be 8,000 characters or fewer so validators evaluate the whole file."
+  },
   "fixtures": {
     "kept": {
       "cid": "bafkreiejvp72lirrec2zz46t7kqideoxar7aagvyw637kk5barlrmugmd4",
@@ -29,7 +36,7 @@
       "upload_status": 201,
       "download_verified": true,
       "download_status": 200,
-      "verified_at": "2026-09-02T15:11:45.160461+00:00"
+      "verified_at": "2026-09-04T19:24:33.507326+00:00"
     },
     "missed": {
       "cid": "bafkreicsshzsovq7wuwba2jgg4t3jk46zgaw2l2du6zkq6igds5ucaljcu",
@@ -46,20 +53,20 @@
       "upload_status": 201,
       "download_verified": true,
       "download_status": 200,
-      "verified_at": "2026-09-02T15:11:51.106358+00:00"
+      "verified_at": "2026-09-04T19:24:37.237654+00:00"
     }
   },
   "protection": {
     "foreign_origin": {
       "status": 403,
-      "checked_at": "2026-08-28T19:45:49.561258+00:00"
+      "checked_at": "2026-09-04T19:24:50.341797+00:00"
     },
     "missing_origin": {
       "status": 403,
-      "checked_at": "2026-08-28T19:45:49.956563+00:00"
+      "checked_at": "2026-09-04T19:24:50.697354+00:00"
     },
     "rate_limit": {
-      "checked_at": "2026-08-28T19:45:52.127027+00:00",
+      "checked_at": "2026-09-04T19:24:52.339149+00:00",
       "attempts": [
         {
           "status": 400,
@@ -76,39 +83,39 @@
           "body_excerpt": "{\"error\":\"The evidence upload could not be read.\"}"
         },
         {
-          "status": 400,
+          "status": 429,
           "vercel_error": null,
-          "vercel_mitigated": null,
-          "content_type": "application/json",
-          "body_excerpt": "{\"error\":\"The evidence upload could not be read.\"}"
+          "vercel_mitigated": "deny",
+          "content_type": "text/plain; charset=utf-8",
+          "body_excerpt": "Too Many Requests\n\nToo Many Requests\ncpt1::pgjr4-1788549891617-3937c7233933"
         },
         {
           "status": 429,
           "vercel_error": null,
           "vercel_mitigated": "deny",
           "content_type": "text/plain; charset=utf-8",
-          "body_excerpt": "Too Many Requests\n\nToo Many Requests\ncpt1::4j5qj-1787946352128-d84cf6758891"
+          "body_excerpt": "Too Many Requests\n\nToo Many Requests\ncpt1::cms6w-1788549891703-aa121d1ff253"
         },
         {
           "status": 429,
           "vercel_error": null,
           "vercel_mitigated": "deny",
           "content_type": "text/plain; charset=utf-8",
-          "body_excerpt": "Too Many Requests\n\nToo Many Requests\ncpt1::sg889-1787946352231-7f74698001b5"
+          "body_excerpt": "Too Many Requests\n\nToo Many Requests\ncpt1::6kgc8-1788549891791-f844b720aa80"
         },
         {
           "status": 429,
           "vercel_error": null,
           "vercel_mitigated": "deny",
           "content_type": "text/plain; charset=utf-8",
-          "body_excerpt": "Too Many Requests\n\nToo Many Requests\ncpt1::cfxqf-1787946352331-08f81c4d793f"
+          "body_excerpt": "Too Many Requests\n\nToo Many Requests\ncpt1::88978-1788549892140-d6d1d31457fc"
         },
         {
           "status": 429,
           "vercel_error": null,
           "vercel_mitigated": "deny",
           "content_type": "text/plain; charset=utf-8",
-          "body_excerpt": "Too Many Requests\n\nToo Many Requests\ncpt1::62lgr-1787946352442-d53a7de26dd9"
+          "body_excerpt": "Too Many Requests\n\nToo Many Requests\ncpt1::pwd6c-1788549892483-a58a254b98ab"
         }
       ]
     }

@@ -1,6 +1,6 @@
-# StreakPact V2.1 StudioNet release runbook
+# StreakPact V2.2 StudioNet release runbook
 
-StreakPact is a zero-value StudioNet application. “Deployable” means the source and UI pass their repeatable gates. A deployed release has a recorded contract address and hosted website; launch acceptance additionally requires the real two-wallet checks against that exact address. V2.1 also requires wallet-authenticated evidence provenance and immutable original/appeal records. StudioNet is temporary and may reset, so a release address is not a promise of permanent state.
+StreakPact is a zero-value StudioNet application. “Deployable” means the source and UI pass their repeatable gates. A deployed release has a recorded contract address and hosted website; launch acceptance additionally requires the real two-wallet checks against that exact address. V2.2 requires wallet-authenticated evidence provenance, immutable original/appeal records, full-document evidence judgment, non-zero role addresses, complete audit reads, and second-precision observation times. StudioNet is temporary and may reset, so a release address is not a promise of permanent state.
 
 For the website setup, use the [Vercel deployment checklist](STREAKPACT_VERCEL_DEPLOYMENT.md).
 
@@ -16,7 +16,7 @@ cd ../..
 python scripts/check_streakpact_release.py
 ```
 
-This runs GenVM lint/validation, all StreakPact V2.1 direct tests, deployment-script compilation, web API and interface safeguard tests, web type checking, a production build, and the production dependency audit. A missing release deployment is reported as pending rather than failing the pre-deployment gate.
+This runs GenVM lint/validation, all StreakPact V2.2 direct tests, deployment-script compilation, web API and interface safeguard tests, web type checking, a production build, and the production dependency audit. A missing release deployment is reported as pending rather than failing the pre-deployment gate.
 
 ## 2. Evidence publisher
 
@@ -30,7 +30,7 @@ STREAKPACT_APP_ORIGIN=https://the-exact-production-origin.example
 NEXT_PUBLIC_NETWORK_NAME=StudioNet
 ```
 
-The publisher accepts only non-empty JSON or plain text up to 100,000 bytes, applies a basic per-instance rate limit, removes the original filename, and never returns the JWT. Because IPFS evidence is public and content-addressed, testers must not upload secrets, personal identifiers, or sensitive health data. The pact fixes an evidence-attestor wallet; that wallet submits the public URL, digest, activity statement, and observation time in its GenLayer transaction. Add a platform/WAF rate limit before distributing the app broadly; the in-process limit is only a first layer.
+The publisher accepts only non-empty, valid UTF-8 JSON or plain text up to both 8,000 Unicode characters and 100,000 bytes. It rejects the entire file when either limit is exceeded, applies a basic per-instance rate limit, removes the original filename, and never returns the JWT. The contract independently fetches and enforces the same limits before judging the complete artifact; it never truncates a prefix. Because IPFS evidence is public and content-addressed, testers must not upload secrets, personal identifiers, or sensitive health data. The pact fixes an evidence-attestor wallet; that wallet submits the public URL, digest, activity statement, and second-precision observation time in its GenLayer transaction. Add a platform/WAF rate limit before distributing the app broadly; the in-process limit is only a first layer.
 
 ## 3. Recorded StudioNet deployment
 
@@ -98,6 +98,7 @@ Record the wallet addresses, transaction hashes, pact IDs, and observed result f
 - Appeal: adversely affected participant submits one signed replacement record; the original record remains readable, while unauthorized and second appeals fail.
 - Wallet/UI: rejection, execution failure, refresh recovery, account switch, mobile layout, and direct invite-link opening.
 - Operations: contract config reads correctly; fee is zero; evidence service, address, and origin gates are green; no outcome-changing owner action exists.
+- Guards: zero treasury, zero failure-recipient, zero attestor, invalid UTF-8, and evidence beyond either public size limit are rejected without changing pact state.
 
 ## 6. Final release condition
 
@@ -128,6 +129,7 @@ python scripts/check_streakpact_hosted.py fixtures
 python scripts/check_streakpact_hosted.py protection
 python scripts/run_streakpact_acceptance.py cancellations
 python scripts/run_streakpact_acceptance.py prepare_losses
+python scripts/run_streakpact_acceptance.py guards
 python scripts/run_streakpact_acceptance.py self_win
 python scripts/run_streakpact_acceptance.py final_matrix
 ```
@@ -138,7 +140,7 @@ from the saved owner signer with a separate test-account context; no private key
 is printed or stored in the public records. Preserve the owner's ignored `.env`
 and the transaction journal. Do not delete the journal to retry pending writes.
 
-Results are stored in `deployments/streak_pact_v2_1_acceptance.json` and
+Results are stored in `deployments/streak_pact_v2_2_acceptance.json` and
 `deployments/streak_pact_v2_hosted_checks.json`. They include actual execution
 outcomes and credited native-transfer receipts, not finality alone. The public
 test records use synthetic reading logs plus wallet-authenticated attestations.

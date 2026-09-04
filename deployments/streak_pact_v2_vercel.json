@@ -1,8 +1,8 @@
 {
   "schema_version": 2,
   "product": "StreakPact by demigodd00",
-  "verified_on": "2026-09-02",
-  "status": "publicly_deployed_v2_1_acceptance_passed_manual_wallet_and_device_signoff_pending",
+  "verified_on": "2026-09-04",
+  "status": "publicly_deployed_v2_2_acceptance_passed_manual_wallet_and_device_signoff_pending",
   "public_url": "https://streakpact-zeta.vercel.app",
   "repository": {
     "url": "https://github.com/Demigodd00/demigodd00-genlayer-apps",
@@ -18,31 +18,35 @@
     "framework": "Next.js",
     "node_version": "22.x",
     "package_manager": "pnpm@11.19.0",
-    "verified_application_commit": "d851d9889db99bce82ff3e82b17604c298c54c46",
+    "verified_application_commit": "b76c816a0e947c1b06fda184b19367b03221ca76",
     "verified_application_deployment": {
-      "id": "H7ivsoQaN7biy4djbhxh9dZnyDuY",
-      "url": "https://streakpact-3cvfzj9po-demi17.vercel.app",
-      "dashboard_url": "https://vercel.com/demi17/streakpact/H7ivsoQaN7biy4djbhxh9dZnyDuY",
+      "id": "4MpeNvJYUFo3P3E5W11SnZCQCRPB",
+      "url": "https://streakpact-owbvc1rot-demi17.vercel.app",
+      "dashboard_url": "https://vercel.com/demi17/streakpact/4MpeNvJYUFo3P3E5W11SnZCQCRPB",
       "state": "READY",
-      "build_duration_seconds": 28,
-      "verified_at": "2026-09-02T15:07:44Z"
+      "build_duration_seconds": 46,
+      "verified_at": "2026-09-04T19:23:37Z"
     },
     "provenance_note": "Later record-only commits may trigger deployments with identical application code."
   },
   "contract": {
     "name": "StreakPactV2",
-    "version": "2.1.0",
+    "version": "2.2.0",
     "network": "studionet",
     "chain_id": 61999,
-    "address": "0xa878379DE7398da0F6Ac6cF1AE32d6CA4e9062c2",
-    "deployment_transaction": "0x011ad6d8bfd315fd3cb6993ff19ece8a64b5d5921b6d076a6ac90ff4706efdb0",
-    "source_sha256": "80fc4f894f23339d9c0f38698852a3d9499c08e3f280cfb830c4159b86f78057",
+    "address": "0x386Baf8F5C543429a8d513F183271513ae59BC81",
+    "deployment_transaction": "0x08877fdbb955b7c5b1a55a46c231a6d716b33f1879e32f06cf71774f3253b3c3",
+    "source_sha256": "7548cd316c161a75b9de9915784f04dce2d27ba39fe5b282bab27bc61e721f83",
     "fee_bps": 0,
     "period_secs": 60,
     "appeal_window_secs": 300,
     "evidence_policy": "CONTENT_ADDRESSED_AND_WALLET_ATTESTED",
     "attestation_schema": "streakpact.wallet-attestation.v1",
     "original_appeal_records": "IMMUTABLE_SEPARATE_RECORDS",
+    "max_evidence_chars": 8000,
+    "max_evidence_bytes": 100000,
+    "evidence_encoding": "valid_utf8",
+    "evidence_evaluation": "complete_body_no_truncation",
     "monetary_value": false,
     "state_persistence": "temporary_development_network",
     "record": "streak_pact_v2_studionet.json"
@@ -56,7 +60,7 @@
     {
       "name": "NEXT_PUBLIC_STREAKPACT_V2_ADDRESS",
       "scope": "Production",
-      "value": "0xa878379DE7398da0F6Ac6cF1AE32d6CA4e9062c2"
+      "value": "0x386Baf8F5C543429a8d513F183271513ae59BC81"
     },
     {
       "name": "STREAKPACT_APP_ORIGIN",
@@ -96,29 +100,34 @@
   },
   "validation": {
     "genvm_validation": "passed",
-    "direct_contract_tests_passed": 15,
-    "web_tests_passed": 70,
+    "direct_contract_tests_passed": 19,
+    "web_tests_passed": 77,
     "typescript": "passed",
     "production_build": "passed",
     "production_dependency_audit": "no_known_vulnerabilities_reported",
     "github_ci": {
       "conclusion": "success",
-      "commit": "d851d9889db99bce82ff3e82b17604c298c54c46",
-      "url": "https://github.com/Demigodd00/demigodd00-genlayer-apps/actions/runs/33646289908"
+      "commit": "b76c816a0e947c1b06fda184b19367b03221ca76",
+      "url": "https://github.com/Demigodd00/demigodd00-genlayer-apps/actions/runs/33910379517"
+    },
+    "real_studionet_consensus": {
+      "status": "passed",
+      "verdict": "KEPT",
+      "digest_and_signer_stored": true
     },
     "exact_release_acceptance": {
       "status": "passed",
-      "contract_transactions_checked": 42,
-      "successful_executions": 29,
-      "expected_rejections": 13,
-      "state_assertions": 29,
-      "credited_native_transfers": 6,
-      "completed_at": "2026-09-02T15:25:45.790041+01:00",
-      "record": "streak_pact_v2_1_acceptance.json"
+      "contract_transactions_checked": 50,
+      "successful_executions": 33,
+      "expected_rejections": 17,
+      "state_assertions": 34,
+      "credited_native_transfers": 7,
+      "completed_at": "2026-09-04T19:13:50.404196+00:00",
+      "record": "streak_pact_v2_2_acceptance.json"
     },
     "hosted_health": {
       "status_code": 200,
-      "product": "StreakPact V2.1",
+      "product": "StreakPact V2.2",
       "all_readiness_flags": true
     },
     "live_contract_status": {
@@ -128,23 +137,28 @@
       "provenance_policy_matches": true,
       "attestation_schema_matches": true,
       "immutable_original_appeal_records": true,
+      "complete_audit_history": true,
+      "strict_evidence_limits": true,
+      "nonzero_role_addresses": true,
+      "second_precision_observation_times": true,
       "stats_match_acceptance_journal": true
     },
     "reviewer_fixtures": {
-      "sp2-5_independent_verifier_and_preserved_appeal": "passed",
-      "sp2-6_two_wallet_signed_appeals": "passed",
+      "sp2-6_independent_verifier_and_preserved_appeal": "passed",
+      "sp2-7_two_wallet_signed_appeals": "passed",
       "browser_console_warnings_or_errors": 0
     },
     "hosted_public_evidence_uploads": "passed",
     "public_evidence_download_digests": "passed",
     "foreign_and_missing_origin_rejection": "passed",
+    "over_8000_character_rejection_before_upload": "passed",
     "edge_rate_limit": "passed",
     "real_javascript_sdk_receipt_classification": "passed",
-    "real_metamask_v2_1": "pending_manual",
+    "real_metamask_v2_2": "pending_manual",
     "physical_phone": "pending_manual"
   },
   "remaining_manual_checks": [
-    "Create and reject one V2.1 transaction using the real MetaMask extension, then verify refresh and account-switch recovery.",
+    "Create and reject one V2.2 transaction using the real MetaMask extension, then verify refresh and account-switch recovery.",
     "Open an invite or shared pact in a physical phone wallet browser and verify layout, evidence selection, and approvals."
   ]
 }

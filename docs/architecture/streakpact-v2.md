@@ -1,4 +1,4 @@
-# StreakPact V2.1 architecture and launch gates
+# StreakPact V2.2 architecture and launch gates
 
 ## Responsibility boundary
 
@@ -58,15 +58,17 @@ The maker funds a stake and shares an invite. A challenger must match it before 
 6. Only the pact's configured attestor can submit the original wallet-authenticated claim.
 7. An evidence verdict cannot be stored unless its body matches the supplied digest and its observed time belongs to that period.
 8. Original adjudication fields cannot be rewritten by an appeal.
-9. Page reads and collection scans are bounded.
-10. Treasury and timing configuration are immutable after deployment.
-11. Admin software has no contract method for changing outcomes or moving user escrow.
+9. Treasury, failure-recipient, and evidence-attestor addresses cannot be zero.
+10. Evidence must be valid UTF-8 and no more than both 8,000 Unicode characters and 100,000 bytes; validators judge the complete body and never a truncated prefix.
+11. Paginated collections are bounded, while the complete immutable adjudication reason for every period remains retrievable.
+12. Treasury and timing configuration are immutable after deployment.
+13. Admin software has no contract method for changing outcomes or moving user escrow.
 
 ## Evidence publishing boundary
 
-The web app now includes a narrow server-side publisher for public IPFS. It accepts only JSON or plain text up to 100 KB, hashes the exact bytes, uploads with a server-only restricted Pinata credential, and returns an approved gateway URL plus SHA-256 digest. The browser independently hashes the selected file and refuses to auto-fill mismatched results. Manual approved IPFS and Arweave URLs remain supported.
+The web app includes a narrow server-side publisher for public IPFS. It accepts only valid UTF-8 JSON or plain text up to both 8,000 Unicode characters and 100 KB, hashes the exact bytes, uploads with a server-only restricted Pinata credential, and returns an approved gateway URL plus SHA-256 digest. The browser independently applies the same limits, hashes the entire selected file, and refuses to auto-fill mismatched results. Manual approved IPFS and Arweave URLs remain supported.
 
-The publisher is convenience infrastructure, not an authority: the GenLayer leader and validators still re-fetch the artifact, enforce the same size bound, and verify the digest before adjudication. Production hosting must configure an exact allowed origin and platform-level rate limiting.
+The publisher is convenience infrastructure, not an authority: the GenLayer leader and validators still re-fetch the artifact, enforce the same character, byte, and encoding bounds, verify the digest, and judge the complete body before adjudication. Production hosting must configure an exact allowed origin and platform-level rate limiting.
 
 A future source-specific adapter could complement the shipped wallet attestations without becoming authoritative:
 

@@ -1,60 +1,62 @@
 # StreakPact by demigodd00: StudioNet deployment status
 
-Checked on 2026-09-02. StreakPact V2.1 is live at
-[streakpact-zeta.vercel.app](https://streakpact-zeta.vercel.app). The steward's
-evidence-provenance request is implemented in the contract, UI, reviewer
-fixtures, and release records.
+Checked on 2026-09-04. StreakPact V2.2 is live at
+[streakpact-zeta.vercel.app](https://streakpact-zeta.vercel.app). The release
+closes the steward's evidence-provenance request and the subsequent evidence,
+address, audit-history, and timestamp review findings.
 
 ## Release identity
 
 - Network: GenLayer StudioNet, chain ID `61999`.
-- Contract: `StreakPactV2`, version `2.1.0`.
-- Address: `0xa878379DE7398da0F6Ac6cF1AE32d6CA4e9062c2`.
-- Deployment transaction: `0x011ad6d8bfd315fd3cb6993ff19ece8a64b5d5921b6d076a6ac90ff4706efdb0`.
+- Contract: `StreakPactV2`, version `2.2.0`.
+- Address: `0x386Baf8F5C543429a8d513F183271513ae59BC81`.
+- Deployment transaction: `0x08877fdbb955b7c5b1a55a46c231a6d716b33f1879e32f06cf71774f3253b3c3`.
 - Deployer and treasury: `0x1adf37F016384714F683CaC4d0a261A6d4e27033`.
-- Deployed at: `2026-09-02T13:33:08.406316+00:00`.
-- Implementation revision: `29ecaa894f4d793329f65e85e7ccd5777fd352bf`.
-- Source SHA-256: `80fc4f894f23339d9c0f38698852a3d9499c08e3f280cfb830c4159b86f78057`.
+- Deployed at: `2026-09-04T18:11:55.550253+00:00`.
+- Implementation revision: `b76c816a0e947c1b06fda184b19367b03221ca76`.
+- Source SHA-256: `7548cd316c161a75b9de9915784f04dce2d27ba39fe5b282bab27bc61e721f83`.
 - Machine-readable deployment record: [streak_pact_v2_studionet.json](../deployments/streak_pact_v2_studionet.json).
 
-StudioNet and its test GEN have no monetary value. The network is temporary and
-may reset; this is not a mainnet or financial-safety claim.
+StudioNet and test GEN have no monetary value. StudioNet is temporary and may
+reset; this is not a mainnet or financial-safety claim.
 
-## Steward correction: passed
+## Steward corrections: passed
 
-V2.1 fixes an evidence-attestor wallet when a pact is created. Each successful
-check-in is a GenLayer transaction from that wallet and binds these fields into
-the stored record and canonical `streakpact.wallet-attestation.v1` ID:
+Every successful check-in is a GenLayer transaction from the pact's fixed
+evidence-attestor wallet. It binds the subject, statement, observation time,
+public artifact, validator-recomputed SHA-256 digest, and signer into the
+canonical `streakpact.wallet-attestation.v1` record. A signature proves who
+made the claim, not that the off-chain activity is true; validators still judge
+the exact public evidence against the pact criteria.
 
-- pact, period, subject wallet, and attestor wallet;
-- activity statement and period-bounded observation time;
-- public evidence URL and validator-recomputed SHA-256 digest; and
-- provenance class: `SELF_ATTESTED`, `WALLET_VERIFIED`, or
-  `APPELLANT_ATTESTED`.
+V2.2 additionally enforces these reviewer-facing invariants:
 
-Only the configured attestor can submit an original check-in. The transaction
-authenticates who made the attestation but does not make the activity claim true;
-validators still compare the artifact and signed claim with the pact criteria.
-Bare self-assertions are explicitly insufficient in the adjudication prompt.
+- evidence must be valid UTF-8 and no more than both 8,000 Unicode characters
+  and 100,000 bytes; the entire artifact is judged and nothing is truncated;
+- zero addresses are rejected for treasury, failure recipient, and evidence
+  attestor;
+- every original and appealed adjudication remains available with its complete
+  reason and provenance; the UI initially shows recent entries but can expand
+  the full history; and
+- check-in and appeal observation timestamps preserve seconds and are checked
+  against the exact period boundaries before signing.
 
-Appeals write a second record. The original verdict, signer, evidence, digest,
-statement, observation time, and adjudication remain unchanged and readable.
-Live fixture `sp2-5` proves an independent verifier submission and an original
-`MISSED / AUTO_MISS` record beside a maker-signed successful appeal. Fixture
-`sp2-6` proves signed maker and challenger records in a settled two-wallet pact.
+Appeals always add a separate record; the original verdict, signer, evidence,
+digest, statement, observation time, and adjudication remain unchanged.
+Fixture `sp2-6` proves an independent verifier plus preserved appeal history.
+Fixture `sp2-7` proves a settled two-wallet challenge with signed appeal records.
 
 ## Exact-release contract acceptance: passed
 
-The recorded matrix ran against the exact address above with two SDK signers:
+The matrix ran against the exact V2.2 address above with two SDK signers:
 
-- 42 finalized transactions: 29 successful executions and 13 expected contract
-  rejections;
-- 29 state assertions, including independent-attestor enforcement and immutable
-  original/appeal provenance;
-- six emitted refunds or payouts checked for finality, recipient, amount, parent
-  linkage, and `value_credited: true`; and
-- six created pacts, four settled pacts, four kept periods, and eight missed
-  periods in the final contract stats.
+- 50 finalized contract transactions were inspected: 33 successful executions
+  and 17 expected contract rejections;
+- 34 state assertions covered provenance, immutable appeals, zero-address
+  guards, full-document evidence limits, and settlement accounting;
+- seven native refunds or payouts were checked for finality, recipient, amount,
+  parent linkage, and `value_credited: true`; and
+- seven pacts were created, five settled, four periods kept, and eleven missed.
 
 | Pact | Scenario | Final state | Verified test-GEN credit |
 | --- | --- | --- | --- |
@@ -62,48 +64,49 @@ The recorded matrix ran against the exact address above with two SDK signers:
 | `sp2-2` | Unmatched challenge cancellation | `VOIDED` | 0.001 to maker |
 | `sp2-3` | Matched challenge loss | `SETTLED` | 0.002 to challenger |
 | `sp2-4` | Self-pact loss | `SETTLED` | 0.001 to failure recipient |
-| `sp2-5` | Verifier-attested self-pact win after appeal | `SETTLED` | 0.001 to maker |
-| `sp2-6` | Matched challenge win after signed appeals | `SETTLED` | 0.002 to maker |
+| `sp2-5` | Oversized evidence rejected, then elapsed-period loss | `SETTLED` | 0.001 to failure recipient |
+| `sp2-6` | Independent-verifier self win after preserved appeal | `SETTLED` | 0.001 to maker |
+| `sp2-7` | Matched challenge win after signed appeals | `SETTLED` | 0.002 to maker |
 
-See the [V2.1 transaction and transfer journal](../deployments/streak_pact_v2_1_acceptance.json).
+See the [V2.2 transaction and transfer journal](../deployments/streak_pact_v2_2_acceptance.json).
 The fixtures are synthetic reading logs without personal data; they are not
 claims that physical activity was independently observed.
 
 ## Build and hosted verification: passed
 
-- GenVM lint/validation and pinned runner verification passed.
-- 15 direct contract tests and 70 web tests passed.
+- GenVM lint/validation passed with the concrete pinned runner.
+- 19 direct contract tests and 77 web tests passed.
 - TypeScript, the Next.js production build, and the production dependency audit
-  passed; no known vulnerabilities were reported.
-- GitHub Actions passed for the final application revision `d851d98`:
-  [Tests run 33646289908](https://github.com/Demigodd00/demigodd00-genlayer-apps/actions/runs/33646289908).
-- Vercel deployment `H7ivsoQaN7biy4djbhxh9dZnyDuY` reached `READY` from
-  revision `d851d9889db99bce82ff3e82b17604c298c54c46`.
-- The public `/api/health` returned HTTP 200 with product `StreakPact V2.1` and
-  all four readiness flags true.
-- The public status page resolved the exact V2.1 address, version, zero fee,
-  `CONTENT_ADDRESSED_AND_WALLET_ATTESTED`,
-  `streakpact.wallet-attestation.v1`, and
-  `IMMUTABLE_SEPARATE_RECORDS`. Its metrics matched the acceptance journal.
-- Public `sp2-5` and `sp2-6` pages displayed the signed wallets, timestamps,
-  evidence digests, attestation IDs, and separate original/appeal audit records.
-- No browser console warning or error was observed on the checked status and
-  reviewer views.
+  passed; no known production vulnerabilities were reported.
+- A real full-consensus StudioNet evidence test finalized `KEPT` and verified
+  the stored digest and signer.
+- GitHub Actions passed on the exact implementation revision:
+  [Tests run 33910379517](https://github.com/Demigodd00/demigodd00-genlayer-apps/actions/runs/33910379517).
+- Vercel deployment `4MpeNvJYUFo3P3E5W11SnZCQCRPB` reached `READY` from
+  revision `b76c816a0e947c1b06fda184b19367b03221ca76` and is Production.
+- `/api/health` returned HTTP 200 with product `StreakPact V2.2` and all four
+  readiness flags true.
+- `/admin` resolved the exact V2.2 address, version, zero fee, evidence limits,
+  provenance policy, attestation schema, and immutable record policy.
+- Public `sp2-6` and `sp2-7` views exposed the complete original/appeal audit
+  trail. No browser console warning or error was observed.
+- Public evidence download digests, origin rejection, and Vercel edge rate
+  limiting passed. An 8,001-character upload was rejected with HTTP 413 before
+  Pinata upload.
 
 See the [machine-readable hosting record](../deployments/streak_pact_v2_vercel.json).
-The earlier V2.0 contract and MetaMask-created `sp2-7` are archived history and
-must not be submitted as V2.1 evidence.
+The earlier V2.0 and V2.1 contracts are archived history and must not be used as
+evidence for this V2.2 submission.
 
-## Remaining manual product checks
+## Remaining manual sign-off
 
-These are useful product sign-off checks, not observed blockers in the steward's
-provenance correction:
+No automated or reviewer-blocking defect is known. Two device-specific product
+checks remain because the available automation cannot control a real MetaMask
+extension or physical phone:
 
-1. Create and reject one V2.1 transaction using the real MetaMask extension,
-   then refresh and switch accounts to confirm browser-wallet recovery.
-2. Open an invitation or shared pact on a physical phone wallet browser and
+1. Create and reject one V2.2 transaction in MetaMask, then refresh and switch
+   accounts to confirm browser-wallet recovery.
+2. Open an invitation or shared pact in a physical phone wallet browser and
    check layout, evidence selection, and approvals.
 
-The available automated browser has no wallet extension or physical-device
-surface, so these checks are deliberately not marked passed. A custom domain is
-optional; the public Vercel URL is already live.
+The public Vercel URL is live; a custom domain is optional.

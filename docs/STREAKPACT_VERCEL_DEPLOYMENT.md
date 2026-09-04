@@ -88,11 +88,14 @@ See [Vercel WAF rate limiting](https://vercel.com/docs/vercel-firewall/vercel-wa
 1. Request the production `/api/health`; all configuration gates should be true.
    This verifies configuration only, not contract execution or Pinata access.
 2. Open `/admin`; read the actual contract configuration and verify zero fees.
-   For V2.1, also verify `CONTENT_ADDRESSED_AND_WALLET_ATTESTED`, attestation
+   For V2.2, also verify `CONTENT_ADDRESSED_AND_WALLET_ATTESTED`, attestation
    schema `streakpact.wallet-attestation.v1`, and immutable separate original
-   and appeal records.
+   and appeal records. Confirm the public configuration reports an 8,000
+   character and 100,000-byte evidence limit.
 3. Upload a non-sensitive text/JSON fixture through the real website. Download
    the returned public URL and verify its SHA-256 matches the uploaded bytes.
+   Verify an 8,001-character fixture is rejected before upload rather than
+   accepted or silently truncated.
 4. Record the full two-wallet acceptance matrix from the release runbook against
    the release address: transaction hashes, pact IDs, outcomes and dates.
    Confirm the configured attestor is enforced and that an appeal adds a second
