@@ -197,7 +197,7 @@ class Acceptance:
             "max_source_bytes": "100000",
             "max_source_chars": "8000",
             "source_policy": "STRICT_UTF8_SHA256_VALIDATOR_FETCH_AND_SNAPSHOT",
-            "version": "1.2.0-studionet",
+            "version": "1.2.1-studionet",
         }
         if any(stats.get(key) != value for key, value in expected.items()):
             raise RuntimeError("The exact-release configuration is not active")

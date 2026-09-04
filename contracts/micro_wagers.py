@@ -653,13 +653,17 @@ Return STRICT JSON with exactly these keys:
             "source_url": w.source_url,
             "creator": str(w.creator),
             "creator_side": w.creator_side,
-            "taker": str(w.taker),
+            "taker": str(w.taker) if w.taker != w.creator else "",
             "taker_side": w.taker_side,
             "stake_atto": str(int(w.stake_atto)),
             "deadline_unix": str(int(w.deadline_unix)),
             "created_at_iso": w.created_at_iso,
             "status": w.status,
-            "winner": str(w.winner),
+            "winner": (
+                str(w.winner)
+                if w.status in ("PROVISIONAL", "SETTLED") and len(w.outcome_label) > 0
+                else ""
+            ),
             "outcome_label": w.outcome_label,
             "confidence_bucket": str(int(w.confidence_bucket)),
             "verdict_reason": w.verdict_reason,
@@ -768,5 +772,5 @@ Return STRICT JSON with exactly these keys:
             "max_source_bytes": str(MAX_PAGE_BYTES),
             "max_source_chars": str(MAX_PAGE_CHARS),
             "source_policy": "STRICT_UTF8_SHA256_VALIDATOR_FETCH_AND_SNAPSHOT",
-            "version": "1.2.0-studionet",
+            "version": "1.2.1-studionet",
         }

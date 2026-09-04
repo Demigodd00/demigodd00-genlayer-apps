@@ -164,6 +164,7 @@ def test_accept_flow(direct_vm, direct_deploy, direct_alice, direct_bob):
     w = contract.get_wager(wid)
     assert w["status"] == "LIVE"
     assert w["taker"].lower() == _addr_hex(direct_bob).lower()
+    assert w["winner"] == ""
 
     direct_vm.sender = direct_alice
     direct_vm.value = STAKE
@@ -184,6 +185,8 @@ def test_accept_after_deadline_is_rejected(direct_vm, direct_deploy, direct_alic
         contract.accept_wager(wid)
     direct_vm.value = 0
     assert contract.get_wager(wid)["status"] == "OPEN"
+    assert contract.get_wager(wid)["taker"] == ""
+    assert contract.get_wager(wid)["winner"] == ""
 
 
 def test_cancel_open_wager_refunds_creator(direct_vm, direct_deploy, direct_alice, direct_bob):
@@ -196,7 +199,10 @@ def test_cancel_open_wager_refunds_creator(direct_vm, direct_deploy, direct_alic
 
     direct_vm.sender = direct_alice
     contract.cancel_wager(wid)
-    assert contract.get_wager(wid)["status"] == "VOIDED"
+    wager = contract.get_wager(wid)
+    assert wager["status"] == "VOIDED"
+    assert wager["taker"] == ""
+    assert wager["winner"] == ""
 
 
 def test_resolve_requires_live_and_deadline(direct_vm, direct_deploy, direct_alice, direct_bob):
@@ -365,6 +371,7 @@ def test_resolution_timeout_allows_permissionless_two_party_refund(
     wager = contract.get_wager(wid)
     assert wager["status"] == "VOIDED"
     assert wager["recoverable"] is False
+    assert wager["winner"] == ""
     assert wager["original_record"]["exists"] is False
     assert wager["verdict_reason"].startswith("[RESOLUTION TIMEOUT]")
     assert transfers == [
@@ -407,6 +414,7 @@ def test_resolve_void_refunds(direct_vm, direct_deploy, direct_alice, direct_bob
 
     assert contract.get_wager(wid)["status"] == "VOIDED"
     assert contract.get_wager(wid)["outcome_label"] == ""
+    assert contract.get_wager(wid)["winner"] == ""
 
 
 def test_low_confidence_resolution_voids(direct_vm, direct_deploy, direct_alice, direct_bob):
@@ -604,7 +612,7 @@ def test_list_and_stats_views(direct_vm, direct_deploy, direct_alice, direct_bob
     stats = contract.get_stats()
     assert stats["total_created"] == "2"
     assert stats["total_settled"] == "0"
-    assert stats["version"] == "1.2.0-studionet"
+    assert stats["version"] == "1.2.1-studionet"
     assert stats["max_source_bytes"] == "100000"
     assert stats["max_source_chars"] == "8000"
     assert stats["source_policy"] == "STRICT_UTF8_SHA256_VALIDATOR_FETCH_AND_SNAPSHOT"
