@@ -15,12 +15,12 @@ describe('protocol value formatting', () => {
 });
 
 describe('wallet and error presentation', () => {
-  const address = '0x0bAE6f3aE56E02A50f5Bed0051F56ec28725a58F';
+  const address = '0x788432Aa8D55c81c3bd2ef0FbB29A4Bc7E6e4cC6';
 
   it('validates and compares addresses without case sensitivity', () => {
     expect(isAddress(address)).toBe(true);
     expect(sameAddress(address, address.toLowerCase())).toBe(true);
-    expect(shortAddress(address)).toBe('0x0bAE…a58F');
+    expect(shortAddress(address)).toBe('0x7884…4cC6');
   });
 
   it('removes contract error categories before showing the user', () => {

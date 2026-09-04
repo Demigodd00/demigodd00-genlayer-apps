@@ -124,7 +124,8 @@ def main() -> None:
         transaction_hash_variant=TransactionHashVariant.LATEST_FINAL,
     )
     expected = {
-        "version": "2.1.0",
+        "version": "2.2.0",
+        "evaluation_schema": "hackathon-judge-evaluation-v1",
         "network_target": "studionet",
         "funding_model": "WITHDRAWABLE_DEPOSIT_CREDIT_V1",
         "evidence_schema": "hackathon-judge-snapshot-v3",

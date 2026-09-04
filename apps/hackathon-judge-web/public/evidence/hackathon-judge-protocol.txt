@@ -4,11 +4,11 @@ BUILD WINDOW: Built for Open Intelligence Build Week — Verified Jury
 
 PUBLIC IDENTIFIERS
 - Live application: https://hackathon-judge-studionet.blazekingsley2.chatgpt.site/
-- StudioNet contract: 0x0bAE6f3aE56E02A50f5Bed0051F56ec28725a58F
-- Deployment transaction: 0x78362bdfad4abbedde0e153befc2276ecaf2db1dd00f8b5378b46a3f44e8f048
-- Public contract source: https://github.com/Demigodd00/streakpact/blob/main/contracts/hackathon_judge.py
-- Public deployment record: https://github.com/Demigodd00/streakpact/blob/main/deployments/hackathon_judge_studionet.json
-- Deployed source SHA-256: 821f6be09d63e097593457b5a0f5080c93277aedf2be38b81302c9976ec77c07
+- StudioNet contract: 0x788432Aa8D55c81c3bd2ef0FbB29A4Bc7E6e4cC6
+- Deployment transaction: 0x4b963396d91fa9088c77c4d15fcf02197c7d397a636ff4875c0c7ad6fd1a9926
+- Public contract source: https://github.com/Demigodd00/demigodd00-genlayer-apps/blob/main/contracts/hackathon_judge.py
+- Public deployment record: https://github.com/Demigodd00/demigodd00-genlayer-apps/blob/main/deployments/hackathon_judge_studionet.json
+- Deployed source SHA-256: 5b27de829d137bdf1b89c0bb02d2742431cdc7833fb0c5b63b4285f6304a14d8
 
 VERIFIABLE IMPLEMENTATION
 The contract captures each public evidence page with gl.nondet.web.render(). The leader and validators must agree on the exact normalized snapshot and its SHA-256 digest before either is stored. A later judgment reads only that immutable snapshot.
@@ -16,7 +16,7 @@ The contract captures each public evidence page with gl.nondet.web.render(). The
 Validators independently interpret the on-chain prose rulebook and rubric. Consensus compares eligibility and the 20-point score band exactly, permits a bounded confidence difference, and deliberately excludes free-form rationale wording. Appeals may add one independently captured snapshot. Ranking, prize credit, withdrawal, refunds, and address-based win credentials are deterministic.
 
 LIVENESS AND TESTS
-Any account may evaluate, resolve an appeal, finalize, or apply the 24-hour timeout fallback. A timed-out unresolved judgment becomes INCONCLUSIVE so no submission can lock the event or prize forever. GenVM lint passes, 19 direct tests cover lifecycle and adversarial cases, the frontend check passes, and the production dependency audit reports no known vulnerabilities.
+Any account may evaluate, resolve an appeal, finalize, or apply the 24-hour timeout fallback. A timed-out unresolved judgment becomes INCONCLUSIVE so no submission can lock the event or prize forever. GenVM lint passes, 20 direct tests cover lifecycle and adversarial cases, the frontend check passes, and the production dependency audit reports no known vulnerabilities.
 
 RUBRIC CLAIM
 Every exact public identifier required by the rulebook is present. The evidence explains the complete capture, consensus, appeal, liveness, and settlement flow without relying on private material.

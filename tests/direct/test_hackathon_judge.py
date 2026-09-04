@@ -343,7 +343,8 @@ def test_lists_and_config_expose_consensus_policy(direct_vm, direct_deploy, dire
     assert submissions["items"][0]["project_name"] == "Project One"
 
     config = contract.get_config()
-    assert config["version"] == "2.1.0"
+    assert config["version"] == "2.2.0"
+    assert config["evaluation_schema"] == "hackathon-judge-evaluation-v1"
     assert config["evidence_schema"] == "hackathon-judge-snapshot-v3"
     assert config["funding_model"] == "WITHDRAWABLE_DEPOSIT_CREDIT_V1"
     assert config["evidence_policy"] == "VALIDATOR_AGREED_IMMUTABLE_RENDER_SNAPSHOT"
@@ -370,6 +371,27 @@ def test_evidence_capture_consensus_binds_snapshot_and_digest(direct_deploy):
     assert contract._capture_results_match(
         {"snapshot": snapshot, "digest": "0" * 64},
         {"snapshot": snapshot, "digest": "0" * 64},
+    ) is False
+
+
+def test_judgment_consensus_rejects_malformed_leader_fields(direct_deploy):
+    contract = _deploy(direct_deploy)
+    honest = {
+        "eligibility": "ELIGIBLE",
+        "score_band": 80,
+        "confidence_bucket": 90,
+        "reason": "Independent evidence satisfies the rulebook.",
+    }
+
+    assert contract._evaluation_results_match(honest, {**honest, "reason": "Different valid wording."}) is True
+    assert contract._evaluation_results_match({**honest, "confidence_bucket": 120}, honest) is False
+    assert contract._evaluation_results_match({**honest, "confidence_bucket": 95}, honest) is False
+    assert contract._evaluation_results_match({**honest, "score_band": "80"}, honest) is False
+    assert contract._evaluation_results_match({**honest, "reason": "x" * 401}, honest) is False
+    assert contract._evaluation_results_match({**honest, "extra": "leader-only"}, honest) is False
+    assert contract._evaluation_results_match(
+        {**honest, "eligibility": "INELIGIBLE", "score_band": 80},
+        honest,
     ) is False
 
 

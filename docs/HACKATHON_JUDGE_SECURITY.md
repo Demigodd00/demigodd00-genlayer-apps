@@ -6,7 +6,7 @@
 - **Immutable terms:** rulebook, rubric, threshold, deadline, appeal window, and prize are fixed at creation.
 - **Immutable evidence:** submission and appeal pages are normalized, hashed, independently re-rendered, and accepted only when validators match both the exact snapshot and digest.
 - **Prompt-injection boundary:** evidence, entrant summaries, and appeal statements are explicitly treated as untrusted data and cannot redefine role, output schema, or security rules.
-- **Consensus-safe output:** exact comparison is limited to eligibility and coarse score band; confidence is bounded; free-form reasoning is excluded.
+- **Consensus-safe output:** exact comparison is limited to eligibility and coarse score band; confidence is bounded; free-form reasoning is excluded. Both leader and validator records must first match the strict normalized evaluation schema.
 - **Deterministic settlement:** winner ranking, tie-breaking, refunds, credits, and credentials do not invoke an LLM.
 - **Bounded state:** input lengths, page size, submission count, score values, evidence size, URL format, and appeal count are capped.
 - **Escrow accounting:** prize funds move through owned app credit. Withdrawal zeroes credit before the external transfer.

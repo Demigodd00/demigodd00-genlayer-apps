@@ -17,8 +17,8 @@ declare global { interface Window { ethereum?: EthereumProvider } }
 export type WalletSession = { address: Address; client: ReturnType<typeof createClient>; provider: EthereumProvider };
 export type TxProgress = { state: "idle" | "checking" | "signing" | "submitted" | "finalizing" | "confirmed" | "failed"; label: string; hash?: string };
 
-export const CONTRACT_ADDRESS = (process.env.NEXT_PUBLIC_HACKATHON_JUDGE_ADDRESS ?? "0x0bAE6f3aE56E02A50f5Bed0051F56ec28725a58F") as Address;
-export const EXPLORER_URL = `https://explorer-studionet.genlayer.com/address/${CONTRACT_ADDRESS}`;
+export const CONTRACT_ADDRESS = (process.env.NEXT_PUBLIC_HACKATHON_JUDGE_ADDRESS ?? "0x788432Aa8D55c81c3bd2ef0FbB29A4Bc7E6e4cC6") as Address;
+export const EXPLORER_URL = `https://explorer-studio.genlayer.com/address/${CONTRACT_ADDRESS}`;
 const readClient = createClient({ chain: chains.studionet });
 
 async function read<T>(functionName: string, args: unknown[] = []): Promise<T> {
@@ -37,7 +37,7 @@ function validPage<T>(value: Page<T>): Page<T> {
   return value;
 }
 
-export const listHackathons = async () => validPage(await read<Page<HackathonSummary>>("list_hackathons", [0, 25]));
+export const listHackathons = async (offset = 0) => validPage(await read<Page<HackathonSummary>>("list_hackathons", [offset, 25]));
 export const getHackathon = (id: string) => read<Hackathon>("get_hackathon", [id]);
 export const listSubmissions = async (id: string) => validPage(await read<Page<Submission>>("list_submissions", [id, 0, 25]));
 export const getEvidence = (id: string, index: string) => read<Evidence>("get_submission_evidence", [id, Number(index)]);

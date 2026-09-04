@@ -7,9 +7,9 @@ Hackathon Judge turns a prose rulebook, public project evidence, and independent
 ## Links
 
 - Live app: [hackathon-judge-studionet.blazekingsley2.chatgpt.site](https://hackathon-judge-studionet.blazekingsley2.chatgpt.site)
-- StudioNet contract: [`0x0bAE6f3aE56E02A50f5Bed0051F56ec28725a58F`](https://explorer-studionet.genlayer.com/address/0x0bAE6f3aE56E02A50f5Bed0051F56ec28725a58F)
-- Deployment transaction: `0x78362bdfad4abbedde0e153befc2276ecaf2db1dd00f8b5378b46a3f44e8f048`
-- Deployed source SHA-256: `821f6be09d63e097593457b5a0f5080c93277aedf2be38b81302c9976ec77c07`
+- StudioNet contract: [`0x788432Aa8D55c81c3bd2ef0FbB29A4Bc7E6e4cC6`](https://explorer-studio.genlayer.com/address/0x788432Aa8D55c81c3bd2ef0FbB29A4Bc7E6e4cC6)
+- Deployment transaction: `0x4b963396d91fa9088c77c4d15fcf02197c7d397a636ff4875c0c7ad6fd1a9926`
+- Deployed source SHA-256: `5b27de829d137bdf1b89c0bb02d2742431cdc7833fb0c5b63b4285f6304a14d8`
 - Contract source: [`contracts/hackathon_judge.py`](../contracts/hackathon_judge.py)
 - Architecture: [`docs/architecture/hackathon-judge.md`](architecture/hackathon-judge.md)
 - Security and limitations: [`docs/HACKATHON_JUDGE_SECURITY.md`](HACKATHON_JUDGE_SECURITY.md)
@@ -23,7 +23,7 @@ Hackathon judging is slow, opaque, and difficult to audit. Rules are prose, evid
 
 ## The GenLayer-native mechanism
 
-At submission time, every validator renders the public evidence URL and must reproduce both the exact normalized snapshot and its SHA-256 digest. That agreed snapshot becomes the immutable record. After the deadline, any account may trigger judging. Validators independently evaluate the saved snapshot against the stored prose rulebook and rubric.
+At submission time, every validator renders the public evidence URL and must reproduce both the exact normalized snapshot and its SHA-256 digest. That agreed snapshot becomes the immutable record. After the deadline, any account may trigger judging. Validators independently evaluate the saved snapshot against the stored prose rulebook and rubric using `exec_prompt()` inside a custom `run_nondet_unsafe()` comparison.
 
 Consensus compares only the fields that affect settlement:
 
@@ -61,7 +61,7 @@ Consensus compares only the fields that affect settlement:
 
 ## Live StudioNet result
 
-Event `hj-3`, **Open Intelligence Build Week — Verified Jury Final**, is finalized on the v2.1 contract with two validator-captured submissions and a 0.001 simulated GEN prize.
+Event `hj-3`, **Open Intelligence Build Week — Verified Jury Final**, is the preserved finalized demonstration from the v2.1 contract. Its historical receipt remains available while a fresh v2.2 demonstration is prepared on the hardened release contract.
 
 | Project | Final eligibility | Score | Confidence | Outcome |
 |---|---:|---:|---:|---|
@@ -75,9 +75,9 @@ The evidence digests, every transaction hash, final representative rationale, wi
 | Check | Result |
 |---|---|
 | GenVM lint | Passed; runner hash pinned |
-| Direct tests | 19 passed, including forged-snapshot and timeout cases |
+| Direct tests | 20 passed, including malformed-leader, forged-snapshot, and timeout cases |
 | StudioNet integration | 1 passed through real renderer + LLM consensus |
-| Frontend tests | 4 passed |
+| Frontend tests | 8 passed |
 | Frontend typecheck/lint/build | Passed |
 | Production dependency audit | No known vulnerabilities |
 | Deployed source/config verification | Passed |

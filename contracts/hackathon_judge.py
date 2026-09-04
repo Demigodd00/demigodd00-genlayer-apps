@@ -194,7 +194,7 @@ def _parse_evaluation(raw) -> dict:
             if alias in data:
                 reason_raw = data[alias]
                 break
-    reason = str(reason_raw).strip()[:MAX_REASON_CHARS] if reason_raw is not None else ""
+    reason = str(reason_raw).replace("\x00", "").strip()[:MAX_REASON_CHARS] if reason_raw is not None else ""
     if confidence < MIN_CONFIDENCE:
         eligibility = INCONCLUSIVE
     if eligibility != ELIGIBLE:
@@ -670,6 +670,8 @@ class HackathonJudge(gl.Contract):
         self.hackathons[hackathon_id] = hackathon
 
     def _apply_evaluation(self, submission: Submission, result: dict, now: int) -> None:
+        if not self._valid_evaluation_result(result):
+            raise gl.vm.UserError(f"{ERROR_LLM} invalid normalized judgment result")
         submission.eligibility = result["eligibility"]
         submission.score_band = u256(result["score_band"])
         submission.confidence_bucket = u256(result["confidence_bucket"])
@@ -766,14 +768,45 @@ class HackathonJudge(gl.Contract):
             if not isinstance(leaders_res, gl.vm.Return):
                 return _handle_leader_error(leaders_res, leader_fn)
             validator_result = leader_fn()
-            leader_result = leaders_res.calldata
-            if leader_result["eligibility"] != validator_result["eligibility"]:
-                return False
-            if int(leader_result["score_band"]) != int(validator_result["score_band"]):
-                return False
-            return abs(int(leader_result["confidence_bucket"]) - int(validator_result["confidence_bucket"])) <= 20
+            return self._evaluation_results_match(leaders_res.calldata, validator_result)
 
-        return gl.vm.run_nondet_unsafe(leader_fn, validator_fn)
+        result = gl.vm.run_nondet_unsafe(leader_fn, validator_fn)
+        if not self._valid_evaluation_result(result):
+            raise gl.vm.UserError(f"{ERROR_LLM} invalid normalized judgment result")
+        return result
+
+    def _valid_evaluation_result(self, result: dict) -> bool:
+        # Calldata from a leader is adversarial, even if honest leaders use the parser.
+        if not isinstance(result, dict) or len(result) != 4:
+            return False
+        if not all(key in result for key in ("eligibility", "score_band", "confidence_bucket", "reason")):
+            return False
+        eligibility = result["eligibility"]
+        score = result["score_band"]
+        confidence = result["confidence_bucket"]
+        reason = result["reason"]
+        if not isinstance(eligibility, str) or eligibility not in (ELIGIBLE, INELIGIBLE, INCONCLUSIVE):
+            return False
+        if type(score) is not int or score not in (0, 20, 40, 60, 80, 100):
+            return False
+        if type(confidence) is not int or confidence < 0 or confidence > 100 or confidence % 10 != 0:
+            return False
+        if not isinstance(reason, str) or len(reason) > MAX_REASON_CHARS or "\x00" in reason:
+            return False
+        if eligibility != ELIGIBLE and score != 0:
+            return False
+        if eligibility != INCONCLUSIVE and confidence < MIN_CONFIDENCE:
+            return False
+        return True
+
+    def _evaluation_results_match(self, leader_result: dict, validator_result: dict) -> bool:
+        if not self._valid_evaluation_result(leader_result) or not self._valid_evaluation_result(validator_result):
+            return False
+        return (
+            leader_result["eligibility"] == validator_result["eligibility"]
+            and leader_result["score_band"] == validator_result["score_band"]
+            and abs(leader_result["confidence_bucket"] - validator_result["confidence_bucket"]) <= 20
+        )
 
     def _appeals_block_finalization(self, hackathon: Hackathon, now: int) -> bool:
         index = 0
@@ -962,7 +995,8 @@ class HackathonJudge(gl.Contract):
     @gl.public.view
     def get_config(self) -> dict:
         return {
-            "version": "2.1.0",
+            "version": "2.2.0",
+            "evaluation_schema": "hackathon-judge-evaluation-v1",
             "network_target": "studionet",
             "funding_model": "WITHDRAWABLE_DEPOSIT_CREDIT_V1",
             "evidence_schema": "hackathon-judge-snapshot-v3",

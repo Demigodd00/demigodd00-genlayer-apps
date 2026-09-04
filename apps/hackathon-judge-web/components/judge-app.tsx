@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   ArrowUpRight, Award, BookOpenText, Box, Check, ChevronRight,
   CircleDollarSign, Code2, ExternalLink, FileCheck2, Fingerprint,
@@ -57,6 +57,9 @@ function formValue(data: FormData, key: string): string {
 
 export function JudgeApp() {
   const [events, setEvents] = useState<HackathonSummary[]>([]);
+  const [eventTotal, setEventTotal] = useState(0);
+  const [nextOffset, setNextOffset] = useState(0);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [selectedId, setSelectedId] = useState('');
   const [hackathon, setHackathon] = useState<Hackathon | null>(null);
   const [submissions, setSubmissions] = useState<Submission[]>([]);
@@ -69,23 +72,67 @@ export function JudgeApp() {
   const [loading, setLoading] = useState(true);
   const [appealTarget, setAppealTarget] = useState<Submission | null>(null);
   const [evidence, setEvidence] = useState<{ project: string; value: Evidence } | null>(null);
+  const [transactionPending, setTransactionPending] = useState(false);
+  const transactionLock = useRef(false);
+  const selectedIdRef = useRef('');
+  const walletRef = useRef<WalletSession | null>(null);
+  const listRevision = useRef(0);
+  const pageLock = useRef(false);
+
+  const selectRoom = useCallback((id: string) => {
+    if (transactionLock.current) return;
+    selectedIdRef.current = id;
+    setSelectedId(id);
+    setHackathon(null);
+    setSubmissions([]);
+    setPanel('none');
+    setAppealTarget(null);
+    setEvidence(null);
+    setError('');
+  }, []);
 
   const refreshList = useCallback(async () => {
+    const revision = ++listRevision.current;
     const [eventPage, protocolStats] = await Promise.all([listHackathons(), getStats()]);
+    if (revision !== listRevision.current) return;
     setEvents(eventPage.items);
+    setEventTotal(Number(eventPage.total));
+    setNextOffset(eventPage.items.length);
     setStats(protocolStats);
-    setSelectedId((current) => current || eventPage.items[0]?.id || '');
+    if (!selectedIdRef.current) {
+      const id = eventPage.items[0]?.id || '';
+      selectedIdRef.current = id;
+      setSelectedId(id);
+    }
   }, []);
+
+  const loadMore = async () => {
+    if (pageLock.current || transactionLock.current) return;
+    pageLock.current = true;
+    setLoadingMore(true);
+    const revision = listRevision.current;
+    try {
+      const page = await listHackathons(nextOffset);
+      if (revision !== listRevision.current) return;
+      setEvents((current) => [...new Map([...current, ...page.items].map((event) => [event.id, event])).values()]);
+      setEventTotal(Number(page.total));
+      setNextOffset(nextOffset + page.items.length);
+    } catch (cause) { setError(friendlyError(cause)); }
+    finally { pageLock.current = false; setLoadingMore(false); }
+  };
 
   const refreshSelected = useCallback(async (id: string) => {
     if (!id) { setHackathon(null); setSubmissions([]); return; }
     const [event, entries] = await Promise.all([getHackathon(id), listSubmissions(id)]);
+    if (selectedIdRef.current !== id) return;
     setHackathon(event);
     setSubmissions(entries.items);
   }, []);
 
   const refreshProfile = useCallback(async (session: WalletSession | null) => {
-    setProfile(session ? await getBuilderProfile(session.address) : null);
+    if (!session) { setProfile(null); return; }
+    const result = await getBuilderProfile(session.address);
+    if (walletRef.current === session) setProfile(result);
   }, []);
 
   useEffect(() => {
@@ -95,7 +142,10 @@ export function JudgeApp() {
         const [eventPage, protocolStats] = await Promise.all([listHackathons(), getStats()]);
         if (!active) return;
         setEvents(eventPage.items);
+        setEventTotal(Number(eventPage.total));
+        setNextOffset(eventPage.items.length);
         setStats(protocolStats);
+        selectedIdRef.current = eventPage.items[0]?.id || '';
         setSelectedId(eventPage.items[0]?.id || '');
       } catch (cause) {
         if (active) setError(friendlyError(cause));
@@ -126,30 +176,38 @@ export function JudgeApp() {
 
   useEffect(() => {
     if (!wallet) return;
-    return watchWallet(wallet, (message) => { setWallet(null); setProfile(null); setError(message); });
+    return watchWallet(wallet, (message) => { walletRef.current = null; setWallet(null); setProfile(null); setError(message); });
   }, [wallet]);
 
-  const busy = ['checking', 'signing', 'submitted', 'finalizing'].includes(progress.state);
+  const busy = transactionPending;
   const organizer = Boolean(wallet && hackathon && sameAddress(wallet.address, hackathon.organizer));
 
   const runTx = async (work: (session: WalletSession, report: (value: TxProgress) => void) => Promise<string>) => {
+    if (transactionLock.current) return;
     if (!wallet) { setError('Connect a StudioNet wallet first.'); return; }
+    // Acquire synchronously: React state alone does not guard same-tick clicks.
+    transactionLock.current = true;
+    setTransactionPending(true);
+    const roomId = selectedIdRef.current;
     setError('');
     setProgress({ state: 'checking', label: 'Preparing action' });
     try {
       await work(wallet, setProgress);
       await refreshList();
-      await refreshSelected(selectedId);
+      await refreshSelected(roomId);
       await refreshProfile(wallet);
       setPanel('none');
       setAppealTarget(null);
     } catch (cause) { setError(friendlyError(cause)); }
+    finally { transactionLock.current = false; setTransactionPending(false); }
   };
 
   const connect = async () => {
+    if (transactionLock.current) return;
     setError('');
     try {
       const session = await connectWallet();
+      walletRef.current = session;
       setWallet(session);
       await refreshProfile(session);
     } catch (cause) { setError(friendlyError(cause)); }
@@ -157,9 +215,11 @@ export function JudgeApp() {
 
   const handleCreate = async (event: FormSubmit) => {
     event.preventDefault();
+    try {
     const data = new FormData(event.currentTarget);
     const prize = parseGen(formValue(data, 'prize') || '0');
     const deadline = Math.floor(new Date(formValue(data, 'deadline')).getTime() / 1000);
+    if (!Number.isFinite(deadline)) throw new Error('Choose a valid submission deadline.');
     await runTx((session, report) => createHackathon(session, {
       name: formValue(data, 'name'), awardTitle: formValue(data, 'award'),
       rulebook: formValue(data, 'rulebook'), rubric: formValue(data, 'rubric'),
@@ -167,17 +227,21 @@ export function JudgeApp() {
       minWinningScore: formValue(data, 'minimum'), appealWindowSecs: String(Number(formValue(data, 'appealMinutes')) * 60),
       prizeAtto: String(prize),
     }, report));
+    } catch (cause) { setError(friendlyError(cause)); }
   };
 
   const handleFund = async (event: FormSubmit) => {
     event.preventDefault();
+    try {
     const amount = parseGen(formValue(new FormData(event.currentTarget), 'amount'));
+    if (amount <= 0n) throw new Error('Enter a deposit amount greater than zero.');
     await runTx((session, report) => deposit(session, amount, report));
+    } catch (cause) { setError(friendlyError(cause)); }
   };
 
   const handleSubmit = async (event: FormSubmit) => {
     event.preventDefault();
-    if (!hackathon) return;
+    if (!hackathon || hackathon.id !== selectedIdRef.current) { setError('Select a room and wait for it to load.'); return; }
     const data = new FormData(event.currentTarget);
     await runTx((session, report) => submitProject(session, hackathon.id, formValue(data, 'project'), formValue(data, 'url'), formValue(data, 'summary'), report));
   };
@@ -185,26 +249,36 @@ export function JudgeApp() {
   const handleAppeal = async (event: FormSubmit) => {
     event.preventDefault();
     if (!hackathon || !appealTarget) return;
+    const targetId = appealTarget.hackathon_id;
+    if (targetId !== hackathon.id || targetId !== selectedIdRef.current) {
+      setPanel('none'); setAppealTarget(null);
+      setError('The selected room changed. Reopen the appeal from its original submission.');
+      return;
+    }
     const data = new FormData(event.currentTarget);
-    await runTx((session, report) => appealSubmission(session, hackathon.id, appealTarget.index, formValue(data, 'statement'), formValue(data, 'url'), report));
+    await runTx((session, report) => appealSubmission(session, targetId, appealTarget.index, formValue(data, 'statement'), formValue(data, 'url'), report));
   };
 
   const showEvidence = async (submission: Submission) => {
     if (!hackathon) return;
     setError('');
-    try { setEvidence({ project: submission.project_name, value: await getEvidence(hackathon.id, submission.index) }); }
+    const id = submission.hackathon_id;
+    try {
+      const value = await getEvidence(id, submission.index);
+      if (selectedIdRef.current === id) setEvidence({ project: submission.project_name, value });
+    }
     catch (cause) { setError(friendlyError(cause)); }
   };
 
   const verdictReady = hackathon?.phase === 'READY_FOR_JUDGING' || hackathon?.status === 'JUDGING';
   const walletCredit = profile?.available_credit_atto ?? '0';
   const activeDescription = useMemo(() => {
-    if (!hackathon) return 'The v2.1 steward is live. Create the first public judging event.';
+    if (!hackathon) return selectedId ? 'Loading the selected judging room…' : 'The v2.2 steward is live. Create the first public judging event.';
     if (hackathon.accepting_submissions) return `${hackathon.remaining_slots} submission slot${hackathon.remaining_slots === '1' ? '' : 's'} still open.`;
     if (hackathon.finalizable) return 'Every decision is in. Anyone can finalize the winner.';
     if (hackathon.appeal_blocked) return 'Finalization is paused while appeal rights are active.';
     return `${hackathon.evaluated_count} of ${hackathon.submission_count} entries judged.`;
-  }, [hackathon]);
+  }, [hackathon, selectedId]);
 
   return (
     <main className="app-shell">
@@ -213,7 +287,7 @@ export function JudgeApp() {
           <div className="brand-mark" aria-hidden="true"><Scale /></div>
           <div><strong>Hackathon Judge</strong><span>GenLayer-native jury protocol</span></div>
         </div>
-        <div className="network-lock"><span /> StudioNet · v2.1</div>
+        <div className="network-lock"><span /> StudioNet · v2.2</div>
         <div className="top-actions">
           <a className="icon-link" href="/hackathon-judge-demo.mp4" target="_blank" rel="noreferrer" aria-label="Watch demo video"><Play /></a>
           <a className="icon-link" href={EXPLORER_URL} target="_blank" rel="noreferrer" aria-label="View contract in explorer"><ExternalLink /></a>
@@ -228,7 +302,7 @@ export function JudgeApp() {
           {busy ? <LoaderCircle className="spin" /> : progress.state === 'confirmed' ? <Check /> : <ShieldCheck />}
           <span>{error || progress.label}</span>
           {progress.hash && <code>{progress.hash.slice(0, 12)}…</code>}
-          <button onClick={() => { setError(''); setProgress(idleProgress); }} aria-label="Dismiss"><X /></button>
+          <button disabled={busy} onClick={() => { if (!transactionLock.current) { setError(''); setProgress(idleProgress); } }} aria-label="Dismiss"><X /></button>
         </output>
       )}
 
@@ -240,12 +314,13 @@ export function JudgeApp() {
             {loading && <div className="loading-row"><LoaderCircle className="spin" /> Loading StudioNet</div>}
             {!loading && events.length === 0 && <div className="rail-empty">No rooms yet.<br />Open the first docket.</div>}
             {events.map((item) => (
-              <button key={item.id} className="event-item" data-active={item.id === selectedId} onClick={() => setSelectedId(item.id)}>
+              <button key={item.id} className="event-item" data-active={item.id === selectedId} disabled={busy} onClick={() => selectRoom(item.id)}>
                 <span className="event-index">{item.id.replace('hj-', '#')}</span>
                 <span><strong>{item.name}</strong><small>{item.submission_count} entries · {formatGen(item.prize_atto)} GEN</small></span>
                 <ChevronRight />
               </button>
             ))}
+            {nextOffset < eventTotal && <Button variant="outline" disabled={loadingMore || busy} onClick={loadMore}>{loadingMore ? 'Loading rooms…' : 'Load more rooms'}</Button>}
           </div>
           <div className="rail-ledger">
             <span>Protocol ledger</span>
@@ -311,7 +386,7 @@ export function JudgeApp() {
             </ActionPanel>
           )}
 
-          {!hackathon ? <EmptyDocket onCreate={() => setPanel('create')} /> : <>
+          {!hackathon ? (selectedId ? <div className="loading-row"><LoaderCircle className="spin" /> Loading selected docket</div> : <EmptyDocket onCreate={() => setPanel('create')} />) : <>
             <div className="rule-grid">
               <article className="rule-card"><div><BookOpenText /><span>Rulebook</span></div><p>{hackathon.rulebook}</p></article>
               <article className="rule-card"><div><FileCheck2 /><span>Rubric</span></div><p>{hackathon.rubric}</p></article>

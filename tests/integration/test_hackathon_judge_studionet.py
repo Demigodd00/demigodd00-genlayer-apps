@@ -16,7 +16,8 @@ def test_hackathon_judge_reaches_consensus_on_rendered_evidence_studionet():
     factory = get_contract_factory("HackathonJudge")
     contract = factory.deploy(args=[])
     config = contract.get_config(args=[]).call()
-    assert config["version"] == "2.1.0"
+    assert config["version"] == "2.2.0"
+    assert config["evaluation_schema"] == "hackathon-judge-evaluation-v1"
     assert config["evidence_schema"] == "hackathon-judge-snapshot-v3"
     assert config["liveness_policy"] == "PERMISSIONLESS_TIMEOUT_TO_INCONCLUSIVE"
     accounts = get_accounts()
@@ -24,7 +25,7 @@ def test_hackathon_judge_reaches_consensus_on_rendered_evidence_studionet():
 
     unique = str(int(time.time()))
     name = "Hackathon Judge StudioNet Smoke " + unique
-    deadline = int(time.time()) + 75
+    deadline = int(time.time()) + 180
     create_receipt = contract.create_hackathon(
         args=[
             name,

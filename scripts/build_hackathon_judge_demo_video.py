@@ -90,7 +90,7 @@ def build() -> None:
             title_card(
                 "Hackathon Judge",
                 "Natural-language judging, settled on-chain",
-                "0x0bAE6f3aE56E02A50f5Bed0051F56ec28725a58F",
+                "0x788432Aa8D55c81c3bd2ef0FbB29A4Bc7E6e4cC6",
             ),
             6,
         ),

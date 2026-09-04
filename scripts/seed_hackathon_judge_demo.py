@@ -1,4 +1,4 @@
-"""Seed the exact Hackathon Judge v2.1 StudioNet release with a public demo.
+"""Seed the exact Hackathon Judge v2.2 StudioNet release with a public demo.
 
 The organizer uses HACKATHON_JUDGE_DEMO_PRIVATE_KEY when supplied, otherwise
 the existing local StudioNet signer. Entrants are deterministically derived and
@@ -89,7 +89,7 @@ def _load_or_start_record(address: str, accounts: dict) -> dict:
     return {
         "network": "studionet",
         "contract": address,
-        "contract_version": "2.1.0",
+        "contract_version": "2.2.0",
         "site_url": SITE_URL,
         "event_name": EVENT_NAME,
         "started_at": _timestamp(),
@@ -228,8 +228,8 @@ def _wait_until(deadline: int) -> None:
 
 def main() -> None:
     deployment = json.loads(DEPLOYMENT_PATH.read_text(encoding="utf-8"))
-    if deployment.get("network") != "studionet" or deployment.get("version") != "2.1.0":
-        raise RuntimeError("The recorded Hackathon Judge v2.1 StudioNet release is not active")
+    if deployment.get("network") != "studionet" or deployment.get("version") != "2.2.0":
+        raise RuntimeError("The recorded Hackathon Judge v2.2 StudioNet release is not active")
     address = deployment["address"]
     organizer = Account.from_key(_load_signer())
     entrant_one = Account.from_key(hmac.new(organizer.key, b"hackathon-judge/demo/entrant-one/v2", hashlib.sha256).digest())
@@ -247,7 +247,11 @@ def main() -> None:
 
     organizer_client = clients["organizer"]
     config = _read(organizer_client, address, "get_config", [])
-    if config.get("version") != "2.1.0" or config.get("evidence_schema") != "hackathon-judge-snapshot-v3":
+    if (
+        config.get("version") != "2.2.0"
+        or config.get("evidence_schema") != "hackathon-judge-snapshot-v3"
+        or config.get("evaluation_schema") != "hackathon-judge-evaluation-v1"
+    ):
         raise RuntimeError("Deployed configuration does not match the demo")
 
     listing = _read(organizer_client, address, "list_hackathons", [0, 25])
