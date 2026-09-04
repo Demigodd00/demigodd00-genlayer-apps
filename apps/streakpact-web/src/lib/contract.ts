@@ -103,19 +103,20 @@ const EVIDENCE_PREFIXES = [
   "https://gateway.pinata.cloud/ipfs/",
   "https://arweave.net/",
 ] as const;
-const MAX_EVIDENCE_BYTES = 100_000;
+export const MAX_EVIDENCE_BYTES = 100_000;
+export const MAX_EVIDENCE_CHARS = 8_000;
 
 const readClient = createClient({ chain: chains.studionet });
 
 function contractAddress(): Address {
   if (!CONTRACT_READY) {
-    throw new Error("StreakPact V2.1 has not been configured for this environment.");
+    throw new Error("StreakPact V2.2 has not been configured for this environment.");
   }
   return CONTRACT_ADDRESS as Address;
 }
 
 export function isAddress(value: string): value is Address {
-  return /^0x[0-9a-fA-F]{40}$/.test(value);
+  return /^0x[0-9a-fA-F]{40}$/.test(value) && !/^0x0{40}$/i.test(value);
 }
 
 export function isEvidenceUrl(value: string): boolean {
@@ -132,7 +133,17 @@ export async function hashEvidenceFile(file: File): Promise<string> {
   if (file.size > MAX_EVIDENCE_BYTES) {
     throw new Error("Evidence must be 100 KB or smaller so validators can fetch it safely.");
   }
-  const digest = await crypto.subtle.digest("SHA-256", await file.arrayBuffer());
+  const bytes = await file.arrayBuffer();
+  let text: string;
+  try {
+    text = new TextDecoder("utf-8", { fatal: true }).decode(bytes);
+  } catch {
+    throw new Error("Evidence must be valid UTF-8 text.");
+  }
+  if (Array.from(text).length > MAX_EVIDENCE_CHARS) {
+    throw new Error("Evidence must be 8,000 characters or fewer so validators evaluate the whole file.");
+  }
+  const digest = await crypto.subtle.digest("SHA-256", bytes);
   return Array.from(new Uint8Array(digest), (byte) => byte.toString(16).padStart(2, "0")).join("");
 }
 

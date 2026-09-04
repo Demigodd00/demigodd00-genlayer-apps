@@ -8,6 +8,7 @@ export const runtime = "nodejs";
 const PINATA_UPLOAD_URL = "https://uploads.pinata.cloud/v3/files";
 const PUBLIC_GATEWAY_PREFIX = "https://gateway.pinata.cloud/ipfs/";
 const MAX_EVIDENCE_BYTES = 100_000;
+const MAX_EVIDENCE_CHARS = 8_000;
 const MAX_REQUEST_BYTES = 220_000;
 const RATE_WINDOW_MS = 60_000;
 const MAX_UPLOADS_PER_WINDOW = 5;
@@ -176,6 +177,15 @@ export async function POST(request: Request) {
   }
 
   const bytes = await candidate.arrayBuffer();
+  let text: string;
+  try {
+    text = new TextDecoder("utf-8", { fatal: true }).decode(bytes);
+  } catch {
+    return json({ error: "Evidence must be valid UTF-8 text." }, 400);
+  }
+  if (Array.from(text).length > MAX_EVIDENCE_CHARS) {
+    return json({ error: "Evidence must be 8,000 characters or fewer so validators evaluate the whole file." }, 413);
+  }
   const digest = createHash("sha256").update(Buffer.from(bytes)).digest("hex");
   const extension = mimeType === "application/json" ? "json" : "txt";
   const publicFile = new File([bytes], `streakpact-${digest.slice(0, 16)}.${extension}`, {

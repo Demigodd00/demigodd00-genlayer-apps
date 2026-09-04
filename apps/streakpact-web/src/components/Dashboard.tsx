@@ -28,7 +28,15 @@ import {
 } from "@/lib/contract";
 import EvidenceFilePicker from "./EvidenceFilePicker";
 import TxNotice from "./TxNotice";
-import { formatCountdown, pactShareUrl, pactTiming, transactionPending } from "@/lib/ui-state";
+import {
+  formatCountdown,
+  localDateTimeValue,
+  observationTimeError,
+  pactShareUrl,
+  pactTiming,
+  parseLocalDateTime,
+  transactionPending,
+} from "@/lib/ui-state";
 
 const demoPact: PactView = {
   id: "sp2-preview",
@@ -86,11 +94,6 @@ const demoCheckins: CheckinView[] = [0, 1, 2].map((period) => {
     appeal_record: {},
   };
 });
-
-function localDateTime(unixSeconds = Math.floor(Date.now() / 1000)): string {
-  const date = new Date(unixSeconds * 1000);
-  return new Date(date.getTime() - date.getTimezoneOffset() * 60_000).toISOString().slice(0, 16);
-}
 
 function statusLabel(status: string): string {
   return status.replaceAll("_", " ").toLowerCase().replace(/^./, (letter) => letter.toUpperCase());
@@ -283,12 +286,12 @@ export function PactDetail({
   const [evidenceUrl, setEvidenceUrl] = useState("");
   const [digest, setDigest] = useState("");
   const [statement, setStatement] = useState("");
-  const [observedAt, setObservedAt] = useState(localDateTime);
+  const [observedAt, setObservedAt] = useState(localDateTimeValue);
   const [appealPeriodNumber, setAppealPeriodNumber] = useState("");
   const [appealStatement, setAppealStatement] = useState("");
   const [appealUrl, setAppealUrl] = useState("");
   const [appealDigest, setAppealDigest] = useState("");
-  const [appealObservedAt, setAppealObservedAt] = useState(localDateTime);
+  const [appealObservedAt, setAppealObservedAt] = useState(localDateTimeValue);
   const [progress, setProgress] = useState<TxProgress | null>(null);
   const [error, setError] = useState("");
   const [now, setNow] = useState(() => Math.floor(Date.now() / 1000));
@@ -300,11 +303,13 @@ export function PactDetail({
   const pact = { ...storedPact, ...pactTiming(storedPact, now) };
   useEffect(() => {
     if (!pact.window_open_now) return;
-    const selectedUnix = Math.floor(new Date(observedAt).getTime() / 1000);
-    if (!Number.isFinite(selectedUnix) || selectedUnix < Number(pact.next_window_open) || selectedUnix > now) {
-      setObservedAt(localDateTime(now));
+    const selectedUnix = parseLocalDateTime(observedAt);
+    const windowOpen = Number(pact.next_window_open);
+    const windowClose = Number(pact.next_window_close);
+    if (selectedUnix === null || selectedUnix < windowOpen || selectedUnix >= windowClose || selectedUnix > now) {
+      setObservedAt(localDateTimeValue(Math.max(windowOpen, Math.min(now, windowClose - 1))));
     }
-  }, [now, observedAt, pact.next_window_open, pact.window_open_now]);
+  }, [now, observedAt, pact.next_window_close, pact.next_window_open, pact.window_open_now]);
   const stakePresentation = pactStakePresentation(pact);
   const busy = transactionPending(progress);
 
@@ -372,11 +377,17 @@ export function PactDetail({
       setError("Describe what you are attesting in at least 20 characters.");
       return;
     }
-    const observedAtUnix = Math.floor(new Date(observedAt).getTime() / 1000);
-    if (!Number.isFinite(observedAtUnix)) {
-      setError("Choose when the activity was observed.");
+    const timeError = observationTimeError(
+      observedAt,
+      Number(pact.next_window_open),
+      Number(pact.next_window_close),
+      now,
+    );
+    if (timeError) {
+      setError(timeError);
       return;
     }
+    const observedAtUnix = parseLocalDateTime(observedAt)!;
     void run(() => submitCheckin(
       session!,
       pact.id,
@@ -389,6 +400,11 @@ export function PactDetail({
   }
 
   function sendAppeal() {
+    const selectedPeriod = Number(appealPeriodNumber);
+    if (!Number.isSafeInteger(selectedPeriod) || selectedPeriod < 0 || selectedPeriod >= Number(pact.periods_total)) {
+      setError("Choose a period to appeal.");
+      return;
+    }
     if (appealStatement.trim().length < 20) {
       setError("Explain the appeal in at least 20 characters.");
       return;
@@ -398,15 +414,18 @@ export function PactDetail({
       setError(validationError);
       return;
     }
-    const observedAtUnix = Math.floor(new Date(appealObservedAt).getTime() / 1000);
-    if (!Number.isFinite(observedAtUnix)) {
-      setError("Choose when the appealed activity occurred.");
+    const duration = (Number(pact.end_unix) - Number(pact.start_unix)) / Number(pact.periods_total);
+    const periodStart = Number(pact.start_unix) + selectedPeriod * duration;
+    const timeError = observationTimeError(appealObservedAt, periodStart, periodStart + duration, now);
+    if (timeError) {
+      setError(timeError);
       return;
     }
+    const observedAtUnix = parseLocalDateTime(appealObservedAt)!;
     void run(() => appealPeriod(
       session!,
       pact.id,
-      Number(appealPeriodNumber),
+      selectedPeriod,
       appealStatement.trim(),
       appealUrl.trim(),
       appealDigest.trim().toLowerCase(),
@@ -465,25 +484,17 @@ export function PactDetail({
         </div>
         {checkins.length > 0 ? (
           <div className="evidence-list">
-            {checkins.slice().reverse().slice(0, 4).map((item) => (
-              <div key={item.period}>
-                <span className={`verdict-mark verdict-${item.verdict.toLowerCase()}`}>{item.verdict === "KEPT" ? "✓" : "×"}</span>
-                <div>
-                  <strong>Period {Number(item.period) + 1} · {item.verdict}{item.appealed ? " after appeal" : ""}</strong>
-                  <p>{item.reason}</p>
-                  <details className="evidence-details audit-details">
-                    <summary>{item.appealed ? "Original + appeal records" : "Audit record"}</summary>
-                    <div className="audit-records">
-                      <AdjudicationAudit label="Original" record={item.original_record} />
-                      {item.appealed ? <AdjudicationAudit label="Appeal" record={item.appeal_record as AdjudicationRecord} /> : null}
-                    </div>
-                  </details>
-                </div>
-                <small>{item.confidence_bucket}% confidence</small>
-              </div>
-            ))}
+            {checkins.slice().reverse().slice(0, 4).map((item) => <CheckinAuditRow item={item} key={item.period} />)}
           </div>
         ) : <p className="muted">No check-ins yet.</p>}
+        {checkins.length > 4 ? (
+          <details className="evidence-details earlier-periods">
+            <summary>Show {checkins.length - 4} earlier periods</summary>
+            <div className="evidence-list">
+              {checkins.slice().reverse().slice(4).map((item) => <CheckinAuditRow item={item} key={item.period} />)}
+            </div>
+          </details>
+        ) : null}
       </section>
 
       <section className="action-section">
@@ -526,7 +537,7 @@ export function PactDetail({
               </div>
             </details>
             <div className="field-row">
-              <label><span>Observed in your timezone</span><input type="datetime-local" value={observedAt} onChange={(event) => setObservedAt(event.target.value)} /></label>
+              <label><span>Observed in your timezone</span><input type="datetime-local" step={1} value={observedAt} onChange={(event) => setObservedAt(event.target.value)} /></label>
               <label><span>Signing wallet</span><input className="mono" value={shortenAddress(pact.evidence_attestor)} readOnly /></label>
             </div>
             <label><span>Attestation</span><textarea value={statement} onChange={(event) => setStatement(event.target.value)} rows={3} maxLength={240} placeholder="I attest that the subject completed…" /></label>
@@ -551,11 +562,11 @@ export function PactDetail({
                   setAppealPeriodNumber(value);
                   if (value !== "") {
                     const duration = (Number(pact.end_unix) - Number(pact.start_unix)) / Number(pact.periods_total);
-                    setAppealObservedAt(localDateTime(Number(pact.start_unix) + Number(value) * duration + Math.max(1, Math.floor(duration / 2))));
+                    setAppealObservedAt(localDateTimeValue(Number(pact.start_unix) + Number(value) * duration + Math.max(1, Math.floor(duration / 2))));
                   }
                 }}><option value="">Choose a period</option>{appealable.map((item) => <option value={item.period} key={item.period}>Period {Number(item.period) + 1} · {item.verdict}</option>)}</select></label>
                 <label><span>Reason for appeal</span><textarea value={appealStatement} onChange={(event) => setAppealStatement(event.target.value)} rows={3} /></label>
-                <label><span>Activity time</span><input type="datetime-local" value={appealObservedAt} onChange={(event) => setAppealObservedAt(event.target.value)} /></label>
+                <label><span>Activity time</span><input type="datetime-local" step={1} value={appealObservedAt} onChange={(event) => setAppealObservedAt(event.target.value)} /></label>
                 <EvidenceFilePicker
                   idPrefix={`appeal-${pact.id}`}
                   onDigest={(nextDigest) => {
@@ -600,13 +611,37 @@ function AdjudicationAudit({ label, record }: { label: string; record: Adjudicat
     <section className="audit-record">
       <strong>{label} · {record.verdict}</strong>
       <dl>
-        <div><dt>Signed by</dt><dd className="mono">{shortenAddress(record.attestor)}</dd></div>
+        <div><dt>Provenance</dt><dd>{record.provenance || "Protocol timer"}</dd></div>
+        <div><dt>Signed by</dt><dd className="mono">{record.attestor || "Protocol"}</dd></div>
+        {record.statement ? <div><dt>Statement</dt><dd>{record.statement}</dd></div> : null}
         <div><dt>Observed</dt><dd>{record.observed_at_iso ? new Date(record.observed_at_iso).toLocaleString() : "Protocol timer"}</dd></div>
+        <div><dt>Judged</dt><dd>{record.judged_at_iso ? new Date(record.judged_at_iso).toLocaleString() : "—"}</dd></div>
+        {record.reason ? <div><dt>Reason</dt><dd>{record.reason}</dd></div> : null}
         {record.evidence_url ? <div><dt>Evidence</dt><dd><a href={record.evidence_url} target="_blank" rel="noreferrer">Open file ↗</a></dd></div> : null}
         {record.content_digest ? <div><dt>File SHA-256</dt><dd className="mono">{record.content_digest}</dd></div> : null}
         {record.attestation_id ? <div><dt>Attestation</dt><dd className="mono">{record.attestation_id}</dd></div> : null}
       </dl>
     </section>
+  );
+}
+
+function CheckinAuditRow({ item }: { item: CheckinView }) {
+  return (
+    <div>
+      <span className={`verdict-mark verdict-${item.verdict.toLowerCase()}`}>{item.verdict === "KEPT" ? "✓" : "×"}</span>
+      <div>
+        <strong>Period {Number(item.period) + 1} · {item.verdict}{item.appealed ? " after appeal" : ""}</strong>
+        <p>{item.reason}</p>
+        <details className="evidence-details audit-details">
+          <summary>{item.appealed ? "Original + appeal records" : "Audit record"}</summary>
+          <div className="audit-records">
+            <AdjudicationAudit label="Original" record={item.original_record} />
+            {item.appealed ? <AdjudicationAudit label="Appeal" record={item.appeal_record as AdjudicationRecord} /> : null}
+          </div>
+        </details>
+      </div>
+      <small>{item.confidence_bucket}% confidence</small>
+    </div>
   );
 }
 

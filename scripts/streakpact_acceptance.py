@@ -29,7 +29,7 @@ from deploy_streak_pact_v2 import load_deploy_environment
 
 ROOT = Path(__file__).resolve().parents[1]
 DEPLOYMENT = ROOT / "deployments/streak_pact_v2_studionet.json"
-RECORD = ROOT / "deployments/streak_pact_v2_1_acceptance.json"
+RECORD = ROOT / "deployments/streak_pact_v2_2_acceptance.json"
 RPC_URL = "https://studio.genlayer.com/api"
 
 
@@ -116,12 +116,24 @@ class Acceptance:
             entry["evm_transaction_hash"] = Web3.to_hex(Web3.keccak(hexstr=params[0]))
             self.save()
         self.last_request = time.monotonic()
-        response = self.http.post(RPC_URL, json={
+        request_body = {
             "jsonrpc": "2.0", "id": int(time.time() * 1000),
             "method": method, "params": params,
-        }, timeout=(10, 120))
-        response.raise_for_status()
-        payload = response.json()
+        }
+        for attempt in range(5):
+            try:
+                response = self.http.post(RPC_URL, json=request_body, timeout=(10, 120))
+                response.raise_for_status()
+                payload = response.json()
+                break
+            except (requests.RequestException, ValueError):
+                # Never automatically rebroadcast a signed transaction. Its
+                # deterministic hash is recovered by write() on the next run.
+                if method == "eth_sendRawTransaction" or attempt == 4:
+                    raise
+                time.sleep(2.0 * (attempt + 1))
+                self.http.close()
+                self.http = requests.Session()
         if payload.get("error"):
             err = payload["error"]
             raise RuntimeError(f"{method}: RPC {err.get('code')}: {err.get('message')}")
@@ -140,7 +152,7 @@ class Acceptance:
             raise RuntimeError("Deployed source differs from the recorded release")
         config = self.read("get_config", [])
         if (
-            config["version"] != "2.1.0"
+            config["version"] != "2.2.0"
             or config["fee_bps"] != "0"
             or config["period_secs"] != "60"
             or config["appeal_window_secs"] != "300"

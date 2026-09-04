@@ -3,7 +3,7 @@ import test from "node:test";
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { PactDetail } from "../src/components/Dashboard";
-import type { PactView, WalletSession } from "../src/lib/contract";
+import type { CheckinView, PactView, WalletSession } from "../src/lib/contract";
 
 const maker = `0x${"1".repeat(40)}` as const;
 const recipient = `0x${"2".repeat(40)}` as const;
@@ -19,9 +19,9 @@ const pact: PactView = {
   appeal_deadline_unix: "0", appeal_open: false,
 };
 
-function render(value: PactView, address: `0x${string}` | null) {
+function render(value: PactView, address: `0x${string}` | null, checkins: CheckinView[] = []) {
   const session = address ? { address, client: {} } as WalletSession : null;
-  return renderToStaticMarkup(createElement(PactDetail, { pact: value, session, checkins: [], onRefresh: async () => {} }));
+  return renderToStaticMarkup(createElement(PactDetail, { pact: value, session, checkins, onRefresh: async () => {} }));
 }
 
 test("the maker can cancel an unstarted self-pact from its interface", () => {
@@ -76,4 +76,35 @@ test("only the configured verifier gets the signed check-in controls", () => {
   assert.match(render(verified, maker), /Waiting for verifier/);
   assert.doesNotMatch(render(verified, maker), /Sign and submit/);
   assert.match(render(verified, verifier), /Sign and submit/);
+});
+
+test("all periods and complete original audit fields remain reviewable", () => {
+  const checkins = Array.from({ length: 7 }, (_, period): CheckinView => {
+    const record = {
+      verdict: "KEPT" as const,
+      method: "SIGNED_CONTENT_EVIDENCE",
+      statement: `Signed statement for period ${period + 1}`,
+      evidence_url: `https://arweave.net/period-${period + 1}`,
+      content_digest: String(period).padStart(64, "0"),
+      confidence_bucket: "90",
+      reason: `Complete original reason for period ${period + 1}`,
+      judged_at_iso: "2033-05-18T04:00:30+00:00",
+      attestor: verifier,
+      observed_at_iso: "2033-05-18T04:00:23+00:00",
+      attestation_id: String(period + 1).padStart(64, "0"),
+      provenance: "WALLET_VERIFIED",
+    };
+    return {
+      period: String(period), ...record, subject: maker, configured_attestor: verifier,
+      attestation_schema: "streakpact.wallet-attestation.v1", appealed: false,
+      original_record: record, appeal_record: {},
+    };
+  });
+  const html = render({ ...pact, status: "SETTLED", periods_total: "7", kept_count: "7" }, maker, checkins);
+  assert.match(html, /Show 3 earlier periods/);
+  assert.match(html, /Complete original reason for period 1/);
+  assert.match(html, /Signed statement for period 1/);
+  assert.match(html, new RegExp(verifier));
+  assert.match(html, /Provenance/);
+  assert.match(html, /Judged/);
 });

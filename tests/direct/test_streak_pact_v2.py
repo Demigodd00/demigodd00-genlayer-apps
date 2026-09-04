@@ -11,6 +11,7 @@ EVIDENCE_BODY = b'{"activity":"strength workout","duration_minutes":55,"complete
 EVIDENCE_DIGEST = hashlib.sha256(EVIDENCE_BODY).hexdigest()
 EVIDENCE_URL = "https://arweave.net/audit-fixture-1"
 TEST_NOW_UNIX = 2_000_000_000
+ZERO_ADDRESS = "0x0000000000000000000000000000000000000000"
 
 
 def _warp_to(direct_vm, unix_ts: int) -> None:
@@ -105,6 +106,38 @@ def test_self_pact_rejects_maker_as_failure_recipient(
     contract = _deploy(direct_deploy, direct_bob)
     with pytest.raises(Exception, match="failure recipient must differ"):
         _create(direct_vm, contract, direct_alice, direct_alice)
+    direct_vm.value = 0
+
+
+def test_zero_treasury_is_rejected(direct_deploy):
+    with pytest.raises(Exception, match="treasury cannot be the zero address"):
+        direct_deploy(
+            "contracts/streak_pact_v2.py",
+            ZERO_ADDRESS,
+            0,
+            DAY,
+            APPEAL_WINDOW,
+        )
+
+
+def test_zero_creation_addresses_are_rejected(
+    direct_vm, direct_deploy, direct_alice, direct_bob
+):
+    contract = _deploy(direct_deploy, direct_bob)
+    direct_vm.sender = direct_alice
+    direct_vm.value = STAKE
+    base_args = (
+        "SELF",
+        "Three-day strength streak",
+        "Complete at least one documented 30 minute strength workout in the period.",
+        3,
+        1,
+        _start(),
+    )
+    with pytest.raises(Exception, match="failure recipient cannot be the zero address"):
+        contract.create_pact(*base_args, ZERO_ADDRESS, "0x" + direct_alice.hex())
+    with pytest.raises(Exception, match="evidence attestor cannot be the zero address"):
+        contract.create_pact(*base_args, "0x" + direct_bob.hex(), ZERO_ADDRESS)
     direct_vm.value = 0
 
 
@@ -222,6 +255,64 @@ def test_digest_is_required_and_verified(
             EVIDENCE_URL,
             "0" * 64,
             "I attest that this period's strength workout was completed.",
+            start + 30,
+        )
+
+
+def test_validator_receives_the_complete_evidence_document(
+    direct_vm, direct_deploy, direct_alice, direct_bob
+):
+    contract = _deploy(direct_deploy, direct_bob)
+    start = _start()
+    pact_id = _create(direct_vm, contract, direct_alice, direct_bob, start=start)
+    marker = "FULL_DOCUMENT_TAIL"
+    page = ("é" * (8_000 - len(marker))) + marker
+    body = page.encode("utf-8")
+    digest = hashlib.sha256(body).hexdigest()
+    direct_vm.mock_web(
+        r"https://arweave\.net/.*",
+        {"status": 200, "body": page},
+    )
+    direct_vm.mock_llm(
+        r"(?s).*FULL_DOCUMENT_TAIL.*",
+        json.dumps({
+            "verdict": "KEPT",
+            "confidence": 90,
+            "reason": "The full document, including its tail, was evaluated.",
+        }),
+    )
+    _warp_to(direct_vm, start + 60)
+    direct_vm.sender = direct_alice
+    contract.submit_checkin(
+        pact_id,
+        EVIDENCE_URL,
+        digest,
+        "I attest that the complete evidence document proves this workout.",
+        start + 30,
+    )
+    assert contract.get_checkin(pact_id, 0)["verdict"] == "KEPT"
+
+
+def test_evidence_over_the_character_limit_is_rejected_instead_of_truncated(
+    direct_vm, direct_deploy, direct_alice, direct_bob
+):
+    contract = _deploy(direct_deploy, direct_bob)
+    start = _start()
+    pact_id = _create(direct_vm, contract, direct_alice, direct_bob, start=start)
+    page = "x" * 8_001
+    digest = hashlib.sha256(page.encode("utf-8")).hexdigest()
+    direct_vm.mock_web(
+        r"https://arweave\.net/.*",
+        {"status": 200, "body": page},
+    )
+    _warp_to(direct_vm, start + 60)
+    direct_vm.sender = direct_alice
+    with pytest.raises(Exception, match="8000 character limit"):
+        contract.submit_checkin(
+            pact_id,
+            EVIDENCE_URL,
+            digest,
+            "I attest that this oversized document proves the workout.",
             start + 30,
         )
 
@@ -439,6 +530,8 @@ def test_page_size_is_capped(direct_vm, direct_deploy, direct_alice, direct_bob)
     assert len(result["items"]) == 1
     config = contract.get_config()
     assert config["max_page_size"] == "25"
-    assert config["version"] == "2.1.0"
+    assert config["version"] == "2.2.0"
+    assert config["max_evidence_bytes"] == "100000"
+    assert config["max_evidence_chars"] == "8000"
     assert config["evidence_policy"] == "CONTENT_ADDRESSED_AND_WALLET_ATTESTED"
     assert config["original_appeal_records"] == "IMMUTABLE_SEPARATE_RECORDS"

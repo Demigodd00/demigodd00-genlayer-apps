@@ -41,6 +41,8 @@ DEPLOY_ENV_KEYS = {
 }
 
 ADDRESS_PATTERN = re.compile(r"^0x[0-9a-fA-F]{40}$")
+RELEASE_VERSION = "2.2.0"
+ZERO_ADDRESS = "0x0000000000000000000000000000000000000000"
 FEE_BPS_CAP = 500
 MIN_PERIOD_SECS = 60
 MAX_PERIOD_SECS = 30 * 24 * 60 * 60
@@ -49,7 +51,7 @@ MAX_APPEAL_WINDOW_SECS = 7 * 24 * 60 * 60
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Deploy a preflighted StreakPact V2.1 contract")
+    parser = argparse.ArgumentParser(description=f"Deploy a preflighted StreakPact V{RELEASE_VERSION} contract")
     parser.add_argument("--fee-bps", type=int, default=0)
     parser.add_argument("--period-secs", type=int, default=86400)
     parser.add_argument("--appeal-window-secs", type=int, default=86400)
@@ -94,6 +96,8 @@ def validate_configuration(args: argparse.Namespace, treasury: str, network_name
         raise ValueError("appeal_window_secs is outside the contract bounds")
     if ADDRESS_PATTERN.fullmatch(treasury) is None:
         raise ValueError("STREAKPACT_TREASURY must be a 20-byte 0x address")
+    if treasury.lower() == ZERO_ADDRESS:
+        raise ValueError("STREAKPACT_TREASURY cannot be the zero address")
     if network_name == "studionet" and args.fee_bps != 0:
         raise ValueError("StudioNet StreakPact deployments must use --fee-bps 0")
 
@@ -204,7 +208,7 @@ def main() -> None:
 
     record = {
         "contract": "StreakPactV2",
-        "version": "2.1.0",
+        "version": RELEASE_VERSION,
         "network": network_name,
         "address": contract_address,
         "transaction_hash": str(tx_hash),

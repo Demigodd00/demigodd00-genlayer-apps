@@ -47,6 +47,7 @@ MAX_REASON_CHARS = 280
 MAX_PAGE_SIZE = 25
 FEE_BPS_CAP = 500
 MIN_CONFIDENCE = 70
+ZERO_ADDRESS = "0x0000000000000000000000000000000000000000"
 
 ALLOWED_EVIDENCE_PREFIXES = (
     "https://ipfs.io/ipfs/",
@@ -305,6 +306,8 @@ class StreakPactV2(gl.Contract):
             self.treasury = Address(treasury)
         except Exception:
             raise gl.vm.UserError(f"{ERROR_EXPECTED} invalid treasury address")
+        if str(self.treasury).lower() == ZERO_ADDRESS:
+            raise gl.vm.UserError(f"{ERROR_EXPECTED} treasury cannot be the zero address")
         self.fee_bps = fee_bps
         self.period_secs = period_secs
         self.appeal_window_secs = appeal_window_secs
@@ -368,6 +371,10 @@ class StreakPactV2(gl.Contract):
             evidence_attestor_address = Address(evidence_attestor)
         except Exception:
             raise gl.vm.UserError(f"{ERROR_EXPECTED} invalid evidence attestor address")
+        if str(failure_recipient_address).lower() == ZERO_ADDRESS:
+            raise gl.vm.UserError(f"{ERROR_EXPECTED} failure recipient cannot be the zero address")
+        if str(evidence_attestor_address).lower() == ZERO_ADDRESS:
+            raise gl.vm.UserError(f"{ERROR_EXPECTED} evidence attestor cannot be the zero address")
         if mode == MODE_SELF and failure_recipient_address == gl.message.sender_address:
             raise gl.vm.UserError(f"{ERROR_EXPECTED} self pact failure recipient must differ from maker")
         provenance_policy = (
@@ -768,7 +775,14 @@ class StreakPactV2(gl.Contract):
             digest = hashlib.sha256(body).hexdigest()
             if digest != expected_digest:
                 raise gl.vm.UserError(f"{ERROR_EXTERNAL} evidence digest mismatch")
-            page = body.decode("utf-8", errors="replace")[:MAX_PAGE_CHARS]
+            try:
+                page = body.decode("utf-8")
+            except UnicodeDecodeError:
+                raise gl.vm.UserError(f"{ERROR_EXTERNAL} evidence must be valid UTF-8 text")
+            if len(page) > MAX_PAGE_CHARS:
+                raise gl.vm.UserError(
+                    f"{ERROR_EXTERNAL} evidence exceeds {MAX_PAGE_CHARS} character limit"
+                )
             prompt = f"""You are one validator in an accountability escrow jury.
 
 SYSTEM RULES:
@@ -971,7 +985,9 @@ Return JSON only:
         index = start
         while index < end:
             item = self.checkins[pact_id + ":" + str(index)]
-            items.append(self._checkin_view(pact, item, True))
+            # Every immutable field remains available from the paginated history.
+            # The UI collapses older rows instead of discarding or shortening them.
+            items.append(self._checkin_view(pact, item, False))
             index += 1
         return {"total": str(total), "items": items}
 
@@ -1018,7 +1034,7 @@ Return JSON only:
     @gl.public.view
     def get_config(self) -> dict:
         return {
-            "version": "2.1.0",
+            "version": "2.2.0",
             "treasury": str(self.treasury),
             "fee_bps": str(int(self.fee_bps)),
             "period_secs": str(int(self.period_secs)),
@@ -1026,6 +1042,8 @@ Return JSON only:
             "min_stake_atto": str(MIN_STAKE_ATTO),
             "max_stake_atto": str(MAX_STAKE_ATTO),
             "max_page_size": str(MAX_PAGE_SIZE),
+            "max_evidence_bytes": str(MAX_PAGE_BYTES),
+            "max_evidence_chars": str(MAX_PAGE_CHARS),
             "evidence_policy": "CONTENT_ADDRESSED_AND_WALLET_ATTESTED",
             "attestation_schema": ATTESTATION_SCHEMA,
             "original_appeal_records": "IMMUTABLE_SEPARATE_RECORDS",

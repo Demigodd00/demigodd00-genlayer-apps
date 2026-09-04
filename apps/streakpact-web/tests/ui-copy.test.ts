@@ -47,8 +47,8 @@ test("the upload privacy warning stays visible before file selection", () => {
     onDigest: () => {},
     onPublished: () => {},
   }));
-  assert.match(html, /100 KB max/);
-  assert.match(html, /Evidence is public—don’t upload private information\./);
+  assert.match(html, /8,000 characters \/ 100 KB max/);
+  assert.match(html, /Public—don’t include private information\./);
   assert.match(html, /<button[^>]*disabled=""[^>]*>Publish evidence<\/button>/);
   assert.doesNotMatch(html, /<details/);
 });

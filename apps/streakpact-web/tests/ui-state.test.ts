@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import type { EthereumProvider, PactView, TxProgress } from "../src/lib/contract";
-import { formatCountdown, legacyWorkspaceRoute, oneTransactionAtATime, pactShareUrl, pactTiming, readAllPages, readRecentPage, transactionPending, watchWalletSession } from "../src/lib/ui-state";
+import { formatCountdown, legacyWorkspaceRoute, localDateTimeValue, observationTimeError, oneTransactionAtATime, pactShareUrl, pactTiming, parseLocalDateTime, readAllPages, readRecentPage, transactionPending, watchWalletSession } from "../src/lib/ui-state";
 
 const timed = {
   status: "LIVE", next_period: "0", periods_total: "3", next_window_open: "1000",
@@ -43,6 +43,25 @@ test("short StudioNet windows show seconds rather than zero hours", () => {
   assert.equal(formatCountdown("1029", 1000), "29s");
   assert.equal(formatCountdown("1061", 1000), "1m 1s");
   assert.equal(formatCountdown("999", 1000), "Now");
+});
+
+test("datetime-local values preserve second precision for offset pact windows", () => {
+  const base = 2_000_000_000;
+  for (const offset of [10, 23, 39]) {
+    const unix = base + offset;
+    const value = localDateTimeValue(unix);
+    assert.match(value, new RegExp(`:${String(new Date(unix * 1000).getSeconds()).padStart(2, "0")}$`));
+    assert.equal(parseLocalDateTime(value), unix);
+  }
+});
+
+test("observations enforce both period boundaries and the current second", () => {
+  const local = (unix: number) => localDateTimeValue(unix);
+  assert.equal(observationTimeError(local(1010), 1010, 1070, 1040), "");
+  assert.match(observationTimeError(local(1009), 1010, 1070, 1040), /inside this period/);
+  assert.match(observationTimeError(local(1041), 1010, 1070, 1040), /not in the future/);
+  assert.match(observationTimeError(local(1070), 1010, 1070, 1100), /inside this period/);
+  assert.match(observationTimeError("", 1010, 1070, 1040), /Choose when/);
 });
 
 test("all pending transaction stages disable duplicate actions", () => {

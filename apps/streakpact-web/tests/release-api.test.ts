@@ -31,7 +31,7 @@ afterEach(() => {
   }
 });
 
-function upload(contents = "reading completed", type = "text/plain", headers: Record<string, string> = {}) {
+function upload(contents: BlobPart = "reading completed", type = "text/plain", headers: Record<string, string> = {}) {
   const form = new FormData();
   form.set("file", new File([contents], "private-original-name.txt", { type }));
   return new Request(`${ORIGIN}/api/evidence`, {
@@ -100,6 +100,18 @@ test("file validation rejects empty, oversized and unsupported evidence", async 
   assert.equal((await POST(upload(""))).status, 400);
   assert.equal((await POST(upload("x".repeat(100_001)))).status, 413);
   assert.equal((await POST(upload("image bytes", "image/png"))).status, 415);
+});
+
+test("publisher rejects text the contract cannot evaluate in full", async () => {
+  assert.equal((await POST(upload("x".repeat(8_001)))).status, 413);
+  assert.equal((await POST(upload(new Uint8Array([0xc3, 0x28])))).status, 400);
+});
+
+test("publisher accepts the exact 8,000-character Unicode boundary", async () => {
+  const contents = "é".repeat(8_000);
+  const size = new TextEncoder().encode(contents).byteLength;
+  mock.method(globalThis, "fetch", async () => Response.json({ data: { cid: CID, size } }));
+  assert.equal((await POST(upload(contents))).status, 201);
 });
 
 test("malformed multipart bodies and missing files are rejected", async () => {

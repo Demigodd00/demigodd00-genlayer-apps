@@ -82,6 +82,32 @@ export function formatCountdown(unix: string, now: number): string {
   return hours >= 24 ? `${Math.floor(hours / 24)}d ${hours % 24}h` : `${hours}h ${Math.floor((seconds % 3600) / 60)}m`;
 }
 
+export function localDateTimeValue(unixSeconds = Math.floor(Date.now() / 1000)): string {
+  if (!Number.isFinite(unixSeconds)) return "";
+  const date = new Date(Math.floor(unixSeconds) * 1000);
+  return new Date(date.getTime() - date.getTimezoneOffset() * 60_000).toISOString().slice(0, 19);
+}
+
+export function parseLocalDateTime(value: string): number | null {
+  if (!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(?::\d{2})?$/.test(value)) return null;
+  const milliseconds = new Date(value).getTime();
+  return Number.isFinite(milliseconds) ? Math.floor(milliseconds / 1000) : null;
+}
+
+export function observationTimeError(
+  value: string,
+  periodStart: number,
+  periodEndExclusive: number,
+  latestAllowed: number,
+): string {
+  const observed = parseLocalDateTime(value);
+  if (observed === null) return "Choose when the activity was observed.";
+  if (observed < periodStart || observed >= periodEndExclusive || observed > latestAllowed) {
+    return "Activity time must be inside this period and not in the future.";
+  }
+  return "";
+}
+
 const activeTransactions = new Set<string>();
 
 export async function oneTransactionAtATime<T>(account: string, action: () => Promise<T>): Promise<T> {

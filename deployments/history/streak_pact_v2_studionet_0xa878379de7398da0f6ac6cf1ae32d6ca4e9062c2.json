@@ -1,9 +1,9 @@
 {
   "contract": "StreakPactV2",
-  "version": "2.2.0",
+  "version": "2.1.0",
   "network": "studionet",
-  "address": "0x386Baf8F5C543429a8d513F183271513ae59BC81",
-  "transaction_hash": "0x08877fdbb955b7c5b1a55a46c231a6d716b33f1879e32f06cf71774f3253b3c3",
+  "address": "0xa878379DE7398da0F6Ac6cF1AE32d6CA4e9062c2",
+  "transaction_hash": "0x011ad6d8bfd315fd3cb6993ff19ece8a64b5d5921b6d076a6ac90ff4706efdb0",
   "deployer": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
   "treasury": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
   "constructor_args": {
@@ -12,8 +12,8 @@
     "period_secs": 60,
     "appeal_window_secs": 300
   },
-  "source_sha256": "7548cd316c161a75b9de9915784f04dce2d27ba39fe5b282bab27bc61e721f83",
+  "source_sha256": "80fc4f894f23339d9c0f38698852a3d9499c08e3f280cfb830c4159b86f78057",
   "runner_dependency": "# { \"Depends\": \"py-genlayer:1jb45aa8ynh2a9c9xn3b7qqh8sm5q93hwfp7jqmwsfhh8jpz09h6\" }",
   "preflight_skipped": false,
-  "deployed_at": "2026-09-04T18:11:55.550253+00:00"
+  "deployed_at": "2026-09-02T13:33:08.406316+00:00"
 }

@@ -79,7 +79,7 @@ export default function EvidenceFilePicker({
           accept=".json,.txt,application/json,text/plain"
           onChange={(event) => void chooseFile(event.target.files?.[0])}
         />
-        <small>JSON or text · 100 KB max. Evidence is public—don’t upload private information.</small>
+        <small>JSON or text · 8,000 characters / 100 KB max. Public—don’t include private information.</small>
       </label>
       {file ? (
         <div className="evidence-file-summary">

@@ -11,6 +11,9 @@ import time
 from streakpact_acceptance import Acceptance, ROOT, output, timestamp
 
 STAKE = 10**15
+ZERO_ADDRESS = "0x0000000000000000000000000000000000000000"
+OVER_LIMIT_EVIDENCE_URL = "https://gateway.pinata.cloud/ipfs/bafkreifi7vf5gjyxfnkzlkeured45sx3lstqy2jqr2escvfvuy4zjzajti"
+OVER_LIMIT_EVIDENCE_DIGEST = "a8fd4bd327172b5595a8948907cecafb5ca70c69308e892154b5a63994e4099a"
 CRITERIA = (
     "For this StudioNet demonstration, require a wallet-authenticated attestation "
     "to the exact JSON digest. The artifact must show activity reading, completed "
@@ -125,6 +128,35 @@ class Suite:
         self.create("self-loss", lead=120)
         self.complete("prepare_losses")
 
+    def guards(self):
+        start = int(time.time()) + 1800
+        base = ["SELF", "Release guard rejection", CRITERIA, 3, 1, start]
+        maker = self.runner.accounts["maker"].address
+        tester = self.runner.accounts["tester"].address
+        self.write(
+            "reject-zero-failure-recipient", "create_pact",
+            [*base, ZERO_ADDRESS, maker], value=STAKE,
+            error="failure recipient cannot be the zero address",
+        )
+        self.write(
+            "reject-zero-evidence-attestor", "create_pact",
+            [*base, tester, ZERO_ADDRESS], value=STAKE,
+            error="evidence attestor cannot be the zero address",
+        )
+        pact_id = self.create("evidence-limit-loss", lead=180)
+        created = self.snapshot("evidence-limit-created", "get_pact", [pact_id], {"status": "LIVE"})
+        if not self.runner.record["transactions"].get("reject-over-limit-evidence", {}).get("transaction_hash"):
+            self.wait_until(int(created["start_unix"]) + 3, "evidence character-limit window")
+        self.write("reject-over-limit-evidence", "submit_checkin", [
+            pact_id, OVER_LIMIT_EVIDENCE_URL, OVER_LIMIT_EVIDENCE_DIGEST,
+            "I attest to this synthetic boundary fixture for release testing.",
+            int(created["start_unix"]) + 1,
+        ], error="8000 character limit")
+        self.snapshot("evidence-limit-rejection-preserved-state", "get_pact", [pact_id], {
+            "status": "LIVE", "kept_count": "0", "miss_count": "0",
+        })
+        self.complete("guards")
+
     def self_win(self):
         proof = self.proof()
         pact_id = self.create("self-win", lead=180, attestor_role="tester")
@@ -200,7 +232,7 @@ class Suite:
         if "prepare_loss_settlements" in self.runner.record.get("completed_phases", {}):
             return
         deadlines = []
-        for key in ["self-loss", "challenge-loss"]:
+        for key in ["self-loss", "challenge-loss", "evidence-limit-loss"]:
             pact_id = self.runner.record["pacts"][key]
             pact = self.runner.read("get_pact", [pact_id])
             self.wait_until(int(pact["end_unix"]) + 3, key + " periods to expire")
@@ -224,9 +256,9 @@ class Suite:
 
     def settle_losses(self):
         self.prepare_loss_settlements()
-        deadlines = [int(self.runner.record["assertions"][key + "-provisional"]["observed"]["appeal_deadline_unix"]) for key in ["self-loss", "challenge-loss"]]
+        deadlines = [int(self.runner.record["assertions"][key + "-provisional"]["observed"]["appeal_deadline_unix"]) for key in ["self-loss", "challenge-loss", "evidence-limit-loss"]]
         self.wait_until(max(deadlines) + 3, "loss-pact appeal windows to close")
-        for key in ["self-loss", "challenge-loss"]:
+        for key in ["self-loss", "challenge-loss", "evidence-limit-loss"]:
             pact_id = self.runner.record["pacts"][key]
             self.write(key + "-finalize", "finalize_settlement", [pact_id])
             self.snapshot(key + "-finalized", "get_pact", [pact_id], {"status": "LOST"})
@@ -283,6 +315,7 @@ class Suite:
             ("self-win-claim", "maker", STAKE),
             ("self-loss-claim", "tester", STAKE),
             ("challenge-loss-claim", "tester", STAKE * 2),
+            ("evidence-limit-loss-claim", "tester", STAKE),
             ("challenge-win-claim", "maker", STAKE * 2),
         ]
         for key, role, amount in cases:
@@ -320,10 +353,10 @@ class Suite:
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("phase", choices=["cancellations", "prepare_losses", "self_win", "prepare_loss_settlements", "prepare_challenge_win", "settle_losses", "finish_challenge_win", "verify_transfers", "final_matrix"])
+    parser.add_argument("phase", choices=["cancellations", "prepare_losses", "guards", "self_win", "prepare_loss_settlements", "prepare_challenge_win", "settle_losses", "finish_challenge_win", "verify_transfers", "final_matrix"])
     options = parser.parse_args()
     suite = Suite()
-    phases = ["prepare_loss_settlements", "prepare_challenge_win", "settle_losses", "finish_challenge_win", "verify_transfers"] if options.phase == "final_matrix" else [options.phase]
+    phases = ["guards", "prepare_loss_settlements", "prepare_challenge_win", "settle_losses", "finish_challenge_win", "verify_transfers"] if options.phase == "final_matrix" else [options.phase]
     for phase in phases:
         if phase in suite.runner.record.get("completed_phases", {}):
             output({"phase": phase, "state": "already passed"})
