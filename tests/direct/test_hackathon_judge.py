@@ -59,16 +59,20 @@ def _submit(direct_vm, contract, entrant, hackathon_id, suffix="one"):
     )
 
 
-def _mock_repository(direct_vm, contract, entrant, event, suffix="one", parent="", challenge_override=None):
+def _mock_repository(direct_vm, contract, entrant, event, suffix="one", parent="", challenge_override=None, metadata_changes=None, file_changes=None, rendered=None, api_status=200):
     url = "https://github.com/test-owner/test-repo/blob/main/" + suffix + ".txt"
-    challenge = contract.get_evidence_challenge(event, _address(entrant), url, parent)
+    challenge = contract.get_evidence_challenge(event, _address(entrant), url, parent)["challenge"]
     body = "Project demo: a deployed GenLayer intelligent contract with public tests and architecture.\n" + (challenge if challenge_override is None else challenge_override)
     raw = body.encode("utf-8")
     sha = "a" * 40
-    direct_vm.mock_web(r"https://api\.github\.com/repos/test-owner/test-repo$", {"status": 200, "body": json.dumps({"id": 123, "full_name": "test-owner/test-repo", "private": False, "default_branch": "main", "fork": False})})
+    metadata = {"id": 123, "full_name": "test-owner/test-repo", "private": False, "default_branch": "main", "fork": False}
+    metadata.update(metadata_changes or {})
+    direct_vm.mock_web(r"https://api\.github\.com/repos/test-owner/test-repo$", {"status": api_status, "body": json.dumps(metadata)})
     direct_vm.mock_web(r"https://api\.github\.com/repos/test-owner/test-repo/commits/HEAD$", {"status": 200, "body": json.dumps({"sha": sha})})
-    direct_vm.mock_web(r"https://api\.github\.com/repos/test-owner/test-repo/contents/" + suffix + r"\.txt\?ref=" + sha, {"status": 200, "body": json.dumps({"type": "file", "path": suffix + ".txt", "encoding": "base64", "content": base64.b64encode(raw).decode(), "sha": hashlib.sha1(b"blob " + str(len(raw)).encode() + b"\x00" + raw).hexdigest()})})
-    direct_vm.mock_web(r"https://raw\.githubusercontent\.com/test-owner/test-repo/" + sha + "/" + suffix + r"\.txt", {"status": 200, "body": body})
+    file_record = {"type": "file", "path": suffix + ".txt", "encoding": "base64", "content": base64.b64encode(raw).decode(), "sha": hashlib.sha1(b"blob " + str(len(raw)).encode() + b"\x00" + raw).hexdigest()}
+    file_record.update(file_changes or {})
+    direct_vm.mock_web(r"https://api\.github\.com/repos/test-owner/test-repo/contents/" + suffix + r"\.txt\?ref=" + sha, {"status": 200, "body": json.dumps(file_record)})
+    direct_vm.mock_web(r"https://raw\.githubusercontent\.com/test-owner/test-repo/" + sha + "/" + suffix + r"\.txt", {"status": 200, "body": body if rendered is None else rendered})
     return url
 
 
@@ -579,7 +583,7 @@ def test_replayed_or_missing_challenge_cannot_create_entry(direct_vm, direct_dep
     contract = _deploy(direct_deploy)
     event = _create(direct_vm, contract, direct_alice)
     url = "https://github.com/test-owner/test-repo/blob/main/one.txt"
-    challenge = contract.get_evidence_challenge(event, _address(direct_bob), url, "")
+    challenge = contract.get_evidence_challenge(event, _address(direct_bob), url, "")["challenge"]
     parts = challenge.split("|")
     positions = {"wallet": 4, "event": 3, "contract": 2, "repository": 5, "path": 6}
     if change in positions:
@@ -662,3 +666,22 @@ def test_appeal_proof_must_bind_original_package(direct_vm, direct_deploy, direc
     with pytest.raises(Exception, match="missing exact wallet and event"):
         contract.appeal_submission(event, 0, "An appeal with a proof taken from a different original evidence package.", url)
     assert contract.get_submission(event, 0)["appeal_count"] == "0"
+
+
+@pytest.mark.parametrize("options,error", [
+    ({"metadata_changes": {"full_name": "attacker/other"}}, "repository identity"),
+    ({"metadata_changes": {"private": True}}, "repository identity"),
+    ({"file_changes": {"sha": "0" * 40}}, "blob digest mismatch"),
+    ({"file_changes": {"type": "symlink"}}, "authenticated repository file"),
+    ({"rendered": "Forged rendering with entirely different project evidence."}, "render does not match"),
+    ({"api_status": 404}, "GitHub record unavailable"),
+    ({"api_status": 429}, "temporarily unavailable"),
+])
+def test_authentication_failure_never_reserves_entry(direct_vm, direct_deploy, direct_alice, direct_bob, options, error):
+    contract = _deploy(direct_deploy)
+    event = _create(direct_vm, contract, direct_alice)
+    url = _mock_repository(direct_vm, contract, direct_bob, event, **options)
+    direct_vm.sender = direct_bob
+    with pytest.raises(Exception, match=error):
+        contract.submit_project(event, "Unverified project", url, "A sufficiently long project summary for this test.")
+    assert contract.get_hackathon(event)["submission_count"] == "0"

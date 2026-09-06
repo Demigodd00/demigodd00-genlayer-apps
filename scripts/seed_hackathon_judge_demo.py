@@ -342,9 +342,9 @@ def main() -> None:
 
     submissions = _read(organizer_client, address, "list_submissions", [hackathon_id, 0, 25])["items"]
     fixture = next(item for item in submissions if item["entrant"].lower() == entrant_two.address.lower())
-    record["appeal_challenge"] = _read(organizer_client, address, "get_evidence_challenge", [
-        hackathon_id, entrant_two.address, EVIDENCE_BASE + "appeal.txt", fixture["evidence_package_digest"],
-    ])
+    expected_challenge = "|".join(("HJ-PROVENANCE-V1", "studionet", address.lower(), hackathon_id, entrant_two.address.lower(),
+        "demigodd00/demigodd00-genlayer-apps", "docs/evidence/hackathon-judge-v23/appeal.txt", "appeal", fixture["evidence_package_digest"]))
+    record["appeal_challenge"] = expected_challenge
     record["captured_submissions"] = submissions
     _save(record)
     if phase == "submit":

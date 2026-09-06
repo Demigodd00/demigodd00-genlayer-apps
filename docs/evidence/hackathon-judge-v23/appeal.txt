@@ -1,0 +1,14 @@
+PROJECT: Appeal Recovery Fixture - authenticated addendum
+PURPOSE: Supply the deployment identifier omitted by the original acceptance fixture.
+
+HJ-PROVENANCE-V1|studionet|0xbc71e1d982dfa369156e6b9a7a3f61b23bda5b86|hj-1|0x9fc5896680745a067dd988be15978c04ebc31cc3|demigodd00/demigodd00-genlayer-apps|docs/evidence/hackathon-judge-v23/appeal.txt|appeal|9199dc08b7f186fd418d23ba0258b4f997ba9f4b5e868c7f84dad9478ef8e59f
+
+COMPLETE PUBLIC IDENTIFIERS
+StudioNet contract: 0xBC71e1D982Dfa369156E6B9A7a3f61B23BDa5B86
+Deployment transaction: 0x5e8cc280253fe413e6a183892ce8ecd682609e72ecb2da905714acdb9ae07587
+Contract source: https://github.com/Demigodd00/demigodd00-genlayer-apps/blob/main/contracts/hackathon_judge.py
+Live application: https://hackathon-judge-studionet.blazekingsley2.chatgpt.site/
+
+The missing transaction identifier is now present. The original fixture and this addendum together explain the protocol's repository verification, immutable rendering, independent jury consensus, appeal and settlement workflow. The rubric assigns 80 when all identifiers are supplied only through an appeal. This is an explicit test fixture and makes no separate originality or deployment ownership claim.
+
+The appeal challenge binds the same entrant and event to the original evidence package. Validators verify the repository default branch and Git file digest, render the commit-pinned file, and save a separate provenance record and package digest before reassessing the evidence. Finalization rechecks both packages, selects the highest eligible score, credits the prize and issues a wallet-based credential. Prize withdrawal is a separate transaction.

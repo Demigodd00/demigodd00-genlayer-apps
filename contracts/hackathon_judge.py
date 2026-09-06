@@ -737,12 +737,12 @@ class HackathonJudge(gl.Contract):
             submission.status = SUBMISSION_INCONCLUSIVE
 
     @gl.public.view
-    def get_evidence_challenge(self, hackathon_id: str, entrant: str, evidence_url: str, parent_package_digest: str) -> str:
+    def get_evidence_challenge(self, hackathon_id: str, entrant: str, evidence_url: str, parent_package_digest: str) -> dict:
         self._get_hackathon(hackathon_id)
         repository, _, path = _repository_file(evidence_url)
         if parent_package_digest and re.fullmatch(r"[0-9a-f]{64}", parent_package_digest) is None:
             raise gl.vm.UserError(f"{ERROR_EXPECTED} invalid parent package digest")
-        return _challenge(str(gl.message.contract_address), hackathon_id, str(Address(entrant)), repository, path, parent_package_digest)
+        return {"challenge": _challenge(str(gl.message.contract_address), hackathon_id, str(Address(entrant)), repository, path, parent_package_digest)}
 
     def _capture_evidence(self, evidence_url: str, hackathon_id: str, entrant: Address, context: str, parent: str) -> dict:
         repository, ref, path = _repository_file(evidence_url)
