@@ -13,12 +13,13 @@ import os
 import time
 from datetime import datetime, timezone
 from pathlib import Path
+from hackathon_judge_rpc import read_studionet_view
 
 from eth_account import Account
 from genlayer_py import create_client
 from genlayer_py.assertions import tx_execution_succeeded
 from genlayer_py.chains import studionet
-from genlayer_py.types import TransactionHashVariant, TransactionStatus
+from genlayer_py.types import TransactionStatus
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -174,12 +175,7 @@ def _output(value: dict) -> None:
 
 
 def _read(client, address: str, method: str, args: list):
-    return client.read_contract(
-        address=address,
-        function_name=method,
-        args=args,
-        transaction_hash_variant=TransactionHashVariant.LATEST_FINAL,
-    )
+    return read_studionet_view(client, address, method, args)
 
 
 def _write(record: dict, clients: dict, address: str, step: str, role: str, method: str, args: list, value: int = 0) -> dict:

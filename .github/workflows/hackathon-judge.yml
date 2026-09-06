@@ -8,6 +8,8 @@ on:
       - "tests/integration/test_hackathon_judge_studionet.py"
       - "scripts/deploy_hackathon_judge.py"
       - "scripts/seed_hackathon_judge_demo.py"
+      - "scripts/hackathon_judge_rpc.py"
+      - "tests/test_hackathon_judge_rpc.py"
       - "apps/hackathon-judge-web/**"
       - ".github/workflows/hackathon-judge.yml"
   pull_request:
@@ -17,6 +19,8 @@ on:
       - "tests/integration/test_hackathon_judge_studionet.py"
       - "scripts/deploy_hackathon_judge.py"
       - "scripts/seed_hackathon_judge_demo.py"
+      - "scripts/hackathon_judge_rpc.py"
+      - "tests/test_hackathon_judge_rpc.py"
       - "apps/hackathon-judge-web/**"
       - ".github/workflows/hackathon-judge.yml"
   workflow_dispatch:
@@ -36,9 +40,9 @@ jobs:
       - name: Validate contract and scripts
         run: |
           genvm-lint check contracts/hackathon_judge.py
-          python -m compileall -q scripts/deploy_hackathon_judge.py scripts/seed_hackathon_judge_demo.py
+          python -m compileall -q scripts/deploy_hackathon_judge.py scripts/seed_hackathon_judge_demo.py scripts/hackathon_judge_rpc.py
       - name: Run direct lifecycle and adversarial tests
-        run: pytest tests/direct/test_hackathon_judge.py -v
+        run: pytest tests/direct/test_hackathon_judge.py tests/test_hackathon_judge_rpc.py -v
 
   dapp-release-gate:
     runs-on: ubuntu-latest

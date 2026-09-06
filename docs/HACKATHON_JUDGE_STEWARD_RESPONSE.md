@@ -46,6 +46,8 @@ For a fresh live demonstration: deploy a new contract, prepare original/fixture 
 
 Frontend checks run from apps/hackathon-judge-web with `pnpm check` and `pnpm audit:prod`.
 
+The Python read adapter uses StudioNet's native raw-calldata read route because its [legacy read decoder](https://github.com/genlayerlabs/genlayer-studio/blob/main/backend/protocol_rpc/transactions_parser.py) assumes a two-byte RLP list prefix, which fails on long helper arguments. The adapter preserves read-only calls and latest-final state; it does not alter consensus, execution mode, or transaction validation. Its two tests cover calldata round-tripping and error propagation. The live acceptance record includes challenge_view_verified after comparing the full on-chain appeal challenge with the expected wallet binding.
+
 ## Scope and limitations
 
 GitHub HTTPS records and a repository-published challenge establish publication control/authorization at capture. This is not OAuth identity binding or signed-commit verification. Fork publication does not authenticate upstream authorship. The verifier does not claim that external deployment links belong to the entrant; this release supports the repository route of the request. Originality and factual project claims remain matters for the jury's evidence assessment.
