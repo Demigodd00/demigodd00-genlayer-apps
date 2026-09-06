@@ -1,10 +1,10 @@
 {
   "network": "studionet",
-  "contract": "0x6fD9B65001B0eEF5CC98A95D20A1c693C0D04FBA",
+  "contract": "0xBC71e1D982Dfa369156E6B9A7a3f61B23BDa5B86",
   "contract_version": "2.3.0",
   "site_url": "https://hackathon-judge-studionet.blazekingsley2.chatgpt.site",
   "event_name": "Repository Provenance \u2014 Verified Jury v2.3",
-  "started_at": "2026-09-06T18:53:03.481900+00:00",
+  "started_at": "2026-09-06T18:36:36.141353+00:00",
   "wallets": {
     "organizer": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
     "entrant_one": "0x585b4429B8B6B1BB69BbDacbC9D0f1cCe4d7a579",
@@ -17,11 +17,11 @@
       "role": "organizer",
       "sender": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
       "value_atto": "1000000000000000",
-      "transaction_hash": "0x04469d9b896a0f0ced78adbf39eb3a994b51f66ef630bab143af10c36c2fa9c5",
-      "submitted_at": "2026-09-06T18:53:20.756176+00:00",
+      "transaction_hash": "0x0d3f09f1d9ba264511419331878c6e7f021ede07ac8ad40ca786f8523ce5fafa",
+      "submitted_at": "2026-09-06T18:36:49.933499+00:00",
       "status": "FINALIZED",
       "execution_succeeded": true,
-      "finalized_at": "2026-09-06T18:53:55.365865+00:00"
+      "finalized_at": "2026-09-06T18:37:22.959151+00:00"
     },
     "create_event": {
       "method": "create_hackathon",
@@ -30,7 +30,7 @@
         "Best Verifiable Agent",
         "This is a release acceptance demonstration, not an originality contest. Entries must provide all of these exact public identifiers: a GenLayer StudioNet contract address, its deployment transaction hash, the public contract source URL, and the live application URL. Missing identifiers are inconclusive. The second entry is an explicit test fixture, not a separate competing product.",
         "Score 100 when every required exact identifier is present and the evidence explains the complete consensus, appeal, and settlement flow. Score 80 when all identifiers are supplied only through a valid appeal. Missing identifiers must receive zero and INCONCLUSIVE; a clear build-window violation is INELIGIBLE.",
-        1788721435,
+        1788720442,
         3,
         60,
         60,
@@ -39,11 +39,11 @@
       "role": "organizer",
       "sender": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
       "value_atto": "0",
-      "transaction_hash": "0xd27edb221a6fe45369beeb8462064c68a7fcb148baa901b9147bcefcdb11e093",
-      "submitted_at": "2026-09-06T18:54:01.066823+00:00",
+      "transaction_hash": "0xe3789b343110156177ca8c70a108fb9300ce5a1e2b73eaa11457db60bfc31a08",
+      "submitted_at": "2026-09-06T18:37:28.606150+00:00",
       "status": "FINALIZED",
       "execution_succeeded": true,
-      "finalized_at": "2026-09-06T18:54:35.462352+00:00"
+      "finalized_at": "2026-09-06T18:38:03.427517+00:00"
     },
     "submit_hackathon_judge": {
       "method": "submit_project",
@@ -56,11 +56,11 @@
       "role": "entrant_one",
       "sender": "0x585b4429B8B6B1BB69BbDacbC9D0f1cCe4d7a579",
       "value_atto": "0",
-      "transaction_hash": "0xb48efbc7186664968f391d8b30b283b3145367d365902a707cbc920d8f66949d",
-      "submitted_at": "2026-09-06T18:55:34.270708+00:00",
+      "transaction_hash": "0x11171442675b9fdb5dc213e1f28914c23a794a957677ce00cae4abbf5f7ed51f",
+      "submitted_at": "2026-09-06T18:39:09.809445+00:00",
       "status": "FINALIZED",
       "execution_succeeded": true,
-      "finalized_at": "2026-09-06T18:56:13.402967+00:00"
+      "finalized_at": "2026-09-06T18:39:48.604464+00:00"
     },
     "submit_appeal_fixture": {
       "method": "submit_project",
@@ -73,11 +73,11 @@
       "role": "entrant_two",
       "sender": "0x9fC5896680745A067dD988be15978C04ebC31CC3",
       "value_atto": "0",
-      "transaction_hash": "0xd84a214089fb43289662c3e52d80c7c8be5a30cb65550ae652e6baee5a7e1e8f",
-      "submitted_at": "2026-09-06T18:56:19.203806+00:00",
+      "transaction_hash": "0x7cc0629edf4c8712ddd68cafad7d499dcddbd892f1c36661c5bd8c522651ad20",
+      "submitted_at": "2026-09-06T18:39:55.096283+00:00",
       "status": "FINALIZED",
       "execution_succeeded": true,
-      "finalized_at": "2026-09-06T18:57:02.224928+00:00"
+      "finalized_at": "2026-09-06T18:40:34.969788+00:00"
     },
     "evaluate_0": {
       "method": "evaluate_submission",
@@ -88,11 +88,11 @@
       "role": "organizer",
       "sender": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
       "value_atto": "0",
-      "transaction_hash": "0x6e4d255ddec4611ca4567ee51458a3cb01bbc1a5ee9fb233b20c2ac9243550ea",
-      "submitted_at": "2026-09-06T19:04:06.343395+00:00",
+      "transaction_hash": "0xe8605b5f22b9232a4a95ee753e55f9b54a058abcfab953aaad656c14596b58a5",
+      "submitted_at": "2026-09-06T18:47:34.014860+00:00",
       "status": "FINALIZED",
       "execution_succeeded": true,
-      "finalized_at": "2026-09-06T19:04:50.815522+00:00"
+      "finalized_at": "2026-09-06T18:48:16.263273+00:00"
     },
     "evaluate_1": {
       "method": "evaluate_submission",
@@ -103,11 +103,11 @@
       "role": "organizer",
       "sender": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
       "value_atto": "0",
-      "transaction_hash": "0x7901b7b3c889c6452d048aecfb599c7d1108f276b5872dd6d25c8afd35824583",
-      "submitted_at": "2026-09-06T19:04:56.960350+00:00",
+      "transaction_hash": "0x3f275d014afd187e265f59046b0d82a420923d3b1df187568a1ef58e248c13c8",
+      "submitted_at": "2026-09-06T18:48:22.255505+00:00",
       "status": "FINALIZED",
       "execution_succeeded": true,
-      "finalized_at": "2026-09-06T19:05:35.847978+00:00"
+      "finalized_at": "2026-09-06T18:49:05.148976+00:00"
     },
     "appeal_recovery_fixture": {
       "method": "appeal_submission",
@@ -120,11 +120,11 @@
       "role": "entrant_two",
       "sender": "0x9fC5896680745A067dD988be15978C04ebC31CC3",
       "value_atto": "0",
-      "transaction_hash": "0x51f4ec4dd85b18baa723332cf1999f480a047643145c315cf3fc5b7ffc994f6a",
-      "submitted_at": "2026-09-06T19:05:43.869953+00:00",
+      "transaction_hash": "0x2ece4a7e166aab8a1476c311bca0a6095cb35b6695adabea4e34e4d864c6ef91",
+      "submitted_at": "2026-09-06T18:49:13.478862+00:00",
       "status": "FINALIZED",
       "execution_succeeded": true,
-      "finalized_at": "2026-09-06T19:06:19.432289+00:00"
+      "finalized_at": "2026-09-06T18:49:52.481610+00:00"
     },
     "resolve_recovery_fixture_appeal": {
       "method": "resolve_appeal",
@@ -135,11 +135,11 @@
       "role": "organizer",
       "sender": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
       "value_atto": "0",
-      "transaction_hash": "0x9d1cd13522860ad2fe6824f6ff7a59871af7e9f604c783a43e0647fdd37b6f07",
-      "submitted_at": "2026-09-06T19:06:27.505726+00:00",
+      "transaction_hash": "0x7dc9a06d3af877b379b8f6256ac2aafdcea285bc7bc164f48aada315f59f79ac",
+      "submitted_at": "2026-09-06T18:50:00.705832+00:00",
       "status": "FINALIZED",
       "execution_succeeded": true,
-      "finalized_at": "2026-09-06T19:07:52.707768+00:00"
+      "finalized_at": "2026-09-06T18:50:47.682139+00:00"
     },
     "finalize_event": {
       "method": "finalize_hackathon",
@@ -149,11 +149,11 @@
       "role": "organizer",
       "sender": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
       "value_atto": "0",
-      "transaction_hash": "0x063bfca9347ace935789d60311f3b7914e73d657f38a2e64217e798d01710a5a",
-      "submitted_at": "2026-09-06T19:08:00.680610+00:00",
+      "transaction_hash": "0x4869990fe9ec8dc155af38736e12fdf54b686c1337bdada30b5530987cd8bcdb",
+      "submitted_at": "2026-09-06T18:50:56.671207+00:00",
       "status": "FINALIZED",
       "execution_succeeded": true,
-      "finalized_at": "2026-09-06T19:08:35.407956+00:00"
+      "finalized_at": "2026-09-06T18:51:31.504275+00:00"
     },
     "withdraw_winner_prize": {
       "method": "withdraw_credit",
@@ -161,11 +161,11 @@
       "role": "entrant_one",
       "sender": "0x585b4429B8B6B1BB69BbDacbC9D0f1cCe4d7a579",
       "value_atto": "0",
-      "transaction_hash": "0xc76984bc1a6922d569e90e48d22662743178d7acc49893d8d9d5fbe8184ca3b6",
-      "submitted_at": "2026-09-06T19:08:46.355773+00:00",
+      "transaction_hash": "0xa269a8f988611e99dfe42c2fc87a2c9c53b1f7a2a8a78856dc8ebea0dec1960c",
+      "submitted_at": "2026-09-06T18:51:41.321424+00:00",
       "status": "FINALIZED",
       "execution_succeeded": true,
-      "finalized_at": "2026-09-06T19:09:24.854319+00:00"
+      "finalized_at": "2026-09-06T18:52:15.867391+00:00"
     }
   },
   "assertions": {
@@ -179,22 +179,22 @@
     "evaluated_count": "2",
     "appeal_demonstrated": true,
     "evidence_digests": {
-      "Hackathon Judge Protocol": "e470401914ca631e49db0bf52489ad72256da4f1e27b6faec10c02d2ee79d870",
-      "Appeal Recovery Fixture": "2df19a2d0ffc9f77d7ee6e6662f38250061fa2f5fc14d72ae38fe883eafd645f"
+      "Hackathon Judge Protocol": "23cca6a2e15b9ed57221608863f4bcceaac1d4737ca10cd1b8853d92c1ecd8ce",
+      "Appeal Recovery Fixture": "223a5e2fecfde598592e61319d9bfc38620978c75cb262f2a140b0b978dc32d1"
     },
     "evidence_packages": {
       "Hackathon Judge Protocol": {
-        "original": "ae7af5724db90b1c977b0000fb2c4669660af7926236bf3102c7333959a4d201",
+        "original": "b1fbc7e2e9cbe0cc167f8c21eb252082d47e34f7f5564e830f3e034c0f83c9f3",
         "appeal": "",
         "provenance": {
-          "blob_sha": "49a514d29381095ece713b5b0b8c170ca86566b7",
-          "challenge": "HJ-PROVENANCE-V1|studionet|0x6fd9b65001b0eef5cc98a95d20a1c693c0d04fba|hj-1|0x585b4429b8b6b1bb69bbdacbc9d0f1cce4d7a579|demigodd00/demigodd00-genlayer-apps|docs/evidence/hackathon-judge-v23/original.txt|submission|none",
-          "commit": "ea7be20201dfe495d483f03ddcd544e5925a9871",
+          "blob_sha": "0a85e5ff80f62763e9a283a56d2b84d05a6780e5",
+          "challenge": "HJ-PROVENANCE-V1|studionet|0xbc71e1d982dfa369156e6b9a7a3f61b23bda5b86|hj-1|0x585b4429b8b6b1bb69bbdacbc9d0f1cce4d7a579|demigodd00/demigodd00-genlayer-apps|docs/evidence/hackathon-judge-v23/original.txt|submission|none",
+          "commit": "aace96c1c42ae3812f8b84c7fa3ba89345aef47f",
           "context_digest": "747edc1a85620ccbe0c783481ded2efeab78d9a650094e44ce5838d33c905c4e",
-          "contract": "0x6fd9b65001b0eef5cc98a95d20a1c693c0d04fba",
+          "contract": "0xbc71e1d982dfa369156e6b9a7a3f61b23bda5b86",
           "default_branch": "main",
           "entrant": "0x585b4429b8b6b1bb69bbdacbc9d0f1cce4d7a579",
-          "frozen_url": "https://raw.githubusercontent.com/demigodd00/demigodd00-genlayer-apps/ea7be20201dfe495d483f03ddcd544e5925a9871/docs/evidence/hackathon-judge-v23/original.txt",
+          "frozen_url": "https://raw.githubusercontent.com/demigodd00/demigodd00-genlayer-apps/aace96c1c42ae3812f8b84c7fa3ba89345aef47f/docs/evidence/hackathon-judge-v23/original.txt",
           "hackathon_id": "hj-1",
           "is_fork": false,
           "network": "studionet",
@@ -208,17 +208,17 @@
         "appeal_provenance": null
       },
       "Appeal Recovery Fixture": {
-        "original": "2829c47380446b2d4d2c6990be6606118f49292862ed4fb90ae1a85d23dca28f",
-        "appeal": "197ecbd9fab4196de1394eb4b3d71c2e73ed4caccc53697024d3e3e742ee1c1b",
+        "original": "9199dc08b7f186fd418d23ba0258b4f997ba9f4b5e868c7f84dad9478ef8e59f",
+        "appeal": "d54896dbef263ad2016c20a14691bf33b499c98292df327010c3514a2f973957",
         "provenance": {
-          "blob_sha": "e92706890fde6911fb1ee04571adedb820e7ceab",
-          "challenge": "HJ-PROVENANCE-V1|studionet|0x6fd9b65001b0eef5cc98a95d20a1c693c0d04fba|hj-1|0x9fc5896680745a067dd988be15978c04ebc31cc3|demigodd00/demigodd00-genlayer-apps|docs/evidence/hackathon-judge-v23/fixture.txt|submission|none",
-          "commit": "ea7be20201dfe495d483f03ddcd544e5925a9871",
+          "blob_sha": "58744d26bc04fe5fe0491c1c7521907763f78ec0",
+          "challenge": "HJ-PROVENANCE-V1|studionet|0xbc71e1d982dfa369156e6b9a7a3f61b23bda5b86|hj-1|0x9fc5896680745a067dd988be15978c04ebc31cc3|demigodd00/demigodd00-genlayer-apps|docs/evidence/hackathon-judge-v23/fixture.txt|submission|none",
+          "commit": "aace96c1c42ae3812f8b84c7fa3ba89345aef47f",
           "context_digest": "2b20197f397ee44158e4b22d48f91763388d5c2e1fc08279b48bd8945ba86af5",
-          "contract": "0x6fd9b65001b0eef5cc98a95d20a1c693c0d04fba",
+          "contract": "0xbc71e1d982dfa369156e6b9a7a3f61b23bda5b86",
           "default_branch": "main",
           "entrant": "0x9fc5896680745a067dd988be15978c04ebc31cc3",
-          "frozen_url": "https://raw.githubusercontent.com/demigodd00/demigodd00-genlayer-apps/ea7be20201dfe495d483f03ddcd544e5925a9871/docs/evidence/hackathon-judge-v23/fixture.txt",
+          "frozen_url": "https://raw.githubusercontent.com/demigodd00/demigodd00-genlayer-apps/aace96c1c42ae3812f8b84c7fa3ba89345aef47f/docs/evidence/hackathon-judge-v23/fixture.txt",
           "hackathon_id": "hj-1",
           "is_fork": false,
           "network": "studionet",
@@ -230,18 +230,18 @@
           "submitted_url": "https://github.com/Demigodd00/demigodd00-genlayer-apps/blob/main/docs/evidence/hackathon-judge-v23/fixture.txt"
         },
         "appeal_provenance": {
-          "blob_sha": "5979f41f2db6dfe9046079f9fd116fe22839b618",
-          "challenge": "HJ-PROVENANCE-V1|studionet|0x6fd9b65001b0eef5cc98a95d20a1c693c0d04fba|hj-1|0x9fc5896680745a067dd988be15978c04ebc31cc3|demigodd00/demigodd00-genlayer-apps|docs/evidence/hackathon-judge-v23/appeal.txt|appeal|2829c47380446b2d4d2c6990be6606118f49292862ed4fb90ae1a85d23dca28f",
-          "commit": "14c055fa892280e9722d69d7387cabf52c49a5bb",
+          "blob_sha": "88c88a8c605ff1db1a8c746414e7080c221993a6",
+          "challenge": "HJ-PROVENANCE-V1|studionet|0xbc71e1d982dfa369156e6b9a7a3f61b23bda5b86|hj-1|0x9fc5896680745a067dd988be15978c04ebc31cc3|demigodd00/demigodd00-genlayer-apps|docs/evidence/hackathon-judge-v23/appeal.txt|appeal|9199dc08b7f186fd418d23ba0258b4f997ba9f4b5e868c7f84dad9478ef8e59f",
+          "commit": "c23512b8f85224ae22d946b090363ec700ebf01d",
           "context_digest": "1c0b6eabc23dd330e6c6badf2809071c0d7c70ca54048f9ff8576b1dd2989775",
-          "contract": "0x6fd9b65001b0eef5cc98a95d20a1c693c0d04fba",
+          "contract": "0xbc71e1d982dfa369156e6b9a7a3f61b23bda5b86",
           "default_branch": "main",
           "entrant": "0x9fc5896680745a067dd988be15978c04ebc31cc3",
-          "frozen_url": "https://raw.githubusercontent.com/demigodd00/demigodd00-genlayer-apps/14c055fa892280e9722d69d7387cabf52c49a5bb/docs/evidence/hackathon-judge-v23/appeal.txt",
+          "frozen_url": "https://raw.githubusercontent.com/demigodd00/demigodd00-genlayer-apps/c23512b8f85224ae22d946b090363ec700ebf01d/docs/evidence/hackathon-judge-v23/appeal.txt",
           "hackathon_id": "hj-1",
           "is_fork": false,
           "network": "studionet",
-          "parent_package_digest": "2829c47380446b2d4d2c6990be6606118f49292862ed4fb90ae1a85d23dca28f",
+          "parent_package_digest": "9199dc08b7f186fd418d23ba0258b4f997ba9f4b5e868c7f84dad9478ef8e59f",
           "path": "docs/evidence/hackathon-judge-v23/appeal.txt",
           "repository": "demigodd00/demigodd00-genlayer-apps",
           "repository_id": "1347628494",
@@ -256,30 +256,29 @@
         "eligibility": "ELIGIBLE",
         "score_band": "100",
         "confidence_bucket": "90",
-        "reasoning": "All required exact public identifiers are present in the evidence: StudioNet contract address, deployment transaction hash, public contract source URL, and live application URL. The evidence comprehensively explains the complete judging workflow, including consensus, appeal, and settlement flow."
+        "reasoning": "Evidence snapshot includes all exact required public identifiers: StudioNet contract address, deployment transaction hash, public contract source URL, and live application URL. It also describes the full consensus, appeal, and settlement workflow in detail. No clear rule violation is shown by the saved evidence."
       },
       "Appeal Recovery Fixture": {
         "status": "NOT_SELECTED",
         "eligibility": "ELIGIBLE",
         "score_band": "80",
         "confidence_bucket": "90",
-        "reasoning": "Original evidence was inconclusive due to missing deployment transaction hash. The appeal snapshot supplies the missing exact public identifier plus the other required identifiers, and the rubric explicitly assigns 80 when all identifiers are supplied only through a valid appeal. No clear rule violation is evidenced."
+        "reasoning": "Appeal evidence supplies the previously missing required identifier: the deployment transaction hash, alongside contract address, source URL, and live app URL. The saved record demonstrates the appeal is tied to the original package. Under the rubric, identifiers completed only via valid appeal score 80."
       }
     }
   },
-  "updated_at": "2026-09-06T19:09:31.273983+00:00",
-  "funding_transaction_hash": "0x8bb058205f467e5455dc8f71c00d675b93f659b9d90a5f40106063128d7fec0b",
-  "submission_deadline_unix": 1788721435,
+  "updated_at": "2026-09-06T18:52:22.385745+00:00",
+  "funding_transaction_hash": "0x22339eb21c61b888e58111d40e2173c196c93eea705c60e5f556fb293aef3698",
+  "submission_deadline_unix": 1788720442,
   "hackathon_id": "hj-1",
   "wrong_wallet_rejection": {
-    "transaction_hash": "0x570031a2081443d4c1ba50c4b5ff6e545eb71539c9a022874c8145da292c90fd",
+    "transaction_hash": "0x7f115c9046a8bfe373a967389565e0eff281081b0f75228fd4393d52b8f5d704",
     "verified": true,
     "execution_succeeded": false,
     "expected_error": "missing exact wallet and event provenance challenge",
     "submission_count_after": "0"
   },
-  "challenge_view_verified": true,
-  "appeal_challenge": "HJ-PROVENANCE-V1|studionet|0x6fd9b65001b0eef5cc98a95d20a1c693c0d04fba|hj-1|0x9fc5896680745a067dd988be15978c04ebc31cc3|demigodd00/demigodd00-genlayer-apps|docs/evidence/hackathon-judge-v23/appeal.txt|appeal|2829c47380446b2d4d2c6990be6606118f49292862ed4fb90ae1a85d23dca28f",
+  "appeal_challenge": "HJ-PROVENANCE-V1|studionet|0xbc71e1d982dfa369156e6b9a7a3f61b23bda5b86|hj-1|0x9fc5896680745a067dd988be15978c04ebc31cc3|demigodd00/demigodd00-genlayer-apps|docs/evidence/hackathon-judge-v23/appeal.txt|appeal|9199dc08b7f186fd418d23ba0258b4f997ba9f4b5e868c7f84dad9478ef8e59f",
   "captured_submissions": [
     {
       "appeal_count": "0",
@@ -296,8 +295,8 @@
       "eligibility": "",
       "entrant": "0x585b4429B8B6B1BB69BbDacbC9D0f1cCe4d7a579",
       "evaluated_at_iso": "",
-      "evidence_digest": "e470401914ca631e49db0bf52489ad72256da4f1e27b6faec10c02d2ee79d870",
-      "evidence_package_digest": "ae7af5724db90b1c977b0000fb2c4669660af7926236bf3102c7333959a4d201",
+      "evidence_digest": "23cca6a2e15b9ed57221608863f4bcceaac1d4737ca10cd1b8853d92c1ecd8ce",
+      "evidence_package_digest": "b1fbc7e2e9cbe0cc167f8c21eb252082d47e34f7f5564e830f3e034c0f83c9f3",
       "evidence_url": "https://github.com/Demigodd00/demigodd00-genlayer-apps/blob/main/docs/evidence/hackathon-judge-v23/original.txt",
       "expirable": false,
       "hackathon_id": "hj-1",
@@ -306,12 +305,12 @@
       "original_eligibility": "",
       "original_score_band": "0",
       "project_name": "Hackathon Judge Protocol",
-      "provenance_record": "{\"blob_sha\":\"49a514d29381095ece713b5b0b8c170ca86566b7\",\"challenge\":\"HJ-PROVENANCE-V1|studionet|0x6fd9b65001b0eef5cc98a95d20a1c693c0d04fba|hj-1|0x585b4429b8b6b1bb69bbdacbc9d0f1cce4d7a579|demigodd00/demigodd00-genlayer-apps|docs/evidence/hackathon-judge-v23/original.txt|submission|none\",\"commit\":\"ea7be20201dfe495d483f03ddcd544e5925a9871\",\"context_digest\":\"747edc1a85620ccbe0c783481ded2efeab78d9a650094e44ce5838d33c905c4e\",\"contract\":\"0x6fd9b65001b0eef5cc98a95d20a1c693c0d04fba\",\"default_branch\":\"main\",\"entrant\":\"0x585b4429b8b6b1bb69bbdacbc9d0f1cce4d7a579\",\"frozen_url\":\"https://raw.githubusercontent.com/demigodd00/demigodd00-genlayer-apps/ea7be20201dfe495d483f03ddcd544e5925a9871/docs/evidence/hackathon-judge-v23/original.txt\",\"hackathon_id\":\"hj-1\",\"is_fork\":false,\"network\":\"studionet\",\"parent_package_digest\":\"\",\"path\":\"docs/evidence/hackathon-judge-v23/original.txt\",\"repository\":\"demigodd00/demigodd00-genlayer-apps\",\"repository_id\":\"1347628494\",\"schema\":\"hackathon-judge-github-provenance-v1\",\"submitted_url\":\"https://github.com/Demigodd00/demigodd00-genlayer-apps/blob/main/docs/evidence/hackathon-judge-v23/original.txt\"}",
+      "provenance_record": "{\"blob_sha\":\"0a85e5ff80f62763e9a283a56d2b84d05a6780e5\",\"challenge\":\"HJ-PROVENANCE-V1|studionet|0xbc71e1d982dfa369156e6b9a7a3f61b23bda5b86|hj-1|0x585b4429b8b6b1bb69bbdacbc9d0f1cce4d7a579|demigodd00/demigodd00-genlayer-apps|docs/evidence/hackathon-judge-v23/original.txt|submission|none\",\"commit\":\"aace96c1c42ae3812f8b84c7fa3ba89345aef47f\",\"context_digest\":\"747edc1a85620ccbe0c783481ded2efeab78d9a650094e44ce5838d33c905c4e\",\"contract\":\"0xbc71e1d982dfa369156e6b9a7a3f61b23bda5b86\",\"default_branch\":\"main\",\"entrant\":\"0x585b4429b8b6b1bb69bbdacbc9d0f1cce4d7a579\",\"frozen_url\":\"https://raw.githubusercontent.com/demigodd00/demigodd00-genlayer-apps/aace96c1c42ae3812f8b84c7fa3ba89345aef47f/docs/evidence/hackathon-judge-v23/original.txt\",\"hackathon_id\":\"hj-1\",\"is_fork\":false,\"network\":\"studionet\",\"parent_package_digest\":\"\",\"path\":\"docs/evidence/hackathon-judge-v23/original.txt\",\"repository\":\"demigodd00/demigodd00-genlayer-apps\",\"repository_id\":\"1347628494\",\"schema\":\"hackathon-judge-github-provenance-v1\",\"submitted_url\":\"https://github.com/Demigodd00/demigodd00-genlayer-apps/blob/main/docs/evidence/hackathon-judge-v23/original.txt\"}",
       "reasoning": "",
-      "resolution_deadline_unix": "1788807835",
+      "resolution_deadline_unix": "1788806842",
       "score_band": "0",
       "status": "SUBMITTED",
-      "submitted_at_iso": "2026-09-06T18:55:33+00:00",
+      "submitted_at_iso": "2026-09-06T18:39:09+00:00",
       "summary": "The live GenLayer-native judging protocol with exact public source, deployment, and reproducibility evidence."
     },
     {
@@ -329,8 +328,8 @@
       "eligibility": "",
       "entrant": "0x9fC5896680745A067dD988be15978C04ebC31CC3",
       "evaluated_at_iso": "",
-      "evidence_digest": "2df19a2d0ffc9f77d7ee6e6662f38250061fa2f5fc14d72ae38fe883eafd645f",
-      "evidence_package_digest": "2829c47380446b2d4d2c6990be6606118f49292862ed4fb90ae1a85d23dca28f",
+      "evidence_digest": "223a5e2fecfde598592e61319d9bfc38620978c75cb262f2a140b0b978dc32d1",
+      "evidence_package_digest": "9199dc08b7f186fd418d23ba0258b4f997ba9f4b5e868c7f84dad9478ef8e59f",
       "evidence_url": "https://github.com/Demigodd00/demigodd00-genlayer-apps/blob/main/docs/evidence/hackathon-judge-v23/fixture.txt",
       "expirable": false,
       "hackathon_id": "hj-1",
@@ -339,14 +338,14 @@
       "original_eligibility": "",
       "original_score_band": "0",
       "project_name": "Appeal Recovery Fixture",
-      "provenance_record": "{\"blob_sha\":\"e92706890fde6911fb1ee04571adedb820e7ceab\",\"challenge\":\"HJ-PROVENANCE-V1|studionet|0x6fd9b65001b0eef5cc98a95d20a1c693c0d04fba|hj-1|0x9fc5896680745a067dd988be15978c04ebc31cc3|demigodd00/demigodd00-genlayer-apps|docs/evidence/hackathon-judge-v23/fixture.txt|submission|none\",\"commit\":\"ea7be20201dfe495d483f03ddcd544e5925a9871\",\"context_digest\":\"2b20197f397ee44158e4b22d48f91763388d5c2e1fc08279b48bd8945ba86af5\",\"contract\":\"0x6fd9b65001b0eef5cc98a95d20a1c693c0d04fba\",\"default_branch\":\"main\",\"entrant\":\"0x9fc5896680745a067dd988be15978c04ebc31cc3\",\"frozen_url\":\"https://raw.githubusercontent.com/demigodd00/demigodd00-genlayer-apps/ea7be20201dfe495d483f03ddcd544e5925a9871/docs/evidence/hackathon-judge-v23/fixture.txt\",\"hackathon_id\":\"hj-1\",\"is_fork\":false,\"network\":\"studionet\",\"parent_package_digest\":\"\",\"path\":\"docs/evidence/hackathon-judge-v23/fixture.txt\",\"repository\":\"demigodd00/demigodd00-genlayer-apps\",\"repository_id\":\"1347628494\",\"schema\":\"hackathon-judge-github-provenance-v1\",\"submitted_url\":\"https://github.com/Demigodd00/demigodd00-genlayer-apps/blob/main/docs/evidence/hackathon-judge-v23/fixture.txt\"}",
+      "provenance_record": "{\"blob_sha\":\"58744d26bc04fe5fe0491c1c7521907763f78ec0\",\"challenge\":\"HJ-PROVENANCE-V1|studionet|0xbc71e1d982dfa369156e6b9a7a3f61b23bda5b86|hj-1|0x9fc5896680745a067dd988be15978c04ebc31cc3|demigodd00/demigodd00-genlayer-apps|docs/evidence/hackathon-judge-v23/fixture.txt|submission|none\",\"commit\":\"aace96c1c42ae3812f8b84c7fa3ba89345aef47f\",\"context_digest\":\"2b20197f397ee44158e4b22d48f91763388d5c2e1fc08279b48bd8945ba86af5\",\"contract\":\"0xbc71e1d982dfa369156e6b9a7a3f61b23bda5b86\",\"default_branch\":\"main\",\"entrant\":\"0x9fc5896680745a067dd988be15978c04ebc31cc3\",\"frozen_url\":\"https://raw.githubusercontent.com/demigodd00/demigodd00-genlayer-apps/aace96c1c42ae3812f8b84c7fa3ba89345aef47f/docs/evidence/hackathon-judge-v23/fixture.txt\",\"hackathon_id\":\"hj-1\",\"is_fork\":false,\"network\":\"studionet\",\"parent_package_digest\":\"\",\"path\":\"docs/evidence/hackathon-judge-v23/fixture.txt\",\"repository\":\"demigodd00/demigodd00-genlayer-apps\",\"repository_id\":\"1347628494\",\"schema\":\"hackathon-judge-github-provenance-v1\",\"submitted_url\":\"https://github.com/Demigodd00/demigodd00-genlayer-apps/blob/main/docs/evidence/hackathon-judge-v23/fixture.txt\"}",
       "reasoning": "",
-      "resolution_deadline_unix": "1788807835",
+      "resolution_deadline_unix": "1788806842",
       "score_band": "0",
       "status": "SUBMITTED",
-      "submitted_at_iso": "2026-09-06T18:56:18+00:00",
+      "submitted_at_iso": "2026-09-06T18:39:53+00:00",
       "summary": "A deliberate evidence-gap fixture used to prove that missing identifiers become inconclusive and can be repaired once through appeal."
     }
   ],
-  "completed_at": "2026-09-06T19:09:31.273983+00:00"
+  "completed_at": "2026-09-06T18:52:22.385745+00:00"
 }

@@ -32,11 +32,23 @@ Implemented in v2.3. Evidence now requires an exact wallet/event/contract/reposi
 
 Open hj-1 on the live app. Inspect both submissions and the separate appeal evidence. Confirm the recorded entrant wallets and the appeal's parent package link. Open the live receipt: the wrong-wallet transaction must show failed execution with the expected challenge error; subsequent valid transactions must show successful finalized execution. Confirm the event winner, prize credit release and withdrawal transaction. The two entries are controlled release fixtures, not a claim of independent hackathon adoption.
 
+## Completed verification — 6 September 2026
+
+- 47 direct contract and RPC-adapter tests passed; GenVM lint passed.
+- 11 frontend tests passed, together with type checking, lint and production build. The production dependency audit reported no known vulnerabilities.
+- The independent live integration test passed (36.27 seconds), reading finalized execution receipts, the exact deployed source, wallet-bound original and appeal packages, the resolved scores and zero remaining winner credit after withdrawal.
+- [Hackathon Judge CI](https://github.com/Demigodd00/demigodd00-genlayer-apps/actions/runs/34053798161) and [repository test CI](https://github.com/Demigodd00/demigodd00-genlayer-apps/actions/runs/34053798162) passed for source commit `98f8b34ea4ddb9391a2c42726c01aae72efe7df1`.
+- Wrong-wallet rejection: `0x570031a2081443d4c1ba50c4b5ff6e545eb71539c9a022874c8145da292c90fd`.
+- Event finalization: `0x063bfca9347ace935789d60311f3b7914e73d657f38a2e64217e798d01710a5a`.
+- Winner withdrawal: `0xc76984bc1a6922d569e90e48d22662743178d7acc49893d8d9d5fbe8184ca3b6`.
+
+The final event selected Hackathon Judge Protocol at 100 points; the deliberate evidence-gap fixture became eligible at 80 after its verified appeal. The 0.001 simulated GEN prize was released and withdrawn. These checks are release evidence, not a guarantee of security or steward approval.
+
 ## Reproduction
 
 ```powershell
 genvm-lint check contracts/hackathon_judge.py --json
-python -m pytest tests/direct/test_hackathon_judge.py -v
+python -m pytest tests/direct/test_hackathon_judge.py tests/test_hackathon_judge_rpc.py -v
 gltest tests/integration/test_hackathon_judge_studionet.py --network studionet -v -s
 ```
 
