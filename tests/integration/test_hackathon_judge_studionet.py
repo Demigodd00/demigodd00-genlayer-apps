@@ -70,6 +70,8 @@ def test_hackathon_judge_live_provenance_receipts_and_settlement():
             assert record["contract"] == address.lower() and record["hackathon_id"] == event_id
             assert record["challenge"] in snapshot.splitlines()
             assert record["parent_package_digest"] == (entry["evidence_package_digest"] if prefix else "")
+            generated = read("get_evidence_challenge", [event_id, entry["entrant"], record["submitted_url"], record["parent_package_digest"]])
+            assert generated == {"challenge": record["challenge"]}
             context = entry["appeal_statement"] if prefix else entry["summary"]
             assert record["context_digest"] == hashlib.sha256(context.encode()).hexdigest()
             package = json.dumps({"provenance": record_text, "snapshot_digest": digest},

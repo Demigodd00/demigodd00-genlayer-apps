@@ -17,7 +17,7 @@ declare global { interface Window { ethereum?: EthereumProvider } }
 export type WalletSession = { address: Address; client: ReturnType<typeof createClient>; provider: EthereumProvider };
 export type TxProgress = { state: "idle" | "checking" | "signing" | "submitted" | "finalizing" | "confirmed" | "failed"; label: string; hash?: string };
 
-export const CONTRACT_ADDRESS = (process.env.NEXT_PUBLIC_HACKATHON_JUDGE_ADDRESS ?? "0x788432Aa8D55c81c3bd2ef0FbB29A4Bc7E6e4cC6") as Address;
+export const CONTRACT_ADDRESS = (process.env.NEXT_PUBLIC_HACKATHON_JUDGE_ADDRESS ?? "0x6fD9B65001B0eEF5CC98A95D20A1c693C0D04FBA") as Address;
 export const EXPLORER_URL = `https://explorer-studio.genlayer.com/address/${CONTRACT_ADDRESS}`;
 const readClient = createClient({ chain: chains.studionet });
 

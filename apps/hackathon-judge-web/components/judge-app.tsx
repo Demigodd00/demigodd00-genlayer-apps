@@ -15,7 +15,7 @@ import {
   type TxProgress, type WalletSession,
 } from '@/lib/contract';
 import {
-  dateTime, formatGen, friendlyError, parseGen, sameAddress, shortAddress,
+  dateTime, evidenceChallenge, formatGen, friendlyError, parseGen, sameAddress, shortAddress,
   type BuilderProfile, type Evidence, type Hackathon, type HackathonSummary,
   type ProtocolStats, type Submission,
 } from '@/lib/protocol';
@@ -73,6 +73,7 @@ export function JudgeApp() {
   const [appealTarget, setAppealTarget] = useState<Submission | null>(null);
   const [evidence, setEvidence] = useState<{ project: string; value: Evidence } | null>(null);
   const [transactionPending, setTransactionPending] = useState(false);
+  const [proofUrl, setProofUrl] = useState('');
   const transactionLock = useRef(false);
   const selectedIdRef = useRef('');
   const walletRef = useRef<WalletSession | null>(null);
@@ -89,6 +90,7 @@ export function JudgeApp() {
     setAppealTarget(null);
     setEvidence(null);
     setError('');
+    setProofUrl('');
   }, []);
 
   const refreshList = useCallback(async () => {
@@ -243,6 +245,8 @@ export function JudgeApp() {
     event.preventDefault();
     if (!hackathon || hackathon.id !== selectedIdRef.current) { setError('Select a room and wait for it to load.'); return; }
     const data = new FormData(event.currentTarget);
+    try { evidenceChallenge(CONTRACT_ADDRESS, hackathon.id, wallet?.address || '', formValue(data, 'url')); }
+    catch (cause) { setError(friendlyError(cause)); return; }
     await runTx((session, report) => submitProject(session, hackathon.id, formValue(data, 'project'), formValue(data, 'url'), formValue(data, 'summary'), report));
   };
 
@@ -256,6 +260,10 @@ export function JudgeApp() {
       return;
     }
     const data = new FormData(event.currentTarget);
+    if (formValue(data, 'url').trim()) {
+      try { evidenceChallenge(CONTRACT_ADDRESS, targetId, wallet?.address || '', formValue(data, 'url'), appealTarget.evidence_package_digest); }
+      catch (cause) { setError(friendlyError(cause)); return; }
+    }
     await runTx((session, report) => appealSubmission(session, targetId, appealTarget.index, formValue(data, 'statement'), formValue(data, 'url'), report));
   };
 
@@ -273,7 +281,7 @@ export function JudgeApp() {
   const verdictReady = hackathon?.phase === 'READY_FOR_JUDGING' || hackathon?.status === 'JUDGING';
   const walletCredit = profile?.available_credit_atto ?? '0';
   const activeDescription = useMemo(() => {
-    if (!hackathon) return selectedId ? 'Loading the selected judging room…' : 'The v2.2 steward is live. Create the first public judging event.';
+    if (!hackathon) return selectedId ? 'Loading the selected judging room…' : 'The v2.3 steward is live. Create the first public judging event.';
     if (hackathon.accepting_submissions) return `${hackathon.remaining_slots} submission slot${hackathon.remaining_slots === '1' ? '' : 's'} still open.`;
     if (hackathon.finalizable) return 'Every decision is in. Anyone can finalize the winner.';
     if (hackathon.appeal_blocked) return 'Finalization is paused while appeal rights are active.';
@@ -287,9 +295,9 @@ export function JudgeApp() {
           <div className="brand-mark" aria-hidden="true"><Scale /></div>
           <div><strong>Hackathon Judge</strong><span>GenLayer-native jury protocol</span></div>
         </div>
-        <div className="network-lock"><span /> StudioNet · v2.2</div>
+        <div className="network-lock"><span /> StudioNet · v2.3</div>
         <div className="top-actions">
-          <a className="icon-link" href="/hackathon-judge-demo.mp4" target="_blank" rel="noreferrer" aria-label="Watch demo video"><Play /></a>
+          <a className="icon-link" href="/hackathon-judge-demo.mp4" target="_blank" rel="noreferrer" aria-label="Watch v2.2 demo video (predates repository verification)" title="v2.2 demo — predates repository verification"><Play /></a>
           <a className="icon-link" href={EXPLORER_URL} target="_blank" rel="noreferrer" aria-label="View contract in explorer"><ExternalLink /></a>
           <Button className="wallet-button" onClick={connect} disabled={busy}>
             <Wallet /> {wallet ? shortAddress(wallet.address) : 'Connect wallet'}
@@ -339,13 +347,13 @@ export function JudgeApp() {
             </div>
             <div className="docket-actions">
               <Button variant="outline" onClick={() => { void Promise.all([refreshList(), selectedId ? refreshSelected(selectedId) : Promise.resolve()]).catch((cause) => setError(friendlyError(cause))); }}><RefreshCw /> Refresh</Button>
-              {hackathon?.accepting_submissions && <Button onClick={() => setPanel('submit')}><ArrowUpRight /> Submit project</Button>}
+              {hackathon?.accepting_submissions && <Button onClick={() => { setProofUrl(''); setPanel('submit'); }}><ArrowUpRight /> Submit project</Button>}
             </div>
           </div>
 
           <div className="process-strip">
             {[
-              ['01', 'Capture', 'Validators render evidence'],
+              ['01', 'Verify', 'Wallet + repository proof'],
               ['02', 'Judge', 'Agree on decision fields'],
               ['03', 'Appeal', 'One review right'],
               ['04', 'Settle', 'Prize + credential'],
@@ -373,14 +381,16 @@ export function JudgeApp() {
               </div>}
               {panel === 'submit' && hackathon && <form className="action-form" onSubmit={handleSubmit}>
                 <Field label="Project name"><input name="project" required minLength={3} maxLength={80} /></Field>
-                <Field label="Public evidence URL" hint="Captured once by validators; future page edits cannot change this submission."><input name="url" type="url" required placeholder="https://your-project.example/demo" /></Field>
+                <Field label="GitHub evidence file URL" hint="Use a .txt file on the repository’s default branch. Include your project evidence and the exact challenge below."><input name="url" type="url" required maxLength={300} value={proofUrl} onChange={(e) => setProofUrl(e.target.value)} placeholder="https://github.com/owner/repo/blob/main/evidence.txt" /></Field>
+                <ProofGuide event={hackathon.id} entrant={wallet?.address || ''} url={proofUrl} />
                 <Field label="Entrant summary"><textarea name="summary" required minLength={20} maxLength={800} placeholder="What the project does and what the evidence demonstrates…" /></Field>
                 <Button type="submit" disabled={busy}><Fingerprint /> Capture evidence + submit</Button>
               </form>}
               {panel === 'appeal' && appealTarget && <form className="action-form" onSubmit={handleAppeal}>
                 <div className="appeal-context"><Status value={appealTarget.eligibility} /><strong>{appealTarget.project_name}</strong><p>{appealTarget.reasoning}</p></div>
                 <Field label="Appeal statement"><textarea name="statement" required minLength={30} maxLength={1000} placeholder="Explain the specific decision error using the rulebook and saved evidence…" /></Field>
-                <Field label="New evidence URL (optional)" hint="If supplied, validators capture a second immutable snapshot."><input name="url" type="url" /></Field>
+                <Field label="New evidence URL (optional)" hint="New evidence needs a GitHub .txt file with a fresh appeal challenge tied to the original package."><input name="url" type="url" maxLength={300} value={proofUrl} onChange={(e) => setProofUrl(e.target.value)} /></Field>
+                {proofUrl && <ProofGuide event={appealTarget.hackathon_id} entrant={wallet?.address || ''} url={proofUrl} parent={appealTarget.evidence_package_digest} />}
                 <Button type="submit" disabled={busy}><Scale /> File one appeal</Button>
               </form>}
             </ActionPanel>
@@ -394,20 +404,21 @@ export function JudgeApp() {
 
             <div className="section-title"><div><h2>Submission docket</h2><span>{submissions.length} / {hackathon.max_submissions} entries</span></div><Status value={hackathon.phase} /></div>
             <div className="submission-list">
-              {submissions.length === 0 && <div className="submission-empty"><FileCheck2 /><strong>Waiting for evidence</strong><span>Each entrant gets one submission. Validators save the rendered page before judging begins.</span></div>}
+              {submissions.length === 0 && <div className="submission-empty"><FileCheck2 /><strong>Waiting for evidence</strong><span>Each entrant publishes a wallet challenge in a GitHub evidence file. Validators verify and save it before judging begins.</span></div>}
               {submissions.map((item) => (
                 <article className="submission" key={item.index} data-winner={item.is_winner}>
                   <div className="submission-rank">{item.is_winner ? <Trophy /> : String(Number(item.index) + 1).padStart(2, '0')}</div>
                   <div className="submission-body">
                     <div className="submission-head"><div><h3>{item.project_name}</h3><span>{shortAddress(item.entrant)} · {new Date(item.submitted_at_iso).toLocaleDateString()}</span></div><Status value={item.status} /></div>
                     <p>{item.summary}</p>
+                    {item.provenance_record && <div className="evidence-line"><ShieldCheck /><span>Repository proof verified at capture</span><code>package:{item.evidence_package_digest.slice(0, 12)}…</code></div>}
                     <div className="evidence-line"><Fingerprint /><code>sha256:{item.evidence_digest.slice(0, 16)}…</code><button onClick={() => showEvidence(item)}>Inspect snapshot</button><a href={item.evidence_url} target="_blank" rel="noreferrer">Source <ExternalLink /></a></div>
                     {item.reasoning && <blockquote><b>Representative rationale · wording not compared</b>{item.reasoning}</blockquote>}
                     <div className="submission-footer">
                       <div><span>Eligibility <b>{item.eligibility || 'Pending'}</b></span><span>Score <b>{item.score_band || '0'} / 100</b></span><span>Confidence <b>{item.confidence_bucket || '0'}%</b></span></div>
                       <div className="row-actions">
                         {verdictReady && item.status === 'SUBMITTED' && <Button size="sm" onClick={() => runTx((session, report) => evaluateSubmission(session, hackathon.id, item.index, report))} disabled={busy}><Gavel /> Judge</Button>}
-                        {item.appealable && wallet && sameAddress(wallet.address, item.entrant) && <Button size="sm" variant="outline" onClick={() => { setAppealTarget(item); setPanel('appeal'); }}>Appeal</Button>}
+                        {item.appealable && wallet && sameAddress(wallet.address, item.entrant) && <Button size="sm" variant="outline" onClick={() => { setProofUrl(''); setAppealTarget(item); setPanel('appeal'); }}>Appeal</Button>}
                         {item.appeal_resolvable && <Button size="sm" onClick={() => runTx((session, report) => resolveAppeal(session, hackathon.id, item.index, report))} disabled={busy}>Resolve appeal</Button>}
                         {item.expirable && <Button size="sm" variant="outline" onClick={() => runTx((session, report) => expireUnresolvedSubmission(session, hackathon.id, item.index, report))} disabled={busy}>Mark timed out</Button>}
                       </div>
@@ -424,6 +435,7 @@ export function JudgeApp() {
           <div className="verdict-orbit"><div><Gavel /><strong>{hackathon ? `${hackathon.evaluated_count}/${hackathon.submission_count}` : stats.total_evaluated}</strong><span>decisions</span></div></div>
           <div className="decision-spec">
             <h3>Consensus boundary</h3>
+            <div><ShieldCheck /><span><b>Required</b> repository provenance</span></div>
             <div><Check /><span><b>Exact</b> eligibility</span></div>
             <div><Check /><span><b>Exact</b> 20-point score band</span></div>
             <div><Check /><span><b>±20</b> confidence tolerance</span></div>
@@ -452,12 +464,33 @@ export function JudgeApp() {
 
       {evidence && <div className="modal-backdrop"><button className="modal-dismiss" onClick={() => setEvidence(null)} aria-label="Close evidence dialog" /><dialog className="evidence-modal" open aria-label="Saved evidence">
         <header><div><span>Immutable render snapshot</span><h2>{evidence.project}</h2></div><button onClick={() => setEvidence(null)} aria-label="Close"><X /></button></header>
+        <ProvenanceRecord record={evidence.value.provenance_record} digest={evidence.value.evidence_package_digest} />
         <div className="digest-box"><Fingerprint /><code>{evidence.value.evidence_digest}</code></div>
         <pre>{evidence.value.evidence_snapshot}</pre>
-        {evidence.value.appeal_evidence_snapshot && <><h3>Appeal evidence</h3><div className="digest-box"><Fingerprint /><code>{evidence.value.appeal_evidence_digest}</code></div><pre>{evidence.value.appeal_evidence_snapshot}</pre></>}
+        {evidence.value.appeal_evidence_snapshot && <><h3>Appeal evidence</h3><ProvenanceRecord record={evidence.value.appeal_provenance_record} digest={evidence.value.appeal_package_digest} /><div className="digest-box"><Fingerprint /><code>{evidence.value.appeal_evidence_digest}</code></div><pre>{evidence.value.appeal_evidence_snapshot}</pre></>}
       </dialog></div>}
     </main>
   );
+}
+
+function ProofGuide({ event, entrant, url, parent = '' }: { event: string; entrant: string; url: string; parent?: string }) {
+  let challenge = '';
+  let message = '';
+  try { challenge = evidenceChallenge(CONTRACT_ADDRESS, event, entrant, url, parent); }
+  catch (cause) { message = friendlyError(cause); }
+  return <div className="proof-guide">
+    <strong>Publish your wallet proof</strong>
+    <p>Put this exact line in the evidence file, commit it to the default branch, then submit from the connected wallet. Keep the file under 20,000 characters.</p>
+    {challenge ? <textarea aria-label="Wallet provenance challenge" readOnly value={challenge} rows={4} onFocus={(e) => e.target.select()} /> : <p>{message}</p>}
+    <small>Verification records publication in this repository. Originality and claims about linked deployments still require judging.</small>
+  </div>;
+}
+
+function ProvenanceRecord({ record, digest }: { record: string; digest: string }) {
+  if (!record) return <p>Repository provenance is unavailable for this record.</p>;
+  let pretty = record;
+  try { pretty = JSON.stringify(JSON.parse(record), null, 2); } catch { /* Preserve the returned record for inspection. */ }
+  return <section><h3>Wallet and repository provenance</h3><p>Verified at capture against GitHub’s default branch and file records. Settlement rechecks this saved package.</p><div className="digest-box"><ShieldCheck /><code>{digest}</code></div><pre>{pretty}</pre></section>;
 }
 
 function ActionPanel({ title, onClose, children }: { title: string; onClose: () => void; children: React.ReactNode }) {
@@ -468,7 +501,7 @@ function EmptyDocket({ onCreate }: { onCreate: () => void }) {
   return <section className="empty-docket">
     <div className="empty-symbol"><Gavel /></div><span>Contract deployed · docket empty</span>
     <h2>Turn a prose rubric into a consensus-safe decision.</h2>
-    <p>Evidence is rendered from the public web and frozen on-chain. Validators can disagree on their prose, but must converge on the fields that move money and issue credentials.</p>
+    <p>Validators verify a wallet challenge in repository evidence, freeze the record on-chain, and agree on the judgment fields that move prizes and issue credentials.</p>
     <Button onClick={onCreate}><Plus /> Create the first hackathon</Button>
     <div className="empty-principles"><div><Fingerprint /><b>Immutable evidence</b></div><div><Scale /><b>One appeal</b></div><div><Trophy /><b>Escrowed prize</b></div></div>
   </section>;

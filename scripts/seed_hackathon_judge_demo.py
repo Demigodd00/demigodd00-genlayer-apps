@@ -344,6 +344,13 @@ def main() -> None:
     fixture = next(item for item in submissions if item["entrant"].lower() == entrant_two.address.lower())
     expected_challenge = "|".join(("HJ-PROVENANCE-V1", "studionet", address.lower(), hackathon_id, entrant_two.address.lower(),
         "demigodd00/demigodd00-genlayer-apps", "docs/evidence/hackathon-judge-v23/appeal.txt", "appeal", fixture["evidence_package_digest"]))
+    if phase == "submit":
+        challenge_view = _read(organizer_client, address, "get_evidence_challenge", [
+            hackathon_id, entrant_two.address, EVIDENCE_BASE + "appeal.txt", fixture["evidence_package_digest"],
+        ])
+        if not isinstance(challenge_view, dict) or challenge_view.get("challenge") != expected_challenge:
+            raise RuntimeError("Live challenge view does not match the canonical wallet binding")
+        record["challenge_view_verified"] = True
     record["appeal_challenge"] = expected_challenge
     record["captured_submissions"] = submissions
     _save(record)

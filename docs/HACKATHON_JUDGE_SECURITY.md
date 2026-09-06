@@ -1,35 +1,32 @@
-# Hackathon Judge security and limitations
+# Hackathon Judge v2.3 security and limitations
 
-## Security properties
+## Enforced properties
 
-- **No privileged judge:** the deployer receives no role. Evaluation and finalization are permissionless.
-- **Immutable terms:** rulebook, rubric, threshold, deadline, appeal window, and prize are fixed at creation.
-- **Immutable evidence:** submission and appeal pages are normalized, hashed, independently re-rendered, and accepted only when validators match both the exact snapshot and digest.
-- **Prompt-injection boundary:** evidence, entrant summaries, and appeal statements are explicitly treated as untrusted data and cannot redefine role, output schema, or security rules.
-- **Consensus-safe output:** exact comparison is limited to eligibility and coarse score band; confidence is bounded; free-form reasoning is excluded. Both leader and validator records must first match the strict normalized evaluation schema.
-- **Deterministic settlement:** winner ranking, tie-breaking, refunds, credits, and credentials do not invoke an LLM.
-- **Bounded state:** input lengths, page size, submission count, score values, evidence size, URL format, and appeal count are capped.
-- **Escrow accounting:** prize funds move through owned app credit. Withdrawal zeroes credit before the external transfer.
-- **Frontend finality:** the dApp reports success only after StudioNet finalization and a successful execution result.
-- **No key custody:** the web app uses an injected wallet and never requests or stores private keys.
-- **Judgment liveness:** an unresolved initial judgment or appeal can be permissionlessly converted to `INCONCLUSIVE` after 24 hours, allowing deterministic finalization and refund settlement.
+- Signed entrant transactions and repository challenge lines bind evidence to a wallet, event, contract, repository and file path.
+- Independent validators verify public GitHub repository identity, default-branch head, file record and Git blob digest before agreeing on immutable rendered text.
+- A canonical package digest binds the provenance record, snapshot digest, summary or appeal statement, and parent package.
+- A new appeal file must contain its own challenge linked to the original evidence package.
+- Judging and finalization validate saved package integrity. Invalid provenance cannot receive prize credit or a winner credential.
+- Rules and event terms are immutable. No deployer/administrator can select winners or override judgments.
+- Evidence and summaries are untrusted input to the LLM; schema, eligibility, score bands and confidence bounds are checked independently.
+- Prize accounting, ranking, tie-breaking and refunds are deterministic. Withdrawal zeroes credit before emitting a transfer.
+- A 24-hour permissionless timeout makes unresolved judgments inconclusive, keeping them ineligible for prizes.
+- The app requests wallet transactions, never private keys, and requires successful finalized execution before reporting success.
 
-## Known limitations
+## What provenance proves
 
-- `web.render()` observes rendered text, not a cryptographic build artifact. A page can make false claims; the protocol judges evidence quality but does not prove software provenance.
-- Public pages may render differently across geography, time, or anti-bot infrastructure. Exact digest agreement intentionally rejects unstable evidence.
-- Screenshots, video, wallet-gated demos, and very dynamic applications should publish a stable text evidence page.
-- LLMs can still make poor but consensus-compatible judgments. Coarse score bands and appeals reduce, not eliminate, this risk.
-- A single appeal is a product bound, not a claim that every dispute can be resolved in two passes.
-- The timeout fallback deliberately chooses no winner for the unresolved entry; it restores liveness but does not attempt to manufacture validator agreement.
-- Earliest-submission tie-breaking is deterministic but may reward timing. Future versions could support multiple awards or explicit tie rules.
-- Address-based credentials are portable across events using the same contract but do not prove a persistent human identity.
-- StudioNet is a test environment. Its GEN is simulated and the release is not audited for mainnet-value custody.
+GitHub's HTTPS/API records and publication of a contract/event-specific wallet challenge establish publication control or authorization in the named repository at capture. The contract checks repository and file identity, rather than accepting repository claims from an evidence page or LLM.
 
-## Operational guidance
+This does not prove legal ownership, original authorship, a unique person, honest project claims, or control of linked deployment addresses. Git commit signatures are not required or represented as verified. A fork is identified as a fork and proves publication only in that fork. Deployment-only proofs and private repositories are unsupported.
 
-- Write rules that distinguish clear violations from missing evidence.
-- Ask entrants for stable, public, text-rich evidence pages.
-- Keep prize values within the configured caps and withdraw unused credit.
-- Treat an `INCONCLUSIVE` result as an evidence failure, not an accusation of misconduct.
-- Inspect the saved evidence digest and transaction finality before relying on a result.
+## Availability and remaining risks
+
+GitHub and renderer availability are dependencies. Rate limits or inconsistent records fail closed; no entry is reserved. A default-branch update during capture may cause validator disagreement; retry with a stable head. The frozen result remains valid as a historical capture if the repository later changes or disappears.
+
+Only public UTF-8 .txt files, simple paths and bounded text are accepted. Dynamic web pages, binary artifacts, screenshots and videos must be described in a qualifying evidence file; statements about linked material are not automatically authenticated.
+
+LLMs may agree on a poor judgment or mishandle malicious prose. Coarse scores and a single appeal reduce but do not eliminate judgment risk. Wallet-based credentials do not establish human identity. StudioNet is a testing environment, its GEN is simulated, and this release has not received an independent custody/security audit.
+
+## Verification
+
+Direct tests cover wrong-wallet/event/contract/repository/path replays, untrusted URLs, non-default branches, tampered blob/render content, provider errors, appeal parent mismatch and settlement after stored-package corruption. The live acceptance run proves wrong-wallet rejection before two authenticated submissions, an evidence appeal, finalization and withdrawal. See [the response pack](HACKATHON_JUDGE_STEWARD_RESPONSE.md) and [recorded transactions](../deployments/hackathon_judge_demo.json).

@@ -1,71 +1,42 @@
-# Hackathon Judge — Project Explorer submission
+# Hackathon Judge — Project Explorer resubmission
 
 ## Identity
 
-- Application date: `04/09/2026`
-- Project name: `Hackathon Judge`
-- Logo upload: [`docs/assets/hackathon-judge/hackathon-judge-logo.png`](assets/hackathon-judge/hackathon-judge-logo.png)
-- Primary tag: `AI & Agents`
-- Tag 1: `Verifiable Inference`
-- Tag 2: `Source Verification`
+- Project name: Hackathon Judge
+- Application date: use the portal's actual resubmission date.
+- Logo: [existing logo](assets/hackathon-judge/hackathon-judge-logo.png)
+- Primary tag: AI & Agents
+- Focus tags: Verifiable Inference; Source Verification
 
 ## One-liner
 
-> On-chain hackathon judging from public evidence, prose rules, and validator consensus.
+On-chain hackathon judging with wallet-bound repository evidence, validator consensus, appeals and prize settlement.
 
-## Description
+## Description (under 1,000 characters)
 
-> Hackathon Judge is a GenLayer-native protocol for hackathon organizers, builders, and reviewers. Organizers publish a plain-English rulebook, rubric, deadline, appeal window, and prize. Entrants submit a public evidence URL. Validators use gl.nondet.web.render() to agree on an immutable snapshot and SHA-256 digest, then independently judge that saved evidence against the on-chain rules. Consensus compares only settlement-critical fields—exact eligibility, exact 20-point score band, and bounded confidence—while free-form reasoning is exempt. The contract supports one evidence-based appeal, permissionless evaluation and finalization, a 24-hour inconclusive fallback, deterministic ranking, withdrawable prize credit, refunds, and portable wallet-based winner credentials. A finalized StudioNet demo shows two judgments, an inconclusive case repaired by appeal, a 100-point winner, and successful prize withdrawal.
-
-## Demo video
-
-The form accepts YouTube URLs only. Either leave this optional field blank or upload the prepared 60-second video to YouTube as public or unlisted, then paste its `youtube.com/watch` URL.
-
-- Upload file: [`docs/assets/hackathon-judge/hackathon-judge-demo.mp4`](assets/hackathon-judge/hackathon-judge-demo.mp4)
-- Suggested YouTube title: `Hackathon Judge — GenLayer StudioNet Demo`
-- Suggested YouTube description:
-
-> Hackathon Judge turns public evidence and plain-English hackathon rules into an auditable on-chain verdict, appeal record, winner, and prize settlement through GenLayer validator consensus. Live app: https://hackathon-judge-studionet.blazekingsley2.chatgpt.site/ Source: https://github.com/Demigodd00/demigodd00-genlayer-apps
+Hackathon Judge is a GenLayer protocol for organizers and builders. Organizers store prose rules, a rubric, deadlines and a prize on-chain. Entrants publish a wallet/event/contract challenge in a GitHub evidence file. Validators independently verify repository metadata, the default-branch commit and file digest, then render and freeze the authenticated evidence. Each package binds the entrant, event, repository, commit, snapshot and summary. Validators judge the saved evidence, agreeing on eligibility and 20-point score bands while reasoning wording is exempt. New appeal evidence requires another verified package linked to the original. Settlement rechecks both packages before awarding withdrawable prize credit and wallet-based credentials. The StudioNet demo includes a rejected wrong-wallet replay, verified submissions, an evidence appeal and prize withdrawal. Repository verification proves publication control at capture, not originality or ownership of linked deployments.
 
 ## How-to steps
 
-### Step 1
-
-- Optional heading: `Open the finalized docket`
-- Instruction: `Open the website and select hj-1. Confirm status FINALIZED, 2/2 judged, Hackathon Judge Protocol is WINNER at 100/100, Appeal Recovery Fixture is NOT SELECTED at 80/100, and the prize escrow is 0.001 GEN.`
-
-### Step 2
-
-- Optional heading: `Inspect immutable evidence`
-- Instruction: `Click Inspect snapshot on both submissions. Confirm each SHA-256 digest is shown and that Appeal Recovery Fixture displays a separate Appeal evidence section.`
-
-### Step 3
-
-- Optional heading: `Verify the on-chain release`
-- Instruction: `Open the Intelligent contract link and compare its address with the contract below. Open the GitHub demo receipt to verify the finalized transactions, winner, and prize withdrawal.`
+1. **Open the v2.3 docket.** Open the website, select hj-1, and confirm the contract address below and StudioNet v2.3 badge. The finalized demo has two judged entries.
+2. **Inspect repository provenance.** Click Inspect snapshot for each entry. Read the entrant wallet, repository ID/name, default branch, captured commit, blob digest, challenge, frozen URL and package digest.
+3. **Check the appeal binding.** Inspect Appeal Recovery Fixture's appeal evidence. Its provenance record includes parent_package_digest equal to that entry's original evidence_package_digest.
+4. **Verify enforcement and settlement.** Open the public demo receipt. wrong_wallet_rejection records a finalized failed execution with the expected missing-wallet-challenge error and zero entries afterward. Successful later transactions cover valid entries, judgments, appeal, finalization and winner withdrawal.
 
 ## Expected verification outcome
 
-> The steward sees public docket hj-1 finalized on StudioNet with two judged entries: Hackathon Judge Protocol is ELIGIBLE at 100/100 and marked WINNER; Appeal Recovery Fixture is ELIGIBLE at 80/100 after one evidence appeal and marked NOT SELECTED. The jury console shows 2/2 decisions, 0.001 GEN awarded, and contract 0x788432Aa8D55c81c3bd2ef0FbB29A4Bc7E6e4cC6. Inspect snapshot shows frozen original evidence digests, while the second entry also shows a separate appeal digest. The public demo receipt records successful finalization and winner withdrawal, and both GitHub Actions workflows pass.
+The same public app reads v2.3 contract 0x6fD9B65001B0eEF5CC98A95D20A1c693C0D04FBA. Docket hj-1 is FINALIZED with a 100-point Hackathon Judge Protocol winner and an 80-point Appeal Recovery Fixture after one appeal. Every evidence package exposes its wallet/repository/commit binding; the appeal points to its original package. The receipt proves a wrong-wallet submission was rejected without creating an entry, and the winner withdrew the 0.001 simulated GEN prize.
 
-## Links
+## Links and evidence
 
-- Contract link 1: `https://explorer-studio.genlayer.com/address/0x788432Aa8D55c81c3bd2ef0FbB29A4Bc7E6e4cC6`
-- Website: `https://hackathon-judge-studionet.blazekingsley2.chatgpt.site/`
-- GitHub: `https://github.com/Demigodd00/demigodd00-genlayer-apps`
+- Website: https://hackathon-judge-studionet.blazekingsley2.chatgpt.site/
+- GitHub (also paste into the required Evidence field): https://github.com/Demigodd00/demigodd00-genlayer-apps
+- Contract: https://explorer-studio.genlayer.com/address/0x6fD9B65001B0eEF5CC98A95D20A1c693C0D04FBA
+- Steward response: https://github.com/Demigodd00/demigodd00-genlayer-apps/blob/main/docs/HACKATHON_JUDGE_STEWARD_RESPONSE.md
+- Live receipt: https://github.com/Demigodd00/demigodd00-genlayer-apps/blob/main/deployments/hackathon_judge_demo.json
+- Deployment: https://github.com/Demigodd00/demigodd00-genlayer-apps/blob/main/deployments/hackathon_judge_studionet.json
+- Source: https://github.com/Demigodd00/demigodd00-genlayer-apps/blob/main/contracts/hackathon_judge.py
 
-## Evidence and supporting information
+The optional YouTube field can stay blank. The existing video is a historical v2.2 walkthrough and does not demonstrate the new provenance checks. Use the live v2.3 docket and receipts as current evidence.
 
-Paste the repository URL into the required evidence field:
-
-`https://github.com/Demigodd00/demigodd00-genlayer-apps`
-
-Recommended additional evidence links:
-
-1. Live app: `https://hackathon-judge-studionet.blazekingsley2.chatgpt.site/`
-2. Final demo receipt: `https://github.com/Demigodd00/demigodd00-genlayer-apps/blob/main/deployments/hackathon_judge_demo.json`
-3. Deployment receipt: `https://github.com/Demigodd00/demigodd00-genlayer-apps/blob/main/deployments/hackathon_judge_studionet.json`
-4. Contract source: `https://github.com/Demigodd00/demigodd00-genlayer-apps/blob/main/contracts/hackathon_judge.py`
-5. Hosted demo video: `https://hackathon-judge-studionet.blazekingsley2.chatgpt.site/hackathon-judge-demo.mp4`
-
-Complete the reCAPTCHA personally, review the preview, and submit only after confirming every URL is clickable.
+Update the existing action-needed application via Edit. Replace the old contract link and verification text, attach the steward response and live receipt, then personally complete any CAPTCHA and resubmit.

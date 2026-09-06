@@ -1,26 +1,25 @@
 # Hackathon Judge web app
 
-StudioNet dApp for the hardened `HackathonJudge` v2.2 intelligent contract.
+StudioNet dApp for HackathonJudge v2.3, with wallet-bound GitHub evidence and settlement provenance checks.
 
-- Contract: `0x788432Aa8D55c81c3bd2ef0FbB29A4Bc7E6e4cC6`
-- Live: <https://hackathon-judge-studionet.blazekingsley2.chatgpt.site>
-- Walkthrough: <https://hackathon-judge-studionet.blazekingsley2.chatgpt.site/hackathon-judge-demo.mp4>
-- Framework: vinext + React + Tailwind + shadcn components
-- Chain client: `genlayer-js`
+- Contract: `0x6fD9B65001B0eEF5CC98A95D20A1c693C0D04FBA`
+- Live: https://hackathon-judge-studionet.blazekingsley2.chatgpt.site/
+- Historical v2.2 video: /hackathon-judge-demo.mp4 (predates provenance)
+- Stack: vinext, React, Tailwind, shadcn; genlayer-js
 
-## Local development
+## Entrant flow
+
+Connect the entrant wallet, open a room, and enter a GitHub .txt file URL on the repository's default branch. The form generates an exact challenge. Publish it as a complete line in the evidence file before submitting. Validators independently check GitHub records, file contents and the rendering; the saved package is bound to the wallet, event, contract and repository.
+
+New appeal evidence needs a different file and a challenge tied to the original package digest. Inspect snapshot exposes provenance and package digests. Provenance proves repository publication at capture, not originality or ownership of linked deployments.
+
+## Development and checks
 
 ```powershell
 pnpm install --frozen-lockfile
 pnpm dev
-```
-
-The release contract is the safe default. To target another deployment, set `NEXT_PUBLIC_HACKATHON_JUDGE_ADDRESS` before building.
-
-## Verification
-
-```powershell
 pnpm check
+pnpm audit:prod
 ```
 
-`check` runs the TypeScript compiler, unit tests, focused lint, and the complete Sites production build.
+Set NEXT_PUBLIC_HACKATHON_JUDGE_ADDRESS before building only when targeting another compatible v2.3 deployment.

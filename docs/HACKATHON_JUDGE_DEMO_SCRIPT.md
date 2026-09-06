@@ -1,5 +1,7 @@
 # Hackathon Judge demo walkthrough
 
+Historical v2.2 video script. This recording predates the v2.3 repository provenance release. For current review evidence use [the v2.3 resubmission pack](HACKATHON_JUDGE_PROJECT_EXPLORER_SUBMISSION.md) and the live docket.
+
 Target length: 60 seconds. A matching silent, captioned cut is available at [`docs/assets/hackathon-judge/hackathon-judge-demo.mp4`](assets/hackathon-judge/hackathon-judge-demo.mp4).
 
 ## 0–8s — Problem and contract

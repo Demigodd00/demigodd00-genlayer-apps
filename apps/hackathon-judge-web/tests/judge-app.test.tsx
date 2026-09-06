@@ -120,4 +120,19 @@ describe('room and transaction safety', () => {
     await user.click(screen.getByRole('button', { name: 'Load more rooms' }));
     expect(await screen.findByRole('button', { name: /Room Z/ })).toBeTruthy();
   });
+
+  it('prepares the connected wallet proof and blocks untrusted evidence URLs', async () => {
+    const user = userEvent.setup();
+    contract.getHackathon.mockImplementation(async (id: string) => ({ ...event(id, 'Room A'), accepting_submissions: true }));
+    render(<JudgeApp />);
+    await screen.findByRole('heading', { name: 'Room A' });
+    await user.click(screen.getByRole('button', { name: /Connect wallet/i }));
+    await user.click(screen.getByRole('button', { name: 'Submit project' }));
+    const field = screen.getByLabelText(/GitHub evidence file URL/);
+    fireEvent.change(field, { target: { value: 'https://github.com/Owner/Repo/blob/main/evidence.txt' } });
+    expect(screen.getByRole<HTMLTextAreaElement>('textbox', { name: 'Wallet provenance challenge' }).value).toContain(`|hj-A|${address}|owner/repo|evidence.txt|submission|none`);
+    fireEvent.change(field, { target: { value: 'https://evil.example/forged.txt' } });
+    fireEvent.submit(field.closest('form')!);
+    expect(contract.submitProject).not.toHaveBeenCalled();
+  });
 });

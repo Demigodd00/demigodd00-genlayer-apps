@@ -1,16 +1,16 @@
 {
   "contract": "HackathonJudge",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "network": "studionet",
-  "address": "0x788432Aa8D55c81c3bd2ef0FbB29A4Bc7E6e4cC6",
-  "transaction_hash": "0x4b963396d91fa9088c77c4d15fcf02197c7d397a636ff4875c0c7ad6fd1a9926",
-  "deployer": "0x1c8c74DB7ac76becD359c28D77648cC62596E220",
+  "address": "0x6fD9B65001B0eEF5CC98A95D20A1c693C0D04FBA",
+  "transaction_hash": "0x98cdf25fe5bf20ac88a3aa60198a9ccd853882e29dd3cf35f81b2f4ea14bc079",
+  "deployer": "0xa992692EDdB87b7f64298cf2f4934Ce62a079fB5",
   "deployer_role": "deployment_only_no_privileged_access",
   "signer_mode": "disposable_studionet_deployment_only",
-  "source_sha256": "5b27de829d137bdf1b89c0bb02d2742431cdc7833fb0c5b63b4285f6304a14d8",
+  "source_sha256": "dce90861bfed11d9ec9f34c4b10a5523f0881df770c2beb067cac7cf7594d506",
   "receipt_status": "FINALIZED",
   "execution_result": "SUCCESS",
   "verified_source_and_config": true,
-  "deployed_at": "2026-09-04T18:06:35.652855+00:00",
-  "previous_address": "0x0bAE6f3aE56E02A50f5Bed0051F56ec28725a58F"
+  "deployed_at": "2026-09-06T18:45:42.581181+00:00",
+  "previous_address": "0xBC71e1D982Dfa369156E6B9A7a3f61B23BDa5B86"
 }

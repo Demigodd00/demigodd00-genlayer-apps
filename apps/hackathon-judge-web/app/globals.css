@@ -264,6 +264,10 @@ button:disabled { cursor: not-allowed; }
   .jury-console { display: block; }
   .jury-console > * { margin-bottom: 18px; }
 }
+.proof-guide { grid-column: 1 / -1; padding: 18px; border: 1px solid var(--line); border-radius: 10px; }
+.proof-guide p { margin: 10px 0; line-height: 1.6; }
+.proof-guide textarea { width: 100%; font-family: monospace; font-size: 14px; overflow-wrap: anywhere; }
+.proof-guide small { display: block; margin-top: 10px; line-height: 1.5; }
 @media (max-width: 520px) {
   .brand-block strong { font-size: 17px; }
   .brand-mark { width: 31px; height: 31px; }

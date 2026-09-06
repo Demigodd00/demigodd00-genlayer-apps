@@ -1,126 +1,55 @@
-# Hackathon Judge protocol architecture
+# Hackathon Judge v2.3 architecture
 
-Hackathon Judge is a GenLayer-native adjudication and prize protocol for public hackathons. Organizers commit a plain-English rulebook and rubric on-chain. Entrants submit public evidence. Validators independently capture the same evidence and later agree on the small set of subjective decision fields that can move the prize.
+Hackathon Judge interprets a prose rulebook through independent GenLayer validator judgments, then settles a prize through deterministic code.
 
-## System boundary
+## Boundary
 
-```mermaid
-flowchart LR
-    O[Organizer wallet] -->|deposit simulated GEN| C[HackathonJudge v2.2]
-    O -->|rulebook + rubric + deadline + prize| C
-    E[Entrant wallet] -->|project + public HTTPS URL| R[Independent web render]
-    R -->|exact snapshot + SHA-256 agreement| S[(Immutable snapshot in contract storage)]
-    S --> J[Independent validator jury]
-    C --> J
-    J -->|exact eligibility + score band| D[(Decision state)]
-    J -.->|reason wording is exempt| X[Explanatory rationale]
-    D --> A{Adverse decision?}
-    A -->|one entrant appeal| R2[Optional new snapshot + reassessment]
-    A -->|no / resolved| F[Deterministic finalization]
-    R2 --> D
-    J -->|no consensus for 24h| T[Permissionless INCONCLUSIVE fallback]
-    T --> F
-    F -->|winner| W[Prize credit + portable win credential]
-    F -->|no winner / empty cancellation| O2[Organizer refund credit]
-    W -->|withdraw| P[Winner wallet]
-```
+The frontend owns wallet connection, evidence-file guidance, transaction progress and presentation. GitHub supplies public repository and commit records over HTTPS. The contract owns evidence authentication, immutable capture, comparison rules, judging, appeals, ranking, credit and credentials. There is no private verification server or privileged judge.
 
-The frontend owns wallet connection, forms, pagination, transaction progress, and presentation. Public evidence hosts own project pages, repositories, demos, and documentation. The intelligent contract owns all consensus-critical state: immutable terms, evidence capture, subjective decisions, appeal rights, deterministic winner selection, prize accounting, and builder credentials.
+## Repository provenance
 
-## State flow
+1. The entrant connects a wallet and selects a GitHub `.txt` file URL: `https://github.com/OWNER/REPO/blob/REF/PATH.txt`.
+2. The app or `get_evidence_challenge()` produces an exact proof line binding StudioNet, this contract address, event ID, wallet, normalized repository name, case-sensitive file path, purpose, and parent package.
+3. The entrant places the line in the file with project evidence and publishes it on the repository's default branch.
+4. During submission, every validator independently fetches GitHub repository metadata and `/commits/HEAD`. The submitted ref must be the default branch name, `HEAD`, or that exact current head commit.
+5. Validators retrieve `/contents/PATH?ref=COMMIT`, require a file record, decode its content, and recompute the Git blob SHA-1. They require the exact challenge as a complete line.
+6. Validators render the commit-pinned raw file with `gl.nondet.web.render()`. Its normalized text must equal the authenticated file content. The commit, file and provenance result must match independently across validators.
+7. The contract stores the snapshot, SHA-256 snapshot digest, canonical provenance record and SHA-256 package digest.
 
-```text
-OPEN
-  |-- organizer cancel, only while empty --------------------> CANCELLED + prize credit refunded
-  |-- entrant submit ----------------------------------------> validator-agreed immutable snapshot
-  `-- deadline passes ---------------------------------------> READY_FOR_JUDGING
-                                                               |
-                 permissionless evaluate_submission() --------+
-                         |-- ELIGIBLE ------------------------> JUDGED
-                         |-- clear rule violation ------------> INELIGIBLE
-                         `-- material evidence missing -------> INCONCLUSIVE
+The provenance record includes repository ID and name, fork status, default branch, commit, blob SHA, file path, submitted and frozen URLs, challenge, contract, network, event, wallet, summary/statement digest and parent package. The package digest is SHA-256 of canonical JSON containing the provenance record string and snapshot digest. The field names and normalization are specified by `_canonical_json` and `_package_digest` in the contract.
 
-INELIGIBLE / INCONCLUSIVE
-  |-- entrant files one appeal during window ----------------> APPEAL_PENDING
-  |       `-- optional different URL captured immutably
-  `-- permissionless resolve_appeal() -----------------------> JUDGED / INELIGIBLE / INCONCLUSIVE
+A fork proves publication in that fork only. A pull-request-only commit cannot pass as the default branch head of an upstream repository. The repository name and contract address in the proof prevent copying a challenge between repositories or deployments.
 
-SUBMITTED / APPEAL_PENDING
-  `-- unresolved for 24 hours
-        `-- permissionless expire_unresolved_submission() ---> INCONCLUSIVE
+## Authentication scope
 
-all submissions evaluated and appeal rights cleared
-  `-- finalize_hackathon()
-        |-- highest eligible score reaches threshold --------> FINALIZED + prize credit + credential
-        `-- no qualifying score ------------------------------> NO_WINNER + organizer refund credit
-```
+The signed GenLayer transaction establishes the entrant wallet. Publishing its domain-separated challenge on the named repository's default branch establishes repository publication control or authorization at capture. GitHub HTTPS/API records are the external trust source. This is not a GitHub OAuth account link, a signed-commit attestation, legal ownership verification, originality detection, or proof that external deployment links belong to the entrant. Those claims remain evidence for judging. Direct deployment-only proofs are not supported in this release: it implements the steward's repository-record route.
 
-Ties use the earliest submission index. No AI call is made during winner selection or payout accounting.
+## Judgment and appeals
 
-## Two separate consensus operations
+The jury evaluates only saved evidence and stored rules. Every validator independently runs the LLM. Eligibility and score band (0,20,40,60,80,100) must match exactly. Confidence buckets may differ by at most 20. Reasoning wording is exempt, but the result schema is strictly validated. Low confidence becomes INCONCLUSIVE; non-eligible entries score zero.
 
-Evidence capture and judging deliberately do not happen in one nondeterministic operation.
+An adverse decision gives its entrant one appeal. A clarification-only appeal is authorized by the entrant transaction. New evidence needs a new GitHub file with an appeal challenge containing the original package digest. The new package also binds the appeal statement. Both packages are validated before judging or resolving an appeal.
 
-1. `submit_project()` calls `gl.nondet.web.render()` inside a custom `gl.vm.run_nondet_unsafe()`. Leader and validator each normalize the render, hash it, and require exact equality of both snapshot text and digest. The contract also recomputes the leader snapshot hash before accepting the result. The agreed text and digest are stored.
-2. `evaluate_submission()` judges only that saved snapshot. Validators independently parse their LLM output and compare normalized decision fields.
+## Settlement and liveness
 
-This prevents a mutable page from changing between submission and judging. An appeal may add a different public URL, but that page is captured into a second immutable snapshot before it can affect the reassessment.
+Before selecting any eligible winner, finalization recomputes and checks original and appeal package bindings. A missing or corrupted binding rejects settlement before any prize credit or credential is issued. Highest qualifying score wins; ties favor the earliest entry. No AI call or external fetch occurs during finalization: the verified capture is immutable.
 
-## Equivalence principle
+Deposits create wallet-owned credit. Event creation locks the prize; finalization credits the winner or refunds the organizer if no entry qualifies. An organizer can cancel only an empty event. Withdrawal zeroes credit before emitting the transfer.
 
-The protocol compares fields according to their settlement impact:
+An initial judgment or pending appeal unresolved for 24 hours can be permissionlessly expired to INCONCLUSIVE. That entry cannot win, allowing the remaining event to settle.
 
-| Output | Equivalence rule | Why |
-|---|---|---|
-| `eligibility` | Exact | Controls whether a project can win |
-| `score_band` | Exact, one of `0,20,40,60,80,100` | Controls ranking |
-| `confidence_bucket` | Difference no greater than 20 | Avoids false disagreement over calibration |
-| `reason` | Not compared | Natural-language explanations will not match byte-for-byte |
+## Bounds and availability
 
-Low-confidence decisions become `INCONCLUSIVE`; all non-eligible decisions receive score zero. Comparing the rationale itself would make honest validators disagree constantly without improving settlement safety.
+Eight entries per event, one entry per wallet and evidence URL, one appeal, 20,000 normalized evidence characters, 400 rationale characters. Only public UTF-8 GitHub .txt files with simple URL paths are supported; branches containing slashes can use HEAD. Queries, fragments, traversal and lookalike hosts are rejected.
 
-## Prize accounting
+GitHub errors, rate limits, unavailable records, changing branch heads, file/render disagreement and validator disagreement fail closed. Wait and retry while the submission window remains open. Frozen evidence is unaffected by later branch edits or repository deletion.
 
-The contract uses withdrawable app credit:
+StudioNet GEN is simulated. Credentials are wallet records across events on this contract, not verified human identities.
 
-- `deposit()` records simulated StudioNet GEN as credit owned by the sender.
-- `create_hackathon()` debits the selected prize from organizer credit.
-- `finalize_hackathon()` credits the winner, or credits the organizer when no project qualifies.
-- `cancel_hackathon()` credits the organizer only when the event is still empty.
-- `withdraw_credit()` performs the external transfer after zeroing credit, following checks-effects-interactions.
+## Release and verification
 
-No deployer or administrator can select a winner, rewrite terms, or seize credit.
+Contract: `0x6fD9B65001B0eEF5CC98A95D20A1c693C0D04FBA`  
+Deployment: `0x98cdf25fe5bf20ac88a3aa60198a9ccd853882e29dd3cf35f81b2f4ea14bc079`  
+Source SHA-256: `dce90861bfed11d9ec9f34c4b10a5523f0881df770c2beb067cac7cf7594d506`
 
-## Why this is not a Solidity protocol
-
-Solidity can enforce deadlines, balances, uniqueness, and deterministic ranking. It cannot fetch an arbitrary public project page and interpret prose such as “newly built,” “materially complete,” “original,” or “best use of the technology.” Encoding every future rubric as branches would either centralize judgment in an oracle or reduce the protocol to organizer voting.
-
-GenLayer makes the irreducibly subjective step part of validator execution. The contract narrows that subjectivity into coarse, consensus-safe fields, then returns to deterministic code for appeals, ranking, credentials, refunds, and settlement.
-
-## Bounded release limits
-
-- Maximum eight submissions per hackathon and 25 items per page.
-- One submission per wallet and evidence URL per hackathon.
-- One entrant appeal; no organizer veto and no recursive appeal chain.
-- A fixed 24-hour permissionless timeout converts an unresolved initial judgment or appeal to `INCONCLUSIVE` so liveness does not depend on eventual model consensus.
-- Public HTTPS text evidence only. Authentication walls, video-only proof, unstable rendering, and very large pages are unsupported.
-- Snapshot text is capped at 20,000 characters; rationale is capped at 400 characters.
-- Score bands trade precision for reliable validator agreement.
-- StudioNet GEN is simulated test currency and has no monetary value.
-- Portable credentials are address-based records, not transferable identity attestations.
-
-## Verified StudioNet release
-
-- Contract: `0x788432Aa8D55c81c3bd2ef0FbB29A4Bc7E6e4cC6`
-- Version: `2.2.0`
-- Deployment transaction: `0x4b963396d91fa9088c77c4d15fcf02197c7d397a636ff4875c0c7ad6fd1a9926`
-- Source SHA-256: `5b27de829d137bdf1b89c0bb02d2742431cdc7833fb0c5b63b4285f6304a14d8`
-
-Release checks:
-
-```powershell
-genvm-lint check contracts\hackathon_judge.py --json
-pytest tests\direct\test_hackathon_judge.py -v
-gltest tests\integration\test_hackathon_judge_studionet.py -v -s --network studionet
-python scripts\deploy_hackathon_judge.py
-```
+See [steward response and reproduction](../HACKATHON_JUDGE_STEWARD_RESPONSE.md), [live receipts](../../deployments/hackathon_judge_demo.json), and [security scope](../HACKATHON_JUDGE_SECURITY.md).

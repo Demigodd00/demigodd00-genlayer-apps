@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { formatGen, friendlyError, isAddress, parseGen, sameAddress, shortAddress } from '../lib/protocol';
+import { evidenceChallenge, formatGen, friendlyError, isAddress, parseGen, sameAddress, shortAddress } from '../lib/protocol';
 
 describe('protocol value formatting', () => {
   it('round-trips whole and fractional GEN amounts', () => {
@@ -25,5 +25,20 @@ describe('wallet and error presentation', () => {
 
   it('removes contract error categories before showing the user', () => {
     expect(friendlyError(new Error('[EXPECTED] submission deadline is too soon'))).toBe('submission deadline is too soon');
+  });
+});
+
+describe('repository proof preparation', () => {
+  const wallet = '0x1111111111111111111111111111111111111111';
+  const contract = '0x2222222222222222222222222222222222222222';
+  const url = 'https://github.com/Owner/Repo/blob/main/docs/evidence.txt';
+  it('binds the wallet, event, contract, repository and file', () => {
+    expect(evidenceChallenge(contract, 'hj-1', wallet, url)).toBe(`HJ-PROVENANCE-V1|studionet|${contract}|hj-1|${wallet}|owner/repo|docs/evidence.txt|submission|none`);
+    expect(evidenceChallenge(contract, 'hj-1', wallet, url, 'a'.repeat(64))).toContain(`|appeal|${'a'.repeat(64)}`);
+  });
+  it('rejects misleading hosts, traversal and non-file evidence', () => {
+    for (const bad of [url.replace('github.com', 'github.com.evil.example'), url.replace('docs/', '../'), 'https://github.com/Owner/Repo/issues/1']) {
+      expect(() => evidenceChallenge(contract, 'hj-1', wallet, bad)).toThrow('GitHub .txt');
+    }
   });
 });

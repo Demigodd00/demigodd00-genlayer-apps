@@ -39,6 +39,10 @@ export type Submission = {
   project_name: string;
   evidence_url: string;
   evidence_digest: string;
+  provenance_record: string;
+  evidence_package_digest: string;
+  appeal_provenance_record: string;
+  appeal_package_digest: string;
   summary: string;
   submitted_at_iso: string;
   status: string;
@@ -63,6 +67,11 @@ export type Submission = {
 };
 
 export type Evidence = {
+  entrant: Address;
+  provenance_record: string;
+  evidence_package_digest: string;
+  appeal_provenance_record: string;
+  appeal_package_digest: string;
   evidence_url: string;
   evidence_digest: string;
   evidence_snapshot: string;
@@ -144,4 +153,14 @@ export function friendlyError(error: unknown): string {
     .replace(/^.*?\[(?:EXPECTED|EXTERNAL|TRANSIENT|LLM_ERROR)\]\s*/s, "")
     .replace(/^Error:\s*/, "")
     .slice(0, 280);
+}
+
+export function evidenceChallenge(contract: string, event: string, entrant: string, url: string, parent = ''): string {
+  const match = /^https:\/\/github\.com\/([A-Za-z0-9_-]+)\/([A-Za-z0-9_.-]+)\/blob\/([A-Za-z0-9_.-]+)\/([A-Za-z0-9_./-]+\.txt)$/.exec(url.trim());
+  if (!match || match[4].split('/').some((part) => ['', '.', '..'].includes(part)) || ['.', '..'].includes(match[2])) {
+    throw new Error('Use a GitHub .txt file URL on your repository’s default branch.');
+  }
+  if (!isAddress(contract) || !isAddress(entrant)) throw new Error('Connect your entrant wallet to prepare the proof.');
+  if (parent && !/^[0-9a-f]{64}$/.test(parent)) throw new Error('The original evidence package is unavailable.');
+  return ['HJ-PROVENANCE-V1', 'studionet', contract.toLowerCase(), event, entrant.toLowerCase(), `${match[1]}/${match[2]}`.toLowerCase(), match[4], parent ? 'appeal' : 'submission', parent || 'none'].join('|');
 }
