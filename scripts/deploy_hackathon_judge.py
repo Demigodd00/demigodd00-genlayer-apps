@@ -124,11 +124,13 @@ def main() -> None:
         transaction_hash_variant=TransactionHashVariant.LATEST_FINAL,
     )
     expected = {
-        "version": "2.2.0",
+        "version": "2.3.0",
         "evaluation_schema": "hackathon-judge-evaluation-v1",
         "network_target": "studionet",
         "funding_model": "WITHDRAWABLE_DEPOSIT_CREDIT_V1",
-        "evidence_schema": "hackathon-judge-snapshot-v3",
+        "evidence_schema": "hackathon-judge-snapshot-v4",
+        "provenance_schema": "hackathon-judge-github-provenance-v1",
+        "settlement_policy": "REQUIRE_VERIFIED_ORIGINAL_AND_APPEAL_PACKAGES",
         "evidence_policy": "VALIDATOR_AGREED_IMMUTABLE_RENDER_SNAPSHOT",
         "judging_policy": "INDEPENDENT_COMPARATIVE_DECISION_FIELDS",
         "reasoning_policy": "WORDING_EXEMPT_FROM_EQUIVALENCE",

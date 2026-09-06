@@ -1,4 +1,4 @@
-"""Seed the exact Hackathon Judge v2.2 StudioNet release with a public demo.
+"""Seed the exact Hackathon Judge v2.3 StudioNet release with a public demo.
 
 The organizer uses HACKATHON_JUDGE_DEMO_PRIVATE_KEY when supplied, otherwise
 the existing local StudioNet signer. Entrants are deterministically derived and
@@ -6,6 +6,7 @@ their keys are never written to disk. All currency is simulated StudioNet GEN.
 """
 
 import hashlib
+import argparse
 import hmac
 import json
 import os
@@ -26,7 +27,8 @@ RECORD_PATH = ROOT / "deployments" / "hackathon_judge_demo.json"
 HISTORY_DIR = ROOT / "deployments" / "history"
 ENV_PATH = ROOT / ".env"
 SITE_URL = "https://hackathon-judge-studionet.blazekingsley2.chatgpt.site"
-EVENT_NAME = "Open Intelligence Build Week — Verified Jury Final"
+EVENT_NAME = "Repository Provenance — Verified Jury v2.3"
+EVIDENCE_BASE = "https://github.com/Demigodd00/demigodd00-genlayer-apps/blob/main/docs/evidence/hackathon-judge-v23/"
 PRIZE = 10**15
 FINAL = TransactionStatus.FINALIZED
 
@@ -89,7 +91,7 @@ def _load_or_start_record(address: str, accounts: dict) -> dict:
     return {
         "network": "studionet",
         "contract": address,
-        "contract_version": "2.2.0",
+        "contract_version": "2.3.0",
         "site_url": SITE_URL,
         "event_name": EVENT_NAME,
         "started_at": _timestamp(),
@@ -226,10 +228,33 @@ def _wait_until(deadline: int) -> None:
         time.sleep(min(30, max(1, remaining)))
 
 
+def _reject_wrong_wallet(record: dict, clients: dict, address: str, hackathon_id: str) -> None:
+    if record.get("wrong_wallet_rejection", {}).get("verified"):
+        return
+    client = clients["entrant_two"]
+    tx_hash = str(client.write_contract(address=address, function_name="submit_project", args=[
+        hackathon_id, "Wrong wallet replay", EVIDENCE_BASE + "original.txt",
+        "This negative test attempts to claim the first entrant's repository evidence from another wallet.",
+    ]))
+    _output({"phase": "wrong_wallet_test", "transaction_hash": tx_hash})
+    receipt = client.wait_for_transaction_receipt(tx_hash, status=FINAL, interval=5000, retries=180, full_transaction=True)
+    if tx_execution_succeeded(receipt) or "missing exact wallet and event provenance challenge" not in json.dumps(receipt, default=str):
+        raise RuntimeError("Negative test did not prove the expected wallet challenge rejection: " + json.dumps(receipt, default=str))
+    state = _read(client, address, "get_hackathon", [hackathon_id])
+    if state["submission_count"] != "0":
+        raise RuntimeError("Wrong-wallet rejection unexpectedly created an entry")
+    record["wrong_wallet_rejection"] = {"transaction_hash": tx_hash, "verified": True, "execution_succeeded": False,
+        "expected_error": "missing exact wallet and event provenance challenge", "submission_count_after": "0"}
+    _save(record)
+
+
 def main() -> None:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--phase", choices=("submit", "finish"), default="finish")
+    phase = parser.parse_args().phase
     deployment = json.loads(DEPLOYMENT_PATH.read_text(encoding="utf-8"))
-    if deployment.get("network") != "studionet" or deployment.get("version") != "2.2.0":
-        raise RuntimeError("The recorded Hackathon Judge v2.2 StudioNet release is not active")
+    if deployment.get("network") != "studionet" or deployment.get("version") != "2.3.0":
+        raise RuntimeError("The recorded Hackathon Judge v2.3 StudioNet release is not active")
     address = deployment["address"]
     organizer = Account.from_key(_load_signer())
     entrant_one = Account.from_key(hmac.new(organizer.key, b"hackathon-judge/demo/entrant-one/v2", hashlib.sha256).digest())
@@ -248,8 +273,8 @@ def main() -> None:
     organizer_client = clients["organizer"]
     config = _read(organizer_client, address, "get_config", [])
     if (
-        config.get("version") != "2.2.0"
-        or config.get("evidence_schema") != "hackathon-judge-snapshot-v3"
+        config.get("version") != "2.3.0"
+        or config.get("evidence_schema") != "hackathon-judge-snapshot-v4"
         or config.get("evaluation_schema") != "hackathon-judge-evaluation-v1"
     ):
         raise RuntimeError("Deployed configuration does not match the demo")
@@ -266,16 +291,16 @@ def main() -> None:
         record["funding_transaction_hash"] = funding_hash
         _save(record)
         _write(record, clients, address, "deposit_prize", "organizer", "deposit", [], PRIZE)
-        deadline = int(time.time()) + 480
+        deadline = int(time.time()) + 600
         record["submission_deadline_unix"] = deadline
         _save(record)
         _write(record, clients, address, "create_event", "organizer", "create_hackathon", [
             EVENT_NAME,
             "Best Verifiable Agent",
             (
-                "Projects must be newly built during this event and provide all of these exact public identifiers: "
+                "This is a release acceptance demonstration, not an originality contest. Entries must provide all of these exact public identifiers: "
                 "a GenLayer StudioNet contract address, its deployment transaction hash, the public contract source URL, "
-                "and the live application URL. Missing identifiers are inconclusive; clear pre-existing work is ineligible."
+                "and the live application URL. Missing identifiers are inconclusive. The second entry is an explicit test fixture, not a separate competing product."
             ),
             (
                 "Score 100 when every required exact identifier is present and the evidence explains the complete consensus, "
@@ -300,19 +325,31 @@ def main() -> None:
     submission_page = _read(organizer_client, address, "list_submissions", [hackathon_id, 0, 25])
     by_entrant = {item["entrant"].lower(): item for item in submission_page["items"]}
     if entrant_one.address.lower() not in by_entrant:
+        _reject_wrong_wallet(record, clients, address, hackathon_id)
         _write(record, clients, address, "submit_hackathon_judge", "entrant_one", "submit_project", [
             hackathon_id,
             "Hackathon Judge Protocol",
-            SITE_URL + "/evidence/hackathon-judge-protocol.txt",
+            EVIDENCE_BASE + "original.txt",
             "The live GenLayer-native judging protocol with exact public source, deployment, and reproducibility evidence.",
         ])
     if entrant_two.address.lower() not in by_entrant:
         _write(record, clients, address, "submit_appeal_fixture", "entrant_two", "submit_project", [
             hackathon_id,
             "Appeal Recovery Fixture",
-            SITE_URL + "/evidence/appeal-recovery-fixture.txt",
+            EVIDENCE_BASE + "fixture.txt",
             "A deliberate evidence-gap fixture used to prove that missing identifiers become inconclusive and can be repaired once through appeal.",
         ])
+
+    submissions = _read(organizer_client, address, "list_submissions", [hackathon_id, 0, 25])["items"]
+    fixture = next(item for item in submissions if item["entrant"].lower() == entrant_two.address.lower())
+    record["appeal_challenge"] = _read(organizer_client, address, "get_evidence_challenge", [
+        hackathon_id, entrant_two.address, EVIDENCE_BASE + "appeal.txt", fixture["evidence_package_digest"],
+    ])
+    record["captured_submissions"] = submissions
+    _save(record)
+    if phase == "submit":
+        _output({"phase": "publish_appeal_proof", "challenge": record["appeal_challenge"]})
+        return
 
     event = _read(organizer_client, address, "get_hackathon", [hackathon_id])
     deadline = int(event["submission_deadline_unix"])
@@ -331,7 +368,7 @@ def main() -> None:
             hackathon_id,
             int(appeal_fixture["index"]),
             "The original fixture intentionally omitted the deployment transaction. This addendum supplies that exact public identifier and the complete reproducibility record required by the rulebook.",
-            SITE_URL + "/evidence/appeal-recovery-fixture-addendum.txt",
+            EVIDENCE_BASE + "appeal.txt",
         ])
         appeal_fixture = _read(organizer_client, address, "get_submission", [hackathon_id, int(appeal_fixture["index"])])
     if appeal_fixture["appeal_resolvable"]:
@@ -368,6 +405,9 @@ def main() -> None:
         "evaluated_count": event["evaluated_count"],
         "appeal_demonstrated": any(int(item["appeal_count"]) > 0 for item in submissions),
         "evidence_digests": {item["project_name"]: item["evidence_digest"] for item in submissions},
+        "evidence_packages": {item["project_name"]: {"original": item["evidence_package_digest"], "appeal": item["appeal_package_digest"],
+            "provenance": json.loads(item["provenance_record"]),
+            "appeal_provenance": json.loads(item["appeal_provenance_record"]) if item["appeal_provenance_record"] else None} for item in submissions},
         "decisions": {
             item["project_name"]: {
                 "status": item["status"],

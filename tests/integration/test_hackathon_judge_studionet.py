@@ -1,79 +1,80 @@
-import time
+"""Read back the real v2.3 acceptance run without mocking web/LLM responses.
+
+Run scripts/seed_hackathon_judge_demo.py in its documented two phases first.
+This test verifies final receipts, deployed source, evidence and settlement.
+"""
+import base64
+import hashlib
+import json
+from pathlib import Path
 
 import pytest
+from genlayer_py import create_client
+from genlayer_py.assertions import tx_execution_succeeded
+from genlayer_py.chains import studionet
+from genlayer_py.types import TransactionHashVariant, TransactionStatus
 
-from gltest import get_accounts, get_contract_factory
-from gltest.assertions import tx_execution_succeeded
-
-
-def _wait_until(unix_ts: int) -> None:
-    while time.time() <= unix_ts + 2:
-        time.sleep(5)
+ROOT = Path(__file__).resolve().parents[2]
 
 
 @pytest.mark.slow
-def test_hackathon_judge_reaches_consensus_on_rendered_evidence_studionet():
-    factory = get_contract_factory("HackathonJudge")
-    contract = factory.deploy(args=[])
-    config = contract.get_config(args=[]).call()
-    assert config["version"] == "2.2.0"
-    assert config["evaluation_schema"] == "hackathon-judge-evaluation-v1"
-    assert config["evidence_schema"] == "hackathon-judge-snapshot-v3"
-    assert config["liveness_policy"] == "PERMISSIONLESS_TIMEOUT_TO_INCONCLUSIVE"
-    accounts = get_accounts()
-    entrant_contract = contract.connect(accounts[1])
+def test_hackathon_judge_live_provenance_receipts_and_settlement():
+    deployment = json.loads((ROOT / "deployments/hackathon_judge_studionet.json").read_text())
+    demo = json.loads((ROOT / "deployments/hackathon_judge_demo.json").read_text(encoding="utf-8"))
+    assert deployment["version"] == demo["contract_version"] == "2.3.0"
+    assert demo["contract"].lower() == deployment["address"].lower()
+    assert demo.get("completed_at"), "Finish the live provenance demo before checking release acceptance"
+    client = create_client(chain=studionet)
+    address = deployment["address"]
 
-    unique = str(int(time.time()))
-    name = "Hackathon Judge StudioNet Smoke " + unique
-    deadline = int(time.time()) + 180
-    create_receipt = contract.create_hackathon(
-        args=[
-            name,
-            "Example Evidence Award",
-            (
-                "A submission is eligible only when the rendered page identifies itself as Example Domain "
-                "and states that the domain is intended for illustrative examples in documents."
-            ),
-            (
-                "Award exactly 80 points when both required facts are visible. Award zero and mark the project "
-                "ineligible or inconclusive when either fact is absent."
-            ),
-            deadline,
-            1,
-            80,
-            60,
-            0,
-        ]
-    ).transact()
-    assert tx_execution_succeeded(create_receipt)
+    def read(method, args):
+        return client.read_contract(address=address, function_name=method, args=args,
+                                    transaction_hash_variant=TransactionHashVariant.LATEST_FINAL)
 
-    listing = contract.list_hackathons(args=[0, 25]).call()
-    matching = [item for item in listing["items"] if item["name"] == name]
-    assert len(matching) == 1
-    hackathon_id = matching[0]["id"]
+    def receipt(tx):
+        return client.wait_for_transaction_receipt(tx, status=TransactionStatus.FINALIZED,
+                                                   interval=5000, retries=20, full_transaction=True)
 
-    submit_receipt = entrant_contract.submit_project(
-        args=[
-            hackathon_id,
-            "Example Domain Evidence",
-            "https://example.com/",
-            "A public evidence page used to verify the complete StudioNet render and consensus path.",
-        ]
-    ).transact()
-    assert tx_execution_succeeded(submit_receipt)
-    saved = contract.get_submission(args=[hackathon_id, 0]).call()
-    assert len(saved["evidence_digest"]) == 64
+    assert tx_execution_succeeded(receipt(deployment["transaction_hash"]))
+    code = client.provider.make_request(method="gen_getContractCode", params=[address])["result"]
+    source = base64.b64decode(code).decode("utf-8").replace("\r\n", "\n")
+    assert hashlib.sha256(source.encode()).hexdigest() == deployment["source_sha256"]
+    assert source == (ROOT / "contracts/hackathon_judge.py").read_text(encoding="utf-8").replace("\r\n", "\n")
+    assert read("get_config", [])["settlement_policy"] == "REQUIRE_VERIFIED_ORIGINAL_AND_APPEAL_PACKAGES"
 
-    _wait_until(deadline)
-    evaluate_receipt = contract.evaluate_submission(args=[hackathon_id, 0]).transact()
-    assert tx_execution_succeeded(evaluate_receipt)
-    submission = contract.get_submission(args=[hackathon_id, 0]).call()
-    assert submission["eligibility"] == "ELIGIBLE"
-    assert submission["score_band"] == "80"
+    rejected = demo["wrong_wallet_rejection"]
+    rejected_receipt = receipt(rejected["transaction_hash"])
+    assert not tx_execution_succeeded(rejected_receipt)
+    assert rejected["expected_error"] in json.dumps(rejected_receipt, default=str)
+    for step, tx in demo["transactions"].items():
+        assert tx_execution_succeeded(receipt(tx["transaction_hash"])), step
 
-    finalize_receipt = contract.finalize_hackathon(args=[hackathon_id]).transact()
-    assert tx_execution_succeeded(finalize_receipt)
-    hackathon = contract.get_hackathon(args=[hackathon_id]).call()
-    assert hackathon["status"] == "FINALIZED"
-    assert hackathon["winner"].lower() == accounts[1].address.lower()
-    assert contract.get_builder_profile(args=[accounts[1].address]).call()["wins"] == "1"
+    event_id = demo["hackathon_id"]
+    event = read("get_hackathon", [event_id])
+    assert event["status"] == "FINALIZED" and event["prize_released"] is True
+    assert event["winner"].lower() == demo["wallets"]["entrant_one"].lower()
+    assert read("get_credit", [event["winner"]]) == "0"
+    entries = read("list_submissions", [event_id, 0, 25])["items"]
+    assert len(entries) == 2
+    for entry in entries:
+        evidence = read("get_submission_evidence", [event_id, int(entry["index"])])
+        for prefix in ("", "appeal_"):
+            if prefix and not evidence["appeal_evidence_snapshot"]:
+                continue
+            record_text = evidence[prefix + "provenance_record"]
+            record = json.loads(record_text)
+            snapshot = evidence[prefix + "evidence_snapshot"]
+            digest = hashlib.sha256(snapshot.encode()).hexdigest()
+            assert digest == evidence[prefix + "evidence_digest"]
+            assert record["entrant"] == entry["entrant"].lower()
+            assert record["contract"] == address.lower() and record["hackathon_id"] == event_id
+            assert record["challenge"] in snapshot.splitlines()
+            assert record["parent_package_digest"] == (entry["evidence_package_digest"] if prefix else "")
+            context = entry["appeal_statement"] if prefix else entry["summary"]
+            assert record["context_digest"] == hashlib.sha256(context.encode()).hexdigest()
+            package = json.dumps({"provenance": record_text, "snapshot_digest": digest},
+                                 sort_keys=True, separators=(",", ":"), ensure_ascii=False)
+            key = "appeal_package_digest" if prefix else "evidence_package_digest"
+            assert hashlib.sha256(package.encode()).hexdigest() == entry[key]
+    assert entries[0]["score_band"] == "100"
+    assert entries[1]["score_band"] == "80" and entries[1]["appeal_resolved"] is True

@@ -1,0 +1,19 @@
+PROJECT: Hackathon Judge Protocol v2.3
+PURPOSE: Public release acceptance demonstration
+
+HJ-PROVENANCE-V1|studionet|0xbc71e1d982dfa369156e6b9a7a3f61b23bda5b86|hj-1|0x585b4429b8b6b1bb69bbdacbc9d0f1cce4d7a579|demigodd00/demigodd00-genlayer-apps|docs/evidence/hackathon-judge-v23/original.txt|submission|none
+
+EXACT PUBLIC IDENTIFIERS
+StudioNet contract: 0xBC71e1D982Dfa369156E6B9A7a3f61B23BDa5B86
+Deployment transaction: 0x5e8cc280253fe413e6a183892ce8ecd682609e72ecb2da905714acdb9ae07587
+Contract source: https://github.com/Demigodd00/demigodd00-genlayer-apps/blob/main/contracts/hackathon_judge.py
+Live application: https://hackathon-judge-studionet.blazekingsley2.chatgpt.site/
+Source SHA-256: 97bb48affc68f7bcb381f07b5ee0c28cf9908041d9e15d0a833bfbbd17275987
+
+VERIFIABLE WORKFLOW
+Organizers escrow simulated StudioNet GEN and store a prose rulebook, scoring rubric, deadline and appeal window. Entrants publish a wallet/event/contract/repository/path challenge in a .txt file on the repository default branch. Each validator independently retrieves GitHub repository metadata, the default branch commit, and the file record. It verifies the Git blob digest and exact challenge, renders the commit-pinned raw file with gl.nondet.web.render(), and requires the rendering to match the authenticated file. Validators agree exactly on the capture and provenance record.
+
+The immutable evidence package hashes the provenance record and snapshot digest, binding the wallet, event, contract, repository ID, commit, path, original summary digest and proof. A later jury independently evaluates the saved evidence against the prose rules. Exact eligibility and 20-point score bands must agree; confidence has a bounded tolerance; reasoning wording is exempt. One entrant appeal may supply a second verified package linked to the original package digest. Before prize settlement, the contract checks both packages again. The highest eligible score receives withdrawable prize credit and a wallet-based win credential. Unresolved judgments have a 24-hour permissionless inconclusive fallback.
+
+SCOPE
+This demonstrates repository publication control at capture. It does not attest legal ownership or originality, nor authenticate deployer claims about links mentioned in prose. The deployment signer has no privileged contract role. Demo entrants are controlled test wallets authorized to publish evidence in this repository. StudioNet GEN is simulated. The v2.3 site update follows successful live acceptance; the older video documents v2.2.
