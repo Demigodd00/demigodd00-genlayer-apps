@@ -7,6 +7,7 @@ import base64
 import hashlib
 import json
 from pathlib import Path
+from importlib.util import module_from_spec, spec_from_file_location
 
 import pytest
 from eth_account import Account
@@ -14,9 +15,12 @@ from genlayer_py import create_client
 from genlayer_py.assertions import tx_execution_succeeded
 from genlayer_py.chains import studionet
 from genlayer_py.types import TransactionStatus
-from scripts.hackathon_judge_rpc import read_studionet_view
 
 ROOT = Path(__file__).resolve().parents[2]
+_spec = spec_from_file_location("hackathon_judge_rpc", ROOT / "scripts/hackathon_judge_rpc.py")
+_rpc = module_from_spec(_spec)
+_spec.loader.exec_module(_rpc)
+read_studionet_view = _rpc.read_studionet_view
 
 
 @pytest.mark.slow

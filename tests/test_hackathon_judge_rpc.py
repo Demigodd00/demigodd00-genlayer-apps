@@ -1,9 +1,15 @@
 from types import SimpleNamespace
 from unittest.mock import Mock
+from pathlib import Path
+from importlib.util import module_from_spec, spec_from_file_location
 
 import pytest
 from genlayer_py.abi import calldata
-from scripts.hackathon_judge_rpc import read_studionet_view
+
+_spec = spec_from_file_location("hackathon_judge_rpc", Path(__file__).resolve().parents[1] / "scripts/hackathon_judge_rpc.py")
+_rpc = module_from_spec(_spec)
+_spec.loader.exec_module(_rpc)
+read_studionet_view = _rpc.read_studionet_view
 
 
 def test_long_view_uses_raw_calldata_and_preserves_final_state_filter():
