@@ -1,0 +1,8 @@
+# Lacuna's tested Python 3.12 verification toolchain.
+# Install in an isolated virtual environment. No private key is needed for
+# lint, direct tests, or scripts/check_lacuna_release.py.
+genlayer-test==0.29.2
+genlayer-py==0.16.3
+genvm-linter==0.11.0
+pytest==9.1.1
+requests==2.34.2

@@ -1,0 +1,199 @@
+{
+  "product": "Lacuna",
+  "network": "studionet",
+  "chain_id": 61999,
+  "website": "https://lacuna-sepia.vercel.app",
+  "contract": "0x39AE6124194cEd74bBa0A772B9d4568b6cb29242",
+  "status": "PASS",
+  "observed_at": "2026-09-13 11:31:07 UTC",
+  "signing_surface": "User-approved MetaMask prompts in Chrome, initiated through the production website",
+  "verification_surface": "Unsigned public RPC reads, FINALIZED receipts plus successful execution",
+  "campaign_id": "lc-4",
+  "attempt_id": "la-4",
+  "seeded_control": true,
+  "genuine_discovery_claimed": false,
+  "funding": {
+    "hash": "0xd810a12fdb33b7af4fd99802fa8ca84ff19d4baf6182414eee6d32cc38eaf8c1",
+    "status": "FINALIZED",
+    "execution_succeeded": true,
+    "value_atto": "1000000000000000",
+    "sender": "0xA1e3A40bdC63305b5C6fd86276bBE967c5D78698"
+  },
+  "rule_review": {
+    "hash": "0x636b982e84290d07e137656e37b43f44264cb058fdd5b6120ecfe493a2f6117d",
+    "status": "FINALIZED",
+    "execution_succeeded": true
+  },
+  "commitment": {
+    "hash": "0x2b2c8efbd5cbecba3ddcd257752d188a5361acdbaf7590b06bcaf2cc25906a58",
+    "status": "FINALIZED",
+    "execution_succeeded": true,
+    "value_atto": "100000000000000",
+    "sender": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
+    "backup_download_initiated_through_ui": true
+  },
+  "reveal": {
+    "hash": "0xd4dabe2748652a3c5e71513bd59bc3916c05e1a2985bb604ba31d23ab22d160c",
+    "status": "FINALIZED",
+    "execution_succeeded": true,
+    "value_atto": "0",
+    "sender": "0x1adf37F016384714F683CaC4d0a261A6d4e27033"
+  },
+  "stages": [
+    {
+      "stage": "target",
+      "hash": "0xbf5fd38f7b255e40e8d787a14c457035cf8b3f34ef238b72282a1e30e1632431",
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "triggered_by": "0xd4dabe2748652a3c5e71513bd59bc3916c05e1a2985bb604ba31d23ab22d160c",
+      "children": [
+        "0x6e9c95a6d12ecfee195cacc5b81973f4ddaacb5f7d6db9d63e829a863f2e6ee9"
+      ]
+    },
+    {
+      "stage": "referee_one",
+      "hash": "0x6e9c95a6d12ecfee195cacc5b81973f4ddaacb5f7d6db9d63e829a863f2e6ee9",
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "triggered_by": "0xbf5fd38f7b255e40e8d787a14c457035cf8b3f34ef238b72282a1e30e1632431",
+      "children": [
+        "0xf841bcf59499695cfa8ba54e7fdca306f55f9d43b99b6722fc460b1cbc290761"
+      ]
+    },
+    {
+      "stage": "referee_two",
+      "hash": "0xf841bcf59499695cfa8ba54e7fdca306f55f9d43b99b6722fc460b1cbc290761",
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "triggered_by": "0x6e9c95a6d12ecfee195cacc5b81973f4ddaacb5f7d6db9d63e829a863f2e6ee9",
+      "children": []
+    }
+  ],
+  "attempt": {
+    "allocation_atto": "1100000000000000",
+    "allocation_recipient": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
+    "campaign_id": "lc-4",
+    "can_expire": false,
+    "challenger": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
+    "commitment": "3ead4038830e1e51b13c0cd5858005a52fa4c382d4497094ddb0ec799a93f013",
+    "committed_at": "2026-09-13T11:24:17+00:00",
+    "completion_a": "Both reviews finished on June 10 of that same year.",
+    "completion_b": "Both reviews finished on June 20 of that same year.",
+    "document": "Both independent pilot reviews for the applicant finished in June of that year.",
+    "document_sha256": "f3cc3b309ab67671ab05d6be81904be80df6356d55dd1d0c60b02204d96ee16c",
+    "id": "la-4",
+    "referee_one": {
+      "a_compatible": true,
+      "a_outcome": "APPROVE",
+      "b_compatible": true,
+      "b_outcome": "REJECT",
+      "basis": "Original says reviews finished in June; Addition A says June 10, which is before June 15, satisfying the rule. Addition B says June 20, which is after June 15, establishing the necessary condition is false, so REJECT. Both additions concern the same original subject and do not alter the rule or closed-evidence semantics.",
+      "policy_respected": true,
+      "provenance": "GENLAYER_INDEPENDENT_REPLAY",
+      "recorded_at": "2026-09-13T11:27:47+00:00",
+      "same_subject": true
+    },
+    "referee_two": {
+      "a_compatible": true,
+      "a_outcome": "APPROVE",
+      "b_compatible": true,
+      "b_outcome": "REJECT",
+      "basis": "Original says both reviews finished in June; A specifies June 10, which is compatible and satisfies finishing before June 15. B specifies June 20, which is compatible with June and establishes the necessary condition is false, so reject.",
+      "policy_respected": true,
+      "provenance": "GENLAYER_INDEPENDENT_REPLAY",
+      "recorded_at": "2026-09-13T11:28:28+00:00",
+      "same_subject": true
+    },
+    "result_reason": "TARGET_DECIDED_UNDER_GENUINE_AMBIGUITY",
+    "reveal_deadline": "1789299557",
+    "revealed_at": "2026-09-13T11:26:28+00:00",
+    "seeded_control": true,
+    "settled_at": "2026-09-13T11:28:28+00:00",
+    "stage_deadline": "1789299767",
+    "stake_atto": "100000000000000",
+    "status": "CONFIRMED_FINDING",
+    "target": {
+      "basis": "The document says both pilot reviews finished in June, and it does not explicitly state they finished on or after June 15.",
+      "provenance": "GENLAYER_INDEPENDENT_REPLAY",
+      "recorded_at": "2026-09-13T11:27:04+00:00",
+      "verdict": "APPROVE"
+    }
+  },
+  "campaign": {
+    "abstention_promise": "APPROVE only when the supplied facts establish all eligibility requirements. REJECT when the supplied facts establish an explicit disqualifier or establish that any necessary eligibility requirement is false. A known failure of a necessary condition is disqualifying even if the business rule only phrases approval conditions and never uses the word REJECT. An unknown condition is not a failed condition. Otherwise return INSUFFICIENT_EVIDENCE. Missing evidence is not itself disqualifying. This is a closed-evidence, hypothetical-case test; do not assume unstated facts or consult outside knowledge about the applicant.",
+    "active_attempt": "",
+    "attempt_ids": [
+      "la-4"
+    ],
+    "bounty_atto": "1000000000000000",
+    "can_commit": false,
+    "can_expire": false,
+    "closed_at": "2026-09-13T11:28:28+00:00",
+    "closes_at": "1789299355",
+    "created_at": "2026-09-13T10:57:41+00:00",
+    "id": "lc-4",
+    "profile": "SEEDED_PERMISSIVE",
+    "remaining_bounty_atto": "0",
+    "rule": "Approve applicants only if both independent pilot reviews finished before June 15 of the same year.",
+    "rule_deadline": "1789297961",
+    "rule_review": {
+      "admissible": true,
+      "basis": "The rule states an understandable, bounded eligibility condition (two independent pilot reviews completed before a fixed calendar date) that can yield APPROVE, REJECT, or INSUFFICIENT_EVIDENCE depending on supplied facts.",
+      "provenance": "GENLAYER_INDEPENDENT_REPLAY",
+      "recorded_at": "2026-09-13T10:58:15+00:00"
+    },
+    "rule_sha256": "d7e400558c1b80fa9db602b87b649e3f91dc14c7db0b7d7d040d1e17642adf7c",
+    "seeded_control": true,
+    "sponsor": "0xA1e3A40bdC63305b5C6fd86276bBE967c5D78698",
+    "stake_atto": "100000000000000",
+    "status": "CLAIMED",
+    "title": "MetaMask browser test — seeded control",
+    "winner": "0x1adf37F016384714F683CaC4d0a261A6d4e27033"
+  },
+  "pre_withdrawal_credit_atto": "1100000000000000",
+  "remaining_credit_atto": "0",
+  "completed_at": "2026-09-13 11:38:05 UTC",
+  "final_stats": {
+    "accounting_balanced": true,
+    "adjudication": "GENLAYER_INDEPENDENT_REPLAY_EXACT_DECISION_FIELDS",
+    "admin_controls": false,
+    "attempt_escrow_atto": "0",
+    "campaign_escrow_atto": "2000000000000000",
+    "chain_id": "61999",
+    "claimable_atto": "0",
+    "control_findings": "2",
+    "fee_bps": "0",
+    "genuine_findings": "0",
+    "inconclusive_attempts": "0",
+    "invalid_attempts": "1",
+    "max_attempts_per_campaign": "20",
+    "native_withdrawals_submitted_atto": "2400000000000000",
+    "network": "StudioNet",
+    "no_findings": "1",
+    "product": "Lacuna",
+    "referee_rounds": "2",
+    "referees_blinded_to_target": true,
+    "reveal_timeout_secs": "900",
+    "stage_timeout_secs": "900",
+    "target_blinded_to_completions": true,
+    "total_attempts": "4",
+    "total_campaigns": "4",
+    "total_deposited_atto": "4400000000000000",
+    "version": "0.1.1-studionet"
+  },
+  "withdrawal": {
+    "hash": "0xf76ebbd58006a906dff8e05d741e1649ae9c469ee686eff964a01fd05fb55803",
+    "status": "FINALIZED",
+    "execution_succeeded": true,
+    "value_atto": "0",
+    "native_transfer_verified": true,
+    "native_transfer": {
+      "hash": "0x7be9b0430bbe18fc844f7e765343a06e56dbb4e84610a31f245d631ae9da9031",
+      "status": "FINALIZED",
+      "from": "0x39AE6124194cEd74bBa0A772B9d4568b6cb29242",
+      "to": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
+      "value_atto": "1100000000000000",
+      "value_credited": true
+    }
+  }
+}

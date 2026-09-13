@@ -1,0 +1,593 @@
+{
+  "network": "studionet",
+  "started_at": "2026-09-13T09:56:13.803984+00:00",
+  "transactions": {
+    "fund-challenger": {
+      "recipient": "0xE934ed714C029F1dA45dfE929A7E50A9a3b394a3",
+      "value_atto": "1000000000000000",
+      "broadcast_attempted": true,
+      "evm_transaction_hash": "0xa70e7506e6d24dbb82dc7a4ab9bb573e4c9b67d7716405262b9a1cbcf6cbbf13",
+      "hash": "0xa70e7506e6d24dbb82dc7a4ab9bb573e4c9b67d7716405262b9a1cbcf6cbbf13",
+      "checked": true,
+      "status": "FINALIZED",
+      "value_credited": true
+    },
+    "create-abstention": {
+      "method": "create_campaign",
+      "args": [
+        "Acceptance: abstention",
+        "Approve applicants only if both independent pilot reviews finished before June 15 of the same year.",
+        "STANDARD",
+        1789295485
+      ],
+      "value_atto": "1000000000000000",
+      "role": "sponsor",
+      "source_sha256": null,
+      "started_at": "2026-09-13T09:56:25.577790+00:00",
+      "broadcast_attempted": true,
+      "evm_transaction_hash": "0x64849896acc147222fa858d8b154a3bee8d0609d10851e767fa8ec2d0f655f65",
+      "hash": "0x64849896acc147222fa858d8b154a3bee8d0609d10851e767fa8ec2d0f655f65",
+      "checked": true,
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "triggered_transactions": [
+        "0x5c3c81fdab0372bed2fc402670904160b9771d2d1a41e0c0f0f82e9bebabf449"
+      ],
+      "finished_at": "2026-09-13T09:57:12.612903+00:00"
+    },
+    "commit-abstention": {
+      "method": "commit_attempt",
+      "args": [
+        "lc-1",
+        "950bdb555a72c40b685f13433add0d1eb7a0d391cd14509491f959881056ce04"
+      ],
+      "value_atto": "100000000000000",
+      "role": "challenger",
+      "source_sha256": null,
+      "started_at": "2026-09-13T09:57:53.641240+00:00",
+      "broadcast_attempted": true,
+      "evm_transaction_hash": "0xc034203370471514e90fc3eaf4510cb9509fa8c71464a1f3ee29da5e3f33c315",
+      "hash": "0xc034203370471514e90fc3eaf4510cb9509fa8c71464a1f3ee29da5e3f33c315",
+      "checked": true,
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "triggered_transactions": [],
+      "finished_at": "2026-09-13T09:58:39.557140+00:00"
+    },
+    "reveal-abstention": {
+      "method": "reveal_attempt",
+      "args": [
+        "la-1",
+        "Both independent pilot reviews for the applicant finished in June of that year.",
+        "Both reviews finished on June 10 of that same year.",
+        "Both reviews finished on June 20 of that same year.",
+        "e0a72005cda64d9e703229b0d7816cf39f9626c38be1fe08f39f0b76ead3c1ba"
+      ],
+      "value_atto": "0",
+      "role": "challenger",
+      "source_sha256": null,
+      "started_at": "2026-09-13T09:58:42.816346+00:00",
+      "broadcast_attempted": true,
+      "evm_transaction_hash": "0xa939c54f4755dae057ba411586943b2e93b77b6f3b12690606cbc500c08d7401",
+      "hash": "0xa939c54f4755dae057ba411586943b2e93b77b6f3b12690606cbc500c08d7401",
+      "checked": true,
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "triggered_transactions": [
+        "0x8900b8278115451f557b07b86058242c57fbab4d4b917e9473e20bf9a11d236c"
+      ],
+      "finished_at": "2026-09-13T09:59:28.752404+00:00"
+    },
+    "withdraw-abstention": {
+      "method": "withdraw_credit",
+      "args": [
+        "0x1adf37F016384714F683CaC4d0a261A6d4e27033"
+      ],
+      "value_atto": "0",
+      "role": "sponsor",
+      "source_sha256": null,
+      "started_at": "2026-09-13T10:01:51.476318+00:00",
+      "broadcast_attempted": true,
+      "evm_transaction_hash": "0xaeccacf736a3625db4e91b9540a8f5171aaadbe8d704b0b092fe451c0d331420",
+      "hash": "0xaeccacf736a3625db4e91b9540a8f5171aaadbe8d704b0b092fe451c0d331420",
+      "checked": true,
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "triggered_transactions": [
+        "0x35e0b3ae103bd259c240f0017275e05cb7f86ae4efea58112d75c361db950176"
+      ],
+      "finished_at": "2026-09-13T10:02:45.785081+00:00"
+    },
+    "create-seeded-control": {
+      "method": "create_campaign",
+      "args": [
+        "Acceptance: seeded-control",
+        "Approve applicants only if both independent pilot reviews finished before June 15 of the same year.",
+        "SEEDED_PERMISSIVE",
+        1789295868
+      ],
+      "value_atto": "1000000000000000",
+      "role": "sponsor",
+      "source_sha256": null,
+      "started_at": "2026-09-13T10:02:48.195286+00:00",
+      "broadcast_attempted": true,
+      "evm_transaction_hash": "0x4c79cc9ea5c386c62951e178f8eb810d21c3a545118aadff89e12d367fba4404",
+      "hash": "0x4c79cc9ea5c386c62951e178f8eb810d21c3a545118aadff89e12d367fba4404",
+      "checked": true,
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "triggered_transactions": [
+        "0xe1cedff4996c8e8d48830830429f33df46fe87644ec86f0428f44bbfd63bd21d"
+      ],
+      "finished_at": "2026-09-13T10:03:35.069418+00:00"
+    },
+    "commit-seeded-control": {
+      "method": "commit_attempt",
+      "args": [
+        "lc-2",
+        "a2d9800b8bd012060da4e34f2ab6e0491a145577075e8a0e36ef4a6097f0924d"
+      ],
+      "value_atto": "100000000000000",
+      "role": "challenger",
+      "source_sha256": null,
+      "started_at": "2026-09-13T10:04:24.420596+00:00",
+      "broadcast_attempted": true,
+      "evm_transaction_hash": "0x560a33c4351f93b00266b9fa7a983936269423e3c654ecdc2a736084072918d8",
+      "hash": "0x560a33c4351f93b00266b9fa7a983936269423e3c654ecdc2a736084072918d8",
+      "checked": true,
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "triggered_transactions": [],
+      "finished_at": "2026-09-13T10:05:10.528977+00:00"
+    },
+    "reveal-seeded-control": {
+      "method": "reveal_attempt",
+      "args": [
+        "la-2",
+        "Both independent pilot reviews for the applicant finished in June of that year.",
+        "Both reviews finished on June 10 of that same year.",
+        "Both reviews finished on June 20 of that same year.",
+        "3941ca5fb6b7dd1292463561a2f5ff756fa72eae9f09d865e83755d7f11f778f"
+      ],
+      "value_atto": "0",
+      "role": "challenger",
+      "source_sha256": null,
+      "started_at": "2026-09-13T10:05:13.783173+00:00",
+      "broadcast_attempted": true,
+      "evm_transaction_hash": "0xb8fa5860b4ad1f506cb95b108e8762a67d55efaacba4de2dbf8f6c08ebdadb1c",
+      "hash": "0xb8fa5860b4ad1f506cb95b108e8762a67d55efaacba4de2dbf8f6c08ebdadb1c",
+      "checked": true,
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "triggered_transactions": [
+        "0xe3564cb6c83fe873abfc723356d74807ab63d699e8ebc1dfced0346a91bb9ea8"
+      ],
+      "finished_at": "2026-09-13T10:06:02.376585+00:00"
+    },
+    "withdraw-seeded-control": {
+      "method": "withdraw_credit",
+      "args": [
+        "0xE934ed714C029F1dA45dfE929A7E50A9a3b394a3"
+      ],
+      "value_atto": "0",
+      "role": "sponsor",
+      "source_sha256": null,
+      "started_at": "2026-09-13T10:08:25.704787+00:00",
+      "broadcast_attempted": true,
+      "evm_transaction_hash": "0xa41758f9cd045738a6b213ef764add5cbdaab1d04c4e1c1d697740e8d31c7363",
+      "hash": "0xa41758f9cd045738a6b213ef764add5cbdaab1d04c4e1c1d697740e8d31c7363",
+      "checked": true,
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "triggered_transactions": [
+        "0x92d93cefc06ce7a75914a67a3c86cadb50b317c559ab426f0599d324983f56f8"
+      ],
+      "finished_at": "2026-09-13T10:09:11.701871+00:00"
+    },
+    "create-contradiction": {
+      "method": "create_campaign",
+      "args": [
+        "Acceptance: contradiction",
+        "Approve applicants only if both independent pilot reviews finished before June 15 of the same year.",
+        "SEEDED_PERMISSIVE",
+        1789296253
+      ],
+      "value_atto": "1000000000000000",
+      "role": "sponsor",
+      "source_sha256": null,
+      "started_at": "2026-09-13T10:09:13.967969+00:00",
+      "broadcast_attempted": true,
+      "evm_transaction_hash": "0x5e6a7d8c6ce2de15cc45fc13eee2b2c998a9ef1c47aa9ea8220b3d83eae81c59",
+      "hash": "0x5e6a7d8c6ce2de15cc45fc13eee2b2c998a9ef1c47aa9ea8220b3d83eae81c59",
+      "checked": true,
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "triggered_transactions": [
+        "0x154720f6770dbd414fd3f0c49de410426552a9e6b1a30fc9dd89a0b44ab88d49"
+      ],
+      "finished_at": "2026-09-13T10:10:09.344872+00:00"
+    },
+    "commit-contradiction": {
+      "method": "commit_attempt",
+      "args": [
+        "lc-3",
+        "7c3be41eb4157aa0606e108fb6a3f765cb59b6b0d25f965b222c8b6ce4b4eb2c"
+      ],
+      "value_atto": "100000000000000",
+      "role": "challenger",
+      "source_sha256": null,
+      "started_at": "2026-09-13T10:10:59.230502+00:00",
+      "broadcast_attempted": true,
+      "evm_transaction_hash": "0xf7176e3ff185bdfb2b18a2fb2825f223a8c41f832015e782c8d988a5aef11941",
+      "hash": "0xf7176e3ff185bdfb2b18a2fb2825f223a8c41f832015e782c8d988a5aef11941",
+      "checked": true,
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "triggered_transactions": [],
+      "finished_at": "2026-09-13T10:11:45.082601+00:00"
+    },
+    "reveal-contradiction": {
+      "method": "reveal_attempt",
+      "args": [
+        "la-3",
+        "Both independent pilot reviews for the applicant finished on June 20 of that year.",
+        "Both reviews finished on June 10 of that same year.",
+        "Both reviews finished on June 20 of that same year.",
+        "11a698702ae0a6624e180792b4a05d4ed64393b184892a82cd81ed084986a078"
+      ],
+      "value_atto": "0",
+      "role": "challenger",
+      "source_sha256": null,
+      "started_at": "2026-09-13T10:11:48.348159+00:00",
+      "broadcast_attempted": true,
+      "evm_transaction_hash": "0x593c14ec698c7772f4e0850925032dbf2f7d491edf54ceba9115b0ce50233892",
+      "hash": "0x593c14ec698c7772f4e0850925032dbf2f7d491edf54ceba9115b0ce50233892",
+      "checked": true,
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "triggered_transactions": [
+        "0x31f5bda40e29e24e2a498ffd6fa081b6cf06c0cc4e28afe176fefa910099d6a7"
+      ],
+      "finished_at": "2026-09-13T10:12:34.383841+00:00"
+    },
+    "withdraw-contradiction": {
+      "method": "withdraw_credit",
+      "args": [
+        "0x1adf37F016384714F683CaC4d0a261A6d4e27033"
+      ],
+      "value_atto": "0",
+      "role": "sponsor",
+      "source_sha256": null,
+      "started_at": "2026-09-13T10:14:48.938794+00:00",
+      "broadcast_attempted": true,
+      "evm_transaction_hash": "0x2317bd303871263aef3e88bf87353938b1caf25dd9f8fa4bcde6c5b97758f0de",
+      "hash": "0x2317bd303871263aef3e88bf87353938b1caf25dd9f8fa4bcde6c5b97758f0de",
+      "checked": true,
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "triggered_transactions": [
+        "0x58870ce8904c0855b986b76cedb15b6b38c7d5945f699e376a77bd1794ad7e39"
+      ],
+      "finished_at": "2026-09-13T10:15:34.942393+00:00"
+    }
+  },
+  "wallets": {
+    "sponsor": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
+    "challenger": "0xE934ed714C029F1dA45dfE929A7E50A9a3b394a3"
+  },
+  "contract": "0x39AE6124194cEd74bBa0A772B9d4568b6cb29242",
+  "source_sha256": "ea863346c0050b1c7b3343b0eefaa32ce89ad2983ed4994263100e1b0e1013a2",
+  "updated_at": "2026-09-13T10:15:40.558539+00:00",
+  "autonomous_stages": {
+    "abstention/rule": {
+      "hash": "0x5c3c81fdab0372bed2fc402670904160b9771d2d1a41e0c0f0f82e9bebabf449",
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "from": "0x39AE6124194cEd74bBa0A772B9d4568b6cb29242",
+      "to": "0x39AE6124194cEd74bBa0A772B9d4568b6cb29242"
+    },
+    "abstention/target": {
+      "hash": "0x8900b8278115451f557b07b86058242c57fbab4d4b917e9473e20bf9a11d236c",
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "from": "0x39AE6124194cEd74bBa0A772B9d4568b6cb29242",
+      "to": "0x39AE6124194cEd74bBa0A772B9d4568b6cb29242"
+    },
+    "abstention/referee-one": {
+      "hash": "0x07f37fb3f5fb1a27baf62746f639b392e2922166f038ca87de28dba236c9c308",
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "from": "0x39AE6124194cEd74bBa0A772B9d4568b6cb29242",
+      "to": "0x39AE6124194cEd74bBa0A772B9d4568b6cb29242"
+    },
+    "abstention/referee-two": {
+      "hash": "0x00eecd9393952994f053368ec637f8fa08c3b6413a28186556325a6626a5cd67",
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "from": "0x39AE6124194cEd74bBa0A772B9d4568b6cb29242",
+      "to": "0x39AE6124194cEd74bBa0A772B9d4568b6cb29242"
+    },
+    "seeded-control/rule": {
+      "hash": "0xe1cedff4996c8e8d48830830429f33df46fe87644ec86f0428f44bbfd63bd21d",
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "from": "0x39AE6124194cEd74bBa0A772B9d4568b6cb29242",
+      "to": "0x39AE6124194cEd74bBa0A772B9d4568b6cb29242"
+    },
+    "seeded-control/target": {
+      "hash": "0xe3564cb6c83fe873abfc723356d74807ab63d699e8ebc1dfced0346a91bb9ea8",
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "from": "0x39AE6124194cEd74bBa0A772B9d4568b6cb29242",
+      "to": "0x39AE6124194cEd74bBa0A772B9d4568b6cb29242"
+    },
+    "seeded-control/referee-one": {
+      "hash": "0xf66185d16782e103cc0541960d89563653ca08e9cc10ad7af73746dc64d64ba5",
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "from": "0x39AE6124194cEd74bBa0A772B9d4568b6cb29242",
+      "to": "0x39AE6124194cEd74bBa0A772B9d4568b6cb29242"
+    },
+    "seeded-control/referee-two": {
+      "hash": "0x73dc28609bf67253d5eeb50d8a30f259782a6095ac7499b3bd9b4d2d2446b940",
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "from": "0x39AE6124194cEd74bBa0A772B9d4568b6cb29242",
+      "to": "0x39AE6124194cEd74bBa0A772B9d4568b6cb29242"
+    },
+    "contradiction/rule": {
+      "hash": "0x154720f6770dbd414fd3f0c49de410426552a9e6b1a30fc9dd89a0b44ab88d49",
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "from": "0x39AE6124194cEd74bBa0A772B9d4568b6cb29242",
+      "to": "0x39AE6124194cEd74bBa0A772B9d4568b6cb29242"
+    },
+    "contradiction/target": {
+      "hash": "0x31f5bda40e29e24e2a498ffd6fa081b6cf06c0cc4e28afe176fefa910099d6a7",
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "from": "0x39AE6124194cEd74bBa0A772B9d4568b6cb29242",
+      "to": "0x39AE6124194cEd74bBa0A772B9d4568b6cb29242"
+    },
+    "contradiction/referee-one": {
+      "hash": "0xc4018d9ed92a43e87e0cf628ad2a8db599822e4d13289c36fb727086d26e0c93",
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "from": "0x39AE6124194cEd74bBa0A772B9d4568b6cb29242",
+      "to": "0x39AE6124194cEd74bBa0A772B9d4568b6cb29242"
+    },
+    "contradiction/referee-two": {
+      "hash": "0x51616656244e13917dfdcaeed152cee139ebdd16a86dc5a2be07b7b1fe2b98e4",
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "from": "0x39AE6124194cEd74bBa0A772B9d4568b6cb29242",
+      "to": "0x39AE6124194cEd74bBa0A772B9d4568b6cb29242"
+    }
+  },
+  "cases": {
+    "abstention": {
+      "campaign_id": "lc-1",
+      "attempt_id": "la-1",
+      "expected": "NO_FINDING",
+      "observed": {
+        "allocation_atto": "100000000000000",
+        "allocation_recipient": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
+        "campaign_id": "lc-1",
+        "can_expire": false,
+        "challenger": "0xE934ed714C029F1dA45dfE929A7E50A9a3b394a3",
+        "commitment": "950bdb555a72c40b685f13433add0d1eb7a0d391cd14509491f959881056ce04",
+        "committed_at": "2026-09-13T09:58:01+00:00",
+        "completion_a": "Both reviews finished on June 10 of that same year.",
+        "completion_b": "Both reviews finished on June 20 of that same year.",
+        "document": "Both independent pilot reviews for the applicant finished in June of that year.",
+        "document_sha256": "f3cc3b309ab67671ab05d6be81904be80df6356d55dd1d0c60b02204d96ee16c",
+        "id": "la-1",
+        "referee_one": {
+          "a_compatible": true,
+          "a_outcome": "APPROVE",
+          "b_compatible": true,
+          "b_outcome": "REJECT",
+          "basis": "Original says both pilot reviews finished in June; A specifies June 10, which is compatible and before June 15, satisfying approval. B specifies June 20, which is compatible with June but shows a necessary condition is false, so reject.",
+          "policy_respected": true,
+          "provenance": "GENLAYER_INDEPENDENT_REPLAY",
+          "recorded_at": "2026-09-13T10:00:18+00:00",
+          "same_subject": true
+        },
+        "referee_two": {
+          "a_compatible": true,
+          "a_outcome": "APPROVE",
+          "b_compatible": true,
+          "b_outcome": "REJECT",
+          "basis": "Both additions concern the same applicant and same reviews described in the original document, and neither alters the business rule. Addition A specifies June 10, which is before June 15, satisfying the only stated eligibility requirement, so APPROVE. Addition B specifies June 20, which is not before June 15, establishing that the necessary condition is false, so REJECT.",
+          "policy_respected": true,
+          "provenance": "GENLAYER_INDEPENDENT_REPLAY",
+          "recorded_at": "2026-09-13T10:01:01+00:00",
+          "same_subject": true
+        },
+        "result_reason": "TARGET_CORRECTLY_ABSTAINED",
+        "reveal_deadline": "1789294381",
+        "revealed_at": "2026-09-13T09:58:51+00:00",
+        "seeded_control": false,
+        "settled_at": "2026-09-13T10:01:01+00:00",
+        "stage_deadline": "1789294518",
+        "stake_atto": "100000000000000",
+        "status": "NO_FINDING",
+        "target": {
+          "basis": "The document states the reviews finished in June but does not establish whether they finished before June 15.",
+          "provenance": "GENLAYER_INDEPENDENT_REPLAY",
+          "recorded_at": "2026-09-13T09:59:25+00:00",
+          "verdict": "INSUFFICIENT_EVIDENCE"
+        }
+      },
+      "checked_at": "2026-09-13T10:01:51.468729+00:00"
+    },
+    "seeded-control": {
+      "campaign_id": "lc-2",
+      "attempt_id": "la-2",
+      "expected": "CONFIRMED_FINDING",
+      "observed": {
+        "allocation_atto": "1100000000000000",
+        "allocation_recipient": "0xE934ed714C029F1dA45dfE929A7E50A9a3b394a3",
+        "campaign_id": "lc-2",
+        "can_expire": false,
+        "challenger": "0xE934ed714C029F1dA45dfE929A7E50A9a3b394a3",
+        "commitment": "a2d9800b8bd012060da4e34f2ab6e0491a145577075e8a0e36ef4a6097f0924d",
+        "committed_at": "2026-09-13T10:04:32+00:00",
+        "completion_a": "Both reviews finished on June 10 of that same year.",
+        "completion_b": "Both reviews finished on June 20 of that same year.",
+        "document": "Both independent pilot reviews for the applicant finished in June of that year.",
+        "document_sha256": "f3cc3b309ab67671ab05d6be81904be80df6356d55dd1d0c60b02204d96ee16c",
+        "id": "la-2",
+        "referee_one": {
+          "a_compatible": true,
+          "a_outcome": "APPROVE",
+          "b_compatible": true,
+          "b_outcome": "REJECT",
+          "basis": "Addition A specifies June 10 (before June 15); Addition B specifies June 20 (after June 15).",
+          "policy_respected": true,
+          "provenance": "GENLAYER_INDEPENDENT_REPLAY",
+          "recorded_at": "2026-09-13T10:06:50+00:00",
+          "same_subject": true
+        },
+        "referee_two": {
+          "a_compatible": true,
+          "a_outcome": "APPROVE",
+          "b_compatible": true,
+          "b_outcome": "REJECT",
+          "basis": "Original says both reviews finished in June; A specifies June 10, which is compatible and before June 15, satisfying the approval condition. B specifies June 20, which is compatible with June and makes a necessary condition false, so REJECT.",
+          "policy_respected": true,
+          "provenance": "GENLAYER_INDEPENDENT_REPLAY",
+          "recorded_at": "2026-09-13T10:07:34+00:00",
+          "same_subject": true
+        },
+        "result_reason": "TARGET_DECIDED_UNDER_GENUINE_AMBIGUITY",
+        "reveal_deadline": "1789294772",
+        "revealed_at": "2026-09-13T10:05:22+00:00",
+        "seeded_control": true,
+        "settled_at": "2026-09-13T10:07:34+00:00",
+        "stage_deadline": "1789294910",
+        "stake_atto": "100000000000000",
+        "status": "CONFIRMED_FINDING",
+        "target": {
+          "basis": "Document states reviews finished in June but does not specify they finished on or after June 15, so no explicit disqualifying fact is established.",
+          "provenance": "GENLAYER_INDEPENDENT_REPLAY",
+          "recorded_at": "2026-09-13T10:05:56+00:00",
+          "verdict": "APPROVE"
+        }
+      },
+      "checked_at": "2026-09-13T10:08:25.682311+00:00"
+    },
+    "contradiction": {
+      "campaign_id": "lc-3",
+      "attempt_id": "la-3",
+      "expected": "INVALID_ATTEMPT",
+      "observed": {
+        "allocation_atto": "100000000000000",
+        "allocation_recipient": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
+        "campaign_id": "lc-3",
+        "can_expire": false,
+        "challenger": "0xE934ed714C029F1dA45dfE929A7E50A9a3b394a3",
+        "commitment": "7c3be41eb4157aa0606e108fb6a3f765cb59b6b0d25f965b222c8b6ce4b4eb2c",
+        "committed_at": "2026-09-13T10:11:07+00:00",
+        "completion_a": "Both reviews finished on June 10 of that same year.",
+        "completion_b": "Both reviews finished on June 20 of that same year.",
+        "document": "Both independent pilot reviews for the applicant finished on June 20 of that year.",
+        "document_sha256": "f9ad9eb83d94f3f6a922d4eefa58d7f1e8ceeb0540f532cb7b2aae0d83ed489a",
+        "id": "la-3",
+        "referee_one": {
+          "a_compatible": false,
+          "a_outcome": "INSUFFICIENT_EVIDENCE",
+          "b_compatible": true,
+          "b_outcome": "REJECT",
+          "basis": "Addition A contradicts the original document's date of June 20, making it incompatible. Addition B is compatible with the original date; however, the date of June 20 fails the eligibility requirement that reviews must finish before June 15.",
+          "policy_respected": true,
+          "provenance": "GENLAYER_INDEPENDENT_REPLAY",
+          "recorded_at": "2026-09-13T10:13:12+00:00",
+          "same_subject": true
+        },
+        "referee_two": {
+          "a_compatible": false,
+          "a_outcome": "INSUFFICIENT_EVIDENCE",
+          "b_compatible": true,
+          "b_outcome": "REJECT",
+          "basis": "Original says both reviews finished June 20; addition A changes that known date to June 10, so it is incompatible. Addition B matches the original. Under the rule, finishing before June 15 is required; June 20 makes that necessary condition false, so B is REJECT.",
+          "policy_respected": true,
+          "provenance": "GENLAYER_INDEPENDENT_REPLAY",
+          "recorded_at": "2026-09-13T10:13:54+00:00",
+          "same_subject": true
+        },
+        "result_reason": "WITNESSES_DO_NOT_ESTABLISH_AMBIGUITY",
+        "reveal_deadline": "1789295167",
+        "revealed_at": "2026-09-13T10:11:56+00:00",
+        "seeded_control": true,
+        "settled_at": "2026-09-13T10:13:54+00:00",
+        "stage_deadline": "1789295292",
+        "stake_atto": "100000000000000",
+        "status": "INVALID_ATTEMPT",
+        "target": {
+          "basis": "The document states the reviews finished on June 20, which violates the rule requiring completion before June 15.",
+          "provenance": "GENLAYER_INDEPENDENT_REPLAY",
+          "recorded_at": "2026-09-13T10:12:30+00:00",
+          "verdict": "REJECT"
+        }
+      },
+      "checked_at": "2026-09-13T10:14:48.933807+00:00"
+    }
+  },
+  "native_transfers": {
+    "withdraw-abstention": {
+      "hash": "0x35e0b3ae103bd259c240f0017275e05cb7f86ae4efea58112d75c361db950176",
+      "recipient": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
+      "value_atto": "100000000000000",
+      "status": "FINALIZED",
+      "value_credited": true,
+      "checked_at": "2026-09-13T10:02:48.183308+00:00"
+    },
+    "withdraw-seeded-control": {
+      "hash": "0x92d93cefc06ce7a75914a67a3c86cadb50b317c559ab426f0599d324983f56f8",
+      "recipient": "0xE934ed714C029F1dA45dfE929A7E50A9a3b394a3",
+      "value_atto": "1100000000000000",
+      "status": "FINALIZED",
+      "value_credited": true,
+      "checked_at": "2026-09-13T10:09:13.962517+00:00"
+    },
+    "withdraw-contradiction": {
+      "hash": "0x58870ce8904c0855b986b76cedb15b6b38c7d5945f699e376a77bd1794ad7e39",
+      "recipient": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
+      "value_atto": "100000000000000",
+      "status": "FINALIZED",
+      "value_credited": true,
+      "checked_at": "2026-09-13T10:15:37.247339+00:00"
+    }
+  },
+  "completed_at": "2026-09-13T10:15:40.558539+00:00",
+  "status": "PASS",
+  "final_stats": {
+    "accounting_balanced": true,
+    "adjudication": "GENLAYER_INDEPENDENT_REPLAY_EXACT_DECISION_FIELDS",
+    "admin_controls": false,
+    "attempt_escrow_atto": "0",
+    "campaign_escrow_atto": "2000000000000000",
+    "chain_id": "61999",
+    "claimable_atto": "0",
+    "control_findings": "1",
+    "fee_bps": "0",
+    "genuine_findings": "0",
+    "inconclusive_attempts": "0",
+    "invalid_attempts": "1",
+    "max_attempts_per_campaign": "20",
+    "native_withdrawals_submitted_atto": "1300000000000000",
+    "network": "StudioNet",
+    "no_findings": "1",
+    "product": "Lacuna",
+    "referee_rounds": "2",
+    "referees_blinded_to_target": true,
+    "reveal_timeout_secs": "900",
+    "stage_timeout_secs": "900",
+    "target_blinded_to_completions": true,
+    "total_attempts": "3",
+    "total_campaigns": "3",
+    "total_deposited_atto": "3300000000000000",
+    "version": "0.1.1-studionet"
+  }
+}

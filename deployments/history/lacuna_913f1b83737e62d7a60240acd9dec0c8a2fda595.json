@@ -1,0 +1,16 @@
+{
+  "contract": "Lacuna",
+  "network": "studionet",
+  "chain_id": 61999,
+  "address": "0x913F1b83737e62d7a60240acd9Dec0c8a2fdA595",
+  "version": "0.1.0-studionet",
+  "source_sha256": "b2a64c8605ad330aa3e5c959af2349ca0db2776a684ab344131641d824f4cea7",
+  "transaction_hash": "0xe94db6b23d839f594169117ecf84eb2fb3a6f82939160b9fb40ff01aa265f7a9",
+  "deployer": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
+  "admin_controls": false,
+  "runner_dependency": "# { \"Depends\": \"py-genlayer:1jb45aa8ynh2a9c9xn3b7qqh8sm5q93hwfp7jqmwsfhh8jpz09h6\" }",
+  "receipt_status": "FINALIZED",
+  "execution_result": "SUCCESS",
+  "verified_source_and_config": true,
+  "verified_at": "2026-09-13T09:22:00.035857+00:00"
+}
