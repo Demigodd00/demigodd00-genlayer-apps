@@ -4,6 +4,11 @@ on:
   push:
     paths:
       - "contracts/hackathon_judge.py"
+      - "contracts/hackathon_judge_scorecards.py"
+      - "tests/direct/test_hackathon_judge_scorecards.py"
+      - "tests/integration/test_hackathon_judge_scorecards_studionet.py"
+      - "scripts/deploy_hackathon_judge_scorecards.py"
+      - "scripts/seed_hackathon_judge_scorecards.py"
       - "tests/direct/test_hackathon_judge.py"
       - "tests/integration/test_hackathon_judge_studionet.py"
       - "scripts/deploy_hackathon_judge.py"
@@ -15,6 +20,11 @@ on:
   pull_request:
     paths:
       - "contracts/hackathon_judge.py"
+      - "contracts/hackathon_judge_scorecards.py"
+      - "tests/direct/test_hackathon_judge_scorecards.py"
+      - "tests/integration/test_hackathon_judge_scorecards_studionet.py"
+      - "scripts/deploy_hackathon_judge_scorecards.py"
+      - "scripts/seed_hackathon_judge_scorecards.py"
       - "tests/direct/test_hackathon_judge.py"
       - "tests/integration/test_hackathon_judge_studionet.py"
       - "scripts/deploy_hackathon_judge.py"
@@ -40,9 +50,11 @@ jobs:
       - name: Validate contract and scripts
         run: |
           genvm-lint check contracts/hackathon_judge.py
+          genvm-lint check contracts/hackathon_judge_scorecards.py
+          python -m compileall -q scripts/deploy_hackathon_judge_scorecards.py scripts/seed_hackathon_judge_scorecards.py
           python -m compileall -q scripts/deploy_hackathon_judge.py scripts/seed_hackathon_judge_demo.py scripts/hackathon_judge_rpc.py
       - name: Run direct lifecycle and adversarial tests
-        run: pytest tests/direct/test_hackathon_judge.py tests/test_hackathon_judge_rpc.py -v
+        run: pytest tests/direct/test_hackathon_judge.py tests/direct/test_hackathon_judge_scorecards.py tests/test_hackathon_judge_rpc.py -v
 
   dapp-release-gate:
     runs-on: ubuntu-latest
@@ -75,4 +87,4 @@ jobs:
       - name: Install GenLayer toolchain
         run: pip install -r requirements-deploy.txt
       - name: Run real renderer and LLM consensus flow
-        run: gltest tests/integration/test_hackathon_judge_studionet.py --network studionet -v -s
+        run: gltest tests/integration/test_hackathon_judge_studionet.py tests/integration/test_hackathon_judge_scorecards_studionet.py --network studionet -v -s

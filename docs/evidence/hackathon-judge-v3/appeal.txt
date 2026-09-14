@@ -1,0 +1,25 @@
+Hackathon Judge v3 — Authenticated Reproducibility Addendum
+HJ-PROVENANCE-V1|studionet|0xcbebb5edaf1323a6561d1b96911306e531355c1d|hj-1|0x808fc6c1db96663008e0534479f86a0467a7eb00|demigodd00/demigodd00-genlayer-apps|docs/evidence/hackathon-judge-v3/appeal.txt|appeal|cfe67f7ac57ab36e2be1db8bccdb30447be4bbaddc55cad65789639c926a62ba
+
+This authenticated addendum supplies missing reproducibility evidence for the controlled Score Appeal Fixture. It does not introduce a different product, independent adoption, or a usability study. The original frozen submission is retained.
+Contract on GenLayer StudioNet: 0xCBebB5EDAf1323A6561d1b96911306E531355c1d
+Exact deployment transaction: 0x2a295b10b0de3fb9be008984ce888f79e18459c6770887747b2813559afb131f
+Deployment explorer: https://explorer-studio.genlayer.com/transactions/0x2a295b10b0de3fb9be008984ce888f79e18459c6770887747b2813559afb131f
+Public source: https://github.com/Demigodd00/demigodd00-genlayer-apps/blob/main/contracts/hackathon_judge_scorecards.py
+Public app: https://hackathon-judge-studionet.blazekingsley2.chatgpt.site/
+Source SHA-256: db321705262eaf138bd1fb1cfccbb96121d6a11f3bb0aa6147db2f103270660e
+
+Executable checks from a fresh checkout, with Python 3.12 and Node.js installed:
+git clone https://github.com/Demigodd00/demigodd00-genlayer-apps.git
+cd demigodd00-genlayer-apps
+pip install -r requirements-deploy.txt
+python scripts/prepare_gltest_runner.py
+genvm-lint check contracts/hackathon_judge_scorecards.py
+pytest tests/direct/test_hackathon_judge_scorecards.py -q
+Expected outcome: the pinned runner loads, contract lint passes, and all 45 direct scorecard tests pass. These tests use controlled nondeterministic inputs and are not real consensus evidence.
+
+Read-only live verification after the acceptance run is complete:
+pytest tests/integration/test_hackathon_judge_scorecards_studionet.py -v -s
+Expected outcome: one integration test verifies real finalized receipts and expected rejections, deployed source hash, frozen package proofs, exact score arithmetic, preserved original records, unchanged untargeted criteria, final settlement, and zero winner credit after withdrawal. This test does not sign write transactions or use LLM mocks. Running it before the acceptance record is published will correctly fail its completion check.
+
+Reviewer journey after v3 publication: open Transparent Scorecards — Milestone 1, inspect View scorecard for Score Appeal Fixture, compare original and latest totals and ranks, expand cited original/addendum text, then inspect parent and scorecard digests. StudioNet GEN is simulated; this demonstration is not real-user traction or a real-money security audit.
