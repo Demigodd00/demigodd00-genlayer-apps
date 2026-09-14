@@ -1,0 +1,17 @@
+{
+  "site": "Hackathon Judge",
+  "hosting": "OpenAI Sites",
+  "project_id": "appgprj_6a93de9b80f081918e32c5200ecf707b",
+  "version_id": "appgprj_6a93de9b80f081918e32c5200ecf707b~appgver_bec6cb04f8688191972caeaf17674a77",
+  "version_number": 9,
+  "deployment_id": "appgdep_6a9dbc87ce94819193d555052b00908b",
+  "source_commit": "053a5a672d4094d6f97682376032f471e318d800",
+  "archive_sha256": "6418364c9507fc6f14bf9ef5c404d3f72fb3d12661ef5b81e8123b5b39994433",
+  "saved_archive_content_hash": "sha256:690dacdd4a97f3fe1c43bfae3802256b3ebb40b38cf0a2a4cc75801e25dbae20",
+  "contract_version": "2.3.0",
+  "contract_address": "0x6fD9B65001B0eEF5CC98A95D20A1c693C0D04FBA",
+  "url": "https://hackathon-judge-studionet.blazekingsley2.chatgpt.site",
+  "access_mode": "public",
+  "status": "succeeded",
+  "deployed_at": "2026-09-06T19:18:44.196090+00:00"
+}

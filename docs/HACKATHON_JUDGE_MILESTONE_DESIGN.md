@@ -1,10 +1,10 @@
 # Milestone 1: Transparent scorecards and score appeals
 
-Status: implemented and live-verified on StudioNet v3.0.1; final website publication pending. See HACKATHON_JUDGE_MILESTONE_1.md for the review path, results and disclosed pre-release failure.
+Status: implemented, live-verified on StudioNet v3.0.1 and published as site version 10 on September 14, 2026. See HACKATHON_JUDGE_MILESTONE_1.md for the review path, results and disclosed pre-release failure.
 
 Accepted baseline: v2.3, contract 0x6fD9B65001B0eEF5CC98A95D20A1c693C0D04FBA. Its source, deployment and acceptance receipt remain unchanged. This release uses a separate contract and deployment record.
 
-Release candidate: v3.0.1 at 0xF37518553b89e1874DA6c459e9cFb0312298Ab60. The v3.0.0 trial is archived separately after invalid citation ranges caused two appeal resolution failures without changing the original scorecard or releasing the simulated prize.
+Published release: v3.0.1 at 0xF37518553b89e1874DA6c459e9cFb0312298Ab60. The v3.0.0 trial is archived separately after invalid citation ranges caused two appeal resolution failures without changing the original scorecard or releasing the simulated prize.
 
 ## Boundary and flow
 
