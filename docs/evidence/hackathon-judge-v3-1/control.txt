@@ -1,0 +1,15 @@
+Hackathon Judge v3 — Documented Control Fixture
+HJ-PROVENANCE-V1|studionet|0xf37518553b89e1874da6c459e9cfb0312298ab60|hj-1|0xdb134894e5466c380d026e12d364d9b5a9d70807|demigodd00/demigodd00-genlayer-apps|docs/evidence/hackathon-judge-v3-1/control.txt|submission|none
+
+This is a controlled release-acceptance fixture for the same Hackathon Judge build, not a separate product or evidence of independent users, adoption, originality, or a usability study.
+The GenLayer contract implements locked weighted criteria, independently compared criterion scores, exact integer weighted totals, evidence citations, a common appeal window, one targeted score appeal, preserved original scorecards, and settlement after appeals close.
+Frozen evidence comes from wallet-bound GitHub files. Citation excerpts are derived from recorded line ranges; location checking does not establish the truth of a claim or correctness of an AI judgment.
+Public v3 contract on StudioNet: 0xF37518553b89e1874DA6c459e9cFb0312298Ab60
+Exact deployment transaction: 0x8b5253aaabf0dbb4b0911a2cdf9fc66428b6d788e4f7ab5bbb83a80d21ff5db8
+Contract source: https://github.com/Demigodd00/demigodd00-genlayer-apps/blob/main/contracts/hackathon_judge_scorecards.py
+App source: https://github.com/Demigodd00/demigodd00-genlayer-apps/tree/main/apps/hackathon-judge-web
+Public app: https://hackathon-judge-studionet.blazekingsley2.chatgpt.site/
+The updated app has a weighted rubric editor, per-criterion original and latest scores, expandable evidence excerpts, immutable record digests, and a criterion selector for eligible appeals. The v3 UI is being published as part of this release; the existing public site may still show the accepted v2.3 build during acceptance testing.
+Reviewer journey after publication: open the app, select Transparent Scorecards — Milestone 1, and inspect the submission docket. Choose View scorecard, compare original and latest criterion scores and totals, then expand an evidence citation and inspect immutable records. Choose Inspect snapshot to see the saved evidence text.
+Limitations: StudioNet uses simulated GEN. No real payout or real-user traction is claimed. Judging remains subjective; consensus does not guarantee fairness or factual correctness. Evidence provenance demonstrates repository control and wallet binding, not legal ownership.
+This control fixture intentionally provides public identifiers and reviewer navigation without executable verification commands.
