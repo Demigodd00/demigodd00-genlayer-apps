@@ -116,7 +116,11 @@ def test_live_v3_scorecard_history_provenance_and_settlement():
                     assert 1 <= ref['start'] <= ref['end'] <= len(lines)
                     assert ref['end'] - ref['start'] < 5
                     assert '\n'.join(lines[ref['start'] - 1:ref['end']]) == ref['excerpt']
-        assert entry['appeal_deadline_unix'] == event['common_appeal_deadline_unix']
+        # Filing the one allowed appeal consumes this entry's individual deadline;
+        # the event-wide deadline is retained and still gates final settlement.
+        assert entry['appeal_deadline_unix'] == ('0' if entry['appeal_count'] != '0' else event['common_appeal_deadline_unix'])
+        assert history['common_appeal_deadline_unix'] == event['common_appeal_deadline_unix']
+        assert demo['initial_histories'][index]['common_appeal_deadline_unix'] == event['common_appeal_deadline_unix']
     appealed = histories[1]
     assert appealed['appeal_target'] == 'reproducibility' and appealed['appeal_resolved'] is True
     assert appealed['current']['parent_scorecard_digest'] == appealed['original_digest']

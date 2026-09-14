@@ -133,6 +133,9 @@ export function JudgeApp() {
 
   const refreshSelected = useCallback(async (id: string) => {
     if (!id) { setHackathon(null); setSubmissions([]); return; }
+    scorecardRevision.current += 1;
+    setScorecard(null);
+    setScorecardLoading(false);
     const [event, entries] = await Promise.all([getHackathon(id), listSubmissions(id)]);
     if (selectedIdRef.current !== id) return;
     setHackathon(event);
@@ -475,7 +478,7 @@ export function JudgeApp() {
             <div className="muted-check"><X /><span>Reason wording exempt</span></div>
           </div>
           {hackathon && <div className="event-facts">
-            <div><span>Prize escrow</span><b>{formatGen(hackathon.prize_atto)} GEN</b></div>
+            <div><span>{hackathon.prize_released ? 'Settled prize' : 'Prize escrow'}</span><b>{formatGen(hackathon.prize_atto)} GEN</b></div>
             <div><span>Deadline</span><b>{dateTime(hackathon.submission_deadline_unix)}</b></div>
             <div><span>Win threshold</span><b>{hackathon.min_winning_score} / 100</b></div>
             <div><span>Appeal window</span><b>{Math.round(Number(hackathon.appeal_window_secs) / 60)} min</b></div>

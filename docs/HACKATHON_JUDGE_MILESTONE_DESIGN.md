@@ -1,12 +1,16 @@
 # Milestone 1: Transparent scorecards and score appeals
 
-Status: implementation in progress; not yet a completed milestone claim.
+Status: implemented and live-verified on StudioNet v3.0.1; final website publication pending. See HACKATHON_JUDGE_MILESTONE_1.md for the review path, results and disclosed pre-release failure.
 
 Accepted baseline: v2.3, contract 0x6fD9B65001B0eEF5CC98A95D20A1c693C0D04FBA. Its source, deployment and acceptance receipt remain unchanged. This release uses a separate contract and deployment record.
+
+Release candidate: v3.0.1 at 0xF37518553b89e1874DA6c459e9cFb0312298Ab60. The v3.0.0 trial is archived separately after invalid citation ranges caused two appeal resolution failures without changing the original scorecard or releasing the simulated prize.
 
 ## Boundary and flow
 
 The organizer locks 2–4 prose criteria with integer percentage weights totaling 100. Entrants submit the existing wallet-bound GitHub evidence packages. Each validator independently judges the immutable, numbered evidence. Eligibility and each criterion's 20-point band must agree; confidence may differ by at most 20. Reasons and valid citation locations need not be identical. Code checks citation ranges against the captured snapshot and materializes their text; that proves location/integrity, not semantic truth. No LLM controls weights, arithmetic, ranking, deadlines or transfers.
+
+The model-facing reference format uses a source and one existing line number. Normalized records retain start/end/excerpt for auditability. One schema-repair attempt is permitted independently per validator; no failed attempt can mutate a scorecard or move funds. Persistent invalid output still fails closed, leaving resolution available for retry or the documented timeout path.
 
 Weighted totals use integer basis points: sum(score_band * weight), out of 10,000. Rank and minimum-score comparisons use that exact total, without rounding. The UI displays up to two decimals. Ties retain the existing earliest-submission rule, announced before entries open.
 

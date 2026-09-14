@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 
-import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { act, cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -66,6 +66,19 @@ beforeEach(() => {
 afterEach(cleanup);
 
 describe('room and transaction safety', () => {
+  it('does not reopen a stale scorecard response after refreshing the docket', async () => {
+    const user = userEvent.setup();
+    let releaseHistory: ((value: unknown) => void) | undefined;
+    contract.listSubmissions.mockResolvedValue({ total: '1', items: [{ ...appealable, current_scorecard_digest: 'digest' }] });
+    contract.getScorecardHistory.mockImplementation(() => new Promise((resolve) => { releaseHistory = resolve; }));
+    render(<JudgeApp />);
+    await screen.findByRole('heading', { name: 'Room A' });
+    await user.click(await screen.findByRole('button', { name: 'View scorecard' }));
+    await user.click(screen.getByRole('button', { name: 'Refresh' }));
+    await act(async () => releaseHistory?.({ criteria: [], original: null, current: null, effective_total_bps: '0', effective_status: 'INCONCLUSIVE', original_rank: '', current_rank: '', rubric_digest: 'digest', original_digest: '', current_digest: '', appeal_target: '' }));
+    expect(screen.queryByRole('region', { name: 'Scorecard for Project A' })).toBeNull();
+    expect(screen.queryByText('Loading on-chain scorecard history…')).toBeNull();
+  });
   it('offers eligible entrants a targeted criterion appeal', async () => {
     const user = userEvent.setup();
     contract.getHackathon.mockResolvedValue({ ...event('hj-A', 'Room A'), criteria: [{ id: 'implementation', name: 'Implementation', weight: 60 }, { id: 'clarity', name: 'Clarity', weight: 40 }] });
@@ -78,6 +91,10 @@ describe('room and transaction safety', () => {
     expect(screen.queryByRole('option', { name: 'Eligibility and complete scorecard' })).toBeNull();
     await user.selectOptions(screen.getByLabelText(/Decision to appeal/), 'clarity');
     expect((screen.getByRole('combobox', { name: /Decision to appeal/ }) as unknown as { value: string }).value).toBe('clarity');
+    const statement = 'Please reassess clarity against the frozen documentation and locked rubric.';
+    await user.type(screen.getByLabelText('Appeal statement'), statement);
+    await user.click(screen.getByRole('button', { name: 'File one appeal' }));
+    await waitFor(() => expect(contract.appealSubmission).toHaveBeenCalledWith(expect.objectContaining({ address }), 'hj-A', '0', statement, '', 'clarity', expect.any(Function)));
   });
   it('closes a pending appeal when the selected room changes', async () => {
     const user = userEvent.setup();
