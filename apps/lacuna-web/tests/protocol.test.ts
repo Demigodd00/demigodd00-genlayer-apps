@@ -5,6 +5,7 @@ import {
   ADDRESS,
   CHAIN_ID,
   EXAMPLE,
+  campaignStatus,
   commitmentFor,
   gen,
   parseBackup,
@@ -15,6 +16,63 @@ import {
 } from "../src/lib/protocol";
 import { receiptState } from "../src/lib/receipt";
 const wallet = `0x${"a".repeat(40)}`;
+
+const openCampaign = {
+  status: "OPEN",
+  closes_at: "1789299085",
+  active_attempt: "",
+};
+const closingMs = Number(openCampaign.closes_at) * 1000;
+
+test("campaign entry stays open strictly before its deadline", () => {
+  assert.deepEqual(campaignStatus(openCampaign, closingMs - 1), {
+    text: "open",
+    good: true,
+  });
+});
+
+test("passed entry deadlines do not claim the contract has already closed", () => {
+  for (const now of [closingMs, closingMs + 1, closingMs + 86400_000])
+    assert.deepEqual(campaignStatus(openCampaign, now), {
+      text: "Deadline passed — awaiting closure",
+      good: false,
+    });
+  assert.equal(openCampaign.status, "OPEN");
+});
+
+test("an active attempt survives the campaign entry deadline", () => {
+  assert.deepEqual(
+    campaignStatus({ ...openCampaign, active_attempt: "la-1" }, closingMs),
+    { text: "Deadline passed — attempt in progress", good: false },
+  );
+});
+
+test("terminal and rule-review statuses are not overwritten by elapsed deadlines", () => {
+  for (const status of [
+    "CLAIMED",
+    "EXPIRED",
+    "INVALID_RULE",
+    "RULE_INCONCLUSIVE",
+    "PENDING_RULE",
+  ])
+    assert.deepEqual(campaignStatus({ ...openCampaign, status }, closingMs + 1), {
+      text: status.toLowerCase().replaceAll("_", " "),
+      good: false,
+    });
+});
+
+test("unknown browser time or malformed deadlines never advertise open entry", () => {
+  for (const now of [null, NaN, Infinity])
+    assert.deepEqual(campaignStatus(openCampaign, now), {
+      text: "Checking deadline",
+      good: false,
+    });
+  for (const closes_at of ["", "not-a-date", "-1", "Infinity", "9".repeat(400)])
+    assert.deepEqual(campaignStatus({ ...openCampaign, closes_at }, closingMs), {
+      text: "Checking deadline",
+      good: false,
+    });
+});
 
 test("route validation rejects malformed IDs and nested false matches", () => {
   for (const path of [

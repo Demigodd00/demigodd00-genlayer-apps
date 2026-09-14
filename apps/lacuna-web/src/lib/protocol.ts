@@ -102,6 +102,29 @@ export const activeStage = (status: string) =>
   );
 export const label = (value: string) =>
   value.toLowerCase().split("_").join(" ");
+export function campaignStatus(
+  campaign: Pick<Campaign, "status" | "closes_at" | "active_attempt">,
+  nowMs: number | null,
+): { text: string; good: boolean } {
+  if (campaign.status !== "OPEN")
+    return { text: label(campaign.status), good: false };
+
+  const deadlineMs = /^\d+$/.test(campaign.closes_at)
+    ? Number(campaign.closes_at) * 1000
+    : NaN;
+  if (nowMs === null || !Number.isFinite(nowMs) || !Number.isFinite(deadlineMs))
+    return { text: "Checking deadline", good: false };
+
+  // OPEN is stored until a closing transaction; entry eligibility expires first.
+  if (nowMs >= deadlineMs)
+    return {
+      text: campaign.active_attempt
+        ? "Deadline passed — attempt in progress"
+        : "Deadline passed — awaiting closure",
+      good: false,
+    };
+  return { text: "open", good: true };
+}
 export const short = (value: string) =>
   value.length > 16 ? value.slice(0, 7) + "…" + value.slice(-5) : value;
 export const date = (unix: string) =>

@@ -27,6 +27,7 @@ import {
   RULE,
   activeStage,
   backupKey,
+  campaignStatus,
   date,
   downloadBackup,
   friendly,
@@ -90,6 +91,33 @@ function Badge({
       className={`badge ${control ? "control" : status === "CONFIRMED_FINDING" || status === "OPEN" ? "good" : ""}`}
     >
       {control ? "Seeded control" : label(status)}
+    </span>
+  );
+}
+function CampaignBadge({ campaign }: { campaign: Campaign }) {
+  const [now, setNow] = useState<number | null>(null);
+  useEffect(() => {
+    if (campaign.status !== "OPEN") return;
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    const update = () => {
+      clearTimeout(timer);
+      const current = Date.now();
+      setNow(current);
+      const remaining = Number(campaign.closes_at) * 1000 - current;
+      if (Number.isFinite(remaining) && remaining > 0)
+        timer = setTimeout(update, Math.min(remaining, 60_000));
+    };
+    update();
+    document.addEventListener("visibilitychange", update);
+    return () => {
+      clearTimeout(timer);
+      document.removeEventListener("visibilitychange", update);
+    };
+  }, [campaign.closes_at, campaign.status]);
+  const status = campaignStatus(campaign, now);
+  return (
+    <span className={`badge campaign-status${status.good ? " good" : ""}`}>
+      {status.text}
     </span>
   );
 }
@@ -535,7 +563,7 @@ function Range() {
               >
                 <div className="card-top">
                   <span className="mono">{c.id}</span>
-                  <Badge status={c.status} />
+                  <CampaignBadge campaign={c} />
                 </div>
                 <h3>{c.title}</h3>
                 <div className="card-profile">
@@ -778,7 +806,7 @@ function CampaignPage({ id }: { id: string }) {
       </Link>
       <div className="section-heading">
         <p className="eyebrow">Campaign / {id}</p>
-        <Badge status={c.status} />
+        <CampaignBadge campaign={c} />
       </div>
       <h1 className="detail-title">{c.title}</h1>
       {c.seeded_control && (

@@ -433,6 +433,14 @@ p {
   border-color: #70814d;
   background: #7181441b;
 }
+.badge.campaign-status {
+  max-width: 100%;
+  min-width: 0;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  line-height: 1.4;
+  text-align: center;
+}
 .badge.control {
   color: var(--orange);
   border-color: #97754f;
