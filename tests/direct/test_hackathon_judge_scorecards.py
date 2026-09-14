@@ -72,6 +72,47 @@ def test_weighted_scorecard_and_citations_are_reproducible(direct_vm, direct_dep
     assert history["current"]["decision"]["criteria"][0]["refs"][0]["excerpt"] == c.get_submission_evidence(e, 0)["evidence_snapshot"].splitlines()[0]
 
 
+def test_single_line_model_references_normalize_and_independent_validator_agrees(direct_vm, direct_deploy, direct_alice, direct_bob):
+    c, e = deploy(direct_vm, direct_deploy, direct_alice)
+    old._submit(direct_vm, c, direct_bob, e)
+    old._warp_to(direct_vm, DEADLINE + 1)
+    raw = judgment(direct_vm, mutate=lambda raw: [row.update(refs=[{"source": "original", "line": 1}]) for row in raw["criteria"]])
+    c.evaluate_submission(e, 0)
+    assert direct_vm.run_validator()
+    ref = c.get_scorecard_history(e, 0)["current"]["decision"]["criteria"][0]["refs"][0]
+    assert ref["start"] == ref["end"] == 1 and "line" not in ref
+    assert raw["criteria"][0]["refs"][0]["line"] == 1
+
+
+def test_invalid_reference_gets_one_independently_repeated_repair_attempt(direct_vm, direct_deploy, direct_alice, direct_bob):
+    c, e = deploy(direct_vm, direct_deploy, direct_alice)
+    old._submit(direct_vm, c, direct_bob, e)
+    old._warp_to(direct_vm, DEADLINE + 1)
+    valid = judgment(direct_vm, mutate=lambda raw: [row.update(refs=[{"source": "original", "line": 1}]) for row in raw["criteria"]])
+    invalid = copy.deepcopy(valid)
+    invalid["criteria"][0]["refs"] = [{"source": "original", "line": 999}]
+    direct_vm.clear_mocks()
+    direct_vm.mock_llm(r"(?s)^(?!.*SCHEMA_REPAIR:).*independent hackathon jury.*", json.dumps(invalid))
+    direct_vm.mock_llm(r"(?s).*SCHEMA_REPAIR:.*", json.dumps(valid))
+    c.evaluate_submission(e, 0)
+    assert direct_vm.run_validator()
+    assert c.get_submission(e, 0)["score_total_bps"] == "7400"
+
+
+def test_failed_repair_never_changes_a_pending_appeal(direct_vm, direct_deploy, direct_alice, direct_bob):
+    c, e = ready(direct_vm, direct_deploy, direct_alice, direct_bob)
+    before = c.get_scorecard_history(e, 0)
+    direct_vm.sender = direct_bob
+    c.appeal_submission(e, 0, STATEMENT, "", "execution")
+    judgment(direct_vm, (100,), target="execution", mutate=lambda raw: raw["criteria"][0].update(refs=[{"source": "original", "line": 999}]))
+    with pytest.raises(Exception, match="LLM_ERROR"):
+        c.resolve_appeal(e, 0)
+    after = c.get_scorecard_history(e, 0)
+    assert after["effective_status"] == "APPEAL_PENDING"
+    assert after["original"] == before["original"] and after["current"] == before["current"]
+    assert c.get_config()["max_scorecard_prompt_attempts"] == "2"
+
+
 @pytest.mark.parametrize("mutate", [
     lambda x: x.clear(), lambda x: x.pop(), lambda x: x.extend(copy.deepcopy(x) * 2),
     lambda x: x[0].update(weight=69), lambda x: x[0].update(weight=True),

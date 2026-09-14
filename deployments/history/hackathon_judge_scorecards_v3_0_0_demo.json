@@ -1,0 +1,612 @@
+{
+  "network": "studionet",
+  "contract": "0xCBebB5EDAf1323A6561d1b96911306E531355c1d",
+  "contract_version": "3.0.0",
+  "event_name": "Transparent Scorecards \u2014 Milestone 1",
+  "wallets": {
+    "organizer": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
+    "control": "0xdb134894e5466C380d026E12D364D9B5A9D70807",
+    "appeal": "0x808fC6c1Db96663008e0534479f86A0467a7eb00"
+  },
+  "started_at": "2026-09-14T02:40:52.953007+00:00",
+  "fixture_notice": "Controlled acceptance fixtures; not independent projects, users or adoption.",
+  "transactions": {
+    "deposit_prize": {
+      "transaction_hash": "0xe47f2978018570821ae923eb9c22db9cc5fe26beb23398530bead34f8ccfd0ad",
+      "method": "deposit",
+      "args": [],
+      "sender": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
+      "role": "organizer",
+      "value_atto": "1000000000000000",
+      "submitted_at": "2026-09-14T02:41:09.116877+00:00",
+      "expected_error": "",
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "checked_at": "2026-09-14T02:41:47.503119+00:00"
+    },
+    "create_event": {
+      "transaction_hash": "0x9165bdd740c0c836c2dbd46835619bb7711a522df6d7e8bbd836399f16c1d780",
+      "method": "create_hackathon",
+      "args": [
+        "Transparent Scorecards \u2014 Milestone 1",
+        "Auditable judging milestone",
+        "This is a controlled release-acceptance demonstration, not an originality contest or a claim of real adoption. An eligible entry must document the implemented GenLayer scorecard workflow and provide a public contract address, source URL and app URL. Missing the deployment transaction hash affects reproducibility scoring, not eligibility. Judge the recorded text under the three locked criteria. Fixture labels are not scoring instructions.",
+        "[{\"id\": \"implementation\", \"name\": \"Implementation\", \"weight\": 40, \"description\": \"Assess coherent implemented functionality and limitations. Score 80 for a working described scorecard, evidence-reference and appeal workflow with a public contract and app. Score 100 only with independent real-user adoption evidence; these controlled fixtures have none. Score 40 for a concept without implementation.\"}, {\"id\": \"reproducibility\", \"name\": \"Reproducibility\", \"weight\": 40, \"description\": \"Score 40 when an otherwise documented build omits its exact deployment transaction hash. Score 80 when exact contract address, deployment transaction hash, source and app links are supplied but detailed executable verification commands are absent. Score 100 when those identifiers AND executable verification commands and explicit expected outcomes are supplied. New authenticated appeal evidence may supply the missing items.\"}, {\"id\": \"usability\", \"name\": \"Reviewer clarity\", \"weight\": 20, \"description\": \"Assess clarity of the documented reviewer journey. Score 80 for clear steps to open a docket, inspect a scorecard and inspect cited frozen evidence with limitations disclosed. Score 100 only with independent usability-study evidence; these controlled fixtures have none. Score 40 when reviewer steps are absent.\"}]",
+        1789354607,
+        3,
+        60,
+        300,
+        1000000000000000
+      ],
+      "sender": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
+      "role": "organizer",
+      "value_atto": "0",
+      "submitted_at": "2026-09-14T02:41:53.626533+00:00",
+      "expected_error": "",
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "checked_at": "2026-09-14T03:06:26.350926+00:00"
+    },
+    "reject_wrong_wallet": {
+      "transaction_hash": "0x496d9bbfb82e58ea26a979e3cb9114b358a051e707db2faf8ac8b9bb0488413d",
+      "method": "submit_project",
+      "args": [
+        "hj-1",
+        "Wrong wallet attempt",
+        "https://github.com/Demigodd00/demigodd00-genlayer-apps/blob/main/docs/evidence/hackathon-judge-v3/control.txt",
+        "A negative test attempting to replay another entrant's evidence package."
+      ],
+      "sender": "0x808fC6c1Db96663008e0534479f86A0467a7eb00",
+      "role": "appeal",
+      "value_atto": "0",
+      "submitted_at": "2026-09-14T02:45:18.609514+00:00",
+      "expected_error": "missing exact wallet and event provenance challenge",
+      "status": "FINALIZED",
+      "execution_succeeded": false,
+      "checked_at": "2026-09-14T02:45:56.574428+00:00",
+      "expected_rejection_verified": true
+    },
+    "submit_control": {
+      "transaction_hash": "0xd60a92949a1d42e3090d8e6b23ffcd72275154166f37d1f361353feaf8dc69e2",
+      "method": "submit_project",
+      "args": [
+        "hj-1",
+        "Documented Control Fixture",
+        "https://github.com/Demigodd00/demigodd00-genlayer-apps/blob/main/docs/evidence/hackathon-judge-v3/control.txt",
+        "A controlled release fixture with complete public identifiers and a concise reviewer journey, but no executable verification commands."
+      ],
+      "sender": "0xdb134894e5466C380d026E12D364D9B5A9D70807",
+      "role": "control",
+      "value_atto": "0",
+      "submitted_at": "2026-09-14T02:46:04.578137+00:00",
+      "expected_error": "",
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "checked_at": "2026-09-14T03:06:30.107340+00:00"
+    },
+    "submit_entrant": {
+      "transaction_hash": "0x1dc53b99168806c59da87b6c51ebf8c401b8d526c4743cefb6b9e5cb3db61412",
+      "method": "submit_project",
+      "args": [
+        "hj-1",
+        "Score Appeal Fixture",
+        "https://github.com/Demigodd00/demigodd00-genlayer-apps/blob/main/docs/evidence/hackathon-judge-v3/entrant.txt",
+        "A controlled release fixture demonstrating an eligible entry with incomplete reproducibility evidence and a criterion-specific appeal."
+      ],
+      "sender": "0x808fC6c1Db96663008e0534479f86A0467a7eb00",
+      "role": "appeal",
+      "value_atto": "0",
+      "submitted_at": "2026-09-14T02:46:54.322739+00:00",
+      "expected_error": "",
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "checked_at": "2026-09-14T03:06:31.326044+00:00"
+    },
+    "judge_0": {
+      "transaction_hash": "0x614c36a2040c5366be0c9bf5003947d8517463821d9b6acdc1ee215bfb44d7bb",
+      "method": "evaluate_submission",
+      "args": [
+        "hj-1",
+        0
+      ],
+      "sender": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
+      "role": "organizer",
+      "value_atto": "0",
+      "submitted_at": "2026-09-14T02:56:54.924783+00:00",
+      "expected_error": "",
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "checked_at": "2026-09-14T03:06:34.800337+00:00"
+    },
+    "judge_1": {
+      "transaction_hash": "0x68c7ec79163eeba801a621f8ee24d1e537e8f70eb952aeafa3e8b3615c306c37",
+      "method": "evaluate_submission",
+      "args": [
+        "hj-1",
+        1
+      ],
+      "sender": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
+      "role": "organizer",
+      "value_atto": "0",
+      "submitted_at": "2026-09-14T02:58:22.269240+00:00",
+      "expected_error": "",
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "checked_at": "2026-09-14T03:06:36.009266+00:00"
+    },
+    "reject_premature_settlement": {
+      "transaction_hash": "0xef8c7bddf406c2aaf3a1a981fb638b781e0fa7e29bc76fbe0667456160824bcd",
+      "method": "finalize_hackathon",
+      "args": [
+        "hj-1"
+      ],
+      "sender": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
+      "role": "organizer",
+      "value_atto": "0",
+      "submitted_at": "2026-09-14T02:59:30.014731+00:00",
+      "expected_error": "an appeal is pending or its window is still open",
+      "status": "FINALIZED",
+      "execution_succeeded": false,
+      "checked_at": "2026-09-14T03:00:08.046487+00:00",
+      "expected_rejection_verified": true
+    },
+    "appeal_score": {
+      "transaction_hash": "0x4a785a02d02dfa1dd455d4f1d642c3618656c4d6e363eff0406c9ee2a3e9f862",
+      "method": "appeal_submission",
+      "args": [
+        "hj-1",
+        1,
+        "Please reassess only reproducibility. The original evidence omitted the deployment transaction hash. The authenticated addendum supplies that exact identifier, verification commands and expected outcomes under the locked rubric.",
+        "https://github.com/Demigodd00/demigodd00-genlayer-apps/blob/main/docs/evidence/hackathon-judge-v3/appeal.txt",
+        "reproducibility"
+      ],
+      "sender": "0x808fC6c1Db96663008e0534479f86A0467a7eb00",
+      "role": "appeal",
+      "value_atto": "0",
+      "submitted_at": "2026-09-14T03:00:16.082871+00:00",
+      "expected_error": "",
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "checked_at": "2026-09-14T03:06:37.258795+00:00"
+    },
+    "resolve_score_appeal": {
+      "transaction_hash": "0x7a54e7cbb800d2e72709c232116c90a98408ec01d92b79a99b8d3fd4e446128d",
+      "method": "resolve_appeal",
+      "args": [
+        "hj-1",
+        1
+      ],
+      "sender": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
+      "role": "organizer",
+      "value_atto": "0",
+      "submitted_at": "2026-09-14T03:06:42.997622+00:00",
+      "expected_error": "",
+      "status": "FINALIZED",
+      "execution_succeeded": false,
+      "checked_at": "2026-09-14T03:08:16.384460+00:00"
+    }
+  },
+  "assertions": {},
+  "criteria": [
+    {
+      "id": "implementation",
+      "name": "Implementation",
+      "weight": 40,
+      "description": "Assess coherent implemented functionality and limitations. Score 80 for a working described scorecard, evidence-reference and appeal workflow with a public contract and app. Score 100 only with independent real-user adoption evidence; these controlled fixtures have none. Score 40 for a concept without implementation."
+    },
+    {
+      "id": "reproducibility",
+      "name": "Reproducibility",
+      "weight": 40,
+      "description": "Score 40 when an otherwise documented build omits its exact deployment transaction hash. Score 80 when exact contract address, deployment transaction hash, source and app links are supplied but detailed executable verification commands are absent. Score 100 when those identifiers AND executable verification commands and explicit expected outcomes are supplied. New authenticated appeal evidence may supply the missing items."
+    },
+    {
+      "id": "usability",
+      "name": "Reviewer clarity",
+      "weight": 20,
+      "description": "Assess clarity of the documented reviewer journey. Score 80 for clear steps to open a docket, inspect a scorecard and inspect cited frozen evidence with limitations disclosed. Score 100 only with independent usability-study evidence; these controlled fixtures have none. Score 40 when reviewer steps are absent."
+    }
+  ],
+  "updated_at": "2026-09-14T03:08:16.384460+00:00",
+  "funding_transaction_hash": "0xbb2ad7edcb71af821bf84c7cdc63ca63df4069ae1c208164a8bdcaa5075600f6",
+  "submission_deadline_unix": 1789354607,
+  "hackathon_id": "hj-1",
+  "original_challenges": {
+    "control": "HJ-PROVENANCE-V1|studionet|0xcbebb5edaf1323a6561d1b96911306e531355c1d|hj-1|0xdb134894e5466c380d026e12d364d9b5a9d70807|demigodd00/demigodd00-genlayer-apps|docs/evidence/hackathon-judge-v3/control.txt|submission|none",
+    "appeal": "HJ-PROVENANCE-V1|studionet|0xcbebb5edaf1323a6561d1b96911306e531355c1d|hj-1|0x808fc6c1db96663008e0534479f86a0467a7eb00|demigodd00/demigodd00-genlayer-apps|docs/evidence/hackathon-judge-v3/entrant.txt|submission|none"
+  },
+  "wrong_wallet_submission_count_after": "0",
+  "appeal_challenge": "HJ-PROVENANCE-V1|studionet|0xcbebb5edaf1323a6561d1b96911306e531355c1d|hj-1|0x808fc6c1db96663008e0534479f86a0467a7eb00|demigodd00/demigodd00-genlayer-apps|docs/evidence/hackathon-judge-v3/appeal.txt|appeal|cfe67f7ac57ab36e2be1db8bccdb30447be4bbaddc55cad65789639c926a62ba",
+  "challenge_view_verified": true,
+  "initial_histories": [
+    {
+      "appeal_resolved": false,
+      "appeal_statement": "",
+      "appeal_target": "",
+      "common_appeal_deadline_unix": "1789355001",
+      "criteria": [
+        {
+          "description": "Assess coherent implemented functionality and limitations. Score 80 for a working described scorecard, evidence-reference and appeal workflow with a public contract and app. Score 100 only with independent real-user adoption evidence; these controlled fixtures have none. Score 40 for a concept without implementation.",
+          "id": "implementation",
+          "name": "Implementation",
+          "weight": 40
+        },
+        {
+          "description": "Score 40 when an otherwise documented build omits its exact deployment transaction hash. Score 80 when exact contract address, deployment transaction hash, source and app links are supplied but detailed executable verification commands are absent. Score 100 when those identifiers AND executable verification commands and explicit expected outcomes are supplied. New authenticated appeal evidence may supply the missing items.",
+          "id": "reproducibility",
+          "name": "Reproducibility",
+          "weight": 40
+        },
+        {
+          "description": "Assess clarity of the documented reviewer journey. Score 80 for clear steps to open a docket, inspect a scorecard and inspect cited frozen evidence with limitations disclosed. Score 100 only with independent usability-study evidence; these controlled fixtures have none. Score 40 when reviewer steps are absent.",
+          "id": "usability",
+          "name": "Reviewer clarity",
+          "weight": 20
+        }
+      ],
+      "current": {
+        "appeal_package_digest": "",
+        "appeal_statement_digest": "",
+        "appeal_target": "",
+        "contract": "0xcbebb5edaf1323a6561d1b96911306e531355c1d",
+        "decision": {
+          "confidence_bucket": 80,
+          "criteria": [
+            {
+              "id": "implementation",
+              "reason": "Contract implements locked weighted criteria, criterion scores, evidence citations, appeal workflow, and settlement. Public contract and app links are provided. No independent real-user adoption evidence is present per line 4 and 14.",
+              "refs": [
+                {
+                  "end": 6,
+                  "excerpt": "The GenLayer contract implements locked weighted criteria, independently compared criterion scores, exact integer weighted totals, evidence citations, a common appeal window, one targeted score appeal, preserved original scorecards, and settlement after appeals close.\nFrozen evidence comes from wallet-bound GitHub files. Citation excerpts are derived from recorded line ranges; location checking does not establish the truth of a claim or correctness of an AI judgment.",
+                  "source": "original",
+                  "start": 5
+                },
+                {
+                  "end": 13,
+                  "excerpt": "The updated app has a weighted rubric editor, per-criterion original and latest scores, expandable evidence excerpts, immutable record digests, and a criterion selector for eligible appeals. The v3 UI is being published as part of this release; the existing public site may still show the accepted v2.3 build during acceptance testing.\nReviewer journey after publication: open the app, select Transparent Scorecards \u2014 Milestone 1, and inspect the submission docket. Choose View scorecard, compare original and latest criterion scores and totals, then expand an evidence citation and inspect immutable records. Choose Frozen evidence to see the saved evidence text.",
+                  "source": "original",
+                  "start": 12
+                }
+              ],
+              "score_band": 80
+            },
+            {
+              "id": "reproducibility",
+              "reason": "Exact contract address (line 7), deployment transaction hash (line 8), contract source URL (line 9), app source (line 10), and public app URL (line 11) are all supplied. Line 15 explicitly states no executable verification commands are provided.",
+              "refs": [
+                {
+                  "end": 11,
+                  "excerpt": "Public v3 contract on StudioNet: 0xCBebB5EDAf1323A6561d1b96911306E531355c1d\nExact deployment transaction: 0x2a295b10b0de3fb9be008984ce888f79e18459c6770887747b2813559afb131f\nContract source: https://github.com/Demigodd00/demigodd00-genlayer-apps/blob/main/contracts/hackathon_judge_scorecards.py\nApp source: https://github.com/Demigodd00/demigodd00-genlayer-apps/tree/main/apps/hackathon-judge-web\nPublic app: https://hackathon-judge-studionet.blazekingsley2.chatgpt.site/",
+                  "source": "original",
+                  "start": 7
+                },
+                {
+                  "end": 15,
+                  "excerpt": "This control fixture intentionally provides public identifiers and reviewer navigation without executable verification commands.",
+                  "source": "original",
+                  "start": 15
+                }
+              ],
+              "score_band": 80
+            },
+            {
+              "id": "usability",
+              "reason": "Line 13 provides a clear reviewer journey: open app, select hackathon, inspect docket, view scorecard, compare scores, expand evidence citations, inspect immutable records, and view frozen evidence. Limitations are disclosed. No usability study evidence present.",
+              "refs": [
+                {
+                  "end": 14,
+                  "excerpt": "Reviewer journey after publication: open the app, select Transparent Scorecards \u2014 Milestone 1, and inspect the submission docket. Choose View scorecard, compare original and latest criterion scores and totals, then expand an evidence citation and inspect immutable records. Choose Frozen evidence to see the saved evidence text.\nLimitations: StudioNet uses simulated GEN. No real payout or real-user traction is claimed. Judging remains subjective; consensus does not guarantee fairness or factual correctness. Evidence provenance demonstrates repository control and wallet binding, not legal ownership.",
+                  "source": "original",
+                  "start": 13
+                }
+              ],
+              "score_band": 80
+            }
+          ],
+          "eligibility": "ELIGIBLE",
+          "reason": "Entry documents a GenLayer scorecard workflow with public contract address, source URL, and app URL as required by the rulebook. All eligibility requirements are met.",
+          "score_total_bps": 8000
+        },
+        "entrant": "0xdb134894e5466c380d026e12d364d9b5a9d70807",
+        "evaluated_at_iso": "2026-09-14T02:56:54+00:00",
+        "hackathon_id": "hj-1",
+        "original_package_digest": "aabc35e11ee55ac0ea2493e5ee8f612ee767c451bc8b9960d203b22675341e1e",
+        "parent_scorecard_digest": "",
+        "phase": "initial",
+        "rubric_digest": "319a8ea9d53ce99330e7c005e6b73d4cb5eee72ef875bcaac87acb0715e24e66",
+        "schema": "hackathon-judge-scorecard-v1",
+        "submission_index": 0
+      },
+      "current_digest": "ecf00f93d4857da7975eb383398c705c284a2928d258d4c0ddf408034cc0d43b",
+      "current_rank": "1",
+      "effective_at_iso": "2026-09-14T02:56:54+00:00",
+      "effective_eligibility": "ELIGIBLE",
+      "effective_status": "JUDGED",
+      "effective_total_bps": "8000",
+      "judgment_timed_out": false,
+      "original": {
+        "appeal_package_digest": "",
+        "appeal_statement_digest": "",
+        "appeal_target": "",
+        "contract": "0xcbebb5edaf1323a6561d1b96911306e531355c1d",
+        "decision": {
+          "confidence_bucket": 80,
+          "criteria": [
+            {
+              "id": "implementation",
+              "reason": "Contract implements locked weighted criteria, criterion scores, evidence citations, appeal workflow, and settlement. Public contract and app links are provided. No independent real-user adoption evidence is present per line 4 and 14.",
+              "refs": [
+                {
+                  "end": 6,
+                  "excerpt": "The GenLayer contract implements locked weighted criteria, independently compared criterion scores, exact integer weighted totals, evidence citations, a common appeal window, one targeted score appeal, preserved original scorecards, and settlement after appeals close.\nFrozen evidence comes from wallet-bound GitHub files. Citation excerpts are derived from recorded line ranges; location checking does not establish the truth of a claim or correctness of an AI judgment.",
+                  "source": "original",
+                  "start": 5
+                },
+                {
+                  "end": 13,
+                  "excerpt": "The updated app has a weighted rubric editor, per-criterion original and latest scores, expandable evidence excerpts, immutable record digests, and a criterion selector for eligible appeals. The v3 UI is being published as part of this release; the existing public site may still show the accepted v2.3 build during acceptance testing.\nReviewer journey after publication: open the app, select Transparent Scorecards \u2014 Milestone 1, and inspect the submission docket. Choose View scorecard, compare original and latest criterion scores and totals, then expand an evidence citation and inspect immutable records. Choose Frozen evidence to see the saved evidence text.",
+                  "source": "original",
+                  "start": 12
+                }
+              ],
+              "score_band": 80
+            },
+            {
+              "id": "reproducibility",
+              "reason": "Exact contract address (line 7), deployment transaction hash (line 8), contract source URL (line 9), app source (line 10), and public app URL (line 11) are all supplied. Line 15 explicitly states no executable verification commands are provided.",
+              "refs": [
+                {
+                  "end": 11,
+                  "excerpt": "Public v3 contract on StudioNet: 0xCBebB5EDAf1323A6561d1b96911306E531355c1d\nExact deployment transaction: 0x2a295b10b0de3fb9be008984ce888f79e18459c6770887747b2813559afb131f\nContract source: https://github.com/Demigodd00/demigodd00-genlayer-apps/blob/main/contracts/hackathon_judge_scorecards.py\nApp source: https://github.com/Demigodd00/demigodd00-genlayer-apps/tree/main/apps/hackathon-judge-web\nPublic app: https://hackathon-judge-studionet.blazekingsley2.chatgpt.site/",
+                  "source": "original",
+                  "start": 7
+                },
+                {
+                  "end": 15,
+                  "excerpt": "This control fixture intentionally provides public identifiers and reviewer navigation without executable verification commands.",
+                  "source": "original",
+                  "start": 15
+                }
+              ],
+              "score_band": 80
+            },
+            {
+              "id": "usability",
+              "reason": "Line 13 provides a clear reviewer journey: open app, select hackathon, inspect docket, view scorecard, compare scores, expand evidence citations, inspect immutable records, and view frozen evidence. Limitations are disclosed. No usability study evidence present.",
+              "refs": [
+                {
+                  "end": 14,
+                  "excerpt": "Reviewer journey after publication: open the app, select Transparent Scorecards \u2014 Milestone 1, and inspect the submission docket. Choose View scorecard, compare original and latest criterion scores and totals, then expand an evidence citation and inspect immutable records. Choose Frozen evidence to see the saved evidence text.\nLimitations: StudioNet uses simulated GEN. No real payout or real-user traction is claimed. Judging remains subjective; consensus does not guarantee fairness or factual correctness. Evidence provenance demonstrates repository control and wallet binding, not legal ownership.",
+                  "source": "original",
+                  "start": 13
+                }
+              ],
+              "score_band": 80
+            }
+          ],
+          "eligibility": "ELIGIBLE",
+          "reason": "Entry documents a GenLayer scorecard workflow with public contract address, source URL, and app URL as required by the rulebook. All eligibility requirements are met.",
+          "score_total_bps": 8000
+        },
+        "entrant": "0xdb134894e5466c380d026e12d364d9b5a9d70807",
+        "evaluated_at_iso": "2026-09-14T02:56:54+00:00",
+        "hackathon_id": "hj-1",
+        "original_package_digest": "aabc35e11ee55ac0ea2493e5ee8f612ee767c451bc8b9960d203b22675341e1e",
+        "parent_scorecard_digest": "",
+        "phase": "initial",
+        "rubric_digest": "319a8ea9d53ce99330e7c005e6b73d4cb5eee72ef875bcaac87acb0715e24e66",
+        "schema": "hackathon-judge-scorecard-v1",
+        "submission_index": 0
+      },
+      "original_digest": "ecf00f93d4857da7975eb383398c705c284a2928d258d4c0ddf408034cc0d43b",
+      "original_rank": "1",
+      "rubric_digest": "319a8ea9d53ce99330e7c005e6b73d4cb5eee72ef875bcaac87acb0715e24e66"
+    },
+    {
+      "appeal_resolved": false,
+      "appeal_statement": "",
+      "appeal_target": "",
+      "common_appeal_deadline_unix": "1789355001",
+      "criteria": [
+        {
+          "description": "Assess coherent implemented functionality and limitations. Score 80 for a working described scorecard, evidence-reference and appeal workflow with a public contract and app. Score 100 only with independent real-user adoption evidence; these controlled fixtures have none. Score 40 for a concept without implementation.",
+          "id": "implementation",
+          "name": "Implementation",
+          "weight": 40
+        },
+        {
+          "description": "Score 40 when an otherwise documented build omits its exact deployment transaction hash. Score 80 when exact contract address, deployment transaction hash, source and app links are supplied but detailed executable verification commands are absent. Score 100 when those identifiers AND executable verification commands and explicit expected outcomes are supplied. New authenticated appeal evidence may supply the missing items.",
+          "id": "reproducibility",
+          "name": "Reproducibility",
+          "weight": 40
+        },
+        {
+          "description": "Assess clarity of the documented reviewer journey. Score 80 for clear steps to open a docket, inspect a scorecard and inspect cited frozen evidence with limitations disclosed. Score 100 only with independent usability-study evidence; these controlled fixtures have none. Score 40 when reviewer steps are absent.",
+          "id": "usability",
+          "name": "Reviewer clarity",
+          "weight": 20
+        }
+      ],
+      "current": {
+        "appeal_package_digest": "",
+        "appeal_statement_digest": "",
+        "appeal_target": "",
+        "contract": "0xcbebb5edaf1323a6561d1b96911306e531355c1d",
+        "decision": {
+          "confidence_bucket": 100,
+          "criteria": [
+            {
+              "id": "implementation",
+              "reason": "Describes and implements a working scorecard, evidence-reference, and appeal workflow with public contract and app, but lacks independent real-user adoption.",
+              "refs": [
+                {
+                  "end": 5,
+                  "excerpt": "The GenLayer contract implements locked weighted criteria, independently compared criterion scores, exact integer weighted totals, evidence citations, a common appeal window, one targeted score appeal, preserved original scorecards, and settlement after appeals close.",
+                  "source": "original",
+                  "start": 5
+                },
+                {
+                  "end": 10,
+                  "excerpt": "Public v3 contract on StudioNet: 0xCBebB5EDAf1323A6561d1b96911306E531355c1d\nContract source: https://github.com/Demigodd00/demigodd00-genlayer-apps/blob/main/contracts/hackathon_judge_scorecards.py\nApp source: https://github.com/Demigodd00/demigodd00-genlayer-apps/tree/main/apps/hackathon-judge-web\nPublic app: https://hackathon-judge-studionet.blazekingsley2.chatgpt.site/",
+                  "source": "original",
+                  "start": 7
+                }
+              ],
+              "score_band": 80
+            },
+            {
+              "id": "reproducibility",
+              "reason": "Omits exact deployment transaction hash and executable verification commands; contract address and sources are provided.",
+              "refs": [
+                {
+                  "end": 10,
+                  "excerpt": "Public v3 contract on StudioNet: 0xCBebB5EDAf1323A6561d1b96911306E531355c1d\nContract source: https://github.com/Demigodd00/demigodd00-genlayer-apps/blob/main/contracts/hackathon_judge_scorecards.py\nApp source: https://github.com/Demigodd00/demigodd00-genlayer-apps/tree/main/apps/hackathon-judge-web\nPublic app: https://hackathon-judge-studionet.blazekingsley2.chatgpt.site/",
+                  "source": "original",
+                  "start": 7
+                },
+                {
+                  "end": 14,
+                  "excerpt": "Evidence gap: this original package deliberately omits the exact deployment transaction hash and executable verification commands. The locked event rules treat that omission as a reproducibility scoring issue, not an eligibility failure. Any later addendum must be authenticated against this frozen original package.",
+                  "source": "original",
+                  "start": 14
+                }
+              ],
+              "score_band": 40
+            },
+            {
+              "id": "usability",
+              "reason": "Provides clear steps for reviewers to open docket, inspect scorecards and frozen evidence, though no independent usability study exists.",
+              "refs": [
+                {
+                  "end": 12,
+                  "excerpt": "Reviewer journey after publication: open the app, select Transparent Scorecards \u2014 Milestone 1, and inspect the submission docket. Choose View scorecard, compare original and latest criterion scores and totals, then expand an evidence citation and inspect immutable records. Choose Frozen evidence to see the saved evidence text.",
+                  "source": "original",
+                  "start": 12
+                }
+              ],
+              "score_band": 80
+            }
+          ],
+          "eligibility": "ELIGIBLE",
+          "reason": "Entry documents GenLayer scorecard workflow with public contract, source, and app. Missing deployment transaction hash affects reproducibility score only, not eligibility.",
+          "score_total_bps": 6400
+        },
+        "entrant": "0x808fc6c1db96663008e0534479f86a0467a7eb00",
+        "evaluated_at_iso": "2026-09-14T02:58:21+00:00",
+        "hackathon_id": "hj-1",
+        "original_package_digest": "cfe67f7ac57ab36e2be1db8bccdb30447be4bbaddc55cad65789639c926a62ba",
+        "parent_scorecard_digest": "",
+        "phase": "initial",
+        "rubric_digest": "319a8ea9d53ce99330e7c005e6b73d4cb5eee72ef875bcaac87acb0715e24e66",
+        "schema": "hackathon-judge-scorecard-v1",
+        "submission_index": 1
+      },
+      "current_digest": "db8ad5385f7bd72e544662ff3c9830f880fe08d147fae6e2b23fe408f47dbd6d",
+      "current_rank": "2",
+      "effective_at_iso": "2026-09-14T02:58:21+00:00",
+      "effective_eligibility": "ELIGIBLE",
+      "effective_status": "JUDGED",
+      "effective_total_bps": "6400",
+      "judgment_timed_out": false,
+      "original": {
+        "appeal_package_digest": "",
+        "appeal_statement_digest": "",
+        "appeal_target": "",
+        "contract": "0xcbebb5edaf1323a6561d1b96911306e531355c1d",
+        "decision": {
+          "confidence_bucket": 100,
+          "criteria": [
+            {
+              "id": "implementation",
+              "reason": "Describes and implements a working scorecard, evidence-reference, and appeal workflow with public contract and app, but lacks independent real-user adoption.",
+              "refs": [
+                {
+                  "end": 5,
+                  "excerpt": "The GenLayer contract implements locked weighted criteria, independently compared criterion scores, exact integer weighted totals, evidence citations, a common appeal window, one targeted score appeal, preserved original scorecards, and settlement after appeals close.",
+                  "source": "original",
+                  "start": 5
+                },
+                {
+                  "end": 10,
+                  "excerpt": "Public v3 contract on StudioNet: 0xCBebB5EDAf1323A6561d1b96911306E531355c1d\nContract source: https://github.com/Demigodd00/demigodd00-genlayer-apps/blob/main/contracts/hackathon_judge_scorecards.py\nApp source: https://github.com/Demigodd00/demigodd00-genlayer-apps/tree/main/apps/hackathon-judge-web\nPublic app: https://hackathon-judge-studionet.blazekingsley2.chatgpt.site/",
+                  "source": "original",
+                  "start": 7
+                }
+              ],
+              "score_band": 80
+            },
+            {
+              "id": "reproducibility",
+              "reason": "Omits exact deployment transaction hash and executable verification commands; contract address and sources are provided.",
+              "refs": [
+                {
+                  "end": 10,
+                  "excerpt": "Public v3 contract on StudioNet: 0xCBebB5EDAf1323A6561d1b96911306E531355c1d\nContract source: https://github.com/Demigodd00/demigodd00-genlayer-apps/blob/main/contracts/hackathon_judge_scorecards.py\nApp source: https://github.com/Demigodd00/demigodd00-genlayer-apps/tree/main/apps/hackathon-judge-web\nPublic app: https://hackathon-judge-studionet.blazekingsley2.chatgpt.site/",
+                  "source": "original",
+                  "start": 7
+                },
+                {
+                  "end": 14,
+                  "excerpt": "Evidence gap: this original package deliberately omits the exact deployment transaction hash and executable verification commands. The locked event rules treat that omission as a reproducibility scoring issue, not an eligibility failure. Any later addendum must be authenticated against this frozen original package.",
+                  "source": "original",
+                  "start": 14
+                }
+              ],
+              "score_band": 40
+            },
+            {
+              "id": "usability",
+              "reason": "Provides clear steps for reviewers to open docket, inspect scorecards and frozen evidence, though no independent usability study exists.",
+              "refs": [
+                {
+                  "end": 12,
+                  "excerpt": "Reviewer journey after publication: open the app, select Transparent Scorecards \u2014 Milestone 1, and inspect the submission docket. Choose View scorecard, compare original and latest criterion scores and totals, then expand an evidence citation and inspect immutable records. Choose Frozen evidence to see the saved evidence text.",
+                  "source": "original",
+                  "start": 12
+                }
+              ],
+              "score_band": 80
+            }
+          ],
+          "eligibility": "ELIGIBLE",
+          "reason": "Entry documents GenLayer scorecard workflow with public contract, source, and app. Missing deployment transaction hash affects reproducibility score only, not eligibility.",
+          "score_total_bps": 6400
+        },
+        "entrant": "0x808fc6c1db96663008e0534479f86a0467a7eb00",
+        "evaluated_at_iso": "2026-09-14T02:58:21+00:00",
+        "hackathon_id": "hj-1",
+        "original_package_digest": "cfe67f7ac57ab36e2be1db8bccdb30447be4bbaddc55cad65789639c926a62ba",
+        "parent_scorecard_digest": "",
+        "phase": "initial",
+        "rubric_digest": "319a8ea9d53ce99330e7c005e6b73d4cb5eee72ef875bcaac87acb0715e24e66",
+        "schema": "hackathon-judge-scorecard-v1",
+        "submission_index": 1
+      },
+      "original_digest": "db8ad5385f7bd72e544662ff3c9830f880fe08d147fae6e2b23fe408f47dbd6d",
+      "original_rank": "2",
+      "rubric_digest": "319a8ea9d53ce99330e7c005e6b73d4cb5eee72ef875bcaac87acb0715e24e66"
+    }
+  ],
+  "premature_settlement_prize_released": false,
+  "failed_attempts": [
+    {
+      "transaction_hash": "0x1c74336096a7280f1aad2f73ed27ea95527317ad7348a09d5b5dba7a45cc208e",
+      "method": "resolve_appeal",
+      "args": [
+        "hj-1",
+        1
+      ],
+      "sender": "0x1adf37F016384714F683CaC4d0a261A6d4e27033",
+      "role": "organizer",
+      "value_atto": "0",
+      "submitted_at": "2026-09-14T03:01:08.053620+00:00",
+      "expected_error": "",
+      "status": "FINALIZED",
+      "execution_succeeded": false,
+      "checked_at": "2026-09-14T03:02:50.690935+00:00",
+      "result_name": "MAJORITY_DISAGREE",
+      "diagnostic": "Invalid citation ranges rejected; original scorecard unchanged."
+    }
+  ]
+}

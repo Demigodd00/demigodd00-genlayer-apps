@@ -14,7 +14,7 @@ from hackathon_judge_rpc import read_studionet_view
 ROOT = Path(__file__).resolve().parents[1]
 CODE = ROOT / "contracts/hackathon_judge_scorecards.py"
 RECORD = ROOT / "deployments/hackathon_judge_scorecards_studionet.json"
-PENDING = ROOT / "deployments/hackathon_judge_scorecards_deploy_pending.json"
+PENDING = ROOT / "deployments/hackathon_judge_scorecards_v3_0_1_deploy_pending.json"
 
 
 def main():
@@ -44,7 +44,7 @@ def main():
     address = baseline._extract_contract_address(receipt)
     baseline._verify_source(client, address, source)
     config = read_studionet_view(client, address, "get_config", [])
-    expected = {"version": "3.0.0", "evaluation_schema": "hackathon-judge-scorecard-v1",
+    expected = {"version": "3.0.1", "evaluation_schema": "hackathon-judge-scorecard-v1",
                 "settlement_policy": "REQUIRE_VERIFIED_EVIDENCE_SCORECARDS_AND_CLOSED_COMMON_APPEALS",
                 "appeal_policy": "ONE_TARGETED_SCORE_OR_ELIGIBILITY_APPEAL_COMMON_WINDOW",
                 "score_total_scale": "10000", "max_criteria": "4"}
@@ -52,7 +52,7 @@ def main():
         raise RuntimeError("Deployed configuration does not match the milestone")
     baseline.DEPLOYMENT_PATH = RECORD
     baseline._record_deployment({
-        "contract": "HackathonJudgeScorecards", "version": "3.0.0", "network": "studionet",
+        "contract": "HackathonJudgeScorecards", "version": "3.0.1", "network": "studionet",
         "address": address, "transaction_hash": tx, "source_path": "contracts/hackathon_judge_scorecards.py",
         "source_sha256": digest, "deployer": pending["deployer"], "deployer_role": "deployment_only_no_privileged_access",
         "signer_mode": "disposable_studionet_deployment_only", "receipt_status": "FINALIZED",

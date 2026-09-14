@@ -21,8 +21,8 @@ from hackathon_judge_rpc import read_studionet_view
 
 ROOT = Path(__file__).resolve().parents[1]
 DEPLOYMENT = ROOT / "deployments/hackathon_judge_scorecards_studionet.json"
-RECORD = ROOT / "deployments/hackathon_judge_scorecards_demo.json"
-EVIDENCE_BASE = "https://github.com/Demigodd00/demigodd00-genlayer-apps/blob/main/docs/evidence/hackathon-judge-v3/"
+RECORD = ROOT / "deployments/hackathon_judge_scorecards_v3_0_1_demo.json"
+EVIDENCE_BASE = "https://github.com/Demigodd00/demigodd00-genlayer-apps/blob/main/docs/evidence/hackathon-judge-v3-1/"
 EVENT_NAME = "Transparent Scorecards — Milestone 1"
 PRIZE = 10**15
 CRITERIA = [
@@ -89,7 +89,7 @@ def main():
     arguments = parser.parse_args()
     phase = arguments.phase
     deployment = json.loads(DEPLOYMENT.read_text(encoding="utf-8"))
-    assert deployment["version"] == "3.0.0" and deployment["network"] == "studionet"
+    assert deployment["version"] == "3.0.1" and deployment["network"] == "studionet"
     address = deployment["address"]
     owner = Account.from_key(baseline._load_signer())
     accounts = {"organizer": owner,
@@ -98,7 +98,7 @@ def main():
     clients = {name: create_client(chain=studionet, account=account) for name, account in accounts.items()}
     client = clients["organizer"]
     record = json.loads(RECORD.read_text(encoding="utf-8")) if RECORD.exists() else {
-        "network": "studionet", "contract": address, "contract_version": "3.0.0", "event_name": EVENT_NAME,
+        "network": "studionet", "contract": address, "contract_version": "3.0.1", "event_name": EVENT_NAME,
         "wallets": {name: account.address for name, account in accounts.items()}, "started_at": baseline._timestamp(),
         "fixture_notice": "Controlled acceptance fixtures; not independent projects, users or adoption.",
         "transactions": {}, "assertions": {}, "criteria": CRITERIA,
@@ -107,7 +107,7 @@ def main():
         raise RuntimeError("A different milestone demo already exists; preserve/reconcile it before a new run")
     save(record)
     config = read(client, address, "get_config", [])
-    assert config["version"] == "3.0.0" and config["evaluation_schema"] == "hackathon-judge-scorecard-v1"
+    assert config["version"] == "3.0.1" and config["evaluation_schema"] == "hackathon-judge-scorecard-v1"
     if arguments.retry_failed_resolution:
         failed = record["transactions"].get("resolve_score_appeal")
         if phase != "finish" or not failed or failed.get("status") != "FINALIZED" or failed.get("execution_succeeded") is not False:
@@ -131,7 +131,7 @@ def main():
         client.wait_for_transaction_receipt(record["funding_transaction_hash"], status=TransactionStatus.FINALIZED,
                                             interval=5000, retries=120)
         transact(record, clients, "deposit_prize", "organizer", "deposit", [], PRIZE)
-        record["submission_deadline_unix"] = int(time.time()) + 900
+        record["submission_deadline_unix"] = int(time.time()) + 600
         save(record)
     transact(record, clients, "create_event", "organizer", "create_hackathon", [EVENT_NAME, "Auditable judging milestone", RULES,
              json.dumps(CRITERIA), record["submission_deadline_unix"], 3, 60, 300, PRIZE])

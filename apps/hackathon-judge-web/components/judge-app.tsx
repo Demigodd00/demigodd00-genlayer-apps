@@ -321,7 +321,7 @@ export function JudgeApp() {
           <div className="brand-mark" aria-hidden="true"><Scale /></div>
           <div><strong>Hackathon Judge</strong><span>GenLayer-native jury protocol</span></div>
         </div>
-        <div className="network-lock"><span /> StudioNet · v3.0</div>
+        <div className="network-lock"><span /> StudioNet · v3.0.1</div>
         <div className="top-actions">
           <a className="icon-link" href="/hackathon-judge-v3-walkthrough.mp4" target="_blank" rel="noreferrer" aria-label="Watch v3 scorecards milestone walkthrough" title="v3 scorecards and score appeals"><Play /></a>
           <a className="icon-link" href={EXPLORER_URL} target="_blank" rel="noreferrer" aria-label="View contract in explorer"><ExternalLink /></a>

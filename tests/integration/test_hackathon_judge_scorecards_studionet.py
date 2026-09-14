@@ -33,9 +33,9 @@ def canonical(value):
 @pytest.mark.slow
 def test_live_v3_scorecard_history_provenance_and_settlement():
     deployment = json.loads((ROOT / 'deployments/hackathon_judge_scorecards_studionet.json').read_text())
-    demo = json.loads((ROOT / 'deployments/hackathon_judge_scorecards_demo.json').read_text(encoding='utf-8'))
+    demo = json.loads((ROOT / 'deployments/hackathon_judge_scorecards_v3_0_1_demo.json').read_text(encoding='utf-8'))
     assert demo.get('completed_at'), 'Complete the real acceptance run before checking the milestone'
-    assert deployment['version'] == demo['contract_version'] == '3.0.0'
+    assert deployment['version'] == demo['contract_version'] == '3.0.1'
     address = deployment['address']
     assert demo['contract'].lower() == address.lower()
     client = create_client(chain=studionet, account=Account.create())  # read-only sender context
@@ -53,7 +53,7 @@ def test_live_v3_scorecard_history_provenance_and_settlement():
     assert digest(source) == deployment['source_sha256']
     assert source == (ROOT / 'contracts/hackathon_judge_scorecards.py').read_text(encoding='utf-8').replace('\r\n', '\n')
     config = read('get_config', [])
-    assert config['version'] == '3.0.0' and config['score_total_scale'] == '10000'
+    assert config['version'] == '3.0.1' and config['score_total_scale'] == '10000'
     for step, tx in demo['transactions'].items():
         actual = receipt(tx['transaction_hash'])
         if tx['expected_error']:

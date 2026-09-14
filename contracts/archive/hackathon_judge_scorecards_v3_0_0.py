@@ -211,8 +211,6 @@ def _parse_rubric(raw: str) -> list:
 
 
 def _citation(ref: dict, snapshots: dict) -> dict:
-    if isinstance(ref, dict) and set(ref) == {"source", "line"}:
-        ref = {"source": ref["source"], "start": ref["line"], "end": ref["line"]}
     if not isinstance(ref, dict) or set(ref) not in ({"source", "start", "end"}, {"source", "start", "end", "excerpt"}):
         raise gl.vm.UserError(f"{ERROR_LLM} invalid citation fields")
     source, start, end = ref["source"], ref["start"], ref["end"]
@@ -304,16 +302,6 @@ def _scorecards_match(leader, validator, criteria: list, snapshots: dict) -> boo
             and [row["score_band"] for row in leader["criteria"]] == [row["score_band"] for row in validator["criteria"]]
             and leader["score_total_bps"] == validator["score_total_bps"]
             and abs(leader["confidence_bucket"] - validator["confidence_bucket"]) <= 20)
-
-
-def _untargeted_scores_preserved(original: dict, result: dict, target: str) -> bool:
-    if target == "eligibility":
-        return original["eligibility"] in (INELIGIBLE, INCONCLUSIVE)
-    if original["eligibility"] != ELIGIBLE or result["eligibility"] != ELIGIBLE:
-        return False
-    if target not in [row["id"] for row in original["criteria"]]:
-        return False
-    return all(before == after for before, after in zip(original["criteria"], result["criteria"]) if before["id"] != target)
 
 
 def _handle_leader_error(leaders_res, leader_fn) -> bool:
@@ -879,7 +867,13 @@ class HackathonJudgeScorecards(gl.Contract):
                 self.submissions[hackathon.id + ":" + str(index)] = entry
 
     def _appeal_preserves_other_scores(self, original: dict, result: dict, target: str) -> bool:
-        return _untargeted_scores_preserved(original, result, target)
+        if target == "eligibility":
+            return original["eligibility"] in (INELIGIBLE, INCONCLUSIVE)
+        if original["eligibility"] != ELIGIBLE or result["eligibility"] != ELIGIBLE:
+            return False
+        if target not in [row["id"] for row in original["criteria"]]:
+            return False
+        return all(before == after for before, after in zip(original["criteria"], result["criteria"]) if before["id"] != target)
 
     def _require_scorecard(self, hackathon: Hackathon, submission: Submission) -> None:
         try:
@@ -1073,10 +1067,8 @@ class HackathonJudgeScorecards(gl.Contract):
             "Repository publication does not prove originality, deployment ownership or truth. "
             "Return INELIGIBLE for a clear eligibility-rule violation and INCONCLUSIVE for missing evidence required for eligibility. "
             "Missing evidence for one scoring criterion can receive zero without making the whole project ineligible. "
-            "Score every criterion_to_judge with exactly 0,20,40,60,80,100. Include 1–2 supporting SINGLE-LINE references for positive scores. "
-            "Each reference is {source: original or appeal, line: one existing 1-based integer line number}. "
-            "Do not output ranges or start/end fields. Select the most relevant individual lines, not every line of a command block. "
-            "A cited line must exist in the named original_evidence or appeal_evidence array and contain at most 1200 characters. "
+            "Score every criterion_to_judge with exactly 0,20,40,60,80,100. Include 1–2 supporting line ranges for positive scores, "
+            "using source original or appeal, 1-based start and end, at most 5 lines and 1200 characters each. Never cite a missing line. "
             "For absent evidence a zero score may have no refs. Reasons must be faithful to the cited material. "
             "Do not calculate an overall total or change weights. "
             "For a criterion-targeted score appeal, reassess ONLY the named criterion; eligibility remains ELIGIBLE. "
@@ -1085,30 +1077,20 @@ class HackathonJudgeScorecards(gl.Contract):
             "TASK_JSON:\n" + task + "\n"
             'Return JSON only: {"eligibility":"ELIGIBLE"|"INELIGIBLE"|"INCONCLUSIVE","confidence":0,'
             '"reason":"brief explanation, max 400 chars","criteria":[{"id":"exact criterion id","score":0,'
-            '"reason":"brief criterion explanation, max 400 chars","refs":[{"source":"original","line":1}]}]}. '
+            '"reason":"brief criterion explanation, max 400 chars","refs":[{"source":"original","start":1,"end":1}]}]}. '
             "confidence is an integer from 0 to 100; criteria contains exactly the requested IDs."
         )
         def leader_fn() -> dict:
-            attempt_prompt = prompt
-            for attempt in range(2):
-                raw = gl.nondet.exec_prompt(attempt_prompt, response_format="json")
-                try:
-                    return _parse_scorecard(raw, criteria, snapshots, original, target)
-                except gl.vm.UserError as exc:
-                    if attempt == 1:
-                        raise
-                    message = exc.message if hasattr(exc, "message") else str(exc)
-                    attempt_prompt = prompt + "\nSCHEMA_REPAIR: Your previous response was rejected: " + message[:300] + ". Return one complete valid JSON object. Cite single existing lines in the correct evidence source. Do not invent evidence or bypass the rubric."
-            raise gl.vm.UserError(f"{ERROR_LLM} scorecard attempts exhausted")
+            return _parse_scorecard(gl.nondet.exec_prompt(prompt, response_format="json"), criteria, snapshots, original, target)
 
         def validator_fn(leaders_res: gl.vm.Result) -> bool:
             if not isinstance(leaders_res, gl.vm.Return):
                 return _handle_leader_error(leaders_res, leader_fn)
             validator_result = leader_fn()
             leader = leaders_res.calldata
-            if not _scorecards_match(leader, validator_result, criteria, snapshots):
+            if not self._evaluation_results_match(leader, validator_result, criteria, snapshots):
                 return False
-            return not is_appeal or _untargeted_scores_preserved(original, leader, target)
+            return not is_appeal or self._appeal_preserves_other_scores(original, leader, target)
 
         result = gl.vm.run_nondet_unsafe(leader_fn, validator_fn)
         if not _valid_scorecard_decision(result, criteria, snapshots):
@@ -1356,7 +1338,7 @@ class HackathonJudgeScorecards(gl.Contract):
     @gl.public.view
     def get_config(self) -> dict:
         return {
-            "version": "3.0.1",
+            "version": "3.0.0",
             "evaluation_schema": SCORECARD_SCHEMA,
             "network_target": "studionet",
             "funding_model": "WITHDRAWABLE_DEPOSIT_CREDIT_V1",
@@ -1374,8 +1356,6 @@ class HackathonJudgeScorecards(gl.Contract):
             "score_total_scale": "10000",
             "max_criteria": str(MAX_CRITERIA),
             "citation_policy": "FROZEN_LINE_RANGES_WITH_DETERMINISTIC_EXCERPTS",
-            "model_reference_format": "SINGLE_LINE_SOURCE_AND_INDEX",
-            "max_scorecard_prompt_attempts": "2",
             "max_submissions": str(MAX_SUBMISSIONS),
             "max_snapshot_chars": str(MAX_SNAPSHOT_CHARS),
             "judgment_timeout_secs": str(JUDGMENT_TIMEOUT_SECS),
