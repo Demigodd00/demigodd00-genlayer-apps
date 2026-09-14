@@ -18,6 +18,31 @@ records, twelve finalized adjudication self-calls, three credited native payment
 children, and balanced accounting. The checker uses unsigned public reads and
 requires no private key. An older deployment's tests are not used for this address.
 
+## Deadline-status UI correction (2026-09-14)
+
+Source published in commit `6be06c93d6ba7e040356c4967a6c1ce9c6b4c602`.
+Published to the existing public URL in Vercel deployment
+`dpl_3srQFmquFeyXzo4aWncdX1jSbHkm` (READY). Local tests, typecheck, build and audit
+passed, as did the source commit's dedicated
+[Lacuna checks](https://github.com/Demigodd00/demigodd00-genlayer-apps/actions/runs/34793537302).
+
+The homepage and campaign detail now distinguish a passed entry deadline from
+the contract's stored OPEN state. An idle campaign shows "Deadline passed —
+awaiting closure"; an active attempt shows "Deadline passed — attempt in
+progress". The badge updates at the deadline and when a hidden tab returns,
+without changing the on-chain state or sending a closing transaction.
+
+Five new frontend regression tests cover the exact deadline boundary, active
+attempts, preserved terminal/rule-review states, and unavailable clock/deadline
+data. The frontend suite now contains 33 tests. The canonical Intelligent
+Contract, escrow, case records, payment evidence and submission links are unchanged.
+
+Live browser verification on 2026-09-14 confirmed both corrected homepage badges,
+the lc-1 detail badge, no entry link after the deadline, and the unchanged
+closure/recovery action. No console errors were observed on the checked pages.
+The public health endpoint still reports the canonical contract and balanced
+accounting. No wallet transaction was sent for this UI correction.
+
 ## What makes it native
 
 The frontend never calls an LLM service or supplies an authoritative answer.
