@@ -61,7 +61,7 @@
 .locked-criteria small, .accepted-baseline { font-size: .875rem; line-height: 1.5; }
 .accepted-baseline a { text-decoration: underline; }
 .common-appeal-note { font-size: .875rem; line-height: 1.5; padding: 1rem; border-left: 3px solid var(--amber); background: var(--panel); }
-.scorecard-panel { min-width: 0; padding: 1.25rem; margin: 1.5rem 0; border: 1px solid var(--ink); background: var(--panel); box-shadow: 4px 4px 0 var(--ink); }
+.scorecard-panel { min-width: 0; padding: 1.25rem; margin: 1.5rem 0; scroll-margin-top: 84px; border: 1px solid var(--ink); background: var(--panel); box-shadow: 4px 4px 0 var(--ink); }
 .scorecard-panel > header, .criterion-card > header { display: flex; justify-content: space-between; gap: 1rem; align-items: flex-start; flex-wrap: wrap; }
 .scorecard-panel > header span { color: var(--muted); font-size: .875rem; }
 .scorecard-panel h2 { font-family: var(--font-display), serif; font-size: 1.75rem; margin: .2rem 0 1rem; }
@@ -78,7 +78,7 @@
 .scorecard-panel code { overflow-wrap: anywhere; font-size: .875rem; }
 .scorecard-panel summary { cursor: pointer; font-size: .875rem; padding: .5rem 0; }
 .scorecard-panel .criterion-contribution, .scorecard-panel .scorecard-scope { font-size: .875rem; color: var(--muted); }
-.scorecard-timeout { padding: .75rem; border: 1px solid var(--amber); }
+.scorecard-timeout { display: block; padding: .75rem; border: 1px solid var(--amber); }
 @media (max-width: 520px) { .scorecard-totals { grid-template-columns: 1fr; } .scorecard-panel { padding: .8rem; } }
 
 * { box-sizing: border-box; }

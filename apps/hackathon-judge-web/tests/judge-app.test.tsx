@@ -77,7 +77,7 @@ describe('room and transaction safety', () => {
     expect(screen.getByRole('option', { name: 'Implementation (60%)' })).toBeTruthy();
     expect(screen.queryByRole('option', { name: 'Eligibility and complete scorecard' })).toBeNull();
     await user.selectOptions(screen.getByLabelText(/Decision to appeal/), 'clarity');
-    expect(screen.getByRole<HTMLSelectElement>('combobox', { name: /Decision to appeal/ }).value).toBe('clarity');
+    expect((screen.getByRole('combobox', { name: /Decision to appeal/ }) as unknown as { value: string }).value).toBe('clarity');
   });
   it('closes a pending appeal when the selected room changes', async () => {
     const user = userEvent.setup();

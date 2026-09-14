@@ -72,7 +72,9 @@ def transact(record, clients, step, role, method, args, value=0, expected_error=
         valid = success
     save(record)
     if not valid:
-        raise RuntimeError(f"Unexpected execution result for {step}: " + json.dumps(receipt, default=str))
+        leaders = receipt.get("consensus_data", {}).get("leader_receipt", [])
+        summaries = [item.get("result") for item in leaders if item.get("mode") == "leader"]
+        raise RuntimeError(f"Unexpected execution result for {step}: " + json.dumps({"transaction_hash": existing["transaction_hash"], "result_name": receipt.get("result_name"), "leader_results": summaries}, default=str))
     print(json.dumps({"step": step, "state": "verified_rejection" if expected_error else "finalized_success"}), flush=True)
 
 
@@ -83,7 +85,9 @@ def proof(client, address, event, wallet, filename, parent=""):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--phase", choices=("prepare", "submit", "finish"), required=True)
-    phase = parser.parse_args().phase
+    parser.add_argument("--retry-failed-resolution", action="store_true", help="Preserve and retry a confirmed failed resolution; never replace a pending transaction")
+    arguments = parser.parse_args()
+    phase = arguments.phase
     deployment = json.loads(DEPLOYMENT.read_text(encoding="utf-8"))
     assert deployment["version"] == "3.0.0" and deployment["network"] == "studionet"
     address = deployment["address"]
@@ -104,6 +108,21 @@ def main():
     save(record)
     config = read(client, address, "get_config", [])
     assert config["version"] == "3.0.0" and config["evaluation_schema"] == "hackathon-judge-scorecard-v1"
+    if arguments.retry_failed_resolution:
+        failed = record["transactions"].get("resolve_score_appeal")
+        if phase != "finish" or not failed or failed.get("status") != "FINALIZED" or failed.get("execution_succeeded") is not False:
+            raise RuntimeError("Only a recorded, finalized failed resolution can be retried")
+        previous = client.wait_for_transaction_receipt(failed["transaction_hash"], status=TransactionStatus.FINALIZED, retries=1, full_transaction=True)
+        if tx_execution_succeeded(previous) or previous.get("result_name") != "MAJORITY_DISAGREE":
+            raise RuntimeError("Retry requires fresh confirmation of failed consensus")
+        state = read(client, address, "get_scorecard_history", [record["hackathon_id"], 1])
+        if state["effective_status"] != "APPEAL_PENDING" or state["original_digest"] != state["current_digest"]:
+            raise RuntimeError("Retry requires an unchanged original scorecard and a pending appeal")
+        failed["result_name"] = previous["result_name"]
+        failed["diagnostic"] = "Invalid citation ranges rejected; original scorecard unchanged."
+        record.setdefault("failed_attempts", []).append(failed)
+        del record["transactions"]["resolve_score_appeal"]
+        save(record)
     if "create_event" not in record["transactions"]:
         if not record.get("funding_transaction_hash"):
             funding = client.fund_account(owner.address, PRIZE)

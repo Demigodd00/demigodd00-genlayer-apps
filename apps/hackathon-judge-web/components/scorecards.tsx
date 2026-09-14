@@ -1,10 +1,11 @@
 'use client';
 
 import { X } from 'lucide-react';
+import { useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { formatScore, type Criterion, type ScorecardHistory } from '@/lib/protocol';
 
-export function RubricEditor({ value, onChange, disabled }: { value: Criterion[]; onChange(value: Criterion[]): void; disabled: boolean }) {
+export function RubricEditor({ value, onChange, disabled }: { value: Criterion[]; onChange: (value: Criterion[]) => void; disabled: boolean }) {
   const total = value.reduce((sum, criterion) => sum + criterion.weight, 0);
   const update = (index: number, patch: Partial<Criterion>) => onChange(value.map((row, current) => current === index ? { ...row, ...patch } : row));
   const add = () => {
@@ -25,18 +26,23 @@ export function RubricEditor({ value, onChange, disabled }: { value: Criterion[]
   </fieldset>;
 }
 
-export function ScorecardPanel({ project, history, onClose }: { project: string; history: ScorecardHistory; onClose(): void }) {
+export function ScorecardPanel({ project, history, onClose }: { project: string; history: ScorecardHistory; onClose: () => void }) {
+  const panel = useRef<HTMLElement>(null);
+  useEffect(() => {
+    panel.current?.focus({ preventScroll: true });
+    panel.current?.scrollIntoView?.({ behavior: 'instant', block: 'start' });
+  }, [project, history.current_digest]);
   const original = history.original?.decision;
   const current = history.current?.decision;
   const target = history.criteria.find((criterion) => criterion.id === history.appeal_target)?.name || history.appeal_target;
-  return <section className="scorecard-panel" aria-label={`Scorecard for ${project}`}>
+  return <section ref={panel} tabIndex={-1} className="scorecard-panel" aria-label={`Scorecard for ${project}`}>
     <header><div><span>On-chain judgment history</span><h2>{project}</h2></div><button type="button" onClick={onClose} aria-label="Close scorecard"><X /></button></header>
     <div className="scorecard-totals">
       <div><span>Original total</span><strong>{original ? formatScore(original.score_total_bps) : '—'} / 100</strong><small>Initial ranking: {history.original_rank || 'not eligible'}</small></div>
       <div><span>Effective total</span><strong>{formatScore(history.effective_total_bps)} / 100</strong><small>Current ranking: {history.current_rank || 'not eligible'} · {history.effective_status.replaceAll('_', ' ')}</small></div>
     </div>
     {history.appeal_target && <p className="scorecard-appeal"><b>Appeal: {target}</b> · {history.appeal_resolved ? 'resolved' : 'pending'}<br />{history.appeal_statement}</p>}
-    {history.judgment_timed_out && <p role="status" className="scorecard-timeout">Judgment timed out. The effective result is inconclusive with zero points. Any scorecard below is historical, not a new jury decision.</p>}
+    {history.judgment_timed_out && <output className="scorecard-timeout">Judgment timed out. The effective result is inconclusive with zero points. Any scorecard below is historical, not a new jury decision.</output>}
     {history.criteria.map((criterion) => {
       const before = original?.criteria.find((row) => row.id === criterion.id);
       const after = current?.criteria.find((row) => row.id === criterion.id);

@@ -61,6 +61,10 @@ def test_live_v3_scorecard_history_provenance_and_settlement():
             assert tx['expected_error'] in json.dumps(actual, default=str), step
         else:
             assert tx_execution_succeeded(actual), step
+    for failed in demo.get('failed_attempts', []):
+        actual = receipt(failed['transaction_hash'])
+        assert not tx_execution_succeeded(actual)
+        assert actual['result_name'] == failed['result_name'] == 'MAJORITY_DISAGREE'
     assert demo['wrong_wallet_submission_count_after'] == '0'
     assert demo['premature_settlement_prize_released'] is False
     event_id = demo['hackathon_id']

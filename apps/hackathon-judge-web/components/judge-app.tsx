@@ -323,7 +323,7 @@ export function JudgeApp() {
         </div>
         <div className="network-lock"><span /> StudioNet · v3.0</div>
         <div className="top-actions">
-          <a className="icon-link" href="/hackathon-judge-demo.mp4" target="_blank" rel="noreferrer" aria-label="Watch v2.2 demo video (predates repository verification)" title="v2.2 demo — predates repository verification"><Play /></a>
+          <a className="icon-link" href="/hackathon-judge-v3-walkthrough.mp4" target="_blank" rel="noreferrer" aria-label="Watch v3 scorecards milestone walkthrough" title="v3 scorecards and score appeals"><Play /></a>
           <a className="icon-link" href={EXPLORER_URL} target="_blank" rel="noreferrer" aria-label="View contract in explorer"><ExternalLink /></a>
           <Button className="wallet-button" onClick={connect} disabled={busy}>
             <Wallet /> {wallet ? shortAddress(wallet.address) : 'Connect wallet'}
@@ -430,7 +430,7 @@ export function JudgeApp() {
             </div>
 
             {Number(hackathon.common_appeal_deadline_unix || 0) > 0 && <p className="common-appeal-note">Common appeal deadline: <strong>{dateTime(hackathon.common_appeal_deadline_unix!)}</strong>. Settlement also waits for pending appeals.</p>}
-            {scorecardLoading && <p role="status">Loading on-chain scorecard history…</p>}
+            {scorecardLoading && <output>Loading on-chain scorecard history…</output>}
             {scorecard && <ScorecardPanel project={scorecard.project} history={scorecard.value} onClose={() => setScorecard(null)} />}
 
             <div className="section-title"><div><h2>Submission docket</h2><span>{submissions.length} / {hackathon.max_submissions} entries</span></div><Status value={hackathon.phase} /></div>
@@ -469,7 +469,7 @@ export function JudgeApp() {
             <h3>Consensus boundary</h3>
             <div><ShieldCheck /><span><b>Required</b> repository provenance</span></div>
             <div><Check /><span><b>Exact</b> eligibility</span></div>
-            <div><Check /><span><b>Exact</b> each criterion's score band</span></div>
+            <div><Check /><span><b>Exact</b> each criterion&apos;s score band</span></div>
             <div><Check /><span><b>Code</b> weighted total + citation locations</span></div>
             <div><Check /><span><b>±20</b> confidence tolerance</span></div>
             <div className="muted-check"><X /><span>Reason wording exempt</span></div>
@@ -493,6 +493,7 @@ export function JudgeApp() {
           </div>
           <div className="contract-stamp"><Box /><div><span>Intelligent contract</span><code>{shortAddress(CONTRACT_ADDRESS)}</code></div><a href={EXPLORER_URL} target="_blank" rel="noreferrer"><ExternalLink /></a></div>
           <p className="accepted-baseline"><a href="https://explorer-studio.genlayer.com/address/0x6fD9B65001B0eEF5CC98A95D20A1c693C0D04FBA" target="_blank" rel="noreferrer">Accepted v2.3 contract</a> remains unchanged. StudioNet prizes are simulated.</p>
+          <p className="accepted-baseline"><a href="/hackathon-judge-v3-walkthrough.mp4" target="_blank" rel="noreferrer">Watch v3 walkthrough</a> · <a href="https://github.com/Demigodd00/demigodd00-genlayer-apps/blob/main/docs/HACKATHON_JUDGE_MILESTONE_1.md" target="_blank" rel="noreferrer">Milestone evidence and reviewer guide</a></p>
         </aside>
       </section>
 
