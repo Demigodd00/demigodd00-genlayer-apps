@@ -1,5 +1,47 @@
 export type Address = `0x${string}`;
 
+export type Criterion = { id: string; name: string; description: string; weight: number };
+export type Citation = { source: 'original' | 'appeal'; start: number; end: number; excerpt: string };
+export type CriterionScore = { id: string; score_band: number; reason: string; refs: Citation[] };
+export type Scorecard = {
+  phase: 'initial' | 'appeal'; evaluated_at_iso: string; rubric_digest: string;
+  parent_scorecard_digest: string; original_package_digest: string; appeal_package_digest: string;
+  decision: { eligibility: string; confidence_bucket: number; reason: string; score_total_bps: number; criteria: CriterionScore[] };
+};
+export type ScorecardHistory = {
+  criteria: Criterion[]; rubric_digest: string; original: Scorecard | null; current: Scorecard | null;
+  original_digest: string; current_digest: string; appeal_target: string; appeal_statement: string;
+  appeal_resolved: boolean; judgment_timed_out: boolean; effective_eligibility: string;
+  effective_total_bps: string; effective_status: string; effective_at_iso: string;
+  original_rank: string; current_rank: string; common_appeal_deadline_unix: string;
+};
+
+export const DEFAULT_CRITERIA: Criterion[] = [
+  { id: 'implementation', name: 'Implementation', weight: 40, description: 'Assess demonstrated working functionality, completeness and reproducibility.' },
+  { id: 'usefulness', name: 'Usefulness', weight: 30, description: 'Assess the evidenced usefulness for the intended users and problem.' },
+  { id: 'originality', name: 'Originality', weight: 20, description: 'Assess the distinct contribution supported by evidence; do not assume ownership.' },
+  { id: 'clarity', name: 'Clarity', weight: 10, description: 'Assess clear explanations, documentation and how reviewers can reproduce the result.' },
+];
+
+export function serializeRubric(criteria: Criterion[]): string {
+  if (criteria.length < 2 || criteria.length > 4) throw new Error('Choose 2–4 criteria.');
+  const ids = new Set<string>();
+  for (const criterion of criteria) {
+    if (!/^[a-z][a-z0-9_]{0,23}$/.test(criterion.id) || criterion.id === 'eligibility' || ids.has(criterion.id)) throw new Error('Criterion IDs must be unique lowercase identifiers.');
+    ids.add(criterion.id);
+    if (!Number.isInteger(criterion.weight) || criterion.weight < 1 || criterion.weight > 99) throw new Error('Each weight must be a whole percentage from 1 to 99.');
+    if (criterion.name.trim().length < 3 || criterion.name.length > 60 || criterion.description.trim().length < 20 || criterion.description.length > 1000) throw new Error('Each criterion needs a name (3–60 characters) and description (20–1,000 characters).');
+  }
+  if (criteria.reduce((sum, criterion) => sum + criterion.weight, 0) !== 100) throw new Error('Criterion weights must total 100%.');
+  return JSON.stringify(criteria.map((criterion) => ({ ...criterion, name: criterion.name.trim(), description: criterion.description.trim() })));
+}
+
+export function formatScore(bps: string | number): string {
+  const value = BigInt(bps);
+  const fraction = (value % 100n).toString().padStart(2, '0').replace(/0+$/, '');
+  return `${value / 100n}${fraction ? `.${fraction}` : ''}`;
+}
+
 export type HackathonSummary = {
   id: string;
   organizer: Address;
@@ -16,6 +58,9 @@ export type HackathonSummary = {
 export type Hackathon = HackathonSummary & {
   rulebook: string;
   rubric: string;
+  criteria?: Criterion[];
+  rubric_digest?: string;
+  common_appeal_deadline_unix?: string;
   created_at_iso: string;
   phase: string;
   max_submissions: string;
@@ -48,6 +93,12 @@ export type Submission = {
   status: string;
   eligibility: string;
   score_band: string;
+  score_total_bps?: string;
+  original_total_bps?: string;
+  original_scorecard_digest?: string;
+  current_scorecard_digest?: string;
+  appeal_target?: string;
+  judgment_timed_out?: boolean;
   confidence_bucket: string;
   reasoning: string;
   evaluated_at_iso: string;

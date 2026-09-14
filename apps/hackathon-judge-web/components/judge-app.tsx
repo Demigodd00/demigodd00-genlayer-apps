@@ -7,17 +7,18 @@ import {
   Gavel, LoaderCircle, Play, Plus, RefreshCw, Scale, ShieldCheck, Trophy, Wallet, X,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { RubricEditor, ScorecardPanel } from '@/components/scorecards';
 import {
   appealSubmission, cancelHackathon, connectWallet, CONTRACT_ADDRESS, createHackathon,
   deposit, evaluateSubmission, EXPLORER_URL, expireUnresolvedSubmission, finalizeHackathon, getBuilderProfile,
-  getEvidence, getHackathon, getStats, listHackathons, listSubmissions, resolveAppeal,
+  getEvidence, getHackathon, getScorecardHistory, getStats, listHackathons, listSubmissions, resolveAppeal,
   submitProject, watchWallet, withdraw,
   type TxProgress, type WalletSession,
 } from '@/lib/contract';
 import {
-  dateTime, evidenceChallenge, formatGen, friendlyError, parseGen, sameAddress, shortAddress,
+  dateTime, DEFAULT_CRITERIA, evidenceChallenge, formatGen, formatScore, friendlyError, parseGen, sameAddress, serializeRubric, shortAddress,
   type BuilderProfile, type Evidence, type Hackathon, type HackathonSummary,
-  type ProtocolStats, type Submission,
+  type ProtocolStats, type Submission, type Criterion, type ScorecardHistory,
 } from '@/lib/protocol';
 
 type Panel = 'none' | 'create' | 'fund' | 'submit' | 'appeal';
@@ -74,6 +75,10 @@ export function JudgeApp() {
   const [evidence, setEvidence] = useState<{ project: string; value: Evidence } | null>(null);
   const [transactionPending, setTransactionPending] = useState(false);
   const [proofUrl, setProofUrl] = useState('');
+  const [criteria, setCriteria] = useState<Criterion[]>(DEFAULT_CRITERIA.map((criterion) => ({ ...criterion })));
+  const [scorecard, setScorecard] = useState<{ project: string; value: ScorecardHistory } | null>(null);
+  const [scorecardLoading, setScorecardLoading] = useState(false);
+  const scorecardRevision = useRef(0);
   const transactionLock = useRef(false);
   const selectedIdRef = useRef('');
   const walletRef = useRef<WalletSession | null>(null);
@@ -89,6 +94,9 @@ export function JudgeApp() {
     setPanel('none');
     setAppealTarget(null);
     setEvidence(null);
+    setScorecard(null);
+    scorecardRevision.current += 1;
+    setScorecardLoading(false);
     setError('');
     setProofUrl('');
   }, []);
@@ -189,6 +197,9 @@ export function JudgeApp() {
     if (!wallet) { setError('Connect a StudioNet wallet first.'); return; }
     // Acquire synchronously: React state alone does not guard same-tick clicks.
     transactionLock.current = true;
+    scorecardRevision.current += 1;
+    setScorecard(null);
+    setScorecardLoading(false);
     setTransactionPending(true);
     const roomId = selectedIdRef.current;
     setError('');
@@ -222,9 +233,10 @@ export function JudgeApp() {
     const prize = parseGen(formValue(data, 'prize') || '0');
     const deadline = Math.floor(new Date(formValue(data, 'deadline')).getTime() / 1000);
     if (!Number.isFinite(deadline)) throw new Error('Choose a valid submission deadline.');
+    const rubric = serializeRubric(criteria);
     await runTx((session, report) => createHackathon(session, {
       name: formValue(data, 'name'), awardTitle: formValue(data, 'award'),
-      rulebook: formValue(data, 'rulebook'), rubric: formValue(data, 'rubric'),
+      rulebook: formValue(data, 'rulebook'), rubric,
       deadlineUnix: String(deadline), maxSubmissions: formValue(data, 'capacity'),
       minWinningScore: formValue(data, 'minimum'), appealWindowSecs: String(Number(formValue(data, 'appealMinutes')) * 60),
       prizeAtto: String(prize),
@@ -264,7 +276,7 @@ export function JudgeApp() {
       try { evidenceChallenge(CONTRACT_ADDRESS, targetId, wallet?.address || '', formValue(data, 'url'), appealTarget.evidence_package_digest); }
       catch (cause) { setError(friendlyError(cause)); return; }
     }
-    await runTx((session, report) => appealSubmission(session, targetId, appealTarget.index, formValue(data, 'statement'), formValue(data, 'url'), report));
+    await runTx((session, report) => appealSubmission(session, targetId, appealTarget.index, formValue(data, 'statement'), formValue(data, 'url'), formValue(data, 'criterion'), report));
   };
 
   const showEvidence = async (submission: Submission) => {
@@ -279,9 +291,23 @@ export function JudgeApp() {
   };
 
   const verdictReady = hackathon?.phase === 'READY_FOR_JUDGING' || hackathon?.status === 'JUDGING';
+  const showScorecard = async (submission: Submission) => {
+    const revision = ++scorecardRevision.current;
+    setScorecardLoading(true);
+    setError('');
+    try {
+      const value = await getScorecardHistory(submission.hackathon_id, submission.index);
+      if (revision === scorecardRevision.current && selectedIdRef.current === submission.hackathon_id) {
+        setScorecard({ project: submission.project_name, value });
+        setPanel('none');
+      }
+    } catch (cause) { if (revision === scorecardRevision.current) setError(friendlyError(cause)); }
+    finally { if (revision === scorecardRevision.current) setScorecardLoading(false); }
+  };
   const walletCredit = profile?.available_credit_atto ?? '0';
   const activeDescription = useMemo(() => {
-    if (!hackathon) return selectedId ? 'Loading the selected judging room…' : 'The v2.3 steward is live. Create the first public judging event.';
+    if (!hackathon) return selectedId ? 'Loading the selected judging room…' : 'Create an event with weighted criteria and an appeal window.';
+    if (hackathon.status === 'FINALIZED') return 'Final ranking settled. Inspect scorecards to follow each decision and appeal.';
     if (hackathon.accepting_submissions) return `${hackathon.remaining_slots} submission slot${hackathon.remaining_slots === '1' ? '' : 's'} still open.`;
     if (hackathon.finalizable) return 'Every decision is in. Anyone can finalize the winner.';
     if (hackathon.appeal_blocked) return 'Finalization is paused while appeal rights are active.';
@@ -295,7 +321,7 @@ export function JudgeApp() {
           <div className="brand-mark" aria-hidden="true"><Scale /></div>
           <div><strong>Hackathon Judge</strong><span>GenLayer-native jury protocol</span></div>
         </div>
-        <div className="network-lock"><span /> StudioNet · v2.3</div>
+        <div className="network-lock"><span /> StudioNet · v3.0</div>
         <div className="top-actions">
           <a className="icon-link" href="/hackathon-judge-demo.mp4" target="_blank" rel="noreferrer" aria-label="Watch v2.2 demo video (predates repository verification)" title="v2.2 demo — predates repository verification"><Play /></a>
           <a className="icon-link" href={EXPLORER_URL} target="_blank" rel="noreferrer" aria-label="View contract in explorer"><ExternalLink /></a>
@@ -354,8 +380,8 @@ export function JudgeApp() {
           <div className="process-strip">
             {[
               ['01', 'Verify', 'Wallet + repository proof'],
-              ['02', 'Judge', 'Agree on decision fields'],
-              ['03', 'Appeal', 'One review right'],
+              ['02', 'Score', 'Locked weighted criteria'],
+              ['03', 'Appeal', 'Challenge a criterion'],
               ['04', 'Settle', 'Prize + credential'],
             ].map(([number, title, copy], index) => <div key={number} data-active={index === 0 || Boolean(hackathon)}><b>{number}</b><span><strong>{title}</strong><small>{copy}</small></span></div>)}
           </div>
@@ -366,11 +392,11 @@ export function JudgeApp() {
                 <Field label="Hackathon name"><input name="name" required minLength={3} maxLength={80} placeholder="Open Intelligence Build Week" /></Field>
                 <Field label="Award"><input name="award" required minLength={3} maxLength={80} placeholder="Best verifiable agent" /></Field>
                 <Field label="Rulebook" hint="Plain English is the source of truth."><textarea name="rulebook" required minLength={30} maxLength={4000} placeholder="Projects must be newly built, publicly reviewable, and demonstrate…" /></Field>
-                <Field label="Scoring rubric"><textarea name="rubric" required minLength={30} maxLength={2000} placeholder="Impact 30%, execution 30%, originality 20%, evidence 20%…" /></Field>
+                <RubricEditor value={criteria} onChange={setCriteria} disabled={busy} />
                 <Field label="Submission deadline"><input name="deadline" type="datetime-local" defaultValue={deadlineDefault()} required /></Field>
                 <Field label="Capacity"><input name="capacity" type="number" min="1" max="8" defaultValue="3" required /></Field>
-                <Field label="Winning threshold"><select name="minimum" defaultValue="60"><option>20</option><option>40</option><option>60</option><option>80</option><option>100</option></select></Field>
-                <Field label="Appeal window (minutes)"><input name="appealMinutes" type="number" min="1" max="10080" defaultValue="60" required /></Field>
+                <Field label="Winning threshold"><input name="minimum" type="number" min="1" max="100" step="1" defaultValue="60" required /></Field>
+                <Field label="Appeal window (minutes)" hint="The same window starts for everyone after all initial judgments finish or time out."><input name="appealMinutes" type="number" min="1" max="10080" defaultValue="60" required /></Field>
                 <Field label="Escrowed prize (GEN)" hint={`Available: ${formatGen(walletCredit)} GEN`}><input name="prize" inputMode="decimal" defaultValue="0" /></Field>
                 <div className="form-submit"><Button type="button" variant="outline" onClick={() => setPanel('fund')}><CircleDollarSign /> Fund balance</Button><Button type="submit" disabled={busy}><Gavel /> Create on-chain</Button></div>
               </form>}
@@ -388,6 +414,7 @@ export function JudgeApp() {
               </form>}
               {panel === 'appeal' && appealTarget && <form className="action-form" onSubmit={handleAppeal}>
                 <div className="appeal-context"><Status value={appealTarget.eligibility} /><strong>{appealTarget.project_name}</strong><p>{appealTarget.reasoning}</p></div>
+                <Field label="Decision to appeal" hint="One appeal per entry. A criterion's score can rise or fall; other criteria remain unchanged."><select name="criterion" required defaultValue={appealTarget.eligibility === 'ELIGIBLE' ? hackathon?.criteria?.[0]?.id : 'eligibility'}>{appealTarget.eligibility === 'ELIGIBLE' ? hackathon?.criteria?.map((criterion) => <option key={criterion.id} value={criterion.id}>{criterion.name} ({criterion.weight}%)</option>) : <option value="eligibility">Eligibility and complete scorecard</option>}</select></Field>
                 <Field label="Appeal statement"><textarea name="statement" required minLength={30} maxLength={1000} placeholder="Explain the specific decision error using the rulebook and saved evidence…" /></Field>
                 <Field label="New evidence URL (optional)" hint="New evidence needs a GitHub .txt file with a fresh appeal challenge tied to the original package."><input name="url" type="url" maxLength={300} value={proofUrl} onChange={(e) => setProofUrl(e.target.value)} /></Field>
                 {proofUrl && <ProofGuide event={appealTarget.hackathon_id} entrant={wallet?.address || ''} url={proofUrl} parent={appealTarget.evidence_package_digest} />}
@@ -399,8 +426,12 @@ export function JudgeApp() {
           {!hackathon ? (selectedId ? <div className="loading-row"><LoaderCircle className="spin" /> Loading selected docket</div> : <EmptyDocket onCreate={() => setPanel('create')} />) : <>
             <div className="rule-grid">
               <article className="rule-card"><div><BookOpenText /><span>Rulebook</span></div><p>{hackathon.rulebook}</p></article>
-              <article className="rule-card"><div><FileCheck2 /><span>Rubric</span></div><p>{hackathon.rubric}</p></article>
+              <article className="rule-card"><div><FileCheck2 /><span>Locked rubric</span></div>{hackathon.criteria ? <div className="locked-criteria">{hackathon.criteria.map((criterion) => <section key={criterion.id}><strong>{criterion.name} · {criterion.weight}%</strong><p>{criterion.description}</p></section>)}<small>Weights cannot change. Exact weighted totals rank entries; ties favor the earlier submission.</small></div> : <p>{hackathon.rubric}</p>}</article>
             </div>
+
+            {Number(hackathon.common_appeal_deadline_unix || 0) > 0 && <p className="common-appeal-note">Common appeal deadline: <strong>{dateTime(hackathon.common_appeal_deadline_unix!)}</strong>. Settlement also waits for pending appeals.</p>}
+            {scorecardLoading && <p role="status">Loading on-chain scorecard history…</p>}
+            {scorecard && <ScorecardPanel project={scorecard.project} history={scorecard.value} onClose={() => setScorecard(null)} />}
 
             <div className="section-title"><div><h2>Submission docket</h2><span>{submissions.length} / {hackathon.max_submissions} entries</span></div><Status value={hackathon.phase} /></div>
             <div className="submission-list">
@@ -415,8 +446,9 @@ export function JudgeApp() {
                     <div className="evidence-line"><Fingerprint /><code>sha256:{item.evidence_digest.slice(0, 16)}…</code><button onClick={() => showEvidence(item)}>Inspect snapshot</button><a href={item.evidence_url} target="_blank" rel="noreferrer">Source <ExternalLink /></a></div>
                     {item.reasoning && <blockquote><b>Representative rationale · wording not compared</b>{item.reasoning}</blockquote>}
                     <div className="submission-footer">
-                      <div><span>Eligibility <b>{item.eligibility || 'Pending'}</b></span><span>Score <b>{item.score_band || '0'} / 100</b></span><span>Confidence <b>{item.confidence_bucket || '0'}%</b></span></div>
+                      <div><span>Eligibility <b>{item.eligibility || 'Pending'}</b></span><span>Weighted score <b>{item.score_total_bps ? formatScore(item.score_total_bps) : item.score_band || '0'} / 100</b></span><span>Confidence <b>{item.confidence_bucket || '0'}%</b></span></div>
                       <div className="row-actions">
+                        {(item.current_scorecard_digest || item.judgment_timed_out) && <Button size="sm" variant="outline" disabled={busy} onClick={() => showScorecard(item)}>View scorecard</Button>}
                         {verdictReady && item.status === 'SUBMITTED' && <Button size="sm" onClick={() => runTx((session, report) => evaluateSubmission(session, hackathon.id, item.index, report))} disabled={busy}><Gavel /> Judge</Button>}
                         {item.appealable && wallet && sameAddress(wallet.address, item.entrant) && <Button size="sm" variant="outline" onClick={() => { setProofUrl(''); setAppealTarget(item); setPanel('appeal'); }}>Appeal</Button>}
                         {item.appeal_resolvable && <Button size="sm" onClick={() => runTx((session, report) => resolveAppeal(session, hackathon.id, item.index, report))} disabled={busy}>Resolve appeal</Button>}
@@ -437,7 +469,8 @@ export function JudgeApp() {
             <h3>Consensus boundary</h3>
             <div><ShieldCheck /><span><b>Required</b> repository provenance</span></div>
             <div><Check /><span><b>Exact</b> eligibility</span></div>
-            <div><Check /><span><b>Exact</b> 20-point score band</span></div>
+            <div><Check /><span><b>Exact</b> each criterion's score band</span></div>
+            <div><Check /><span><b>Code</b> weighted total + citation locations</span></div>
             <div><Check /><span><b>±20</b> confidence tolerance</span></div>
             <div className="muted-check"><X /><span>Reason wording exempt</span></div>
           </div>
@@ -459,6 +492,7 @@ export function JudgeApp() {
             {organizer && hackathon?.status === 'OPEN' && hackathon.submission_count === '0' && <Button variant="destructive" onClick={() => runTx((session, report) => cancelHackathon(session, hackathon.id, report))} disabled={busy}>Cancel + refund</Button>}
           </div>
           <div className="contract-stamp"><Box /><div><span>Intelligent contract</span><code>{shortAddress(CONTRACT_ADDRESS)}</code></div><a href={EXPLORER_URL} target="_blank" rel="noreferrer"><ExternalLink /></a></div>
+          <p className="accepted-baseline"><a href="https://explorer-studio.genlayer.com/address/0x6fD9B65001B0eEF5CC98A95D20A1c693C0D04FBA" target="_blank" rel="noreferrer">Accepted v2.3 contract</a> remains unchanged. StudioNet prizes are simulated.</p>
         </aside>
       </section>
 
@@ -466,8 +500,8 @@ export function JudgeApp() {
         <header><div><span>Immutable render snapshot</span><h2>{evidence.project}</h2></div><button onClick={() => setEvidence(null)} aria-label="Close"><X /></button></header>
         <ProvenanceRecord record={evidence.value.provenance_record} digest={evidence.value.evidence_package_digest} />
         <div className="digest-box"><Fingerprint /><code>{evidence.value.evidence_digest}</code></div>
-        <pre>{evidence.value.evidence_snapshot}</pre>
-        {evidence.value.appeal_evidence_snapshot && <><h3>Appeal evidence</h3><ProvenanceRecord record={evidence.value.appeal_provenance_record} digest={evidence.value.appeal_package_digest} /><div className="digest-box"><Fingerprint /><code>{evidence.value.appeal_evidence_digest}</code></div><pre>{evidence.value.appeal_evidence_snapshot}</pre></>}
+        <pre>{evidence.value.evidence_snapshot.split('\n').map((line, index) => `${index + 1} | ${line}`).join('\n')}</pre>
+        {evidence.value.appeal_evidence_snapshot && <><h3>Appeal evidence</h3><ProvenanceRecord record={evidence.value.appeal_provenance_record} digest={evidence.value.appeal_package_digest} /><div className="digest-box"><Fingerprint /><code>{evidence.value.appeal_evidence_digest}</code></div><pre>{evidence.value.appeal_evidence_snapshot.split('\n').map((line, index) => `${index + 1} | ${line}`).join('\n')}</pre></>}
       </dialog></div>}
     </main>
   );

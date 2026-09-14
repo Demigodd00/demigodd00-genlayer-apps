@@ -41,7 +41,7 @@ const contract = vi.hoisted(() => ({
   getBuilderProfile: vi.fn(), connectWallet: vi.fn(), watchWallet: vi.fn(), deposit: vi.fn(),
   withdraw: vi.fn(), createHackathon: vi.fn(), cancelHackathon: vi.fn(), submitProject: vi.fn(),
   evaluateSubmission: vi.fn(), appealSubmission: vi.fn(), resolveAppeal: vi.fn(),
-  expireUnresolvedSubmission: vi.fn(), finalizeHackathon: vi.fn(), getEvidence: vi.fn(),
+  expireUnresolvedSubmission: vi.fn(), finalizeHackathon: vi.fn(), getEvidence: vi.fn(), getScorecardHistory: vi.fn(),
   CONTRACT_ADDRESS: '0x788432Aa8D55c81c3bd2ef0FbB29A4Bc7E6e4cC6',
   EXPLORER_URL: 'https://explorer-studio.genlayer.com/address/0x788432Aa8D55c81c3bd2ef0FbB29A4Bc7E6e4cC6',
 }));
@@ -66,6 +66,19 @@ beforeEach(() => {
 afterEach(cleanup);
 
 describe('room and transaction safety', () => {
+  it('offers eligible entrants a targeted criterion appeal', async () => {
+    const user = userEvent.setup();
+    contract.getHackathon.mockResolvedValue({ ...event('hj-A', 'Room A'), criteria: [{ id: 'implementation', name: 'Implementation', weight: 60 }, { id: 'clarity', name: 'Clarity', weight: 40 }] });
+    contract.listSubmissions.mockResolvedValue({ total: '1', items: [{ ...appealable, eligibility: 'ELIGIBLE', status: 'JUDGED' }] });
+    render(<JudgeApp />);
+    await screen.findByRole('heading', { name: 'Room A' });
+    await user.click(screen.getByRole('button', { name: /Connect wallet/i }));
+    await user.click(await screen.findByRole('button', { name: 'Appeal' }));
+    expect(screen.getByRole('option', { name: 'Implementation (60%)' })).toBeTruthy();
+    expect(screen.queryByRole('option', { name: 'Eligibility and complete scorecard' })).toBeNull();
+    await user.selectOptions(screen.getByLabelText(/Decision to appeal/), 'clarity');
+    expect(screen.getByRole<HTMLSelectElement>('combobox', { name: /Decision to appeal/ }).value).toBe('clarity');
+  });
   it('closes a pending appeal when the selected room changes', async () => {
     const user = userEvent.setup();
     render(<JudgeApp />);

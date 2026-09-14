@@ -45,6 +45,42 @@
   --red: #b54c43;
 }
 
+.rubric-editor { grid-column: 1 / -1; min-width: 0; border: 1px solid var(--line); padding: 1rem; border-radius: 6px; }
+.rubric-editor legend { padding: 0 .4rem; font-size: 1rem; font-weight: 700; }
+.rubric-editor > p, .scorecard-panel p { font-size: 1rem; line-height: 1.6; }
+.rubric-editor-row { display: grid; grid-template-columns: minmax(0, 1fr) 100px; gap: .75rem; border-top: 1px solid var(--line); padding-block: 1rem; }
+.rubric-editor-row label { display: grid; gap: .4rem; font-size: .875rem; }
+.rubric-editor-row input, .rubric-editor-row textarea { width: 100%; min-width: 0; padding: .6rem; background: white; border: 1px solid var(--line); border-radius: 4px; font-size: 1rem; }
+.rubric-editor-row .criterion-description { grid-column: 1 / -1; }
+.rubric-editor-row textarea { min-height: 80px; }
+.rubric-editor-footer { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .75rem; align-items: center; font-size: .875rem; }
+.rubric-editor-footer output[data-valid="false"] { color: var(--red); }
+.locked-criteria { display: grid!important; gap: .9rem!important; margin-top: 1rem; }
+.locked-criteria section strong { font-size: .875rem; }
+.locked-criteria section p { margin: .3rem 0!important; font-size: .875rem!important; }
+.locked-criteria small, .accepted-baseline { font-size: .875rem; line-height: 1.5; }
+.accepted-baseline a { text-decoration: underline; }
+.common-appeal-note { font-size: .875rem; line-height: 1.5; padding: 1rem; border-left: 3px solid var(--amber); background: var(--panel); }
+.scorecard-panel { min-width: 0; padding: 1.25rem; margin: 1.5rem 0; border: 1px solid var(--ink); background: var(--panel); box-shadow: 4px 4px 0 var(--ink); }
+.scorecard-panel > header, .criterion-card > header { display: flex; justify-content: space-between; gap: 1rem; align-items: flex-start; flex-wrap: wrap; }
+.scorecard-panel > header span { color: var(--muted); font-size: .875rem; }
+.scorecard-panel h2 { font-family: var(--font-display), serif; font-size: 1.75rem; margin: .2rem 0 1rem; }
+.scorecard-panel > header button { border: 0; background: none; padding: .4rem; }
+.scorecard-totals { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; border-block: 1px solid var(--line); padding: 1rem 0; }
+.scorecard-totals > div { display: grid; gap: .35rem; }
+.scorecard-totals span, .scorecard-totals small { font-size: .875rem; }
+.scorecard-totals strong { font-size: 1.6rem; }
+.criterion-card { padding: 1rem 0; border-top: 1px solid var(--line); }
+.criterion-card h3 { font-size: 1rem; margin: 0; }
+.criterion-card h3 span { color: var(--muted); margin-left: .4rem; }
+.criterion-card > header > div, .criterion-card small { font-size: .875rem; }
+.scorecard-panel pre { white-space: pre-wrap; overflow-wrap: anywhere; font: .875rem/1.6 var(--font-mono), monospace; padding: .75rem; background: var(--fog); max-height: 380px; overflow-y: auto; }
+.scorecard-panel code { overflow-wrap: anywhere; font-size: .875rem; }
+.scorecard-panel summary { cursor: pointer; font-size: .875rem; padding: .5rem 0; }
+.scorecard-panel .criterion-contribution, .scorecard-panel .scorecard-scope { font-size: .875rem; color: var(--muted); }
+.scorecard-timeout { padding: .75rem; border: 1px solid var(--amber); }
+@media (max-width: 520px) { .scorecard-totals { grid-template-columns: 1fr; } .scorecard-panel { padding: .8rem; } }
+
 * { box-sizing: border-box; }
 html { background: var(--paper); }
 body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--font-sans), sans-serif; }

@@ -1,7 +1,13 @@
 import { describe, expect, it } from 'vitest';
-import { evidenceChallenge, formatGen, friendlyError, isAddress, parseGen, sameAddress, shortAddress } from '../lib/protocol';
+import { DEFAULT_CRITERIA, serializeRubric, formatScore, evidenceChallenge, formatGen, friendlyError, isAddress, parseGen, sameAddress, shortAddress } from '../lib/protocol';
 
 describe('protocol value formatting', () => {
+  it('preserves exact fractional scores rather than rounding the ranking', () => {
+    expect(formatScore('6980')).toBe('69.8');
+    expect(formatScore(10000)).toBe('100');
+    expect(formatScore(0)).toBe('0');
+    expect(formatScore('7400')).toBe('74');
+  });
   it('round-trips whole and fractional GEN amounts', () => {
     expect(parseGen('1.2500')).toBe(1_250_000_000_000_000_000n);
     expect(formatGen(parseGen('1.2500'))).toBe('1.25');
@@ -11,6 +17,21 @@ describe('protocol value formatting', () => {
   it('rejects ambiguous and over-precision amounts', () => {
     expect(() => parseGen('-1')).toThrow('valid GEN amount');
     expect(() => parseGen('0.0000000000000000001')).toThrow('valid GEN amount');
+  });
+});
+
+describe('locked weighted rubric', () => {
+  it('serializes valid criteria without changing the weights', () => {
+    expect(JSON.parse(serializeRubric(DEFAULT_CRITERIA))).toEqual(DEFAULT_CRITERIA);
+  });
+  it('rejects invalid totals, fractional weights and duplicate IDs', () => {
+    expect(() => serializeRubric(DEFAULT_CRITERIA.map((row, i) => i === 0 ? { ...row, weight: 39 } : row))).toThrow('100%');
+    expect(() => serializeRubric(DEFAULT_CRITERIA.map((row, i) => i === 0 ? { ...row, weight: 39.5 } : row))).toThrow('whole percentage');
+    expect(() => serializeRubric(DEFAULT_CRITERIA.map((row) => ({ ...row, id: 'same' })))).toThrow('unique');
+  });
+  it('requires two to four meaningful criteria', () => {
+    expect(() => serializeRubric(DEFAULT_CRITERIA.slice(0, 1))).toThrow('2–4');
+    expect(() => serializeRubric(DEFAULT_CRITERIA.map((row) => ({ ...row, description: 'short' })))).toThrow('description');
   });
 });
 

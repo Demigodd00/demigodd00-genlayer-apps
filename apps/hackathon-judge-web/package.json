@@ -14,7 +14,7 @@
     "test": "vitest run --config vitest.config.ts",
     "check": "pnpm typecheck && pnpm test && pnpm lint && pnpm build",
     "audit:prod": "pnpm audit --prod --audit-level moderate",
-    "lint": "oxlint app components/judge-app.tsx components/ui/button.tsx lib tests",
+    "lint": "oxlint app components/judge-app.tsx components/scorecards.tsx components/ui/button.tsx lib tests",
     "format": "oxfmt"
   },
   "dependencies": {

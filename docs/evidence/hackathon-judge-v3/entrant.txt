@@ -1,0 +1,14 @@
+Hackathon Judge v3 — Score Appeal Fixture
+HJ-PROVENANCE-V1|studionet|0xcbebb5edaf1323a6561d1b96911306e531355c1d|hj-1|0x808fc6c1db96663008e0534479f86a0467a7eb00|demigodd00/demigodd00-genlayer-apps|docs/evidence/hackathon-judge-v3/entrant.txt|submission|none
+
+This is a controlled release-acceptance fixture for the same Hackathon Judge build, not a separate product or evidence of independent users, adoption, originality, or a usability study.
+The GenLayer contract implements locked weighted criteria, independently compared criterion scores, exact integer weighted totals, evidence citations, a common appeal window, one targeted score appeal, preserved original scorecards, and settlement after appeals close.
+Frozen evidence comes from wallet-bound GitHub files. Citation excerpts are derived from recorded line ranges; location checking does not establish the truth of a claim or correctness of an AI judgment.
+Public v3 contract on StudioNet: 0xCBebB5EDAf1323A6561d1b96911306E531355c1d
+Contract source: https://github.com/Demigodd00/demigodd00-genlayer-apps/blob/main/contracts/hackathon_judge_scorecards.py
+App source: https://github.com/Demigodd00/demigodd00-genlayer-apps/tree/main/apps/hackathon-judge-web
+Public app: https://hackathon-judge-studionet.blazekingsley2.chatgpt.site/
+The updated app has a weighted rubric editor, per-criterion original and latest scores, expandable evidence excerpts, immutable record digests, and a criterion selector for eligible appeals. The v3 UI is being published as part of this release; the existing public site may still show the accepted v2.3 build during acceptance testing.
+Reviewer journey after publication: open the app, select Transparent Scorecards — Milestone 1, and inspect the submission docket. Choose View scorecard, compare original and latest criterion scores and totals, then expand an evidence citation and inspect immutable records. Choose Frozen evidence to see the saved evidence text.
+Limitations: StudioNet uses simulated GEN. No real payout or real-user traction is claimed. Judging remains subjective; consensus does not guarantee fairness or factual correctness. Evidence provenance demonstrates repository control and wallet binding, not legal ownership.
+Evidence gap: this original package deliberately omits the exact deployment transaction hash and executable verification commands. The locked event rules treat that omission as a reproducibility scoring issue, not an eligibility failure. Any later addendum must be authenticated against this frozen original package.

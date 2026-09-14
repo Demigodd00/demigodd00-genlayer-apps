@@ -2,7 +2,7 @@ import { chains, createClient } from "genlayer-js";
 import { ExecutionResult, TransactionHashVariant, TransactionStatus } from "genlayer-js/types";
 import type {
   Address, BuilderProfile, CreateHackathonInput, Evidence, Hackathon,
-  HackathonSummary, Page, ProtocolStats, Submission,
+  HackathonSummary, Page, ProtocolStats, Submission, ScorecardHistory,
 } from "./protocol";
 import { friendlyError, isAddress, sameAddress } from "./protocol";
 
@@ -17,7 +17,7 @@ declare global { interface Window { ethereum?: EthereumProvider } }
 export type WalletSession = { address: Address; client: ReturnType<typeof createClient>; provider: EthereumProvider };
 export type TxProgress = { state: "idle" | "checking" | "signing" | "submitted" | "finalizing" | "confirmed" | "failed"; label: string; hash?: string };
 
-export const CONTRACT_ADDRESS = (process.env.NEXT_PUBLIC_HACKATHON_JUDGE_ADDRESS ?? "0x6fD9B65001B0eEF5CC98A95D20A1c693C0D04FBA") as Address;
+export const CONTRACT_ADDRESS = (process.env.NEXT_PUBLIC_HACKATHON_JUDGE_ADDRESS ?? "0xCBebB5EDAf1323A6561d1b96911306E531355c1d") as Address;
 export const EXPLORER_URL = `https://explorer-studio.genlayer.com/address/${CONTRACT_ADDRESS}`;
 const readClient = createClient({ chain: chains.studionet });
 
@@ -41,6 +41,7 @@ export const listHackathons = async (offset = 0) => validPage(await read<Page<Ha
 export const getHackathon = (id: string) => read<Hackathon>("get_hackathon", [id]);
 export const listSubmissions = async (id: string) => validPage(await read<Page<Submission>>("list_submissions", [id, 0, 25]));
 export const getEvidence = (id: string, index: string) => read<Evidence>("get_submission_evidence", [id, Number(index)]);
+export const getScorecardHistory = (id: string, index: string) => read<ScorecardHistory>('get_scorecard_history', [id, Number(index)]);
 export const getStats = () => read<ProtocolStats>("get_stats");
 export const getBuilderProfile = (address: Address) => read<BuilderProfile>("get_builder_profile", [address]);
 
@@ -117,7 +118,7 @@ export const createHackathon = (s: WalletSession, input: CreateHackathonInput, p
 export const cancelHackathon = (s: WalletSession, id: string, p: (value: TxProgress) => void) => write(s, "cancel_hackathon", [id], 0n, p);
 export const submitProject = (s: WalletSession, id: string, name: string, url: string, summary: string, p: (value: TxProgress) => void) => write(s, "submit_project", [id, name.trim(), url.trim(), summary.trim()], 0n, p);
 export const evaluateSubmission = (s: WalletSession, id: string, index: string, p: (value: TxProgress) => void) => write(s, "evaluate_submission", [id, Number(index)], 0n, p);
-export const appealSubmission = (s: WalletSession, id: string, index: string, statement: string, url: string, p: (value: TxProgress) => void) => write(s, "appeal_submission", [id, Number(index), statement.trim(), url.trim()], 0n, p);
+export const appealSubmission = (s: WalletSession, id: string, index: string, statement: string, url: string, criterion: string, p: (value: TxProgress) => void) => write(s, "appeal_submission", [id, Number(index), statement.trim(), url.trim(), criterion], 0n, p);
 export const resolveAppeal = (s: WalletSession, id: string, index: string, p: (value: TxProgress) => void) => write(s, "resolve_appeal", [id, Number(index)], 0n, p);
 export const expireUnresolvedSubmission = (s: WalletSession, id: string, index: string, p: (value: TxProgress) => void) => write(s, "expire_unresolved_submission", [id, Number(index)], 0n, p);
 export const finalizeHackathon = (s: WalletSession, id: string, p: (value: TxProgress) => void) => write(s, "finalize_hackathon", [id], 0n, p);
