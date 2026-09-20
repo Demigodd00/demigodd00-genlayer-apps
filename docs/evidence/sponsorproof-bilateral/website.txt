@@ -1,0 +1,5 @@
+Open Builders Workshop — public website
+Controlled SponsorProof bilateral appeal fixture, not a real event or sponsorship.
+Nova Tools is the headline sponsor of the Open Builders Workshop.
+Nova Tools provides development tools that help on-chain builders create and inspect intelligent contracts.
+SPONSORPROOF-V1|studionet|0x0235c7f7e646ba26532587afed3108148c92ef2f|sp-2|c1|0x492f5b5f00167a7479104c3a701ac1d81efb4695|21b95cf8ece650f611d98e6bee49cc69111ccc4760396f4bf558884366175e05
