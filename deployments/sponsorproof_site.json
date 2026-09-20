@@ -1,0 +1,13 @@
+{
+  "project_id": "appgprj_6ab03c88a26c81918477c69ead75d068",
+  "version_id": "appgprj_6ab03c88a26c81918477c69ead75d068~appgver_9767e4b737e88191a5231239002b53fb",
+  "version_number": 1,
+  "deployment_id": "appgdep_6ab047b18bd08191bd3a22357e1cb201",
+  "status": "succeeded",
+  "audience": "owner-private",
+  "url": "https://sponsorproof-studionet.blazekingsley2.chatgpt.site",
+  "source_commit": "74bf53b8a2154962ff7ec1cbdff209eeca139648",
+  "local_archive_sha256": "24298288a2b5bb02962c8d06f3f5e026d06b8d9339f6f4c17e15cd329261df06",
+  "stored_archive_content_hash": "sha256:9800bdcb5cee4976d582c62111013e815e317eae1d38f4bb46edb6cc12374694",
+  "updated_at": "2026-09-20T20:53:25.061760+00:00"
+}

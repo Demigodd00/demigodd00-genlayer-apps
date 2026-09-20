@@ -55,7 +55,8 @@ def run_tx(record, clients, step, role, method, args, value=0, reject=None):
 
 def main():
     parser=argparse.ArgumentParser(); parser.add_argument("--phase",choices=["prepare","finish"],required=True)
-    phase=parser.parse_args().phase
+    parser.add_argument("--acknowledge-late-sponsor-appeal",action="store_true",help="Resume an audited run after a finalized, correctly rejected late sponsor appeal; retain the failed expectation.")
+    options=parser.parse_args(); phase=options.phase
     deployed=json.loads((ROOT/"deployments/sponsorproof_studionet.json").read_text())
     master=Account.from_key(_load_signer())
     accounts={role:Account.from_key(hmac.new(master.key,("sponsorproof/v1/"+role).encode(),hashlib.sha256).digest()) for role in ("sponsor","organizer","outsider")}
@@ -92,10 +93,21 @@ def main():
     run_tx(record,clients,"seal_organizer","organizer","seal_evidence",[cid])
     run_tx(record,clients,"seal_sponsor","sponsor","seal_evidence",[cid])
     run_tx(record,clients,"evaluate","outsider","evaluate",[cid])
-    state=read("get_campaign",[cid]); record["initial"]=state; save(record)
+    state=read("get_campaign",[cid])
+    if "initial" not in record:
+        record["initial"]=state; save(record)
     run_tx(record,clients,"reject_premature_settlement","outsider","settle",[cid],reject="closed review")
     run_tx(record,clients,"appeal_organizer","organizer","appeal",[cid,"Please independently reconsider the newsletter requirement against the captured text. A sponsor name appears, but no product description; preserve the distinction between partial and full delivery."])
-    run_tx(record,clients,"appeal_sponsor","sponsor","appeal",[cid,"Please also consider the session listing: its publication should not count as sponsored without an actual Nova Tools attribution. The wallet challenge is provenance only, not performance evidence."])
+    late=record["transactions"].get("appeal_sponsor",{})
+    if options.acknowledge_late_sponsor_appeal and late.get("execution_succeeded") is False:
+        receipt=late["failure_receipt"]
+        assert int(receipt["created_timestamp"]) >= state["review_deadline"]
+        assert "one appeal statement per party within the shared window" in json.dumps(receipt,default=str)
+        record["observed_deviations"]={"appeal_sponsor": "The intended sponsor appeal arrived after the two-minute review deadline and was correctly rejected. Only the organizer argument entered the live appeal. The failed expectation and receipt are retained; this is not a successful two-party live appeal test."}
+        save(record)
+        print(json.dumps({"step":"appeal_sponsor","observed":"late submission rejected; failed expectation retained"}),flush=True)
+    else:
+        run_tx(record,clients,"appeal_sponsor","sponsor","appeal",[cid,"Please also consider the session listing: its publication should not count as sponsored without an actual Nova Tools attribution. The wallet challenge is provenance only, not performance evidence."])
     while time.time()<state["review_deadline"]+2:
         remaining=max(1,int(state["review_deadline"]+2-time.time()))
         print(json.dumps({"state":"waiting_for_shared_review_window","seconds":remaining}),flush=True)
@@ -106,7 +118,8 @@ def main():
     assert state["status"]=="SETTLED" and len(state["history"])==2
     assert state["history"][0]==record["initial"]["history"][0]
     assert int(state["organizer_allocation"])+int(state["sponsor_allocation"])+int(state["held_atto"])==BUDGET
-    record["credits_before_claim"]={role:read("get_credit",[accounts[role].address]) for role in ("sponsor","organizer")}; save(record)
+    if "credits_before_claim" not in record:
+        record["credits_before_claim"]={role:read("get_credit",[accounts[role].address]) for role in ("sponsor","organizer")}; save(record)
     for role in ("sponsor","organizer"):
         if int(record["credits_before_claim"][role]):
             run_tx(record,clients,"claim_"+role,role,"claim",[])
