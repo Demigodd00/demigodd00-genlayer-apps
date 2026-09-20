@@ -4,7 +4,7 @@ SponsorProof is a two-party sponsorship fulfillment protocol on GenLayer StudioN
 
 ## Deployment and source
 
-- [SponsorProof app](https://sponsorproof-studionet.blazekingsley2.chatgpt.site) — currently owner-private; public reviewer access has not been enabled.
+- [SponsorProof app](https://sponsorproof-studionet.blazekingsley2.chatgpt.site) — public reviewer access enabled on 20 September 2026.
 - [Intelligent contract](https://explorer-studio.genlayer.com/address/0x0235c7f7E646bA26532587aFED3108148C92Ef2f)
 - [Contract source](https://github.com/Demigodd00/demigodd00-genlayer-apps/blob/main/contracts/sponsorproof.py)
 - [Deployment record](https://github.com/Demigodd00/demigodd00-genlayer-apps/blob/main/deployments/sponsorproof_studionet.json)
@@ -71,4 +71,4 @@ Use Node 24 and Python 3.12. Direct tests inject controlled web/LLM responses; t
 - Runtime dependency audit (`npm audit --omit=dev`): **0 reported vulnerabilities** after patch updates. The full audit still reports **six development-tool advisories (two low, four moderate)** through the starter's esbuild/tooling dependencies. This is not a clean full audit or a production security certification; do not expose development servers publicly. Breaking starter-toolchain upgrades were not forced.
 - The read-only WebMCP agreement inspector was exercised on actual `sp-1` state; invalid input was rejected without altering the selected agreement.
 
-Website version 1 was published privately. A reviewer cannot access the Site until its owner enables the appropriate audience. The public GitHub source and StudioNet contract evidence are separate from that website access setting. Nothing has been submitted to a contribution portal.
+Website version 1 was initially published privately. On 20 September 2026, the owner authorized public access and the Site access policy was changed to public without changing the deployed app. Anyone with the URL can visit. Nothing has been submitted to a contribution portal.
