@@ -1,0 +1,811 @@
+{
+  "contract": "0x0235c7f7E646bA26532587aFED3108148C92Ef2f",
+  "network": "studionet",
+  "title": "Open Builders Workshop \u00b7 bilateral appeal demo",
+  "fixture_notice": "Controlled bilateral appeal acceptance fixture; not external users, real sponsorship or adoption. All GEN is simulated.",
+  "budget_atto": "1000000000000000",
+  "review_seconds": 600,
+  "wallets": {
+    "sponsor": "0x2454DEc52222fAbd87E20EE2ED303fAFcF2fdE2B",
+    "organizer": "0x492f5B5f00167a7479104c3a701Ac1D81eFb4695",
+    "outsider": "0xC29CDFd9877d17A8Ba6205948D061d42B753A220"
+  },
+  "commitments": [
+    {
+      "title": "Workshop website",
+      "weight": 50,
+      "url": "https://raw.githubusercontent.com/Demigodd00/demigodd00-genlayer-apps/main/docs/evidence/sponsorproof-bilateral/website.txt",
+      "requirement": "The workshop page must clearly identify Nova Tools as its headline sponsor and meaningfully explain that Nova Tools provides development tools for on-chain builders. Both elements are required for full delivery; a name alone is partial."
+    },
+    {
+      "title": "Newsletter inclusion",
+      "weight": 30,
+      "url": "https://raw.githubusercontent.com/Demigodd00/demigodd00-genlayer-apps/main/docs/evidence/sponsorproof-bilateral/newsletter.txt",
+      "requirement": "The public newsletter must name Nova Tools and explain its developer toolkit in at least one meaningful sentence. A sponsor name without any product explanation is partial delivery, not full delivery."
+    },
+    {
+      "title": "Session listing",
+      "weight": 20,
+      "url": "https://raw.githubusercontent.com/Demigodd00/demigodd00-genlayer-apps/main/docs/evidence/sponsorproof-bilateral/listing.txt",
+      "requirement": "The published session listing must attribute the opening session to Nova Tools as sponsor. A complete listing with no Nova Tools attribution is not fulfilled. A wallet challenge by itself is not sponsor attribution."
+    }
+  ],
+  "deadline": 1789954337,
+  "transactions": {
+    "propose": {
+      "hash": "0x486c589ca4f158ea95f66f3d5a8c6d48a5a499aadb58e82f2158073cc641028d",
+      "role": "sponsor",
+      "method": "propose",
+      "args": [
+        "Open Builders Workshop \u00b7 bilateral appeal demo",
+        "0x492f5B5f00167a7479104c3a701Ac1D81eFb4695",
+        "[{\"title\": \"Workshop website\", \"weight\": 50, \"url\": \"https://raw.githubusercontent.com/Demigodd00/demigodd00-genlayer-apps/main/docs/evidence/sponsorproof-bilateral/website.txt\", \"requirement\": \"The workshop page must clearly identify Nova Tools as its headline sponsor and meaningfully explain that Nova Tools provides development tools for on-chain builders. Both elements are required for full delivery; a name alone is partial.\"}, {\"title\": \"Newsletter inclusion\", \"weight\": 30, \"url\": \"https://raw.githubusercontent.com/Demigodd00/demigodd00-genlayer-apps/main/docs/evidence/sponsorproof-bilateral/newsletter.txt\", \"requirement\": \"The public newsletter must name Nova Tools and explain its developer toolkit in at least one meaningful sentence. A sponsor name without any product explanation is partial delivery, not full delivery.\"}, {\"title\": \"Session listing\", \"weight\": 20, \"url\": \"https://raw.githubusercontent.com/Demigodd00/demigodd00-genlayer-apps/main/docs/evidence/sponsorproof-bilateral/listing.txt\", \"requirement\": \"The published session listing must attribute the opening session to Nova Tools as sponsor. A complete listing with no Nova Tools attribution is not fulfilled. A wallet challenge by itself is not sponsor attribution.\"}]",
+        1000000000000000,
+        1789954337,
+        600
+      ],
+      "value_atto": "0",
+      "expected_error": null,
+      "execution_succeeded": true,
+      "status": "7",
+      "result_name": "MAJORITY_AGREE",
+      "expected_outcome_verified": true
+    },
+    "accept": {
+      "hash": "0x466158382dbf7737e262527e26ca0100dae82a7097b1a69f4088499beaa1b391",
+      "role": "organizer",
+      "method": "accept",
+      "args": [
+        "sp-2",
+        "21b95cf8ece650f611d98e6bee49cc69111ccc4760396f4bf558884366175e05"
+      ],
+      "value_atto": "0",
+      "expected_error": null,
+      "execution_succeeded": true,
+      "status": "7",
+      "result_name": "MAJORITY_AGREE",
+      "expected_outcome_verified": true
+    },
+    "fund": {
+      "hash": "0x5d6fb634b9fba84bfe22dc770db34f03661df14bc8cd44f3210c8449c79c8427",
+      "role": "sponsor",
+      "method": "fund",
+      "args": [
+        "sp-2"
+      ],
+      "value_atto": "1000000000000000",
+      "expected_error": null,
+      "execution_succeeded": true,
+      "status": "7",
+      "result_name": "MAJORITY_AGREE",
+      "expected_outcome_verified": true
+    },
+    "capture_c1": {
+      "hash": "0x7c18a794f0ac939e2f8ba01241cf1e9f4da02c4962b28a6c44f7514488e3fe7c",
+      "role": "organizer",
+      "method": "capture",
+      "args": [
+        "sp-2",
+        "c1"
+      ],
+      "value_atto": "0",
+      "expected_error": null,
+      "execution_succeeded": true,
+      "status": "7",
+      "result_name": "MAJORITY_AGREE",
+      "expected_outcome_verified": true
+    },
+    "capture_c2": {
+      "hash": "0xff3c846beb0acfa5abb8776c5809bebc93c9cf87f05a8e3449dc623b12cb82a6",
+      "role": "organizer",
+      "method": "capture",
+      "args": [
+        "sp-2",
+        "c2"
+      ],
+      "value_atto": "0",
+      "expected_error": null,
+      "execution_succeeded": true,
+      "status": "7",
+      "result_name": "MAJORITY_AGREE",
+      "expected_outcome_verified": true
+    },
+    "capture_c3": {
+      "hash": "0x167f0d4e6d1365610c19552648c13f3dccb6e6f90eaa653867ad78a1d7971c9a",
+      "role": "organizer",
+      "method": "capture",
+      "args": [
+        "sp-2",
+        "c3"
+      ],
+      "value_atto": "0",
+      "expected_error": null,
+      "execution_succeeded": true,
+      "status": "7",
+      "result_name": "MAJORITY_AGREE",
+      "expected_outcome_verified": true
+    },
+    "seal_organizer": {
+      "hash": "0xa5a3344d820a6378c6dcbce08f62dfa4b526997bcffe1231475b67f8c8fa4c7d",
+      "role": "organizer",
+      "method": "seal_evidence",
+      "args": [
+        "sp-2"
+      ],
+      "value_atto": "0",
+      "expected_error": null,
+      "execution_succeeded": true,
+      "status": "7",
+      "result_name": "MAJORITY_AGREE",
+      "expected_outcome_verified": true
+    },
+    "seal_sponsor": {
+      "hash": "0x5fe1d3835b713e23061f9d603babb15e97c2bc39071b920cc22c8e58df03a0ed",
+      "role": "sponsor",
+      "method": "seal_evidence",
+      "args": [
+        "sp-2"
+      ],
+      "value_atto": "0",
+      "expected_error": null,
+      "execution_succeeded": true,
+      "status": "7",
+      "result_name": "MAJORITY_AGREE",
+      "expected_outcome_verified": true
+    },
+    "evaluate": {
+      "hash": "0xd8ec5940d53bf68c0ff830e738c165470423cdffa93b2447a8e309658af6243d",
+      "role": "outsider",
+      "method": "evaluate",
+      "args": [
+        "sp-2"
+      ],
+      "value_atto": "0",
+      "expected_error": null,
+      "execution_succeeded": true,
+      "status": "7",
+      "result_name": "MAJORITY_AGREE",
+      "expected_outcome_verified": true
+    },
+    "appeal_organizer": {
+      "hash": "0xf655f752264d1477db839150f71908175ababad9a8bd7308696c8488a6361838",
+      "role": "organizer",
+      "method": "appeal",
+      "args": [
+        "sp-2",
+        "Please independently reconsider the newsletter against the locked requirement. It names Nova Tools but contains no product explanation. Assess whether this is partial rather than full delivery, using only the frozen newsletter."
+      ],
+      "value_atto": "0",
+      "expected_error": null,
+      "execution_succeeded": true,
+      "status": "7",
+      "result_name": "MAJORITY_AGREE",
+      "expected_outcome_verified": true
+    },
+    "appeal_sponsor": {
+      "hash": "0x4736f8392c955fb0affc4315c7cde4520aac7be92137aba511eae45feeb415d1",
+      "role": "sponsor",
+      "method": "appeal",
+      "args": [
+        "sp-2",
+        "Please independently reconsider the session listing. It must attribute the opening session to Nova Tools. Its wallet challenge proves publication control, not sponsorship delivery. Assess the actual frozen schedule, not the challenge."
+      ],
+      "value_atto": "0",
+      "expected_error": null,
+      "execution_succeeded": true,
+      "status": "7",
+      "result_name": "MAJORITY_AGREE",
+      "expected_outcome_verified": true
+    },
+    "resolve_appeal": {
+      "hash": "0xfcc4dc5340ea19a8f5a1ac72a3b06a0e0b8040db65f1930c4ee709fa98f0d72a",
+      "role": "outsider",
+      "method": "resolve_appeal",
+      "args": [
+        "sp-2"
+      ],
+      "value_atto": "0",
+      "expected_error": null,
+      "execution_succeeded": true,
+      "status": "7",
+      "result_name": "MAJORITY_AGREE",
+      "expected_outcome_verified": true
+    },
+    "settle": {
+      "hash": "0x13f7466f2fdcd33bb8fd568dea7bfea796acc794d35f280f5be583b63b6632b9",
+      "role": "outsider",
+      "method": "settle",
+      "args": [
+        "sp-2"
+      ],
+      "value_atto": "0",
+      "expected_error": null,
+      "execution_succeeded": true,
+      "status": "7",
+      "result_name": "MAJORITY_AGREE",
+      "expected_outcome_verified": true
+    },
+    "claim_organizer": {
+      "hash": "0xb540ff4b51ce788d5dc9bb84b9d279d1a07f39491b14ccc58ce283ec16f6d2b5",
+      "role": "organizer",
+      "method": "claim",
+      "args": [],
+      "value_atto": "0",
+      "expected_error": null,
+      "execution_succeeded": true,
+      "status": "7",
+      "result_name": "MAJORITY_AGREE",
+      "expected_outcome_verified": true
+    },
+    "claim_sponsor": {
+      "hash": "0xe0736ddc2885ae950b06361645311ec808705a606e59b1ea77c59728be812130",
+      "role": "sponsor",
+      "method": "claim",
+      "args": [],
+      "value_atto": "0",
+      "expected_error": null,
+      "execution_succeeded": true,
+      "status": "7",
+      "result_name": "MAJORITY_AGREE",
+      "expected_outcome_verified": true
+    }
+  },
+  "updated_at": "2026-09-20T21:52:55.389577+00:00",
+  "campaign_id": "sp-2",
+  "challenges": {
+    "c1": "SPONSORPROOF-V1|studionet|0x0235c7f7e646ba26532587afed3108148c92ef2f|sp-2|c1|0x492f5b5f00167a7479104c3a701ac1d81efb4695|21b95cf8ece650f611d98e6bee49cc69111ccc4760396f4bf558884366175e05",
+    "c2": "SPONSORPROOF-V1|studionet|0x0235c7f7e646ba26532587afed3108148c92ef2f|sp-2|c2|0x492f5b5f00167a7479104c3a701ac1d81efb4695|21b95cf8ece650f611d98e6bee49cc69111ccc4760396f4bf558884366175e05",
+    "c3": "SPONSORPROOF-V1|studionet|0x0235c7f7e646ba26532587afed3108148c92ef2f|sp-2|c3|0x492f5b5f00167a7479104c3a701ac1d81efb4695|21b95cf8ece650f611d98e6bee49cc69111ccc4760396f4bf558884366175e05"
+  },
+  "faucet_hash": "0x1034142edd03477af2189a2cf12ec6753ee68ee455a8a659677341f6edd0da37",
+  "initial": {
+    "allocated": false,
+    "appeals": {},
+    "budget_atto": "1000000000000000",
+    "commitments": [
+      {
+        "id": "c1",
+        "requirement": "The workshop page must clearly identify Nova Tools as its headline sponsor and meaningfully explain that Nova Tools provides development tools for on-chain builders. Both elements are required for full delivery; a name alone is partial.",
+        "title": "Workshop website",
+        "url": "https://raw.githubusercontent.com/Demigodd00/demigodd00-genlayer-apps/main/docs/evidence/sponsorproof-bilateral/website.txt",
+        "weight": 50
+      },
+      {
+        "id": "c2",
+        "requirement": "The public newsletter must name Nova Tools and explain its developer toolkit in at least one meaningful sentence. A sponsor name without any product explanation is partial delivery, not full delivery.",
+        "title": "Newsletter inclusion",
+        "url": "https://raw.githubusercontent.com/Demigodd00/demigodd00-genlayer-apps/main/docs/evidence/sponsorproof-bilateral/newsletter.txt",
+        "weight": 30
+      },
+      {
+        "id": "c3",
+        "requirement": "The published session listing must attribute the opening session to Nova Tools as sponsor. A complete listing with no Nova Tools attribution is not fulfilled. A wallet challenge by itself is not sponsor attribution.",
+        "title": "Session listing",
+        "url": "https://raw.githubusercontent.com/Demigodd00/demigodd00-genlayer-apps/main/docs/evidence/sponsorproof-bilateral/listing.txt",
+        "weight": 20
+      }
+    ],
+    "contract": "0x0235c7f7e646ba26532587afed3108148c92ef2f",
+    "created_at": 1789939942,
+    "deadline": 1789954337,
+    "evidence": {
+      "c1": {
+        "captured_at": 1789940141,
+        "challenge": "SPONSORPROOF-V1|studionet|0x0235c7f7e646ba26532587afed3108148c92ef2f|sp-2|c1|0x492f5b5f00167a7479104c3a701ac1d81efb4695|21b95cf8ece650f611d98e6bee49cc69111ccc4760396f4bf558884366175e05",
+        "id": "c1",
+        "organizer": "0x492f5b5f00167a7479104c3a701ac1d81efb4695",
+        "package_digest": "2bd6fd45008b8bf231d0c56aa5abe8986e5c9f593411e9e366f8c205a6785acf",
+        "sha256": "67a363124e62fe59584b185360d52dd9f43ee0e2cfaf561967ece740fdfcca55",
+        "terms_digest": "21b95cf8ece650f611d98e6bee49cc69111ccc4760396f4bf558884366175e05",
+        "text": "Open Builders Workshop \u2014 public website\nControlled SponsorProof bilateral appeal fixture, not a real event or sponsorship.\nNova Tools is the headline sponsor of the Open Builders Workshop.\nNova Tools provides development tools that help on-chain builders create and inspect intelligent contracts.\nSPONSORPROOF-V1|studionet|0x0235c7f7e646ba26532587afed3108148c92ef2f|sp-2|c1|0x492f5b5f00167a7479104c3a701ac1d81efb4695|21b95cf8ece650f611d98e6bee49cc69111ccc4760396f4bf558884366175e05",
+        "url": "https://raw.githubusercontent.com/Demigodd00/demigodd00-genlayer-apps/main/docs/evidence/sponsorproof-bilateral/website.txt"
+      },
+      "c2": {
+        "captured_at": 1789940191,
+        "challenge": "SPONSORPROOF-V1|studionet|0x0235c7f7e646ba26532587afed3108148c92ef2f|sp-2|c2|0x492f5b5f00167a7479104c3a701ac1d81efb4695|21b95cf8ece650f611d98e6bee49cc69111ccc4760396f4bf558884366175e05",
+        "id": "c2",
+        "organizer": "0x492f5b5f00167a7479104c3a701ac1d81efb4695",
+        "package_digest": "2ae4152ccf12cb1b3f5219a57454ea81fdf7970f777692b226b89f15dbc3d7b1",
+        "sha256": "f461dc4c460be8d06997917bd85185754353372449b4ec0e7e4a5193da0aa19f",
+        "terms_digest": "21b95cf8ece650f611d98e6bee49cc69111ccc4760396f4bf558884366175e05",
+        "text": "Open Builders Workshop \u2014 public newsletter\nControlled SponsorProof bilateral appeal fixture, not a real event or sponsorship.\nThis week's sessions cover application design and collaborative development.\nSupported by Nova Tools.\nSPONSORPROOF-V1|studionet|0x0235c7f7e646ba26532587afed3108148c92ef2f|sp-2|c2|0x492f5b5f00167a7479104c3a701ac1d81efb4695|21b95cf8ece650f611d98e6bee49cc69111ccc4760396f4bf558884366175e05",
+        "url": "https://raw.githubusercontent.com/Demigodd00/demigodd00-genlayer-apps/main/docs/evidence/sponsorproof-bilateral/newsletter.txt"
+      },
+      "c3": {
+        "captured_at": 1789940236,
+        "challenge": "SPONSORPROOF-V1|studionet|0x0235c7f7e646ba26532587afed3108148c92ef2f|sp-2|c3|0x492f5b5f00167a7479104c3a701ac1d81efb4695|21b95cf8ece650f611d98e6bee49cc69111ccc4760396f4bf558884366175e05",
+        "id": "c3",
+        "organizer": "0x492f5b5f00167a7479104c3a701ac1d81efb4695",
+        "package_digest": "f4d5a87f2c56a5a85acf9a72bd74b56394bca7be076a2260648580a07d8d9d55",
+        "sha256": "fe4d31cd028af3da12b6a0dee1b86acab8f3c5265983abe8ae527000220d5c7a",
+        "terms_digest": "21b95cf8ece650f611d98e6bee49cc69111ccc4760396f4bf558884366175e05",
+        "text": "Open Builders Workshop \u2014 full published session listing\nControlled SponsorProof bilateral appeal fixture, not a real event or sponsorship.\n09:00 Opening session: welcome and community introductions.\n10:00 Application design lab.\n11:00 Collaborative development workshop.\n12:00 Closing discussion.\nSPONSORPROOF-V1|studionet|0x0235c7f7e646ba26532587afed3108148c92ef2f|sp-2|c3|0x492f5b5f00167a7479104c3a701ac1d81efb4695|21b95cf8ece650f611d98e6bee49cc69111ccc4760396f4bf558884366175e05",
+        "url": "https://raw.githubusercontent.com/Demigodd00/demigodd00-genlayer-apps/main/docs/evidence/sponsorproof-bilateral/listing.txt"
+      }
+    },
+    "funded": true,
+    "hard_deadline": 1790559137,
+    "held_atto": "0",
+    "history": [
+      {
+        "appeal_digest": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+        "at": 1789940368,
+        "campaign_id": "sp-2",
+        "contract": "0x0235c7f7e646ba26532587afed3108148c92ef2f",
+        "decision": {
+          "commitments": [
+            {
+              "id": "c1",
+              "outcome": "FULFILLED",
+              "reason": "Line 3 identifies Nova Tools as headline sponsor and line 4 explains that Nova Tools provides development tools for on-chain builders to create and inspect intelligent contracts. Both required elements are present.",
+              "refs": [
+                {
+                  "excerpt": "Nova Tools is the headline sponsor of the Open Builders Workshop.",
+                  "line": 3
+                },
+                {
+                  "excerpt": "Nova Tools provides development tools that help on-chain builders create and inspect intelligent contracts.",
+                  "line": 4
+                }
+              ]
+            },
+            {
+              "id": "c2",
+              "outcome": "PARTIAL",
+              "reason": "Line 4 names Nova Tools as a supporter but provides no explanation of its developer toolkit or product offering. The requirement explicitly states a name without product explanation is partial delivery.",
+              "refs": [
+                {
+                  "excerpt": "Supported by Nova Tools.",
+                  "line": 4
+                }
+              ]
+            },
+            {
+              "id": "c3",
+              "outcome": "NOT_FULFILLED",
+              "reason": "The session listing in lines 3-6 is complete but contains no attribution of any session to Nova Tools as sponsor. The opening session line 3 mentions only welcome and community introductions with no sponsor attribution.",
+              "refs": [
+                {
+                  "excerpt": "09:00 Opening session: welcome and community introductions.",
+                  "line": 3
+                },
+                {
+                  "excerpt": "10:00 Application design lab.",
+                  "line": 4
+                },
+                {
+                  "excerpt": "11:00 Collaborative development workshop.",
+                  "line": 5
+                }
+              ]
+            }
+          ]
+        },
+        "digest": "00f888876bbee23d789263c6423ea92c6e15effbe81e1d690987247c8240958e",
+        "evidence_digests": {
+          "c1": "2bd6fd45008b8bf231d0c56aa5abe8986e5c9f593411e9e366f8c205a6785acf",
+          "c2": "2ae4152ccf12cb1b3f5219a57454ea81fdf7970f777692b226b89f15dbc3d7b1",
+          "c3": "f4d5a87f2c56a5a85acf9a72bd74b56394bca7be076a2260648580a07d8d9d55"
+        },
+        "parent_digest": "",
+        "phase": "initial",
+        "terms_digest": "21b95cf8ece650f611d98e6bee49cc69111ccc4760396f4bf558884366175e05"
+      }
+    ],
+    "id": "sp-2",
+    "organizer": "0x492f5b5f00167a7479104c3a701ac1d81efb4695",
+    "organizer_allocation": "0",
+    "partial_percent": 50,
+    "review_deadline": 1789940968,
+    "review_seconds": 600,
+    "seals": [
+      "0x492f5b5f00167a7479104c3a701ac1d81efb4695",
+      "0x2454dec52222fabd87e20ee2ed303fafcf2fde2b"
+    ],
+    "split_proposal": null,
+    "sponsor": "0x2454dec52222fabd87e20ee2ed303fafcf2fde2b",
+    "sponsor_allocation": "0",
+    "status": "REVIEW",
+    "terms_digest": "21b95cf8ece650f611d98e6bee49cc69111ccc4760396f4bf558884366175e05",
+    "timeout_policy": "REFUND_UNRESOLVED_TO_SPONSOR",
+    "timeout_seconds": 604800,
+    "title": "Open Builders Workshop \u00b7 bilateral appeal demo"
+  },
+  "both_appeals": {
+    "allocated": false,
+    "appeals": {
+      "0x2454dec52222fabd87e20ee2ed303fafcf2fde2b": "Please independently reconsider the session listing. It must attribute the opening session to Nova Tools. Its wallet challenge proves publication control, not sponsorship delivery. Assess the actual frozen schedule, not the challenge.",
+      "0x492f5b5f00167a7479104c3a701ac1d81efb4695": "Please independently reconsider the newsletter against the locked requirement. It names Nova Tools but contains no product explanation. Assess whether this is partial rather than full delivery, using only the frozen newsletter."
+    },
+    "budget_atto": "1000000000000000",
+    "commitments": [
+      {
+        "id": "c1",
+        "requirement": "The workshop page must clearly identify Nova Tools as its headline sponsor and meaningfully explain that Nova Tools provides development tools for on-chain builders. Both elements are required for full delivery; a name alone is partial.",
+        "title": "Workshop website",
+        "url": "https://raw.githubusercontent.com/Demigodd00/demigodd00-genlayer-apps/main/docs/evidence/sponsorproof-bilateral/website.txt",
+        "weight": 50
+      },
+      {
+        "id": "c2",
+        "requirement": "The public newsletter must name Nova Tools and explain its developer toolkit in at least one meaningful sentence. A sponsor name without any product explanation is partial delivery, not full delivery.",
+        "title": "Newsletter inclusion",
+        "url": "https://raw.githubusercontent.com/Demigodd00/demigodd00-genlayer-apps/main/docs/evidence/sponsorproof-bilateral/newsletter.txt",
+        "weight": 30
+      },
+      {
+        "id": "c3",
+        "requirement": "The published session listing must attribute the opening session to Nova Tools as sponsor. A complete listing with no Nova Tools attribution is not fulfilled. A wallet challenge by itself is not sponsor attribution.",
+        "title": "Session listing",
+        "url": "https://raw.githubusercontent.com/Demigodd00/demigodd00-genlayer-apps/main/docs/evidence/sponsorproof-bilateral/listing.txt",
+        "weight": 20
+      }
+    ],
+    "contract": "0x0235c7f7e646ba26532587afed3108148c92ef2f",
+    "created_at": 1789939942,
+    "deadline": 1789954337,
+    "evidence": {
+      "c1": {
+        "captured_at": 1789940141,
+        "challenge": "SPONSORPROOF-V1|studionet|0x0235c7f7e646ba26532587afed3108148c92ef2f|sp-2|c1|0x492f5b5f00167a7479104c3a701ac1d81efb4695|21b95cf8ece650f611d98e6bee49cc69111ccc4760396f4bf558884366175e05",
+        "id": "c1",
+        "organizer": "0x492f5b5f00167a7479104c3a701ac1d81efb4695",
+        "package_digest": "2bd6fd45008b8bf231d0c56aa5abe8986e5c9f593411e9e366f8c205a6785acf",
+        "sha256": "67a363124e62fe59584b185360d52dd9f43ee0e2cfaf561967ece740fdfcca55",
+        "terms_digest": "21b95cf8ece650f611d98e6bee49cc69111ccc4760396f4bf558884366175e05",
+        "text": "Open Builders Workshop \u2014 public website\nControlled SponsorProof bilateral appeal fixture, not a real event or sponsorship.\nNova Tools is the headline sponsor of the Open Builders Workshop.\nNova Tools provides development tools that help on-chain builders create and inspect intelligent contracts.\nSPONSORPROOF-V1|studionet|0x0235c7f7e646ba26532587afed3108148c92ef2f|sp-2|c1|0x492f5b5f00167a7479104c3a701ac1d81efb4695|21b95cf8ece650f611d98e6bee49cc69111ccc4760396f4bf558884366175e05",
+        "url": "https://raw.githubusercontent.com/Demigodd00/demigodd00-genlayer-apps/main/docs/evidence/sponsorproof-bilateral/website.txt"
+      },
+      "c2": {
+        "captured_at": 1789940191,
+        "challenge": "SPONSORPROOF-V1|studionet|0x0235c7f7e646ba26532587afed3108148c92ef2f|sp-2|c2|0x492f5b5f00167a7479104c3a701ac1d81efb4695|21b95cf8ece650f611d98e6bee49cc69111ccc4760396f4bf558884366175e05",
+        "id": "c2",
+        "organizer": "0x492f5b5f00167a7479104c3a701ac1d81efb4695",
+        "package_digest": "2ae4152ccf12cb1b3f5219a57454ea81fdf7970f777692b226b89f15dbc3d7b1",
+        "sha256": "f461dc4c460be8d06997917bd85185754353372449b4ec0e7e4a5193da0aa19f",
+        "terms_digest": "21b95cf8ece650f611d98e6bee49cc69111ccc4760396f4bf558884366175e05",
+        "text": "Open Builders Workshop \u2014 public newsletter\nControlled SponsorProof bilateral appeal fixture, not a real event or sponsorship.\nThis week's sessions cover application design and collaborative development.\nSupported by Nova Tools.\nSPONSORPROOF-V1|studionet|0x0235c7f7e646ba26532587afed3108148c92ef2f|sp-2|c2|0x492f5b5f00167a7479104c3a701ac1d81efb4695|21b95cf8ece650f611d98e6bee49cc69111ccc4760396f4bf558884366175e05",
+        "url": "https://raw.githubusercontent.com/Demigodd00/demigodd00-genlayer-apps/main/docs/evidence/sponsorproof-bilateral/newsletter.txt"
+      },
+      "c3": {
+        "captured_at": 1789940236,
+        "challenge": "SPONSORPROOF-V1|studionet|0x0235c7f7e646ba26532587afed3108148c92ef2f|sp-2|c3|0x492f5b5f00167a7479104c3a701ac1d81efb4695|21b95cf8ece650f611d98e6bee49cc69111ccc4760396f4bf558884366175e05",
+        "id": "c3",
+        "organizer": "0x492f5b5f00167a7479104c3a701ac1d81efb4695",
+        "package_digest": "f4d5a87f2c56a5a85acf9a72bd74b56394bca7be076a2260648580a07d8d9d55",
+        "sha256": "fe4d31cd028af3da12b6a0dee1b86acab8f3c5265983abe8ae527000220d5c7a",
+        "terms_digest": "21b95cf8ece650f611d98e6bee49cc69111ccc4760396f4bf558884366175e05",
+        "text": "Open Builders Workshop \u2014 full published session listing\nControlled SponsorProof bilateral appeal fixture, not a real event or sponsorship.\n09:00 Opening session: welcome and community introductions.\n10:00 Application design lab.\n11:00 Collaborative development workshop.\n12:00 Closing discussion.\nSPONSORPROOF-V1|studionet|0x0235c7f7e646ba26532587afed3108148c92ef2f|sp-2|c3|0x492f5b5f00167a7479104c3a701ac1d81efb4695|21b95cf8ece650f611d98e6bee49cc69111ccc4760396f4bf558884366175e05",
+        "url": "https://raw.githubusercontent.com/Demigodd00/demigodd00-genlayer-apps/main/docs/evidence/sponsorproof-bilateral/listing.txt"
+      }
+    },
+    "funded": true,
+    "hard_deadline": 1790559137,
+    "held_atto": "0",
+    "history": [
+      {
+        "appeal_digest": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+        "at": 1789940368,
+        "campaign_id": "sp-2",
+        "contract": "0x0235c7f7e646ba26532587afed3108148c92ef2f",
+        "decision": {
+          "commitments": [
+            {
+              "id": "c1",
+              "outcome": "FULFILLED",
+              "reason": "Line 3 identifies Nova Tools as headline sponsor and line 4 explains that Nova Tools provides development tools for on-chain builders to create and inspect intelligent contracts. Both required elements are present.",
+              "refs": [
+                {
+                  "excerpt": "Nova Tools is the headline sponsor of the Open Builders Workshop.",
+                  "line": 3
+                },
+                {
+                  "excerpt": "Nova Tools provides development tools that help on-chain builders create and inspect intelligent contracts.",
+                  "line": 4
+                }
+              ]
+            },
+            {
+              "id": "c2",
+              "outcome": "PARTIAL",
+              "reason": "Line 4 names Nova Tools as a supporter but provides no explanation of its developer toolkit or product offering. The requirement explicitly states a name without product explanation is partial delivery.",
+              "refs": [
+                {
+                  "excerpt": "Supported by Nova Tools.",
+                  "line": 4
+                }
+              ]
+            },
+            {
+              "id": "c3",
+              "outcome": "NOT_FULFILLED",
+              "reason": "The session listing in lines 3-6 is complete but contains no attribution of any session to Nova Tools as sponsor. The opening session line 3 mentions only welcome and community introductions with no sponsor attribution.",
+              "refs": [
+                {
+                  "excerpt": "09:00 Opening session: welcome and community introductions.",
+                  "line": 3
+                },
+                {
+                  "excerpt": "10:00 Application design lab.",
+                  "line": 4
+                },
+                {
+                  "excerpt": "11:00 Collaborative development workshop.",
+                  "line": 5
+                }
+              ]
+            }
+          ]
+        },
+        "digest": "00f888876bbee23d789263c6423ea92c6e15effbe81e1d690987247c8240958e",
+        "evidence_digests": {
+          "c1": "2bd6fd45008b8bf231d0c56aa5abe8986e5c9f593411e9e366f8c205a6785acf",
+          "c2": "2ae4152ccf12cb1b3f5219a57454ea81fdf7970f777692b226b89f15dbc3d7b1",
+          "c3": "f4d5a87f2c56a5a85acf9a72bd74b56394bca7be076a2260648580a07d8d9d55"
+        },
+        "parent_digest": "",
+        "phase": "initial",
+        "terms_digest": "21b95cf8ece650f611d98e6bee49cc69111ccc4760396f4bf558884366175e05"
+      }
+    ],
+    "id": "sp-2",
+    "organizer": "0x492f5b5f00167a7479104c3a701ac1d81efb4695",
+    "organizer_allocation": "0",
+    "partial_percent": 50,
+    "review_deadline": 1789940968,
+    "review_seconds": 600,
+    "seals": [
+      "0x492f5b5f00167a7479104c3a701ac1d81efb4695",
+      "0x2454dec52222fabd87e20ee2ed303fafcf2fde2b"
+    ],
+    "split_proposal": null,
+    "sponsor": "0x2454dec52222fabd87e20ee2ed303fafcf2fde2b",
+    "sponsor_allocation": "0",
+    "status": "APPEAL_OPEN",
+    "terms_digest": "21b95cf8ece650f611d98e6bee49cc69111ccc4760396f4bf558884366175e05",
+    "timeout_policy": "REFUND_UNRESOLVED_TO_SPONSOR",
+    "timeout_seconds": 604800,
+    "title": "Open Builders Workshop \u00b7 bilateral appeal demo"
+  },
+  "final": {
+    "allocated": true,
+    "appeals": {
+      "0x2454dec52222fabd87e20ee2ed303fafcf2fde2b": "Please independently reconsider the session listing. It must attribute the opening session to Nova Tools. Its wallet challenge proves publication control, not sponsorship delivery. Assess the actual frozen schedule, not the challenge.",
+      "0x492f5b5f00167a7479104c3a701ac1d81efb4695": "Please independently reconsider the newsletter against the locked requirement. It names Nova Tools but contains no product explanation. Assess whether this is partial rather than full delivery, using only the frozen newsletter."
+    },
+    "budget_atto": "1000000000000000",
+    "commitments": [
+      {
+        "id": "c1",
+        "requirement": "The workshop page must clearly identify Nova Tools as its headline sponsor and meaningfully explain that Nova Tools provides development tools for on-chain builders. Both elements are required for full delivery; a name alone is partial.",
+        "title": "Workshop website",
+        "url": "https://raw.githubusercontent.com/Demigodd00/demigodd00-genlayer-apps/main/docs/evidence/sponsorproof-bilateral/website.txt",
+        "weight": 50
+      },
+      {
+        "id": "c2",
+        "requirement": "The public newsletter must name Nova Tools and explain its developer toolkit in at least one meaningful sentence. A sponsor name without any product explanation is partial delivery, not full delivery.",
+        "title": "Newsletter inclusion",
+        "url": "https://raw.githubusercontent.com/Demigodd00/demigodd00-genlayer-apps/main/docs/evidence/sponsorproof-bilateral/newsletter.txt",
+        "weight": 30
+      },
+      {
+        "id": "c3",
+        "requirement": "The published session listing must attribute the opening session to Nova Tools as sponsor. A complete listing with no Nova Tools attribution is not fulfilled. A wallet challenge by itself is not sponsor attribution.",
+        "title": "Session listing",
+        "url": "https://raw.githubusercontent.com/Demigodd00/demigodd00-genlayer-apps/main/docs/evidence/sponsorproof-bilateral/listing.txt",
+        "weight": 20
+      }
+    ],
+    "contract": "0x0235c7f7e646ba26532587afed3108148c92ef2f",
+    "created_at": 1789939942,
+    "deadline": 1789954337,
+    "evidence": {
+      "c1": {
+        "captured_at": 1789940141,
+        "challenge": "SPONSORPROOF-V1|studionet|0x0235c7f7e646ba26532587afed3108148c92ef2f|sp-2|c1|0x492f5b5f00167a7479104c3a701ac1d81efb4695|21b95cf8ece650f611d98e6bee49cc69111ccc4760396f4bf558884366175e05",
+        "id": "c1",
+        "organizer": "0x492f5b5f00167a7479104c3a701ac1d81efb4695",
+        "package_digest": "2bd6fd45008b8bf231d0c56aa5abe8986e5c9f593411e9e366f8c205a6785acf",
+        "sha256": "67a363124e62fe59584b185360d52dd9f43ee0e2cfaf561967ece740fdfcca55",
+        "terms_digest": "21b95cf8ece650f611d98e6bee49cc69111ccc4760396f4bf558884366175e05",
+        "text": "Open Builders Workshop \u2014 public website\nControlled SponsorProof bilateral appeal fixture, not a real event or sponsorship.\nNova Tools is the headline sponsor of the Open Builders Workshop.\nNova Tools provides development tools that help on-chain builders create and inspect intelligent contracts.\nSPONSORPROOF-V1|studionet|0x0235c7f7e646ba26532587afed3108148c92ef2f|sp-2|c1|0x492f5b5f00167a7479104c3a701ac1d81efb4695|21b95cf8ece650f611d98e6bee49cc69111ccc4760396f4bf558884366175e05",
+        "url": "https://raw.githubusercontent.com/Demigodd00/demigodd00-genlayer-apps/main/docs/evidence/sponsorproof-bilateral/website.txt"
+      },
+      "c2": {
+        "captured_at": 1789940191,
+        "challenge": "SPONSORPROOF-V1|studionet|0x0235c7f7e646ba26532587afed3108148c92ef2f|sp-2|c2|0x492f5b5f00167a7479104c3a701ac1d81efb4695|21b95cf8ece650f611d98e6bee49cc69111ccc4760396f4bf558884366175e05",
+        "id": "c2",
+        "organizer": "0x492f5b5f00167a7479104c3a701ac1d81efb4695",
+        "package_digest": "2ae4152ccf12cb1b3f5219a57454ea81fdf7970f777692b226b89f15dbc3d7b1",
+        "sha256": "f461dc4c460be8d06997917bd85185754353372449b4ec0e7e4a5193da0aa19f",
+        "terms_digest": "21b95cf8ece650f611d98e6bee49cc69111ccc4760396f4bf558884366175e05",
+        "text": "Open Builders Workshop \u2014 public newsletter\nControlled SponsorProof bilateral appeal fixture, not a real event or sponsorship.\nThis week's sessions cover application design and collaborative development.\nSupported by Nova Tools.\nSPONSORPROOF-V1|studionet|0x0235c7f7e646ba26532587afed3108148c92ef2f|sp-2|c2|0x492f5b5f00167a7479104c3a701ac1d81efb4695|21b95cf8ece650f611d98e6bee49cc69111ccc4760396f4bf558884366175e05",
+        "url": "https://raw.githubusercontent.com/Demigodd00/demigodd00-genlayer-apps/main/docs/evidence/sponsorproof-bilateral/newsletter.txt"
+      },
+      "c3": {
+        "captured_at": 1789940236,
+        "challenge": "SPONSORPROOF-V1|studionet|0x0235c7f7e646ba26532587afed3108148c92ef2f|sp-2|c3|0x492f5b5f00167a7479104c3a701ac1d81efb4695|21b95cf8ece650f611d98e6bee49cc69111ccc4760396f4bf558884366175e05",
+        "id": "c3",
+        "organizer": "0x492f5b5f00167a7479104c3a701ac1d81efb4695",
+        "package_digest": "f4d5a87f2c56a5a85acf9a72bd74b56394bca7be076a2260648580a07d8d9d55",
+        "sha256": "fe4d31cd028af3da12b6a0dee1b86acab8f3c5265983abe8ae527000220d5c7a",
+        "terms_digest": "21b95cf8ece650f611d98e6bee49cc69111ccc4760396f4bf558884366175e05",
+        "text": "Open Builders Workshop \u2014 full published session listing\nControlled SponsorProof bilateral appeal fixture, not a real event or sponsorship.\n09:00 Opening session: welcome and community introductions.\n10:00 Application design lab.\n11:00 Collaborative development workshop.\n12:00 Closing discussion.\nSPONSORPROOF-V1|studionet|0x0235c7f7e646ba26532587afed3108148c92ef2f|sp-2|c3|0x492f5b5f00167a7479104c3a701ac1d81efb4695|21b95cf8ece650f611d98e6bee49cc69111ccc4760396f4bf558884366175e05",
+        "url": "https://raw.githubusercontent.com/Demigodd00/demigodd00-genlayer-apps/main/docs/evidence/sponsorproof-bilateral/listing.txt"
+      }
+    },
+    "funded": true,
+    "hard_deadline": 1790559137,
+    "held_atto": "0",
+    "history": [
+      {
+        "appeal_digest": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+        "at": 1789940368,
+        "campaign_id": "sp-2",
+        "contract": "0x0235c7f7e646ba26532587afed3108148c92ef2f",
+        "decision": {
+          "commitments": [
+            {
+              "id": "c1",
+              "outcome": "FULFILLED",
+              "reason": "Line 3 identifies Nova Tools as headline sponsor and line 4 explains that Nova Tools provides development tools for on-chain builders to create and inspect intelligent contracts. Both required elements are present.",
+              "refs": [
+                {
+                  "excerpt": "Nova Tools is the headline sponsor of the Open Builders Workshop.",
+                  "line": 3
+                },
+                {
+                  "excerpt": "Nova Tools provides development tools that help on-chain builders create and inspect intelligent contracts.",
+                  "line": 4
+                }
+              ]
+            },
+            {
+              "id": "c2",
+              "outcome": "PARTIAL",
+              "reason": "Line 4 names Nova Tools as a supporter but provides no explanation of its developer toolkit or product offering. The requirement explicitly states a name without product explanation is partial delivery.",
+              "refs": [
+                {
+                  "excerpt": "Supported by Nova Tools.",
+                  "line": 4
+                }
+              ]
+            },
+            {
+              "id": "c3",
+              "outcome": "NOT_FULFILLED",
+              "reason": "The session listing in lines 3-6 is complete but contains no attribution of any session to Nova Tools as sponsor. The opening session line 3 mentions only welcome and community introductions with no sponsor attribution.",
+              "refs": [
+                {
+                  "excerpt": "09:00 Opening session: welcome and community introductions.",
+                  "line": 3
+                },
+                {
+                  "excerpt": "10:00 Application design lab.",
+                  "line": 4
+                },
+                {
+                  "excerpt": "11:00 Collaborative development workshop.",
+                  "line": 5
+                }
+              ]
+            }
+          ]
+        },
+        "digest": "00f888876bbee23d789263c6423ea92c6e15effbe81e1d690987247c8240958e",
+        "evidence_digests": {
+          "c1": "2bd6fd45008b8bf231d0c56aa5abe8986e5c9f593411e9e366f8c205a6785acf",
+          "c2": "2ae4152ccf12cb1b3f5219a57454ea81fdf7970f777692b226b89f15dbc3d7b1",
+          "c3": "f4d5a87f2c56a5a85acf9a72bd74b56394bca7be076a2260648580a07d8d9d55"
+        },
+        "parent_digest": "",
+        "phase": "initial",
+        "terms_digest": "21b95cf8ece650f611d98e6bee49cc69111ccc4760396f4bf558884366175e05"
+      },
+      {
+        "appeal_digest": "bce8c75e5a84b585f1542ce674a474cf7733498a81fabc2fc8d0a5a6ec12a98e",
+        "at": 1789940975,
+        "campaign_id": "sp-2",
+        "contract": "0x0235c7f7e646ba26532587afed3108148c92ef2f",
+        "decision": {
+          "commitments": [
+            {
+              "id": "c1",
+              "outcome": "FULFILLED",
+              "reason": "The captured workshop page explicitly calls Nova Tools the headline sponsor and also explains that it provides development tools for on-chain builders, satisfying both required elements for full delivery.",
+              "refs": [
+                {
+                  "excerpt": "Nova Tools is the headline sponsor of the Open Builders Workshop.",
+                  "line": 3
+                },
+                {
+                  "excerpt": "Nova Tools provides development tools that help on-chain builders create and inspect intelligent contracts.",
+                  "line": 4
+                }
+              ]
+            },
+            {
+              "id": "c2",
+              "outcome": "PARTIAL",
+              "reason": "The newsletter names Nova Tools, but the captured text provides no meaningful sentence explaining its developer toolkit. The requirement states that sponsor name alone is partial, not full, delivery.",
+              "refs": [
+                {
+                  "excerpt": "This week's sessions cover application design and collaborative development.",
+                  "line": 3
+                },
+                {
+                  "excerpt": "Supported by Nova Tools.",
+                  "line": 4
+                }
+              ]
+            },
+            {
+              "id": "c3",
+              "outcome": "NOT_FULFILLED",
+              "reason": "The published session listing includes the opening session, but it does not attribute that session to Nova Tools anywhere. The requirement says a complete listing with no Nova Tools attribution is not fulfilled.",
+              "refs": [
+                {
+                  "excerpt": "Open Builders Workshop \u2014 full published session listing",
+                  "line": 1
+                },
+                {
+                  "excerpt": "09:00 Opening session: welcome and community introductions.",
+                  "line": 3
+                }
+              ]
+            }
+          ]
+        },
+        "digest": "d047f412ca3730468ee8f67b8f005f1ce067b886422655cdc44f390d9c7806ea",
+        "evidence_digests": {
+          "c1": "2bd6fd45008b8bf231d0c56aa5abe8986e5c9f593411e9e366f8c205a6785acf",
+          "c2": "2ae4152ccf12cb1b3f5219a57454ea81fdf7970f777692b226b89f15dbc3d7b1",
+          "c3": "f4d5a87f2c56a5a85acf9a72bd74b56394bca7be076a2260648580a07d8d9d55"
+        },
+        "parent_digest": "00f888876bbee23d789263c6423ea92c6e15effbe81e1d690987247c8240958e",
+        "phase": "appeal",
+        "terms_digest": "21b95cf8ece650f611d98e6bee49cc69111ccc4760396f4bf558884366175e05"
+      }
+    ],
+    "id": "sp-2",
+    "organizer": "0x492f5b5f00167a7479104c3a701ac1d81efb4695",
+    "organizer_allocation": "650000000000000",
+    "partial_percent": 50,
+    "review_deadline": 1789940968,
+    "review_seconds": 600,
+    "seals": [
+      "0x492f5b5f00167a7479104c3a701ac1d81efb4695",
+      "0x2454dec52222fabd87e20ee2ed303fafcf2fde2b"
+    ],
+    "split_proposal": null,
+    "sponsor": "0x2454dec52222fabd87e20ee2ed303fafcf2fde2b",
+    "sponsor_allocation": "350000000000000",
+    "status": "SETTLED",
+    "terms_digest": "21b95cf8ece650f611d98e6bee49cc69111ccc4760396f4bf558884366175e05",
+    "timeout_policy": "REFUND_UNRESOLVED_TO_SPONSOR",
+    "timeout_seconds": 604800,
+    "title": "Open Builders Workshop \u00b7 bilateral appeal demo"
+  },
+  "credits_before_claim": {
+    "organizer": "650000000000000",
+    "sponsor": "350000000000000"
+  },
+  "credits_after_claim": {
+    "organizer": "0",
+    "sponsor": "0"
+  },
+  "completed_at": "2026-09-20T21:52:55.389577+00:00",
+  "independent_verification": {
+    "command": "pytest tests/integration/test_sponsorproof_studionet.py -v -s",
+    "original_and_bilateral_tests_passed": 2,
+    "frontend_appeal_receipts": {
+      "organizer": "success",
+      "sponsor": "success"
+    },
+    "recipient_balances_at_verification_atto": {
+      "organizer": "650000000000000",
+      "sponsor": "350000000000000"
+    }
+  }
+}

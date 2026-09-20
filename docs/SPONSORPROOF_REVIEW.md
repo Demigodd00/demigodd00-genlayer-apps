@@ -9,17 +9,18 @@ SponsorProof is a two-party sponsorship fulfillment protocol on GenLayer StudioN
 - [Contract source](https://github.com/Demigodd00/demigodd00-genlayer-apps/blob/main/contracts/sponsorproof.py)
 - [Deployment record](https://github.com/Demigodd00/demigodd00-genlayer-apps/blob/main/deployments/sponsorproof_studionet.json)
 - [Controlled live run journal](https://github.com/Demigodd00/demigodd00-genlayer-apps/blob/main/deployments/sponsorproof_demo.json)
+- [Bilateral appeal run journal](https://github.com/Demigodd00/demigodd00-genlayer-apps/blob/main/deployments/sponsorproof_bilateral_demo.json)
 - [Design and security boundaries](https://github.com/Demigodd00/demigodd00-genlayer-apps/blob/main/docs/SPONSORPROOF_DESIGN.md)
 
 Version 1.0.0. Deployment transaction: `0x2708c7bc14843b3f8eb829c1a11f1fbc2ea6d2eb9f91a1e4a9b720be3aff92d9`. Exact source SHA-256: `9c1798d53296836efc5f65ff70d0c90c13c38ad5aeba86060414a3d9dab5dd87`.
 
 ## Read-only reviewer path
 
-1. Open SponsorProof and inspect agreement `sp-1`, **Open Builders Workshop · controlled demo**. Viewing needs no wallet.
+1. Open SponsorProof, refresh the agreements, and select `sp-2`, **Open Builders Workshop · bilateral appeal demo**, in the agreement selector. Viewing needs no wallet. `sp-1` remains available as the original historical demo.
 2. Expand the agreed settlement rules and inspect the two party wallets, immutable terms digest and deadlines.
 3. Inspect each of the three weighted commitments and its exact agreed source URL.
 4. Expand **Inspect frozen evidence** to read numbered captured text and SHA-256 hashes. These are contract records, not frontend judgments.
-5. Compare current outcomes, citations and original decisions. Expand the appeal arguments and immutable history records. This run contains the organizer's argument only: the sponsor's later attempt was rejected after the shared deadline.
+5. Compare current outcomes, citations and original decisions. Expand **Both parties’ appeal arguments** and the immutable history records. In `sp-2`, both the sponsor and organizer statements were accepted. The original `sp-1` run contains only the organizer's accepted statement and retains the sponsor's rejected late attempt in its journal.
 6. Compare organizer allocation, sponsor refund and held amount against the fixed 100%/50%/0% rule and integer weights. The live journal records actual receipts and claim outcomes; do not treat a pending step as success.
 
 The pages, event, sponsor brand and wallets in this run are controlled acceptance fixtures. They do not establish actual sponsorship, external users, audience numbers or adoption. The app also permits users to create their own agreements.
@@ -82,3 +83,26 @@ Version 2 accepts both observed receipt formats, requires explicit successful ex
 Run `node --experimental-strip-types --test tests/protocol.test.mjs tests/receipts.test.mjs` from `apps/sponsorproof-web` for the offline checks and `node --experimental-strip-types --test tests/receipts.live.test.mjs` for the live frontend-adapter checks.
 
 Publication status: version 2 was successfully published to the existing public website on 20 September 2026 at 21:26 UTC, following owner approval. Reload the app and use **Check receipt** for any previously stuck transaction; do not repeat the original action.
+
+## Separate bilateral appeal demonstration
+
+Agreement `sp-2`, **Open Builders Workshop · bilateral appeal demo**, uses a 600-second shared review window and separate sponsor/organizer wallets and publication challenges. The contract, website version, original `sp-1` record and original fixture pages are unchanged. This remains a controlled demonstration using simulated GEN, not external adoption.
+
+The runner is `scripts/seed_sponsorproof_bilateral.py`. It saves each transaction hash before waiting for finalization, preserves unexpected failures, and resumes known transactions without resubmitting them. Both statements must be present in the APPEAL_OPEN state before resolution; the runner waits for the actual review deadline without any time, validator or web overrides.
+
+The run completed on 20 September 2026 at 21:52 UTC. Both appeal statements executed successfully within the common window. The appeal resolution succeeded after that window closed; its decision digest binds both stored arguments. The original decision and captured evidence remain unchanged.
+
+Final state: **SETTLED**. Website FULFILLED, newsletter PARTIAL, listing NOT_FULFILLED; organizer allocation **0.00065 simulated GEN**, sponsor refund **0.00035 simulated GEN**, held **0**. Both withdrawals executed successfully, both claim credits are zero, and an independent balance read returned those exact amounts in the separate recipient wallets.
+
+| Evidence | Finalized transaction |
+| --- | --- |
+| Organizer appeal accepted | [View receipt](https://explorer-studio.genlayer.com/transactions/0xf655f752264d1477db839150f71908175ababad9a8bd7308696c8488a6361838) |
+| Sponsor appeal accepted | [View receipt](https://explorer-studio.genlayer.com/transactions/0x4736f8392c955fb0affc4315c7cde4520aac7be92137aba511eae45feeb415d1) |
+| Shared appeal resolved | [View receipt](https://explorer-studio.genlayer.com/transactions/0xfcc4dc5340ea19a8f5a1ac72a3b06a0e0b8040db65f1930c4ee709fa98f0d72a) |
+| Settlement | [View receipt](https://explorer-studio.genlayer.com/transactions/0x13f7466f2fdcd33bb8fd568dea7bfea796acc794d35f280f5be583b63b6632b9) |
+| Organizer withdrawal | [View receipt](https://explorer-studio.genlayer.com/transactions/0xb540ff4b51ce788d5dc9bb84b9d279d1a07f39491b14ccc58ce283ec16f6d2b5) |
+| Sponsor withdrawal | [View receipt](https://explorer-studio.genlayer.com/transactions/0xe0736ddc2885ae950b06361645311ec808705a606e59b1ea77c59728be812130) |
+
+Independent live read-back verification: **2 tests passed**, covering both the original and bilateral journals. For `sp-2`, checks include successful finalized receipts for every step, both appeal submissions before the deadline, resolution after it, the decision digest binding both arguments, unchanged original evidence/history, conservative integer allocations and zero remaining claim credits.
+
+The frontend's production receipt adapter independently recognized both accepted appeal transactions as successful. The original late sponsor appeal in `sp-1` is preserved rather than relabeled. `sp-2` supplies the missing live two-party appeal demonstration; it does not change the original run's history or imply real-world adoption. The public website already reads this agreement from the existing contract; no frontend redeployment is required.

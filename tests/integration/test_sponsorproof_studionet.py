@@ -2,6 +2,7 @@
 import hashlib
 import json
 import sys
+import pytest
 from pathlib import Path
 from eth_account import Account
 from genlayer_py import create_client
@@ -16,8 +17,9 @@ from deploy_hackathon_judge import _verify_source
 def digest(value):
     return hashlib.sha256(json.dumps(value,sort_keys=True,separators=(",",":"),ensure_ascii=False).encode()).hexdigest()
 
-def test_live_sponsorproof_release():
-    record=json.loads((ROOT/"deployments/sponsorproof_demo.json").read_text())
+@pytest.mark.parametrize("journal", ["sponsorproof_demo.json", "sponsorproof_bilateral_demo.json"])
+def test_live_sponsorproof_release(journal):
+    record=json.loads((ROOT/"deployments"/journal).read_text())
     assert record.get("completed_at"), "Run the explicit live seeder first; this test never creates transactions"
     client=create_client(chain=studionet,account=Account.create())
     address=record["contract"]
@@ -25,11 +27,25 @@ def test_live_sponsorproof_release():
     state=read_studionet_view(client,address,"get_campaign",[record["campaign_id"]])
     assert state==record["final"] and state["status"]=="SETTLED"
     assert len(state["history"])==2 and state["history"][0]==record["initial"]["history"][0]
+    bilateral=journal=="sponsorproof_bilateral_demo.json"
+    if bilateral:
+        expected={record["wallets"][role].lower():record["transactions"]["appeal_"+role]["args"][1] for role in ("organizer","sponsor")}
+        assert state["appeals"]==expected and len(expected)==2
+        assert record["both_appeals"]["status"]=="APPEAL_OPEN"
+        assert record["both_appeals"]["appeals"]==expected
+        assert record["both_appeals"]["history"]==record["initial"]["history"]
+        assert state["evidence"]==record["initial"]["evidence"]==record["both_appeals"]["evidence"]
+        assert state["review_seconds"]==600 and not record.get("observed_deviations")
+        assert all(tx["expected_outcome_verified"] for tx in record["transactions"].values())
     previous=""
     for entry in state["history"]:
         payload={k:v for k,v in entry.items() if k!="digest"}
         assert digest(payload)==entry["digest"] and entry["parent_digest"]==previous
         previous=entry["digest"]
+        if bilateral:
+            assert entry["appeal_digest"]==digest(state["appeals"] if entry["phase"]=="appeal" else {})
+            if entry["phase"]=="appeal":
+                assert entry["at"]>=state["review_deadline"]
         for row in entry["decision"]["commitments"]:
             assert row["outcome"] in ("FULFILLED","PARTIAL","NOT_FULFILLED","INCONCLUSIVE")
             for ref in row["refs"]:
@@ -60,5 +76,7 @@ def test_live_sponsorproof_release():
             assert not tx_execution_succeeded(receipt) and tx["expected_error"] in json.dumps(receipt,default=str),step
         else:
             assert tx_execution_succeeded(receipt),step
+        if bilateral and step in ("appeal_sponsor","appeal_organizer"):
+            assert record["initial"]["history"][0]["at"]<=int(receipt["created_timestamp"])<state["review_deadline"]
     for role in ("organizer","sponsor"):
         assert read_studionet_view(client,address,"get_credit",[record["wallets"][role]])=="0"
