@@ -81,4 +81,4 @@ Version 2 accepts both observed receipt formats, requires explicit successful ex
 
 Run `node --experimental-strip-types --test tests/protocol.test.mjs tests/receipts.test.mjs` from `apps/sponsorproof-web` for the offline checks and `node --experimental-strip-types --test tests/receipts.live.test.mjs` for the live frontend-adapter checks.
 
-Publication status: version 2 is saved and awaiting approval to publish to the existing public website. Version 1 remains live until then. After publication, reload the app and use **Check receipt** for any previously stuck transaction; do not repeat the original action.
+Publication status: version 2 was successfully published to the existing public website on 20 September 2026 at 21:26 UTC, following owner approval. Reload the app and use **Check receipt** for any previously stuck transaction; do not repeat the original action.
