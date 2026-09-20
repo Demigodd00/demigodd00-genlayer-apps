@@ -1,0 +1,5 @@
+Open Builders Workshop — public newsletter
+Controlled SponsorProof release fixture, not a real event or sponsorship.
+This week's sessions cover application design and collaborative development.
+Supported by Nova Tools.
+SPONSORPROOF-V1|studionet|0x0235c7f7e646ba26532587afed3108148c92ef2f|sp-1|c2|0x40ca963f2f19a7393af13238e5618098b173f203|0dc108000d8bfd1988cf0103e51c499c97c234153a5afe455853835142fa2927

@@ -1,0 +1,15 @@
+# SponsorProof — implementation boundary
+
+SponsorProof coordinates two-party, text-based public-web sponsorship agreements entirely on GenLayer StudioNet. The sponsor proposes 1–4 commitments, exact source URLs, weights totaling 100%, budget, delivery deadline and review window. The named organizer accepts the immutable terms; only then may the sponsor fund the exact budget. No administrator may rewrite terms or verdicts.
+
+Each agreed page must expose an agreement-specific organizer-wallet challenge. The organizer captures it once before the deadline. Validators independently fetch the same URL and agree on normalized content before it is frozen and hashed. A source challenge establishes control of the agreed publication, not real-world identity, readership, legal ownership or continuous placement. HTTP failures never become proof of non-delivery. HTML is normalized to bounded visible text; visual placement and analytics are out of scope.
+
+GenLayer independently assesses every captured commitment against its prose requirement. Exact outcome labels (FULFILLED, PARTIAL, NOT_FULFILLED, INCONCLUSIVE) must match across validators; explanation and valid line citations may vary. Unsupported or ambiguous delivery is INCONCLUSIVE. Positive decisions require references to actual frozen lines. Code—not the LLM—maps outcomes to 100%, 50%, 0% or held allocations and does all integer arithmetic.
+
+The delivery period can close early only when both parties seal the current evidence. After the first judgment, both parties share one review window. Each may submit one statement in a single appeal round; resolution waits until the common window closes so neither can race the other. Appeals use the original frozen pages, not post-deadline replacements. Original and revised decisions remain inspectable.
+
+Conclusive allocations can settle after review; INCONCLUSIVE allocations remain held for mutual resolution. Either party may propose a split of the held amount; the other must explicitly accept its digest. A hard, pre-agreed timeout refunds only unresolved amounts to the sponsor after seven days; this is a contractual timeout, not an AI finding of non-delivery. Non-submission or failed judgment can enter the same timeout path after the delivery deadline plus seven days. Pull-based claims clear credit before emitting a finalized transfer. All demo balances are simulated GEN.
+
+Frontend owns wallet interaction, drafts, non-authoritative previews, transaction status and evidence display. Contract owns identity checks, evidence capture, verdict consensus, immutable history, deadlines, settlement and claims. External pages own raw evidence; embedded instructions are untrusted. No bridge, Base escrow, trusted AI backend, private uploads, continuous-monitoring claim or real-money readiness is included.
+
+Verification: contract lint; direct lifecycle, authorization, parsing, consensus-comparator and conservation tests; an actual StudioNet deployment and controlled live acceptance run with recorded transaction hashes. Direct tests use mocks and do not establish network consensus. Any unrun or failed live steps must be disclosed.

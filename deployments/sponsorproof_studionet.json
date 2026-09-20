@@ -1,0 +1,26 @@
+{
+  "transaction_hash": "0x2708c7bc14843b3f8eb829c1a11f1fbc2ea6d2eb9f91a1e4a9b720be3aff92d9",
+  "source_sha256": "9c1798d53296836efc5f65ff70d0c90c13c38ad5aeba86060414a3d9dab5dd87",
+  "deployer": "0x97De3c4518595889E702D505878108d419c7cC42",
+  "address": "0x0235c7f7E646bA26532587aFED3108148C92Ef2f",
+  "contract": "SponsorProof",
+  "network": "studionet",
+  "version": "1.0.0",
+  "source_path": "contracts/sponsorproof.py",
+  "status": "FINALIZED",
+  "execution_result": "SUCCESS",
+  "source_verified": true,
+  "config": {
+    "appeals": "ONE_SHARED_ROUND_BOTH_PARTIES",
+    "consensus": "INDEPENDENT_EXACT_OUTCOME_LABELS",
+    "evidence": "LOCKED_URL_WALLET_CHALLENGE_FROZEN_TEXT",
+    "funds": "SIMULATED_GEN_PULL_CLAIMS",
+    "max_commitments": 4,
+    "name": "SponsorProof",
+    "network": "studionet",
+    "partial_percent": 50,
+    "timeout_seconds": 604800,
+    "version": "1.0.0"
+  },
+  "deployed_at": "2026-09-20T20:19:26.614662+00:00"
+}
