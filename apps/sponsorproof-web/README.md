@@ -11,3 +11,9 @@ The interface supports proposals, organizer acceptance, exact sponsor funding, s
 `inspect_sponsorship_agreement` is an optional read-only WebMCP tool. It displays existing on-chain state and never signs transactions. Unsupported browsers use the ordinary interface.
 
 See [reviewer guide](https://github.com/Demigodd00/demigodd00-genlayer-apps/blob/main/docs/SPONSORPROOF_REVIEW.md) for evidence, limits and reproduction instructions.
+
+## Receipt regression checks
+
+Run `node --experimental-strip-types --test tests/protocol.test.mjs tests/receipts.test.mjs` for offline helper/receipt checks (16 tests). Run `node --experimental-strip-types --test tests/receipts.live.test.mjs` for two read-only checks against actual finalized StudioNet demo transactions. These use the frontend's production receipt adapter, no wallet or signing, and distinguish successful execution from a finalized rollback. Neither check creates a new transaction.
+
+The adapter supports StudioNet snake_case leader receipts and normalized SDK execution fields. Missing or inconsistent execution data fails closed; finality or validator agreement alone is never interpreted as success. Existing stored pending hashes can be resolved through **Check receipt** after updating the page, without submitting the original action again.

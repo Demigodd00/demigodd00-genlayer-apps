@@ -25,4 +25,41 @@ export const credit=(address:string)=>read<string>("get_credit",[address]);
 export async function checkWallet(w:Wallet){const a=await w.provider.request({method:"eth_accounts"}),n=await w.provider.request({method:"eth_chainId"});if(!Array.isArray(a)||!same(a[0],w.address))throw new Error("Wallet changed; reconnect.");if(BigInt(String(n))!==BigInt(chains.studionet.id))throw new Error("Switch to GenLayer StudioNet.");}
 export async function connect():Promise<Wallet>{const p=window.ethereum;if(!p)throw new Error("Install an injected wallet such as MetaMask to sign. Viewing needs no wallet.");const a=await p.request({method:"eth_requestAccounts"});if(!Array.isArray(a)||!validAddress(a[0]))throw new Error("No valid wallet account.");const w={address:a[0],provider:p,client:createClient({chain:chains.studionet,account:a[0],provider:p as never})};await w.client.connect("studionet");await checkWallet(w);return w;}
 export async function submit(w:Wallet,method:string,args:unknown[],value:bigint){await checkWallet(w);return String(await w.client.writeContract({address:ADDRESS,functionName:method,args:args as never[],value}));}
-export async function receipt(hash:string):Promise<"success"|"rejected">{const r=await reader.waitForTransactionReceipt({hash:hash as never,status:TransactionStatus.FINALIZED,retries:30});if(r.statusName!==TransactionStatus.FINALIZED)throw new Error("Still pending; check this receipt again instead of resubmitting.");if(r.txExecutionResultName===ExecutionResult.FINISHED_WITH_ERROR)return "rejected";if(r.txExecutionResultName!==ExecutionResult.FINISHED_WITH_RETURN)throw new Error("Execution outcome is unavailable; check the receipt again.");return "success";}
+type ReceiptOutcome="success"|"rejected";
+const object=(v:unknown):Record<string,unknown>|undefined=>v!==null&&typeof v==="object"&&!Array.isArray(v)?v as Record<string,unknown>:undefined;
+const unavailable=()=>new Error("Execution outcome is unavailable or inconsistent; check the receipt again. Do not resubmit.");
+
+// StudioNet returns snake_case leader receipts; other SDK paths normalize fields.
+// Finality/MAJORITY_AGREE alone does not establish successful execution.
+export function receiptOutcome(value:unknown):ReceiptOutcome{
+ const r=object(value);if(!r)throw unavailable();
+ const statuses=[r.statusName,r.status_name,typeof r.status==="string"&&!/^\d+$/.test(r.status)?r.status:undefined].filter(v=>v!==undefined&&v!==null);
+ if(!statuses.length||new Set(statuses).size!==1)throw unavailable();
+ if(statuses[0]===TransactionStatus.CANCELED)return "rejected";
+ if(statuses[0]!==TransactionStatus.FINALIZED)throw new Error("Still pending; check this receipt again instead of resubmitting.");
+ const outcomes:ReceiptOutcome[]=[];
+ if(r.txExecutionResultName!==undefined&&r.txExecutionResultName!==null){
+  if(r.txExecutionResultName===ExecutionResult.FINISHED_WITH_RETURN)outcomes.push("success");
+  else if(r.txExecutionResultName===ExecutionResult.FINISHED_WITH_ERROR)outcomes.push("rejected");
+  else throw unavailable();
+ }
+ const raw=object(r.consensus_data)?.leader_receipt;
+ if(raw!==undefined&&raw!==null){
+  const leaders=Array.isArray(raw)?raw:[raw];if(!leaders.length)throw unavailable();
+  for(const item of leaders){
+   const leader=object(item);if(!leader)throw unavailable();
+   const execution=leader.execution_result;
+   if(execution!=="SUCCESS"&&execution!=="ERROR")throw unavailable();
+   const outcome=execution==="SUCCESS"?"success":"rejected";
+   const resultStatus=object(leader.result)?.status;
+   if(resultStatus!==undefined&&resultStatus!==(outcome==="success"?"return":"rollback"))throw unavailable();
+   outcomes.push(outcome);
+  }
+ }
+ if(!outcomes.length||new Set(outcomes).size!==1)throw unavailable();
+ return outcomes[0];
+}
+export async function receipt(hash:string):Promise<ReceiptOutcome>{
+ const r=await reader.waitForTransactionReceipt({hash:hash as never,status:TransactionStatus.FINALIZED,retries:30});
+ return receiptOutcome(r);
+}

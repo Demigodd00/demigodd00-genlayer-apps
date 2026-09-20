@@ -1,0 +1,17 @@
+{
+  "project_id": "appgprj_6ab03c88a26c81918477c69ead75d068",
+  "version_id": "appgprj_6ab03c88a26c81918477c69ead75d068~appgver_e391246cfea88191bfb1326f82610a31",
+  "version_number": 2,
+  "status": "saved_awaiting_publish_approval",
+  "source_commit": "56c5a74e39b85627528c203e69e4f8f6e061f7d8",
+  "local_archive_sha256": "781d9fd0681d039921582c30bf370324318493922ac97f92c4a01c94072db5cd",
+  "stored_archive_content_hash": "sha256:3efc8c68c623664a87b698a498b52369703acd7f4e8c2011da56441cbe73a013",
+  "verification": {
+    "offline_tests_passed": 16,
+    "live_read_only_receipt_tests_passed": 2,
+    "typecheck": "passed",
+    "production_build": "passed"
+  },
+  "contract_changed": false,
+  "new_chain_transactions_submitted": false
+}

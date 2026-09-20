@@ -72,3 +72,13 @@ Use Node 24 and Python 3.12. Direct tests inject controlled web/LLM responses; t
 - The read-only WebMCP agreement inspector was exercised on actual `sp-1` state; invalid input was rejected without altering the selected agreement.
 
 Website version 1 was initially published privately. On 20 September 2026, the owner authorized public access and the Site access policy was changed to public without changing the deployed app. Anyone with the URL can visit. Nothing has been submitted to a contribution portal.
+
+## Receipt-handling fix — version 2
+
+A follow-up review found a frontend blocker in website version 1: it expected normalized `statusName` and `txExecutionResultName`, while StudioNet returned `status_name` and `consensus_data.leader_receipt`. Finalized writes were therefore incorrectly displayed as pending, locking further actions. The earlier Python live test and amount-helper tests did not exercise this frontend adapter.
+
+Version 2 accepts both observed receipt formats, requires explicit successful execution rather than finality/consensus alone, recognizes finalized rejections, and fails closed on missing or conflicting data. The contract and its existing state are unchanged. The fix has passed **16 offline frontend tests plus two actual read-only StudioNet receipt tests**, TypeScript checks and the production build. No new chain transactions were submitted for this fix.
+
+Run `node --experimental-strip-types --test tests/protocol.test.mjs tests/receipts.test.mjs` from `apps/sponsorproof-web` for the offline checks and `node --experimental-strip-types --test tests/receipts.live.test.mjs` for the live frontend-adapter checks.
+
+Publication status: version 2 is saved and awaiting approval to publish to the existing public website. Version 1 remains live until then. After publication, reload the app and use **Check receipt** for any previously stuck transaction; do not repeat the original action.
