@@ -1,0 +1,42 @@
+{
+  "product": "OutageBond",
+  "release": "0.2.0-studionet",
+  "contract_address": "0x2893BfB51B80A3ABEE168732f1B3bF86Cde08082",
+  "source_sha256": "6531a9750c6800c200091c63055943f1fb6b7a0bddbc41e1d8baf54f9210fa72",
+  "code_commit": "c5b092f3f357c9592ae8e3f44f5a2f1e9ac8c237",
+  "genvm_lint": "passed",
+  "direct_tests_passed": 18,
+  "frontend_tests_passed": 10,
+  "typecheck": "passed",
+  "production_build": "passed",
+  "production_dependency_audit": "no known vulnerabilities",
+  "live_acceptance": "passed",
+  "acceptance_scope": ["eligible-v2", "short", "unverifiable", "unauthorized-payout", "duplicate-payout"],
+  "historical_inconclusive_claim": "obc-1",
+  "native_payout_atto": "1000000000000000",
+  "native_payout_balance_delta_verified": true,
+  "ci_url": "https://github.com/Demigodd00/demigodd00-genlayer-apps/actions/runs/36151689371",
+  "ci_contract": "success",
+  "ci_frontend": "success",
+  "browser_checks": {
+    "finalized_protocol_version": "0.2.0-studionet",
+    "disconnected_write_blocked": true,
+    "missing_wallet_message": true,
+    "inconclusive_claim_honestly_displayed": true,
+    "paid_claim_displayed": "obc-2",
+    "explicit_utc_dates": true,
+    "real_browser_wallet_signature_automated": false,
+    "rpc_rate_limit_observed": true,
+    "polling_mitigation": "15-second visible-tab reads; paused in hidden tabs"
+  },
+  "out_of_scope_monorepo_checks": {
+    "streakpact": "existing production dependency audit fails",
+    "bountyforge": "existing production dependency audit fails"
+  },
+  "limitations": [
+    "Synthetic, demo-author-controlled report fixtures are not independent operational evidence.",
+    "Long-duration expiry and cross-midnight regressions use the direct test clock, not a shared-chain clock change.",
+    "The original inconclusive fixture remains visible; its pending claim can expire through the permissionless 24-hour deadline path.",
+    "This is test GEN, not production insurance or an external security audit."
+  ]
+}

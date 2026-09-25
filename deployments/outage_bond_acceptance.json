@@ -1,0 +1,921 @@
+{
+  "network": "studionet",
+  "contract": "0x2893BfB51B80A3ABEE168732f1B3bF86Cde08082",
+  "source_sha256": "6531a9750c6800c200091c63055943f1fb6b7a0bddbc41e1d8baf54f9210fa72",
+  "started_at": "2026-09-25T14:43:51.768252+00:00",
+  "transactions": {
+    "create-eligible": {
+      "method": "create_coverage",
+      "args": [
+        "OutageBond Synthetic API",
+        "outagebond-v02-2893BfB5-eligible",
+        "https://example.com/outagebond-demo",
+        "https://outagebond.vercel.app/api/demo-incident",
+        "demo",
+        "0x4123e5162F1FDeA38ceb2522b4B3EF80ad18df82",
+        60,
+        10,
+        1000000000000000,
+        2,
+        3600
+      ],
+      "sender": "0x217b9919d32Cf7ff46BFAe479999aa4f701A1bFa",
+      "value_atto": "2000000000000000",
+      "expect_failure": false,
+      "started_at": "2026-09-25T14:44:03.278166+00:00",
+      "broadcast_attempted": true,
+      "evm_transaction_hash": "0x8c4827ba91676977b36947cab527f9a5432aec62debf8fb650aa26e50c8b47c2",
+      "transaction_hash": "0x8c4827ba91676977b36947cab527f9a5432aec62debf8fb650aa26e50c8b47c2",
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "triggered_transactions": [],
+      "finished_at": "2026-09-25T14:44:48.490763+00:00",
+      "checked": true
+    },
+    "create-short": {
+      "method": "create_coverage",
+      "args": [
+        "OutageBond Synthetic API",
+        "outagebond-v02-2893BfB5-short",
+        "https://example.com/outagebond-demo",
+        "https://outagebond.vercel.app/api/demo-incident",
+        "demo",
+        "0x4123e5162F1FDeA38ceb2522b4B3EF80ad18df82",
+        60,
+        10,
+        1000000000000000,
+        1,
+        3600
+      ],
+      "sender": "0x217b9919d32Cf7ff46BFAe479999aa4f701A1bFa",
+      "value_atto": "1000000000000000",
+      "expect_failure": false,
+      "started_at": "2026-09-25T14:44:54.011156+00:00",
+      "broadcast_attempted": true,
+      "evm_transaction_hash": "0x4a852d42a8d4a6d77c0f6657ec4dbb60bbe92665df4bf83cbbb189e4a175b1e1",
+      "transaction_hash": "0x4a852d42a8d4a6d77c0f6657ec4dbb60bbe92665df4bf83cbbb189e4a175b1e1",
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "triggered_transactions": [],
+      "finished_at": "2026-09-25T14:45:38.848017+00:00",
+      "checked": true
+    },
+    "create-unverifiable": {
+      "method": "create_coverage",
+      "args": [
+        "OutageBond Synthetic API",
+        "outagebond-v02-2893BfB5-unverifiable",
+        "https://example.com/outagebond-demo",
+        "https://outagebond.vercel.app/api/demo-incident",
+        "demo",
+        "0x4123e5162F1FDeA38ceb2522b4B3EF80ad18df82",
+        60,
+        10,
+        1000000000000000,
+        1,
+        3600
+      ],
+      "sender": "0x217b9919d32Cf7ff46BFAe479999aa4f701A1bFa",
+      "value_atto": "1000000000000000",
+      "expect_failure": false,
+      "started_at": "2026-09-25T14:45:44.343576+00:00",
+      "broadcast_attempted": true,
+      "evm_transaction_hash": "0x2dc9dd0e15c0447218940ad7621aad36152ab7aa59b60696b6f4013bbea67640",
+      "transaction_hash": "0x2dc9dd0e15c0447218940ad7621aad36152ab7aa59b60696b6f4013bbea67640",
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "triggered_transactions": [],
+      "finished_at": "2026-09-25T14:46:28.678830+00:00",
+      "checked": true
+    },
+    "submit-eligible": {
+      "method": "submit_claim",
+      "args": [
+        "ob-1",
+        1790347457,
+        1790347547,
+        "https://outagebond.vercel.app/api/demo-incident?start=1790347457&end=1790347547",
+        "https://httpbingo.org/base64/T3V0YWdlQm9uZCBTeW50aGV0aWMgQVBJIChodHRwczovL2V4YW1wbGUuY29tL291dGFnZWJvbmQtZGVtbyksIHJlZ2lvbiBkZW1vLiBTeW50aGV0aWMgdGVzdDogdW5wbGFubmVkIGNvbXBsZXRlIG91dGFnZSBmcm9tIFVuaXggMTc5MDM0NzQ1NyBVVEMgdG8gVW5peCAxNzkwMzQ3NTQ3IFVUQy4gTm90IGEgcmVhbCBvdXRhZ2Uu"
+      ],
+      "sender": "0x4123e5162F1FDeA38ceb2522b4B3EF80ad18df82",
+      "value_atto": "0",
+      "expect_failure": false,
+      "started_at": "2026-09-25T14:46:34.212846+00:00",
+      "broadcast_attempted": true,
+      "evm_transaction_hash": "0x876337df81af9b96f5feefa8a30075a721b930d109add0c5746234df52a54b2d",
+      "transaction_hash": "0x876337df81af9b96f5feefa8a30075a721b930d109add0c5746234df52a54b2d",
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "triggered_transactions": [],
+      "finished_at": "2026-09-25T14:47:18.490186+00:00",
+      "checked": true
+    },
+    "attest-eligible": {
+      "method": "attest",
+      "args": [
+        "obc-1"
+      ],
+      "sender": "0xfFddD024BF7AD2Bed01E4974083cf2ce40FD0D01",
+      "value_atto": "0",
+      "expect_failure": false,
+      "started_at": "2026-09-25T14:47:24.001593+00:00",
+      "broadcast_attempted": true,
+      "evm_transaction_hash": "0xb9fbf8a4d190bb145747a4b11ed0f890344e5d2782ffac50ec56677f3854b243",
+      "transaction_hash": "0xb9fbf8a4d190bb145747a4b11ed0f890344e5d2782ffac50ec56677f3854b243",
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "triggered_transactions": [],
+      "finished_at": "2026-09-25T14:48:45.265764+00:00",
+      "checked": true
+    },
+    "attest-eligible-retry-2": {
+      "method": "attest",
+      "args": [
+        "obc-1"
+      ],
+      "sender": "0xfFddD024BF7AD2Bed01E4974083cf2ce40FD0D01",
+      "value_atto": "0",
+      "expect_failure": false,
+      "started_at": "2026-09-25T14:54:52.220998+00:00",
+      "broadcast_attempted": true,
+      "evm_transaction_hash": "0x8ca16668a9182f78f391a371ef103662967db118e41a62cf90155ce93bab8578",
+      "transaction_hash": "0x8ca16668a9182f78f391a371ef103662967db118e41a62cf90155ce93bab8578",
+      "status": "UNDETERMINED"
+    },
+    "create-eligible-v2": {
+      "method": "create_coverage",
+      "args": [
+        "OutageBond Synthetic API",
+        "outagebond-v02-2893BfB5-eligible-v2",
+        "https://example.com/outagebond-demo",
+        "https://outagebond.vercel.app/api/demo-incident",
+        "demo",
+        "0x4123e5162F1FDeA38ceb2522b4B3EF80ad18df82",
+        60,
+        10,
+        1000000000000000,
+        2,
+        3600
+      ],
+      "sender": "0x217b9919d32Cf7ff46BFAe479999aa4f701A1bFa",
+      "value_atto": "2000000000000000",
+      "expect_failure": false,
+      "started_at": "2026-09-25T15:01:28.676126+00:00",
+      "broadcast_attempted": true,
+      "evm_transaction_hash": "0x1d7f8616c5bf98fe111bf119dcd5ec1ec865d60708c754f8617595e2556476fc",
+      "transaction_hash": "0x1d7f8616c5bf98fe111bf119dcd5ec1ec865d60708c754f8617595e2556476fc",
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "triggered_transactions": [],
+      "finished_at": "2026-09-25T15:02:18.241070+00:00",
+      "checked": true
+    },
+    "submit-eligible-v2": {
+      "method": "submit_claim",
+      "args": [
+        "ob-4",
+        1790348509,
+        1790348599,
+        "https://outagebond.vercel.app/api/demo-incident?start=1790348509&end=1790348599",
+        "https://httpbingo.org/base64/U3ludGhldGljIGFjY2VwdGFuY2UgcmVjb3JkLiBTZXJ2aWNlOiBPdXRhZ2VCb25kIFN5bnRoZXRpYyBBUEksIGh0dHBzOi8vZXhhbXBsZS5jb20vb3V0YWdlYm9uZC1kZW1vLiBSZWdpb246IGRlbW8uIFJlcG9ydGVkIGV2ZW50OiB1bnBsYW5uZWQgY29tcGxldGUgb3V0YWdlLiBTdGFydCBVbml4IFVUQzogMTc5MDM0ODUwOS4gRW5kIFVuaXggVVRDOiAxNzkwMzQ4NTk5LiBTdGF0dXM6IHJlY292ZXJlZC4%3D"
+      ],
+      "sender": "0x4123e5162F1FDeA38ceb2522b4B3EF80ad18df82",
+      "value_atto": "0",
+      "expect_failure": false,
+      "started_at": "2026-09-25T15:03:51.000286+00:00",
+      "broadcast_attempted": true,
+      "evm_transaction_hash": "0x480561bbc6f1d86539a4ed690f8888cd0ea0d22d3e37790dd721c22f06a17e74",
+      "transaction_hash": "0x480561bbc6f1d86539a4ed690f8888cd0ea0d22d3e37790dd721c22f06a17e74",
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "triggered_transactions": [],
+      "finished_at": "2026-09-25T15:04:37.822024+00:00",
+      "checked": true
+    },
+    "attest-eligible-v2": {
+      "method": "attest",
+      "args": [
+        "obc-2"
+      ],
+      "sender": "0xfFddD024BF7AD2Bed01E4974083cf2ce40FD0D01",
+      "value_atto": "0",
+      "expect_failure": false,
+      "started_at": "2026-09-25T15:04:50.836939+00:00",
+      "broadcast_attempted": true,
+      "evm_transaction_hash": "0x947ac114dcf74ec3b3e6f9823ae2fb7a6edeae270c5325721819721fa05bb428",
+      "transaction_hash": "0x947ac114dcf74ec3b3e6f9823ae2fb7a6edeae270c5325721819721fa05bb428",
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "triggered_transactions": [],
+      "finished_at": "2026-09-25T15:05:50.882510+00:00",
+      "checked": true
+    },
+    "unauthorized-payout": {
+      "method": "claim_payout",
+      "args": [
+        "obc-2"
+      ],
+      "sender": "0xfFddD024BF7AD2Bed01E4974083cf2ce40FD0D01",
+      "value_atto": "0",
+      "expect_failure": true,
+      "started_at": "2026-09-25T15:05:55.867102+00:00",
+      "broadcast_attempted": true,
+      "evm_transaction_hash": "0x7d1bc5d45c8f5f49a52f00222b49f57f935eec56a51b67f1a476a4047a53bd2d",
+      "transaction_hash": "0x7d1bc5d45c8f5f49a52f00222b49f57f935eec56a51b67f1a476a4047a53bd2d",
+      "status": "FINALIZED",
+      "execution_succeeded": false,
+      "triggered_transactions": [],
+      "finished_at": "2026-09-25T15:06:45.347682+00:00",
+      "checked": true
+    },
+    "payout": {
+      "method": "claim_payout",
+      "args": [
+        "obc-2"
+      ],
+      "sender": "0x4123e5162F1FDeA38ceb2522b4B3EF80ad18df82",
+      "value_atto": "0",
+      "expect_failure": false,
+      "started_at": "2026-09-25T15:06:49.341498+00:00",
+      "broadcast_attempted": true,
+      "evm_transaction_hash": "0xa8d21d2d66c2839769b9a8b16dc9c8f3dc9fe283fa089e8117241e3ceaf82ab8",
+      "transaction_hash": "0xa8d21d2d66c2839769b9a8b16dc9c8f3dc9fe283fa089e8117241e3ceaf82ab8",
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "triggered_transactions": [
+        "0xa6c94a57c4b8d6f8ea12ab2f7dca0e1d1c51d55832b6e0faefb7e3a215d9ef7b"
+      ],
+      "finished_at": "2026-09-25T15:07:51.595944+00:00",
+      "checked": true
+    },
+    "duplicate-payout": {
+      "method": "claim_payout",
+      "args": [
+        "obc-2"
+      ],
+      "sender": "0x4123e5162F1FDeA38ceb2522b4B3EF80ad18df82",
+      "value_atto": "0",
+      "expect_failure": true,
+      "started_at": "2026-09-25T15:08:04.621054+00:00",
+      "broadcast_attempted": true,
+      "evm_transaction_hash": "0x193c11a719b03665c493a9242318fcd6a05c83e57ebceb6bc0c41c498de7dac7",
+      "transaction_hash": "0x193c11a719b03665c493a9242318fcd6a05c83e57ebceb6bc0c41c498de7dac7",
+      "status": "FINALIZED",
+      "execution_succeeded": false,
+      "triggered_transactions": [],
+      "finished_at": "2026-09-25T15:08:59.379840+00:00",
+      "checked": true
+    },
+    "submit-short": {
+      "method": "submit_claim",
+      "args": [
+        "ob-2",
+        1790347507,
+        1790347537,
+        "https://outagebond.vercel.app/api/demo-incident?start=1790347507&end=1790347537",
+        "https://httpbingo.org/base64/U3ludGhldGljIGFjY2VwdGFuY2UgcmVjb3JkLiBTZXJ2aWNlOiBPdXRhZ2VCb25kIFN5bnRoZXRpYyBBUEksIGh0dHBzOi8vZXhhbXBsZS5jb20vb3V0YWdlYm9uZC1kZW1vLiBSZWdpb246IGRlbW8uIFJlcG9ydGVkIGV2ZW50OiB1bnBsYW5uZWQgY29tcGxldGUgb3V0YWdlLiBTdGFydCBVbml4IFVUQzogMTc5MDM0NzUwNy4gRW5kIFVuaXggVVRDOiAxNzkwMzQ3NTM3LiBTdGF0dXM6IHJlY292ZXJlZC4%3D"
+      ],
+      "sender": "0x4123e5162F1FDeA38ceb2522b4B3EF80ad18df82",
+      "value_atto": "0",
+      "expect_failure": false,
+      "started_at": "2026-09-25T15:08:59.394189+00:00",
+      "broadcast_attempted": true,
+      "evm_transaction_hash": "0x8e1f9ff1c39f5224d2538dfdd61a2dd68a6c018e3e9ca0e788b0f43a8fb01cbb",
+      "transaction_hash": "0x8e1f9ff1c39f5224d2538dfdd61a2dd68a6c018e3e9ca0e788b0f43a8fb01cbb",
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "triggered_transactions": [],
+      "finished_at": "2026-09-25T15:09:49.898859+00:00",
+      "checked": true
+    },
+    "attest-short": {
+      "method": "attest",
+      "args": [
+        "obc-3"
+      ],
+      "sender": "0xfFddD024BF7AD2Bed01E4974083cf2ce40FD0D01",
+      "value_atto": "0",
+      "expect_failure": false,
+      "started_at": "2026-09-25T15:10:02.924821+00:00",
+      "broadcast_attempted": true,
+      "evm_transaction_hash": "0x099bbfa01b2d7aadace0e6335291007afe624cf4c58cdf2992ef0180a58461f2",
+      "transaction_hash": "0x099bbfa01b2d7aadace0e6335291007afe624cf4c58cdf2992ef0180a58461f2",
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "triggered_transactions": [],
+      "finished_at": "2026-09-25T15:11:03.033010+00:00",
+      "checked": true
+    },
+    "submit-unverifiable": {
+      "method": "submit_claim",
+      "args": [
+        "ob-3",
+        1790347557,
+        1790347647,
+        "https://outagebond.vercel.app/api/demo-incident",
+        "https://httpbingo.org/status/404"
+      ],
+      "sender": "0x4123e5162F1FDeA38ceb2522b4B3EF80ad18df82",
+      "value_atto": "0",
+      "expect_failure": false,
+      "started_at": "2026-09-25T15:11:16.045176+00:00",
+      "broadcast_attempted": true,
+      "evm_transaction_hash": "0x63d9939245b3d41b3ba74836d92cc8b5623af53caae548ed87c65aabb800f478",
+      "transaction_hash": "0x63d9939245b3d41b3ba74836d92cc8b5623af53caae548ed87c65aabb800f478",
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "triggered_transactions": [],
+      "finished_at": "2026-09-25T15:12:10.830605+00:00",
+      "checked": true
+    },
+    "attest-unverifiable-1": {
+      "method": "attest",
+      "args": [
+        "obc-4"
+      ],
+      "sender": "0xfFddD024BF7AD2Bed01E4974083cf2ce40FD0D01",
+      "value_atto": "0",
+      "expect_failure": false,
+      "started_at": "2026-09-25T15:12:23.832063+00:00",
+      "broadcast_attempted": true,
+      "evm_transaction_hash": "0x84f25f9838e27f14d1dca4de8830f61658c95bd6e1c09bbbd6362a5282e8af63",
+      "transaction_hash": "0x84f25f9838e27f14d1dca4de8830f61658c95bd6e1c09bbbd6362a5282e8af63",
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "triggered_transactions": [],
+      "finished_at": "2026-09-25T15:13:18.657110+00:00",
+      "checked": true
+    },
+    "attest-unverifiable-2": {
+      "method": "attest",
+      "args": [
+        "obc-4"
+      ],
+      "sender": "0xfFddD024BF7AD2Bed01E4974083cf2ce40FD0D01",
+      "value_atto": "0",
+      "expect_failure": false,
+      "started_at": "2026-09-25T15:13:41.000652+00:00",
+      "broadcast_attempted": true,
+      "evm_transaction_hash": "0xa2448245ce673731896453bef2cf427ec3347fb63757270ec08f247db3f96efb",
+      "transaction_hash": "0xa2448245ce673731896453bef2cf427ec3347fb63757270ec08f247db3f96efb",
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "triggered_transactions": [],
+      "finished_at": "2026-09-25T15:14:33.495370+00:00",
+      "checked": true
+    },
+    "attest-unverifiable-3": {
+      "method": "attest",
+      "args": [
+        "obc-4"
+      ],
+      "sender": "0xfFddD024BF7AD2Bed01E4974083cf2ce40FD0D01",
+      "value_atto": "0",
+      "expect_failure": false,
+      "started_at": "2026-09-25T15:14:55.000755+00:00",
+      "broadcast_attempted": true,
+      "evm_transaction_hash": "0x37f26f74f386c9852362ebd10c7ed01ab44d3ce8a691916ad79b99d674cb9d8f",
+      "transaction_hash": "0x37f26f74f386c9852362ebd10c7ed01ab44d3ce8a691916ad79b99d674cb9d8f",
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "triggered_transactions": [],
+      "finished_at": "2026-09-25T15:15:47.131732+00:00",
+      "checked": true
+    }
+  },
+  "coverages": {
+    "eligible": "ob-1",
+    "short": "ob-2",
+    "unverifiable": "ob-3",
+    "eligible-v2": "ob-4"
+  },
+  "claims": {
+    "eligible": "obc-1",
+    "eligible-v2": "obc-2",
+    "short": "obc-3",
+    "unverifiable": "obc-4"
+  },
+  "assertions": {
+    "eligible-evidence": {
+      "checked_at": "2026-09-25T15:05:55.856706+00:00",
+      "passed": true,
+      "expected": {
+        "outcome": "ELIGIBLE",
+        "intervals_agree": true
+      },
+      "actual": {
+        "intervals_agree": true,
+        "monitor": {
+          "confidence_bucket": 90,
+          "end_unix": 1790348599,
+          "outage_confirmed": true,
+          "readable": true,
+          "region_match": true,
+          "service_match": true,
+          "source_verdict": "OUTAGE_QUALIFIES",
+          "start_unix": 1790348509,
+          "url": "https://httpbingo.org/base64/U3ludGhldGljIGFjY2VwdGFuY2UgcmVjb3JkLiBTZXJ2aWNlOiBPdXRhZ2VCb25kIFN5bnRoZXRpYyBBUEksIGh0dHBzOi8vZXhhbXBsZS5jb20vb3V0YWdlYm9uZC1kZW1vLiBSZWdpb246IGRlbW8uIFJlcG9ydGVkIGV2ZW50OiB1bnBsYW5uZWQgY29tcGxldGUgb3V0YWdlLiBTdGFydCBVbml4IFVUQzogMTc5MDM0ODUwOS4gRW5kIFVuaXggVVRDOiAxNzkwMzQ4NTk5LiBTdGF0dXM6IHJlY292ZXJlZC4%3D"
+        },
+        "operator": {
+          "confidence_bucket": 90,
+          "end_unix": 1790348599,
+          "outage_confirmed": true,
+          "readable": true,
+          "region_match": true,
+          "service_match": true,
+          "source_verdict": "OUTAGE_QUALIFIES",
+          "start_unix": 1790348509,
+          "url": "https://outagebond.vercel.app/api/demo-incident?start=1790348509&end=1790348599"
+        },
+        "outcome": "ELIGIBLE",
+        "reason": "Both independent sources confirm the qualifying outage window."
+      }
+    },
+    "paid-capacity": {
+      "checked_at": "2026-09-25T15:08:04.601927+00:00",
+      "passed": true,
+      "expected": {
+        "paid_claims": "1",
+        "eligible_claims": "0",
+        "pending_claims": "0",
+        "reserved_atto": "0",
+        "available_atto": "1000000000000000",
+        "can_submit": true
+      },
+      "actual": {
+        "available_atto": "1000000000000000",
+        "beneficiary": "0x4123e5162F1FDeA38ceb2522b4B3EF80ad18df82",
+        "can_close": false,
+        "can_submit": true,
+        "claims_submitted": "1",
+        "closed": false,
+        "created_at_unix": "1790348504",
+        "eligible_claims": "0",
+        "ends_at_unix": "1790352104",
+        "id": "ob-4",
+        "max_claims": "2",
+        "min_outage_secs": "60",
+        "operator_status_url": "https://outagebond.vercel.app/api/demo-incident",
+        "paid_claims": "1",
+        "payout_atto": "1000000000000000",
+        "pending_claims": "0",
+        "provider": "0x217b9919d32Cf7ff46BFAe479999aa4f701A1bFa",
+        "region": "demo",
+        "registration_ref": "outagebond-v02-2893BfB5-eligible-v2",
+        "reserved_atto": "0",
+        "service_name": "OutageBond Synthetic API",
+        "service_url": "https://example.com/outagebond-demo",
+        "tolerance_secs": "10"
+      }
+    },
+    "short-outage": {
+      "checked_at": "2026-09-25T15:11:12.043561+00:00",
+      "passed": true,
+      "expected": {
+        "status": "INELIGIBLE"
+      },
+      "actual": {
+        "attestation": {
+          "intervals_agree": true,
+          "monitor": {
+            "confidence_bucket": 90,
+            "end_unix": 1790347537,
+            "outage_confirmed": true,
+            "readable": true,
+            "region_match": true,
+            "service_match": true,
+            "source_verdict": "OUTAGE_TOO_SHORT",
+            "start_unix": 1790347507,
+            "url": "https://httpbingo.org/base64/U3ludGhldGljIGFjY2VwdGFuY2UgcmVjb3JkLiBTZXJ2aWNlOiBPdXRhZ2VCb25kIFN5bnRoZXRpYyBBUEksIGh0dHBzOi8vZXhhbXBsZS5jb20vb3V0YWdlYm9uZC1kZW1vLiBSZWdpb246IGRlbW8uIFJlcG9ydGVkIGV2ZW50OiB1bnBsYW5uZWQgY29tcGxldGUgb3V0YWdlLiBTdGFydCBVbml4IFVUQzogMTc5MDM0NzUwNy4gRW5kIFVuaXggVVRDOiAxNzkwMzQ3NTM3LiBTdGF0dXM6IHJlY292ZXJlZC4%3D"
+          },
+          "operator": {
+            "confidence_bucket": 90,
+            "end_unix": 1790347537,
+            "outage_confirmed": true,
+            "readable": true,
+            "region_match": true,
+            "service_match": true,
+            "source_verdict": "OUTAGE_TOO_SHORT",
+            "start_unix": 1790347507,
+            "url": "https://outagebond.vercel.app/api/demo-incident?start=1790347507&end=1790347537"
+          },
+          "outcome": "INELIGIBLE",
+          "reason": "Both independent sources confirm an outage shorter than the policy minimum."
+        },
+        "attestation_attempts": "1",
+        "attestation_deadline_unix": "1790435355",
+        "attested_at_unix": "1790349018",
+        "can_attest": false,
+        "can_claim_payout": false,
+        "can_expire_claim": false,
+        "can_expire_payout": false,
+        "claimant": "0x4123e5162F1FDeA38ceb2522b4B3EF80ad18df82",
+        "coverage_id": "ob-2",
+        "day_start_unix": "1790294400",
+        "id": "obc-3",
+        "incident_end_unix": "1790347537",
+        "incident_start_unix": "1790347507",
+        "monitor_report_url": "https://httpbingo.org/base64/U3ludGhldGljIGFjY2VwdGFuY2UgcmVjb3JkLiBTZXJ2aWNlOiBPdXRhZ2VCb25kIFN5bnRoZXRpYyBBUEksIGh0dHBzOi8vZXhhbXBsZS5jb20vb3V0YWdlYm9uZC1kZW1vLiBSZWdpb246IGRlbW8uIFJlcG9ydGVkIGV2ZW50OiB1bnBsYW5uZWQgY29tcGxldGUgb3V0YWdlLiBTdGFydCBVbml4IFVUQzogMTc5MDM0NzUwNy4gRW5kIFVuaXggVVRDOiAxNzkwMzQ3NTM3LiBTdGF0dXM6IHJlY292ZXJlZC4%3D",
+        "operator_report_url": "https://outagebond.vercel.app/api/demo-incident?start=1790347507&end=1790347537",
+        "payout_atto": "1000000000000000",
+        "payout_expires_at_unix": "0",
+        "resolution_reason": "Both independent sources confirm an outage shorter than the policy minimum.",
+        "status": "INELIGIBLE",
+        "submitted_at_unix": "1790348955"
+      }
+    },
+    "short-collateral": {
+      "checked_at": "2026-09-25T15:11:16.029727+00:00",
+      "passed": true,
+      "expected": {
+        "reserved_atto": "0",
+        "available_atto": "1000000000000000"
+      },
+      "actual": {
+        "available_atto": "1000000000000000",
+        "beneficiary": "0x4123e5162F1FDeA38ceb2522b4B3EF80ad18df82",
+        "can_close": false,
+        "can_submit": true,
+        "claims_submitted": "1",
+        "closed": false,
+        "created_at_unix": "1790347502",
+        "eligible_claims": "0",
+        "ends_at_unix": "1790351102",
+        "id": "ob-2",
+        "max_claims": "1",
+        "min_outage_secs": "60",
+        "operator_status_url": "https://outagebond.vercel.app/api/demo-incident",
+        "paid_claims": "0",
+        "payout_atto": "1000000000000000",
+        "pending_claims": "0",
+        "provider": "0x217b9919d32Cf7ff46BFAe479999aa4f701A1bFa",
+        "region": "demo",
+        "registration_ref": "outagebond-v02-2893BfB5-short",
+        "reserved_atto": "0",
+        "service_name": "OutageBond Synthetic API",
+        "service_url": "https://example.com/outagebond-demo",
+        "tolerance_secs": "10"
+      }
+    },
+    "unverifiable-terminal": {
+      "checked_at": "2026-09-25T15:15:52.109236+00:00",
+      "passed": true,
+      "expected": {
+        "status": "UNVERIFIABLE",
+        "attestation_attempts": "3"
+      },
+      "actual": {
+        "attestation": {
+          "intervals_agree": false,
+          "monitor": {
+            "confidence_bucket": 0,
+            "end_unix": 0,
+            "outage_confirmed": false,
+            "readable": false,
+            "region_match": false,
+            "service_match": false,
+            "source_verdict": "UNVERIFIABLE",
+            "start_unix": 0,
+            "url": "https://httpbingo.org/status/404"
+          },
+          "operator": {
+            "confidence_bucket": 0,
+            "end_unix": 0,
+            "outage_confirmed": false,
+            "readable": false,
+            "region_match": false,
+            "service_match": false,
+            "source_verdict": "UNVERIFIABLE",
+            "start_unix": 0,
+            "url": "https://outagebond.vercel.app/api/demo-incident"
+          },
+          "outcome": "UNVERIFIABLE",
+          "reason": "At least one source did not provide a reliable reading."
+        },
+        "attestation_attempts": "3",
+        "attestation_deadline_unix": "1790435491",
+        "attested_at_unix": "1790349307",
+        "can_attest": false,
+        "can_claim_payout": false,
+        "can_expire_claim": false,
+        "can_expire_payout": false,
+        "claimant": "0x4123e5162F1FDeA38ceb2522b4B3EF80ad18df82",
+        "coverage_id": "ob-3",
+        "day_start_unix": "1790294400",
+        "id": "obc-4",
+        "incident_end_unix": "1790347647",
+        "incident_start_unix": "1790347557",
+        "monitor_report_url": "https://httpbingo.org/status/404",
+        "operator_report_url": "https://outagebond.vercel.app/api/demo-incident",
+        "payout_atto": "1000000000000000",
+        "payout_expires_at_unix": "0",
+        "resolution_reason": "At least one source did not provide a reliable reading.",
+        "status": "UNVERIFIABLE",
+        "submitted_at_unix": "1790349091"
+      }
+    },
+    "unverifiable-collateral": {
+      "checked_at": "2026-09-25T15:15:56.102774+00:00",
+      "passed": true,
+      "expected": {
+        "pending_claims": "0",
+        "reserved_atto": "0",
+        "available_atto": "1000000000000000"
+      },
+      "actual": {
+        "available_atto": "1000000000000000",
+        "beneficiary": "0x4123e5162F1FDeA38ceb2522b4B3EF80ad18df82",
+        "can_close": false,
+        "can_submit": true,
+        "claims_submitted": "1",
+        "closed": false,
+        "created_at_unix": "1790347552",
+        "eligible_claims": "0",
+        "ends_at_unix": "1790351152",
+        "id": "ob-3",
+        "max_claims": "1",
+        "min_outage_secs": "60",
+        "operator_status_url": "https://outagebond.vercel.app/api/demo-incident",
+        "paid_claims": "0",
+        "payout_atto": "1000000000000000",
+        "pending_claims": "0",
+        "provider": "0x217b9919d32Cf7ff46BFAe479999aa4f701A1bFa",
+        "region": "demo",
+        "registration_ref": "outagebond-v02-2893BfB5-unverifiable",
+        "reserved_atto": "0",
+        "service_name": "OutageBond Synthetic API",
+        "service_url": "https://example.com/outagebond-demo",
+        "tolerance_secs": "10"
+      }
+    }
+  },
+  "wallets": {
+    "provider": "0x217b9919d32Cf7ff46BFAe479999aa4f701A1bFa",
+    "beneficiary": "0x4123e5162F1FDeA38ceb2522b4B3EF80ad18df82",
+    "observer": "0xfFddD024BF7AD2Bed01E4974083cf2ce40FD0D01"
+  },
+  "fixture_disclosure": "Both reports are synthetic and demo-author controlled. Distinct hosts test live fetching, not operational independence or a real outage.",
+  "frontend_origin": "https://outagebond.vercel.app",
+  "updated_at": "2026-09-25T15:16:00.113367+00:00",
+  "preflight": {
+    "exact_source_and_config": true,
+    "checked_at": "2026-09-25T15:01:28.676126+00:00",
+    "stats": {
+      "admin_controls": false,
+      "attestation_window_secs": "86400",
+      "claim_grace_secs": "604800",
+      "fee_bps": "0",
+      "incident_policy": "COVERED_INTERVAL_AND_ALL_TOUCHED_UTC_DAYS",
+      "max_claims_per_coverage": "10",
+      "max_source_bytes": "12000",
+      "network_scope": "STUDIONET_TEST_GEN_NO_MONETARY_VALUE",
+      "payout_claim_secs": "2592000",
+      "source_policy": "TWO_DISTINCT_HTTPS_HOSTS_INDEPENDENT_EXTRACTION_AND_VERDICT",
+      "total_claims": "1",
+      "total_coverages": "3",
+      "total_eligible": "0",
+      "total_ineligible": "0",
+      "total_paid_atto": "0",
+      "total_refunded_atto": "0",
+      "total_unverifiable": "0",
+      "version": "0.2.0-studionet"
+    }
+  },
+  "funding": {
+    "provider_balance_atto": "10000000000000000",
+    "checked_at": "2026-09-25T14:44:03.274055+00:00"
+  },
+  "attestation_history": {
+    "eligible": {
+      "1": {
+        "attestation": {
+          "intervals_agree": false,
+          "monitor": {
+            "confidence_bucket": 80,
+            "end_unix": 1790347547,
+            "outage_confirmed": true,
+            "readable": true,
+            "region_match": true,
+            "service_match": true,
+            "source_verdict": "OUTAGE_QUALIFIES",
+            "start_unix": 1790347457,
+            "url": "https://httpbingo.org/base64/T3V0YWdlQm9uZCBTeW50aGV0aWMgQVBJIChodHRwczovL2V4YW1wbGUuY29tL291dGFnZWJvbmQtZGVtbyksIHJlZ2lvbiBkZW1vLiBTeW50aGV0aWMgdGVzdDogdW5wbGFubmVkIGNvbXBsZXRlIG91dGFnZSBmcm9tIFVuaXggMTc5MDM0NzQ1NyBVVEMgdG8gVW5peCAxNzkwMzQ3NTQ3IFVUQy4gTm90IGEgcmVhbCBvdXRhZ2Uu"
+          },
+          "operator": {
+            "confidence_bucket": 20,
+            "end_unix": 1790347547,
+            "outage_confirmed": false,
+            "readable": true,
+            "region_match": true,
+            "service_match": true,
+            "source_verdict": "UNVERIFIABLE",
+            "start_unix": 1790347457,
+            "url": "https://outagebond.vercel.app/api/demo-incident?start=1790347457&end=1790347547"
+          },
+          "outcome": "UNVERIFIABLE",
+          "reason": "The operator report and independent monitor imply different outcomes."
+        },
+        "attestation_attempts": "1",
+        "attestation_deadline_unix": "1790434002",
+        "attested_at_unix": "1790347652",
+        "can_attest": true,
+        "can_claim_payout": false,
+        "can_expire_claim": false,
+        "can_expire_payout": false,
+        "claimant": "0x4123e5162F1FDeA38ceb2522b4B3EF80ad18df82",
+        "coverage_id": "ob-1",
+        "day_start_unix": "1790294400",
+        "id": "obc-1",
+        "incident_end_unix": "1790347547",
+        "incident_start_unix": "1790347457",
+        "monitor_report_url": "https://httpbingo.org/base64/T3V0YWdlQm9uZCBTeW50aGV0aWMgQVBJIChodHRwczovL2V4YW1wbGUuY29tL291dGFnZWJvbmQtZGVtbyksIHJlZ2lvbiBkZW1vLiBTeW50aGV0aWMgdGVzdDogdW5wbGFubmVkIGNvbXBsZXRlIG91dGFnZSBmcm9tIFVuaXggMTc5MDM0NzQ1NyBVVEMgdG8gVW5peCAxNzkwMzQ3NTQ3IFVUQy4gTm90IGEgcmVhbCBvdXRhZ2Uu",
+        "operator_report_url": "https://outagebond.vercel.app/api/demo-incident?start=1790347457&end=1790347547",
+        "payout_atto": "1000000000000000",
+        "payout_expires_at_unix": "0",
+        "resolution_reason": "",
+        "status": "PENDING",
+        "submitted_at_unix": "1790347602"
+      }
+    },
+    "eligible-v2": {
+      "0": {
+        "attestation": {},
+        "attestation_attempts": "0",
+        "attestation_deadline_unix": "1790435043",
+        "attested_at_unix": "0",
+        "can_attest": true,
+        "can_claim_payout": false,
+        "can_expire_claim": false,
+        "can_expire_payout": false,
+        "claimant": "0x4123e5162F1FDeA38ceb2522b4B3EF80ad18df82",
+        "coverage_id": "ob-4",
+        "day_start_unix": "1790294400",
+        "id": "obc-2",
+        "incident_end_unix": "1790348599",
+        "incident_start_unix": "1790348509",
+        "monitor_report_url": "https://httpbingo.org/base64/U3ludGhldGljIGFjY2VwdGFuY2UgcmVjb3JkLiBTZXJ2aWNlOiBPdXRhZ2VCb25kIFN5bnRoZXRpYyBBUEksIGh0dHBzOi8vZXhhbXBsZS5jb20vb3V0YWdlYm9uZC1kZW1vLiBSZWdpb246IGRlbW8uIFJlcG9ydGVkIGV2ZW50OiB1bnBsYW5uZWQgY29tcGxldGUgb3V0YWdlLiBTdGFydCBVbml4IFVUQzogMTc5MDM0ODUwOS4gRW5kIFVuaXggVVRDOiAxNzkwMzQ4NTk5LiBTdGF0dXM6IHJlY292ZXJlZC4%3D",
+        "operator_report_url": "https://outagebond.vercel.app/api/demo-incident?start=1790348509&end=1790348599",
+        "payout_atto": "1000000000000000",
+        "payout_expires_at_unix": "0",
+        "resolution_reason": "",
+        "status": "PENDING",
+        "submitted_at_unix": "1790348643"
+      },
+      "1": {
+        "attestation": {
+          "intervals_agree": true,
+          "monitor": {
+            "confidence_bucket": 90,
+            "end_unix": 1790348599,
+            "outage_confirmed": true,
+            "readable": true,
+            "region_match": true,
+            "service_match": true,
+            "source_verdict": "OUTAGE_QUALIFIES",
+            "start_unix": 1790348509,
+            "url": "https://httpbingo.org/base64/U3ludGhldGljIGFjY2VwdGFuY2UgcmVjb3JkLiBTZXJ2aWNlOiBPdXRhZ2VCb25kIFN5bnRoZXRpYyBBUEksIGh0dHBzOi8vZXhhbXBsZS5jb20vb3V0YWdlYm9uZC1kZW1vLiBSZWdpb246IGRlbW8uIFJlcG9ydGVkIGV2ZW50OiB1bnBsYW5uZWQgY29tcGxldGUgb3V0YWdlLiBTdGFydCBVbml4IFVUQzogMTc5MDM0ODUwOS4gRW5kIFVuaXggVVRDOiAxNzkwMzQ4NTk5LiBTdGF0dXM6IHJlY292ZXJlZC4%3D"
+          },
+          "operator": {
+            "confidence_bucket": 90,
+            "end_unix": 1790348599,
+            "outage_confirmed": true,
+            "readable": true,
+            "region_match": true,
+            "service_match": true,
+            "source_verdict": "OUTAGE_QUALIFIES",
+            "start_unix": 1790348509,
+            "url": "https://outagebond.vercel.app/api/demo-incident?start=1790348509&end=1790348599"
+          },
+          "outcome": "ELIGIBLE",
+          "reason": "Both independent sources confirm the qualifying outage window."
+        },
+        "attestation_attempts": "1",
+        "attestation_deadline_unix": "1790435043",
+        "attested_at_unix": "1790348706",
+        "can_attest": false,
+        "can_claim_payout": true,
+        "can_expire_claim": false,
+        "can_expire_payout": false,
+        "claimant": "0x4123e5162F1FDeA38ceb2522b4B3EF80ad18df82",
+        "coverage_id": "ob-4",
+        "day_start_unix": "1790294400",
+        "id": "obc-2",
+        "incident_end_unix": "1790348599",
+        "incident_start_unix": "1790348509",
+        "monitor_report_url": "https://httpbingo.org/base64/U3ludGhldGljIGFjY2VwdGFuY2UgcmVjb3JkLiBTZXJ2aWNlOiBPdXRhZ2VCb25kIFN5bnRoZXRpYyBBUEksIGh0dHBzOi8vZXhhbXBsZS5jb20vb3V0YWdlYm9uZC1kZW1vLiBSZWdpb246IGRlbW8uIFJlcG9ydGVkIGV2ZW50OiB1bnBsYW5uZWQgY29tcGxldGUgb3V0YWdlLiBTdGFydCBVbml4IFVUQzogMTc5MDM0ODUwOS4gRW5kIFVuaXggVVRDOiAxNzkwMzQ4NTk5LiBTdGF0dXM6IHJlY292ZXJlZC4%3D",
+        "operator_report_url": "https://outagebond.vercel.app/api/demo-incident?start=1790348509&end=1790348599",
+        "payout_atto": "1000000000000000",
+        "payout_expires_at_unix": "1792940706",
+        "resolution_reason": "Both independent sources confirm the qualifying outage window.",
+        "status": "ELIGIBLE",
+        "submitted_at_unix": "1790348643"
+      }
+    },
+    "short": {
+      "0": {
+        "attestation": {},
+        "attestation_attempts": "0",
+        "attestation_deadline_unix": "1790435355",
+        "attested_at_unix": "0",
+        "can_attest": true,
+        "can_claim_payout": false,
+        "can_expire_claim": false,
+        "can_expire_payout": false,
+        "claimant": "0x4123e5162F1FDeA38ceb2522b4B3EF80ad18df82",
+        "coverage_id": "ob-2",
+        "day_start_unix": "1790294400",
+        "id": "obc-3",
+        "incident_end_unix": "1790347537",
+        "incident_start_unix": "1790347507",
+        "monitor_report_url": "https://httpbingo.org/base64/U3ludGhldGljIGFjY2VwdGFuY2UgcmVjb3JkLiBTZXJ2aWNlOiBPdXRhZ2VCb25kIFN5bnRoZXRpYyBBUEksIGh0dHBzOi8vZXhhbXBsZS5jb20vb3V0YWdlYm9uZC1kZW1vLiBSZWdpb246IGRlbW8uIFJlcG9ydGVkIGV2ZW50OiB1bnBsYW5uZWQgY29tcGxldGUgb3V0YWdlLiBTdGFydCBVbml4IFVUQzogMTc5MDM0NzUwNy4gRW5kIFVuaXggVVRDOiAxNzkwMzQ3NTM3LiBTdGF0dXM6IHJlY292ZXJlZC4%3D",
+        "operator_report_url": "https://outagebond.vercel.app/api/demo-incident?start=1790347507&end=1790347537",
+        "payout_atto": "1000000000000000",
+        "payout_expires_at_unix": "0",
+        "resolution_reason": "",
+        "status": "PENDING",
+        "submitted_at_unix": "1790348955"
+      },
+      "1": {
+        "attestation": {
+          "intervals_agree": true,
+          "monitor": {
+            "confidence_bucket": 90,
+            "end_unix": 1790347537,
+            "outage_confirmed": true,
+            "readable": true,
+            "region_match": true,
+            "service_match": true,
+            "source_verdict": "OUTAGE_TOO_SHORT",
+            "start_unix": 1790347507,
+            "url": "https://httpbingo.org/base64/U3ludGhldGljIGFjY2VwdGFuY2UgcmVjb3JkLiBTZXJ2aWNlOiBPdXRhZ2VCb25kIFN5bnRoZXRpYyBBUEksIGh0dHBzOi8vZXhhbXBsZS5jb20vb3V0YWdlYm9uZC1kZW1vLiBSZWdpb246IGRlbW8uIFJlcG9ydGVkIGV2ZW50OiB1bnBsYW5uZWQgY29tcGxldGUgb3V0YWdlLiBTdGFydCBVbml4IFVUQzogMTc5MDM0NzUwNy4gRW5kIFVuaXggVVRDOiAxNzkwMzQ3NTM3LiBTdGF0dXM6IHJlY292ZXJlZC4%3D"
+          },
+          "operator": {
+            "confidence_bucket": 90,
+            "end_unix": 1790347537,
+            "outage_confirmed": true,
+            "readable": true,
+            "region_match": true,
+            "service_match": true,
+            "source_verdict": "OUTAGE_TOO_SHORT",
+            "start_unix": 1790347507,
+            "url": "https://outagebond.vercel.app/api/demo-incident?start=1790347507&end=1790347537"
+          },
+          "outcome": "INELIGIBLE",
+          "reason": "Both independent sources confirm an outage shorter than the policy minimum."
+        },
+        "attestation_attempts": "1",
+        "attestation_deadline_unix": "1790435355",
+        "attested_at_unix": "1790349018",
+        "can_attest": false,
+        "can_claim_payout": false,
+        "can_expire_claim": false,
+        "can_expire_payout": false,
+        "claimant": "0x4123e5162F1FDeA38ceb2522b4B3EF80ad18df82",
+        "coverage_id": "ob-2",
+        "day_start_unix": "1790294400",
+        "id": "obc-3",
+        "incident_end_unix": "1790347537",
+        "incident_start_unix": "1790347507",
+        "monitor_report_url": "https://httpbingo.org/base64/U3ludGhldGljIGFjY2VwdGFuY2UgcmVjb3JkLiBTZXJ2aWNlOiBPdXRhZ2VCb25kIFN5bnRoZXRpYyBBUEksIGh0dHBzOi8vZXhhbXBsZS5jb20vb3V0YWdlYm9uZC1kZW1vLiBSZWdpb246IGRlbW8uIFJlcG9ydGVkIGV2ZW50OiB1bnBsYW5uZWQgY29tcGxldGUgb3V0YWdlLiBTdGFydCBVbml4IFVUQzogMTc5MDM0NzUwNy4gRW5kIFVuaXggVVRDOiAxNzkwMzQ3NTM3LiBTdGF0dXM6IHJlY292ZXJlZC4%3D",
+        "operator_report_url": "https://outagebond.vercel.app/api/demo-incident?start=1790347507&end=1790347537",
+        "payout_atto": "1000000000000000",
+        "payout_expires_at_unix": "0",
+        "resolution_reason": "Both independent sources confirm an outage shorter than the policy minimum.",
+        "status": "INELIGIBLE",
+        "submitted_at_unix": "1790348955"
+      }
+    }
+  },
+  "payout_balance_before": "0",
+  "payout_proof": {
+    "child_hash": "0xa6c94a57c4b8d6f8ea12ab2f7dca0e1d1c51d55832b6e0faefb7e3a215d9ef7b",
+    "status": "FINALIZED",
+    "value_credited": true,
+    "value_atto": "1000000000000000",
+    "recipient": "0x4123e5162F1FDeA38ceb2522b4B3EF80ad18df82",
+    "before_atto": "0",
+    "after_atto": "1000000000000000"
+  },
+  "final_stats": {
+    "admin_controls": false,
+    "attestation_window_secs": "86400",
+    "claim_grace_secs": "604800",
+    "fee_bps": "0",
+    "incident_policy": "COVERED_INTERVAL_AND_ALL_TOUCHED_UTC_DAYS",
+    "max_claims_per_coverage": "10",
+    "max_source_bytes": "12000",
+    "network_scope": "STUDIONET_TEST_GEN_NO_MONETARY_VALUE",
+    "payout_claim_secs": "2592000",
+    "source_policy": "TWO_DISTINCT_HTTPS_HOSTS_INDEPENDENT_EXTRACTION_AND_VERDICT",
+    "total_claims": "4",
+    "total_coverages": "4",
+    "total_eligible": "1",
+    "total_ineligible": "1",
+    "total_paid_atto": "1000000000000000",
+    "total_refunded_atto": "0",
+    "total_unverifiable": "1",
+    "version": "0.2.0-studionet"
+  },
+  "completed_at": "2026-09-25T15:16:00.113367+00:00",
+  "all_checks_passed": true
+}

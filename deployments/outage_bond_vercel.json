@@ -1,0 +1,21 @@
+{
+  "product": "OutageBond",
+  "release": "0.2.0",
+  "network": "StudioNet",
+  "production_url": "https://outagebond.vercel.app",
+  "deployment_url": "https://outagebond-aft7383s6-demi17.vercel.app",
+  "deployment_id": "dpl_D3hiZEMdr7UbsCx9SSzWUmi8FDa7",
+  "project_id": "prj_kmXUeP9fp2t41BleWXL2DNccljmA",
+  "source_directory": "apps/outagebond-web",
+  "contract_address": "0x2893BfB51B80A3ABEE168732f1B3bF86Cde08082",
+  "ready_state": "READY",
+  "target": "production",
+  "next_version": "16.3.3",
+  "health_verified": true,
+  "security_headers_verified": true,
+  "public_configuration_persisted": true,
+  "git_project_root": "apps/outagebond-web",
+  "git_node_version": "22.x",
+  "frontend_source_commit": "c5b092f3f357c9592ae8e3f44f5a2f1e9ac8c237",
+  "fixture_disclosure": "Both live reports are synthetic and demo-author controlled. They do not establish real-world operational independence."
+}

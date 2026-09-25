@@ -21,6 +21,21 @@ Provider collateral, immutable coverage terms, claim submission, permissionless 
 
 The resume-safe acceptance run writes its results to `deployments/outage_bond_acceptance.json`. Its `all_checks_passed` field, finalized transaction hashes, canonical stored claim readings, native child-transfer `value_credited`, and before/after recipient balances are the evidence of success—not a frontend toast or transaction lifecycle status alone.
 
+The paid claim is [obc-2](https://outagebond.vercel.app/claims/obc-2) under [coverage ob-4](https://outagebond.vercel.app/coverage/ob-4). Native payout transaction `0xa8d21d2d66c2839769b9a8b16dc9c8f3dc9fe283fa089e8117241e3ceaf82ab8` emitted child transfer `0xa6c94a57c4b8d6f8ea12ab2f7dca0e1d1c51d55832b6e0faefb7e3a215d9ef7b`, finalized with `value_credited=true`. The dedicated beneficiary's balance rose from zero to `1000000000000000` atto (0.001 test GEN), and paid coverage still has its second slot available.
+
+The active acceptance run completed successfully:
+
+| Case | Final claim | Verified result |
+| --- | --- | --- |
+| Qualifying 90-second report, 60-second minimum | [obc-2](https://outagebond.vercel.app/claims/obc-2) | PAID; exact 0.001 test GEN native credit; remaining capacity preserved |
+| 30-second report, 60-second minimum | [obc-3](https://outagebond.vercel.app/claims/obc-3) | INELIGIBLE; reserved collateral returned |
+| Both sources unavailable | [obc-4](https://outagebond.vercel.app/claims/obc-4) | UNVERIFIABLE after three committed attempts; reservation released |
+| Wrong-wallet and repeated collection | obc-2 | Both transactions finalized with execution failure; no additional payout |
+
+Read the [complete public acceptance journal](../deployments/outage_bond_acceptance.json) and [verification manifest](../deployments/outage_bond_review_verification.json). The earlier [inconclusive fixture obc-1](https://outagebond.vercel.app/claims/obc-1) is retained separately; its unresolved test reservation may be released by anyone at or after **2026-09-26 14:46:42 UTC**. No real funds are involved, and no automatic expiry transaction is claimed.
+
+![Finalized paid synthetic claim](assets/outagebond/paid-claim.png)
+
 The named test service is **OutageBond Synthetic API**. Both source reports are openly labeled synthetic and controlled by the demo author. They use separate public hosts, but do not demonstrate independent organizations or a real operational outage. The first fixture case was inconclusive because its wording was ambiguous, and its retry ended `UNDETERMINED`. That original claim remains visible with its normal 24-hour expiry protection. The fresh `eligible-v2` case uses structured synthetic facts. The acceptance history retains the inconclusive claim and failed-consensus hash rather than presenting every attempt as successful.
 
 Review the coverage records for the eligible, short, and unavailable-source cases. The acceptance journal maps their exact coverage/claim IDs and transaction hashes. Payout and wrong-wallet/double-collection checks use dedicated recoverable test accounts, never another app's keys.
