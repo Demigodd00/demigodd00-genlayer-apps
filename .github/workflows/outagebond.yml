@@ -1,0 +1,39 @@
+name: OutageBond release checks
+on:
+  push:
+    paths: ['contracts/outage_bond.py', 'tests/direct/test_outage_bond*.py', 'apps/outagebond-web/**', 'scripts/*outage_bond*', '.github/workflows/outagebond.yml']
+  pull_request:
+    paths: ['contracts/outage_bond.py', 'tests/direct/test_outage_bond*.py', 'apps/outagebond-web/**', 'scripts/*outage_bond*', '.github/workflows/outagebond.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - run: pip install -r requirements-deploy.txt
+      - run: python scripts/prepare_gltest_runner.py
+      - run: genvm-lint check contracts/outage_bond.py
+      - run: pytest tests/direct/test_outage_bond.py tests/direct/test_outage_bond_regressions.py -v
+  frontend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/outagebond-web
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 11.19.0
+          package_json_file: apps/outagebond-web/package.json
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm test
+      - run: pnpm typecheck
+      - run: pnpm build
