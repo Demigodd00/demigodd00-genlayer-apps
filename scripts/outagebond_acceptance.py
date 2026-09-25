@@ -192,8 +192,8 @@ class Acceptance:
         start = int(coverage["created_at_unix"])+5
         end = start+duration
         self.wait_until(end+31)
-        report = ("OutageBond Synthetic API (https://example.com/outagebond-demo), region demo. "
-                  f"Synthetic test: unplanned complete outage from Unix {start} UTC to Unix {end} UTC. Not a real outage.")
+        report = ("Synthetic acceptance record. Service: OutageBond Synthetic API, https://example.com/outagebond-demo. "
+                  f"Region: demo. Reported event: unplanned complete outage. Start Unix UTC: {start}. End Unix UTC: {end}. Status: recovered.")
         monitor = "https://httpbingo.org/base64/"+quote(base64.b64encode(report.encode()).decode(), safe="")
         operator = f"{self.origin}/api/demo-incident?start={start}&end={end}"
         if unreadable:
@@ -243,11 +243,14 @@ class Acceptance:
                 output({"phase": "test-faucet", "result": result.get("result")})
             self.record["funding"] = {"provider_balance_atto": str(self.balance(self.accounts["provider"].address)), "checked_at": now()}
             self.save()
-        eligible = self.create("eligible", 2)
+        # Preserve the first inconclusive fixture case and its failed-consensus hash.
+        # This new reference never replaces, resubmits, or relabels that old claim.
+        eligible_name = "eligible-v2"
+        eligible = self.create(eligible_name, 2)
         short = self.create("short", 1)
         unknown = self.create("unverifiable", 1)
-        eligible_id = self.submit("eligible", eligible, 90)
-        claim = self.attest_expected("eligible", eligible_id, "ELIGIBLE")
+        eligible_id = self.submit(eligible_name, eligible, 90)
+        claim = self.attest_expected(eligible_name, eligible_id, "ELIGIBLE")
         assert claim["status"] in ("ELIGIBLE", "PAID"), claim
         self.check("eligible-evidence", claim["attestation"], {"outcome": "ELIGIBLE", "intervals_agree": True})
         self.write("unauthorized-payout", "claim_payout", [eligible_id], role="observer", expect_failure=True)
