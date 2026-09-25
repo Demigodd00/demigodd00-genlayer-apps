@@ -55,7 +55,7 @@ export default function CoverageDetail({ coverageId }: { coverageId: string }) {
 
   useEffect(() => {
     void refresh();
-    const timer = window.setInterval(() => void refresh(), 10000);
+    const timer = window.setInterval(() => { if (!document.hidden) void refresh(); }, 15000);
     return () => window.clearInterval(timer);
   }, [refresh]);
 

@@ -23,7 +23,7 @@ export default function OutageBondApp() {
 
   useEffect(() => {
     void refresh();
-    const timer = window.setInterval(() => void refresh(), 15000);
+    const timer = window.setInterval(() => { if (!document.hidden) void refresh(); }, 15000);
     return () => window.clearInterval(timer);
   }, [refresh]);
 

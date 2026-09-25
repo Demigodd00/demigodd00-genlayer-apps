@@ -235,6 +235,9 @@ class Acceptance:
         verify_source(self.client, self.address, (ROOT/"contracts/outage_bond.py").read_text(encoding="utf-8"))
         stats = verify_configuration(self.client, self.address, self.accounts["provider"])
         self.record["preflight"] = {"exact_source_and_config": True, "checked_at": now(), "stats": stats}
+        if self.record.get("all_checks_passed"):
+            output({"phase": "already-completed", "completed_at": self.record["completed_at"], "new_transactions_sent": False})
+            return
         if "funding" not in self.record:
             balance = self.balance(self.accounts["provider"].address)
             if balance < 4*PAYOUT:

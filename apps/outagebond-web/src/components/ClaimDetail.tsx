@@ -64,7 +64,7 @@ export default function ClaimDetail({ claimId }: { claimId: string }) {
     const params = new URLSearchParams(window.location.search);
     setSubmissionTx(params.get("submitted") ?? "");
     void refresh();
-    const refreshTimer = window.setInterval(() => void refresh(), 5000);
+    const refreshTimer = window.setInterval(() => { if (!document.hidden) void refresh(); }, 15000);
     const clockTimer = window.setInterval(() => setNow(Math.floor(Date.now() / 1000)), 1000);
     setNow(Math.floor(Date.now() / 1000));
     return () => { window.clearInterval(refreshTimer); window.clearInterval(clockTimer); };
