@@ -22,6 +22,7 @@ StreakPact V2.2 is one product in this repository. It supports self-stake pacts 
 | StreakPact V2.2 | Strong: authenticated external-evidence claims directly control escrow settlement | Live StudioNet build |
 | StreakPact V1 | Strong concept, unsafe period accounting | Historical deployed prototype; do not promote |
 | MicroWagers | Strong: public-source interpretation directly controls peer escrow settlement | Verified StudioNet test-token release |
+| ATTEST | Strong: independent public-evidence interpretation controls bonded claim settlement | Live StudioNet test-token release; see [reviewer entry](docs/ATTEST_SUBMISSION.md) |
 
 **MicroWagers release:** [live app](https://microwagers.vercel.app) · [read-only status](https://microwagers.vercel.app/status) · [GenLayer Explorer contract](https://explorer-studio.genlayer.com/address/0xbe655aa17d1b4d31021791F0640a8c4677A11899) · [paste-ready Portal submission](docs/MICROWAGERS_SUBMISSION.md)
 

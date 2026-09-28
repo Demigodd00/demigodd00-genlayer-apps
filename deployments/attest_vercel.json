@@ -1,0 +1,17 @@
+{
+  "product": "ATTEST",
+  "release": "0.1.0",
+  "network": "StudioNet",
+  "production_url": "https://attest-web-silk.vercel.app",
+  "deployment_url": "https://attest-3jocqz23w-demi17.vercel.app",
+  "deployment_id": "dpl_3XxhbbNNhAKFUyRrijuqV5va4px6",
+  "project_id": "prj_iRy0bCpb2ZD1UYwl8mr0Z7NK4uuY",
+  "source_directory": "apps/attest-web",
+  "contract_address": "0x3aFF086e8AAa7707b29ad88a9ebDf581d2d6Ef41",
+  "ready_state": "READY",
+  "target": "production",
+  "next_version": "16.3.3",
+  "health_verified": true,
+  "live_docket_verified": true,
+  "fixture_disclosure": "Hosted register and audit text are synthetic and project-controlled. They prove the acceptance workflow, not an independent real-world claim."
+}

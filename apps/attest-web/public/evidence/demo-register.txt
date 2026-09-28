@@ -1,0 +1,6 @@
+ATTEST SYNTHETIC TEST FIXTURE — not a real grant distribution.
+Reporting period: October 2026.
+Recipient A: 0x1111111111111111111111111111111111111111, 1 test GEN.
+Recipient B: 0x2222222222222222222222222222222222222222, 1 test GEN.
+Recipient C: 0x3333333333333333333333333333333333333333, 1 test GEN.
+The register lists exactly three unique recipient addresses, each with a nonzero test GEN amount.

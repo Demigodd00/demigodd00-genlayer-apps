@@ -1,0 +1,5 @@
+ATTEST SYNTHETIC TEST FIXTURE — not an independent audit or a real grant distribution.
+This file is controlled by the ATTEST demo project.
+The October 2026 synthetic register contains exactly three unique recipient addresses.
+There are no duplicate addresses in the published synthetic register.
+Each of the three listed amounts is greater than zero test GEN.

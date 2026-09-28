@@ -1,0 +1,33 @@
+{
+  "contract": "Attest",
+  "version": "0.1.0",
+  "network": "studionet",
+  "address": "0x3aFF086e8AAa7707b29ad88a9ebDf581d2d6Ef41",
+  "transaction_hash": "0xf5c34952c7d8736efe04738d35b8d04728017f72423cda0949b0812c7852bb12",
+  "deployer": "0xac8B9C33A63e45667fA1b31e03039Ec5b63d4b41",
+  "deployer_role": "no_admin_controls_or_protocol_fees",
+  "signer_mode": "disposable_studionet_deployment_only",
+  "constructor_args": [],
+  "source_sha256": "9f74091b114516fb59c5980f8a094bd1359b6f6ea73a6af58104fc8d48b4e83c",
+  "runner_dependency": "# { \"Depends\": \"py-genlayer:1jb45aa8ynh2a9c9xn3b7qqh8sm5q93hwfp7jqmwsfhh8jpz09h6\" }",
+  "receipt_status": "FINALIZED",
+  "execution_result": "SUCCESS",
+  "verified_source_and_config": true,
+  "preflight_passed": true,
+  "config": {
+    "adjudication_timeout_secs": "604800",
+    "challenge_bps": "1000",
+    "funding": "DEPOSIT_THEN_SPEND_WITH_RECOVERABLE_CREDIT",
+    "max_bond_atto": "1000000000000000000000",
+    "max_review_secs": "2592000",
+    "max_source_chars": "6000",
+    "max_source_urls_per_side": "2",
+    "min_bond_atto": "4000000000000000",
+    "min_review_secs": "3600",
+    "minimum_challenge_atto": "1000000000000000",
+    "network": "STUDIONET",
+    "settlement": "AUTHOR_BOND_PLUS_CHALLENGE_BOND_TO_DECIDING_SIDE; BOTH_REFUNDED_IF_INCONCLUSIVE",
+    "version": "0.1.0"
+  },
+  "verified_at": "2026-09-28T21:19:33.505679+00:00"
+}
