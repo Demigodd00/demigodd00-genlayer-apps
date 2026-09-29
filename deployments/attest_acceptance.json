@@ -1,0 +1,954 @@
+{
+  "contract": "0x3aFF086e8AAa7707b29ad88a9ebDf581d2d6Ef41",
+  "network": "studionet",
+  "frontend_origin": "https://attest-web-silk.vercel.app",
+  "source_sha256": "9f74091b114516fb59c5980f8a094bd1359b6f6ea73a6af58104fc8d48b4e83c",
+  "started_at": "2026-09-28T21:29:26.838430+00:00",
+  "wallets": {
+    "author": "0x1cc85742D0231973C801d69c9260A916E30510D5",
+    "challenger": "0x3792f2E35032Bf32dF31FE9B33e24301e8330f09",
+    "observer": "0x4d08069F2d4412940C4C39Bc4dffa73BF800754F"
+  },
+  "transactions": {
+    "deposit-author": {
+      "method": "deposit",
+      "args": [],
+      "sender": "0x1cc85742D0231973C801d69c9260A916E30510D5",
+      "value_atto": "13000000000000000",
+      "expect_failure": false,
+      "started_at": "2026-09-28T21:29:59.131527+00:00",
+      "broadcast_attempted": true,
+      "evm_transaction_hash": "0xbf3e3a1cce0adf5b5f88a52c4a6d3952e42788f6093e8ffb84dfb0aae80ed0d0",
+      "transaction_hash": "0xbf3e3a1cce0adf5b5f88a52c4a6d3952e42788f6093e8ffb84dfb0aae80ed0d0",
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "triggered_transactions": [],
+      "finished_at": "2026-09-28T21:30:54.946260+00:00",
+      "checked": true
+    },
+    "deposit-challenger": {
+      "method": "deposit",
+      "args": [],
+      "sender": "0x3792f2E35032Bf32dF31FE9B33e24301e8330f09",
+      "value_atto": "2000000000000000",
+      "expect_failure": false,
+      "started_at": "2026-09-28T21:30:54.963606+00:00",
+      "broadcast_attempted": true,
+      "evm_transaction_hash": "0xd84614bec80577e0a5b074e759eacb3225c43b3e38a8223547aa65bd78eb7a8b",
+      "transaction_hash": "0xd84614bec80577e0a5b074e759eacb3225c43b3e38a8223547aa65bd78eb7a8b",
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "triggered_transactions": [],
+      "finished_at": "2026-09-28T21:31:50.707527+00:00",
+      "checked": true
+    },
+    "invalid-post": {
+      "method": "create_claim",
+      "args": [
+        "ATTEST invalid source check",
+        "This failed synthetic claim must leave its GEN deposit available for withdrawal.",
+        "A claim with a local evidence URL must be rejected before any bond credit is locked.",
+        "[\"https://localhost/private\"]",
+        3600,
+        4000000000000000
+      ],
+      "sender": "0x1cc85742D0231973C801d69c9260A916E30510D5",
+      "value_atto": "0",
+      "expect_failure": true,
+      "started_at": "2026-09-28T21:31:59.693193+00:00",
+      "broadcast_attempted": true,
+      "evm_transaction_hash": "0x7a402fc061ee76fbacb73af919ac06004c87fd648c450b6b0e4c88fbcf7f5ca3",
+      "transaction_hash": "0x7a402fc061ee76fbacb73af919ac06004c87fd648c450b6b0e4c88fbcf7f5ca3",
+      "status": "FINALIZED",
+      "execution_succeeded": false,
+      "triggered_transactions": [],
+      "finished_at": "2026-09-28T21:32:49.119146+00:00",
+      "checked": true
+    },
+    "create-disproven": {
+      "method": "create_claim",
+      "args": [
+        "ATTEST synthetic acceptance 3aFF086e disproven",
+        "The ATTEST synthetic October 2026 grant register lists four unique recipients, each assigned a nonzero test GEN amount.",
+        "DISPROVEN if the published synthetic October 2026 register and audit show fewer than four unique recipient addresses; SUPPORTED only if four unique addresses with nonzero amounts are shown; otherwise INCONCLUSIVE.",
+        "[\"https://attest-web-silk.vercel.app/evidence/demo-register.txt\"]",
+        3600,
+        4000000000000000
+      ],
+      "sender": "0x1cc85742D0231973C801d69c9260A916E30510D5",
+      "value_atto": "0",
+      "expect_failure": false,
+      "started_at": "2026-09-28T21:32:54.157721+00:00",
+      "broadcast_attempted": true,
+      "evm_transaction_hash": "0x9718c4a46e81107dc841511ee8ab720a4c7f191f626d23f357f828fe24a3babd",
+      "transaction_hash": "0x9718c4a46e81107dc841511ee8ab720a4c7f191f626d23f357f828fe24a3babd",
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "triggered_transactions": [],
+      "finished_at": "2026-09-28T21:33:43.572724+00:00",
+      "checked": true
+    },
+    "challenge-disproven": {
+      "method": "challenge",
+      "args": [
+        "att-1",
+        "The project-controlled synthetic register and audit both show exactly three unique recipients, not four.",
+        "[\"https://attest-web-silk.vercel.app/evidence/demo-audit.txt\"]"
+      ],
+      "sender": "0x3792f2E35032Bf32dF31FE9B33e24301e8330f09",
+      "value_atto": "0",
+      "expect_failure": false,
+      "started_at": "2026-09-28T21:33:52.616832+00:00",
+      "broadcast_attempted": true,
+      "evm_transaction_hash": "0x0affe69a091ef077e6a9c40117909aba41c3d793fb47a42eeaf05a7ca44f7c1d",
+      "transaction_hash": "0x0affe69a091ef077e6a9c40117909aba41c3d793fb47a42eeaf05a7ca44f7c1d",
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "triggered_transactions": [],
+      "finished_at": "2026-09-28T21:34:47.404699+00:00",
+      "checked": true
+    },
+    "create-inconclusive": {
+      "method": "create_claim",
+      "args": [
+        "ATTEST synthetic acceptance 3aFF086e inconclusive",
+        "The unavailable ATTEST synthetic record lists four unique recipients with nonzero test GEN amounts.",
+        "SUPPORTED only if the declared record shows four unique paid addresses; DISPROVEN only if readable evidence establishes fewer than four; otherwise INCONCLUSIVE.",
+        "[\"https://attest-web-silk.vercel.app/evidence/does-not-exist.txt\"]",
+        3600,
+        4000000000000000
+      ],
+      "sender": "0x1cc85742D0231973C801d69c9260A916E30510D5",
+      "value_atto": "0",
+      "expect_failure": false,
+      "started_at": "2026-09-28T21:34:52.413703+00:00",
+      "broadcast_attempted": true,
+      "evm_transaction_hash": "0x9d8eef88d055f071bc9484e4c148dc3a6aed6a9ff56c232bcb77f2a5d50f8878",
+      "transaction_hash": "0x9d8eef88d055f071bc9484e4c148dc3a6aed6a9ff56c232bcb77f2a5d50f8878",
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "triggered_transactions": [],
+      "finished_at": "2026-09-28T21:35:47.148345+00:00",
+      "checked": true
+    },
+    "challenge-inconclusive": {
+      "method": "challenge",
+      "args": [
+        "att-2",
+        "The declared synthetic source is missing, and there is no readable record to assess.",
+        "[\"https://attest-web-silk.vercel.app/evidence/does-not-exist.txt?challenge=1\"]"
+      ],
+      "sender": "0x3792f2E35032Bf32dF31FE9B33e24301e8330f09",
+      "value_atto": "0",
+      "expect_failure": false,
+      "started_at": "2026-09-28T21:35:56.155124+00:00",
+      "broadcast_attempted": true,
+      "evm_transaction_hash": "0xda05ab3baca891cb5116abcfb7691b0a23c7de46ff6c9c36710655c3fac761dd",
+      "transaction_hash": "0xda05ab3baca891cb5116abcfb7691b0a23c7de46ff6c9c36710655c3fac761dd",
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "triggered_transactions": [],
+      "finished_at": "2026-09-28T21:36:45.678815+00:00",
+      "checked": true
+    },
+    "create-uncontested": {
+      "method": "create_claim",
+      "args": [
+        "ATTEST synthetic acceptance 3aFF086e uncontested",
+        "The ATTEST synthetic October 2026 grant register lists three unique recipients with nonzero test GEN amounts.",
+        "SUPPORTED only if the published synthetic register shows three unique addresses with nonzero amounts; DISPROVEN if it shows a different count; otherwise INCONCLUSIVE.",
+        "[\"https://attest-web-silk.vercel.app/evidence/demo-register.txt\"]",
+        3600,
+        4000000000000000
+      ],
+      "sender": "0x1cc85742D0231973C801d69c9260A916E30510D5",
+      "value_atto": "0",
+      "expect_failure": false,
+      "started_at": "2026-09-28T21:36:50.698252+00:00",
+      "broadcast_attempted": true,
+      "evm_transaction_hash": "0x7aa35b6fa74f7cdfb44f1b86b57f85a7fa504aa78a6efa1baba41f8f7049c55a",
+      "transaction_hash": "0x7aa35b6fa74f7cdfb44f1b86b57f85a7fa504aa78a6efa1baba41f8f7049c55a",
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "triggered_transactions": [],
+      "finished_at": "2026-09-28T21:37:40.357093+00:00",
+      "checked": true
+    },
+    "resolve-disproven": {
+      "method": "resolve",
+      "args": [
+        "att-1"
+      ],
+      "sender": "0x4d08069F2d4412940C4C39Bc4dffa73BF800754F",
+      "value_atto": "0",
+      "expect_failure": false,
+      "started_at": "2026-09-28T22:37:09.000591+00:00",
+      "broadcast_attempted": true,
+      "evm_transaction_hash": "0xa88a5875876e75d52bf73875ce08c921ca11f23683f4289db3bbec753b416f48",
+      "transaction_hash": "0xa88a5875876e75d52bf73875ce08c921ca11f23683f4289db3bbec753b416f48",
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "triggered_transactions": [],
+      "finished_at": "2026-09-28T22:38:11.998398+00:00",
+      "checked": true
+    },
+    "resolve-inconclusive": {
+      "method": "resolve",
+      "args": [
+        "att-2"
+      ],
+      "sender": "0x4d08069F2d4412940C4C39Bc4dffa73BF800754F",
+      "value_atto": "0",
+      "expect_failure": false,
+      "started_at": "2026-09-28T22:38:17.020408+00:00",
+      "broadcast_attempted": true,
+      "evm_transaction_hash": "0xfe1fb56f2d51a24d5d6c8fc60195622298a4b37a06960ddc06f60ff22ae1d9c0",
+      "transaction_hash": "0xfe1fb56f2d51a24d5d6c8fc60195622298a4b37a06960ddc06f60ff22ae1d9c0",
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "triggered_transactions": [],
+      "finished_at": "2026-09-28T22:39:17.129128+00:00",
+      "checked": true
+    },
+    "finalize-uncontested": {
+      "method": "finalize_uncontested",
+      "args": [
+        "att-3"
+      ],
+      "sender": "0x4d08069F2d4412940C4C39Bc4dffa73BF800754F",
+      "value_atto": "0",
+      "expect_failure": false,
+      "started_at": "2026-09-28T22:39:22.153844+00:00",
+      "broadcast_attempted": true,
+      "evm_transaction_hash": "0x246525e7ebf9bc406804d9d4e0a7882400f68887c8d8ded0febd02683a9fcb4c",
+      "transaction_hash": "0x246525e7ebf9bc406804d9d4e0a7882400f68887c8d8ded0febd02683a9fcb4c",
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "triggered_transactions": [],
+      "finished_at": "2026-09-28T22:40:16.991909+00:00",
+      "checked": true
+    },
+    "withdraw-author": {
+      "method": "withdraw_credit",
+      "args": [],
+      "sender": "0x1cc85742D0231973C801d69c9260A916E30510D5",
+      "value_atto": "0",
+      "expect_failure": false,
+      "started_at": "2026-09-28T22:40:36.987213+00:00",
+      "broadcast_attempted": true,
+      "evm_transaction_hash": "0xe87534aa7d0e3e2427978f0245d055e2a628b9086447c389ec2a580bbdf73228",
+      "transaction_hash": "0xe87534aa7d0e3e2427978f0245d055e2a628b9086447c389ec2a580bbdf73228",
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "triggered_transactions": [
+        "0xa2baf471b8c6db3a3ab71d76b5ced1dc92fa5b2a7de70fc0052b0d267a1929e5"
+      ],
+      "finished_at": "2026-09-28T22:41:32.958930+00:00",
+      "checked": true
+    },
+    "withdraw-challenger": {
+      "method": "withdraw_credit",
+      "args": [],
+      "sender": "0x3792f2E35032Bf32dF31FE9B33e24301e8330f09",
+      "value_atto": "0",
+      "expect_failure": false,
+      "started_at": "2026-09-28T22:41:48.949726+00:00",
+      "broadcast_attempted": true,
+      "evm_transaction_hash": "0xc9e99ed7e2469f45cb912efe8692228ab8b42431abae349c868368f3edb50128",
+      "transaction_hash": "0xc9e99ed7e2469f45cb912efe8692228ab8b42431abae349c868368f3edb50128",
+      "status": "FINALIZED",
+      "execution_succeeded": true,
+      "triggered_transactions": [
+        "0xe04cf9f3e1be058d110da4519692e267194a5eb6d1647544e82ce3735801793b"
+      ],
+      "finished_at": "2026-09-28T22:42:39.557889+00:00",
+      "checked": true
+    }
+  },
+  "claims": {
+    "disproven": "att-1",
+    "inconclusive": "att-2",
+    "uncontested": "att-3"
+  },
+  "checks": {
+    "initial-author-credit": {
+      "checked_at": "2026-09-28T21:31:55.683464+00:00",
+      "passed": true,
+      "expected": {
+        "credit": "13000000000000000"
+      },
+      "actual": {
+        "credit": "13000000000000000"
+      }
+    },
+    "initial-challenger-credit": {
+      "checked_at": "2026-09-28T21:31:59.691177+00:00",
+      "passed": true,
+      "expected": {
+        "credit": "2000000000000000"
+      },
+      "actual": {
+        "credit": "2000000000000000"
+      }
+    },
+    "failed-post-credit-recoverable": {
+      "checked_at": "2026-09-28T21:32:54.138847+00:00",
+      "passed": true,
+      "expected": {
+        "credit": "13000000000000000"
+      },
+      "actual": {
+        "credit": "13000000000000000"
+      }
+    },
+    "created-disproven": {
+      "checked_at": "2026-09-28T21:33:52.608968+00:00",
+      "passed": true,
+      "expected": {
+        "status": "OPEN",
+        "title": "ATTEST synthetic acceptance 3aFF086e disproven",
+        "bond_atto": "4000000000000000",
+        "source_urls": [
+          "https://attest-web-silk.vercel.app/evidence/demo-register.txt"
+        ]
+      },
+      "actual": {
+        "author": "0x1cc85742d0231973c801d69c9260a916e30510d5",
+        "author_argument": "",
+        "bond_atto": "4000000000000000",
+        "challenge": null,
+        "challenge_bond_atto": "1000000000000000",
+        "challenge_deadline": 1790634789,
+        "citations": [],
+        "created_at": 1790631189,
+        "evidence_snapshot": [],
+        "id": "att-1",
+        "outcome": "",
+        "reason": "",
+        "resolved_at": 0,
+        "response_argument": "",
+        "response_urls": [],
+        "review_window_secs": 3600,
+        "source_urls": [
+          "https://attest-web-silk.vercel.app/evidence/demo-register.txt"
+        ],
+        "statement": "The ATTEST synthetic October 2026 grant register lists four unique recipients, each assigned a nonzero test GEN amount.",
+        "status": "OPEN",
+        "terms_digest": "9e75c84b734d60b42aac3f03c09eb411e1db054416163679f8891e58db1068cc",
+        "title": "ATTEST synthetic acceptance 3aFF086e disproven",
+        "verification_rule": "DISPROVEN if the published synthetic October 2026 register and audit show fewer than four unique recipient addresses; SUPPORTED only if four unique addresses with nonzero amounts are shown; otherwise INCONCLUSIVE."
+      }
+    },
+    "challenged-disproven": {
+      "checked_at": "2026-09-28T21:34:52.407856+00:00",
+      "passed": true,
+      "expected": {
+        "status": "CHALLENGED"
+      },
+      "actual": {
+        "author": "0x1cc85742d0231973c801d69c9260a916e30510d5",
+        "author_argument": "",
+        "bond_atto": "4000000000000000",
+        "challenge": {
+          "argument": "The project-controlled synthetic register and audit both show exactly three unique recipients, not four.",
+          "bond_atto": "1000000000000000",
+          "challenger": "0x3792f2e35032bf32df31fe9b33e24301e8330f09",
+          "created_at": 1790631247,
+          "source_urls": [
+            "https://attest-web-silk.vercel.app/evidence/demo-audit.txt"
+          ]
+        },
+        "challenge_bond_atto": "1000000000000000",
+        "challenge_deadline": 1790634789,
+        "citations": [],
+        "created_at": 1790631189,
+        "evidence_snapshot": [],
+        "id": "att-1",
+        "outcome": "",
+        "reason": "",
+        "resolved_at": 0,
+        "response_argument": "",
+        "response_urls": [],
+        "review_window_secs": 3600,
+        "source_urls": [
+          "https://attest-web-silk.vercel.app/evidence/demo-register.txt"
+        ],
+        "statement": "The ATTEST synthetic October 2026 grant register lists four unique recipients, each assigned a nonzero test GEN amount.",
+        "status": "CHALLENGED",
+        "terms_digest": "9e75c84b734d60b42aac3f03c09eb411e1db054416163679f8891e58db1068cc",
+        "title": "ATTEST synthetic acceptance 3aFF086e disproven",
+        "verification_rule": "DISPROVEN if the published synthetic October 2026 register and audit show fewer than four unique recipient addresses; SUPPORTED only if four unique addresses with nonzero amounts are shown; otherwise INCONCLUSIVE."
+      }
+    },
+    "created-inconclusive": {
+      "checked_at": "2026-09-28T21:35:56.147044+00:00",
+      "passed": true,
+      "expected": {
+        "status": "OPEN",
+        "title": "ATTEST synthetic acceptance 3aFF086e inconclusive",
+        "bond_atto": "4000000000000000",
+        "source_urls": [
+          "https://attest-web-silk.vercel.app/evidence/does-not-exist.txt"
+        ]
+      },
+      "actual": {
+        "author": "0x1cc85742d0231973c801d69c9260a916e30510d5",
+        "author_argument": "",
+        "bond_atto": "4000000000000000",
+        "challenge": null,
+        "challenge_bond_atto": "1000000000000000",
+        "challenge_deadline": 1790634907,
+        "citations": [],
+        "created_at": 1790631307,
+        "evidence_snapshot": [],
+        "id": "att-2",
+        "outcome": "",
+        "reason": "",
+        "resolved_at": 0,
+        "response_argument": "",
+        "response_urls": [],
+        "review_window_secs": 3600,
+        "source_urls": [
+          "https://attest-web-silk.vercel.app/evidence/does-not-exist.txt"
+        ],
+        "statement": "The unavailable ATTEST synthetic record lists four unique recipients with nonzero test GEN amounts.",
+        "status": "OPEN",
+        "terms_digest": "47eb81824a1020f227f56e96c391664bfcf57bdd07fdfd62f791be396399fef3",
+        "title": "ATTEST synthetic acceptance 3aFF086e inconclusive",
+        "verification_rule": "SUPPORTED only if the declared record shows four unique paid addresses; DISPROVEN only if readable evidence establishes fewer than four; otherwise INCONCLUSIVE."
+      }
+    },
+    "challenged-inconclusive": {
+      "checked_at": "2026-09-28T21:36:50.683367+00:00",
+      "passed": true,
+      "expected": {
+        "status": "CHALLENGED"
+      },
+      "actual": {
+        "author": "0x1cc85742d0231973c801d69c9260a916e30510d5",
+        "author_argument": "",
+        "bond_atto": "4000000000000000",
+        "challenge": {
+          "argument": "The declared synthetic source is missing, and there is no readable record to assess.",
+          "bond_atto": "1000000000000000",
+          "challenger": "0x3792f2e35032bf32df31fe9b33e24301e8330f09",
+          "created_at": 1790631371,
+          "source_urls": [
+            "https://attest-web-silk.vercel.app/evidence/does-not-exist.txt?challenge=1"
+          ]
+        },
+        "challenge_bond_atto": "1000000000000000",
+        "challenge_deadline": 1790634907,
+        "citations": [],
+        "created_at": 1790631307,
+        "evidence_snapshot": [],
+        "id": "att-2",
+        "outcome": "",
+        "reason": "",
+        "resolved_at": 0,
+        "response_argument": "",
+        "response_urls": [],
+        "review_window_secs": 3600,
+        "source_urls": [
+          "https://attest-web-silk.vercel.app/evidence/does-not-exist.txt"
+        ],
+        "statement": "The unavailable ATTEST synthetic record lists four unique recipients with nonzero test GEN amounts.",
+        "status": "CHALLENGED",
+        "terms_digest": "47eb81824a1020f227f56e96c391664bfcf57bdd07fdfd62f791be396399fef3",
+        "title": "ATTEST synthetic acceptance 3aFF086e inconclusive",
+        "verification_rule": "SUPPORTED only if the declared record shows four unique paid addresses; DISPROVEN only if readable evidence establishes fewer than four; otherwise INCONCLUSIVE."
+      }
+    },
+    "created-uncontested": {
+      "checked_at": "2026-09-28T21:37:49.334044+00:00",
+      "passed": true,
+      "expected": {
+        "status": "OPEN",
+        "title": "ATTEST synthetic acceptance 3aFF086e uncontested",
+        "bond_atto": "4000000000000000",
+        "source_urls": [
+          "https://attest-web-silk.vercel.app/evidence/demo-register.txt"
+        ]
+      },
+      "actual": {
+        "author": "0x1cc85742d0231973c801d69c9260a916e30510d5",
+        "author_argument": "",
+        "bond_atto": "4000000000000000",
+        "challenge": null,
+        "challenge_bond_atto": "1000000000000000",
+        "challenge_deadline": 1790635025,
+        "citations": [],
+        "created_at": 1790631425,
+        "evidence_snapshot": [],
+        "id": "att-3",
+        "outcome": "",
+        "reason": "",
+        "resolved_at": 0,
+        "response_argument": "",
+        "response_urls": [],
+        "review_window_secs": 3600,
+        "source_urls": [
+          "https://attest-web-silk.vercel.app/evidence/demo-register.txt"
+        ],
+        "statement": "The ATTEST synthetic October 2026 grant register lists three unique recipients with nonzero test GEN amounts.",
+        "status": "OPEN",
+        "terms_digest": "4eaa8484082502ad70484bd5b829fd1e7f17748b4c889ca0e4e4734c05f66ccd",
+        "title": "ATTEST synthetic acceptance 3aFF086e uncontested",
+        "verification_rule": "SUPPORTED only if the published synthetic register shows three unique addresses with nonzero amounts; DISPROVEN if it shows a different count; otherwise INCONCLUSIVE."
+      }
+    },
+    "disproven-verdict": {
+      "checked_at": "2026-09-28T22:38:17.004615+00:00",
+      "passed": true,
+      "expected": {
+        "status": "RESOLVED",
+        "outcome": "DISPROVEN"
+      },
+      "actual": {
+        "author": "0x1cc85742d0231973c801d69c9260a916e30510d5",
+        "author_argument": "",
+        "bond_atto": "4000000000000000",
+        "challenge": {
+          "argument": "The project-controlled synthetic register and audit both show exactly three unique recipients, not four.",
+          "bond_atto": "1000000000000000",
+          "challenger": "0x3792f2e35032bf32df31fe9b33e24301e8330f09",
+          "created_at": 1790631247,
+          "source_urls": [
+            "https://attest-web-silk.vercel.app/evidence/demo-audit.txt"
+          ]
+        },
+        "challenge_bond_atto": "1000000000000000",
+        "challenge_deadline": 1790634789,
+        "citations": [
+          {
+            "digest": "027038ff1b2d3f85bd0157c2738b90e105c4090fb606ea5daf8117f6e7a2245d",
+            "excerpt": "The register lists exactly three unique recipient addresses, each with a nonzero test GEN amount.",
+            "line": 6,
+            "role": "CLAIM",
+            "source_id": "S1",
+            "url": "https://attest-web-silk.vercel.app/evidence/demo-register.txt"
+          },
+          {
+            "digest": "7d32def1ab29637789e64890c9015e793f76c779a1ff6c45d9eb08a75810985d",
+            "excerpt": "The October 2026 synthetic register contains exactly three unique recipient addresses.",
+            "line": 3,
+            "role": "CHALLENGE",
+            "source_id": "S2",
+            "url": "https://attest-web-silk.vercel.app/evidence/demo-audit.txt"
+          },
+          {
+            "digest": "7d32def1ab29637789e64890c9015e793f76c779a1ff6c45d9eb08a75810985d",
+            "excerpt": "Each of the three listed amounts is greater than zero test GEN.",
+            "line": 5,
+            "role": "CHALLENGE",
+            "source_id": "S2",
+            "url": "https://attest-web-silk.vercel.app/evidence/demo-audit.txt"
+          }
+        ],
+        "created_at": 1790631189,
+        "evidence_snapshot": [
+          {
+            "digest": "027038ff1b2d3f85bd0157c2738b90e105c4090fb606ea5daf8117f6e7a2245d",
+            "id": "S1",
+            "role": "CLAIM",
+            "status": "READABLE",
+            "text": "ATTEST SYNTHETIC TEST FIXTURE \u2014 not a real grant distribution.\nReporting period: October 2026.\nRecipient A: 0x1111111111111111111111111111111111111111, 1 test GEN.\nRecipient B: 0x2222222222222222222222222222222222222222, 1 test GEN.\nRecipient C: 0x3333333333333333333333333333333333333333, 1 test GEN.\nThe register lists exactly three unique recipient addresses, each with a nonzero test GEN amount.",
+            "url": "https://attest-web-silk.vercel.app/evidence/demo-register.txt"
+          },
+          {
+            "digest": "7d32def1ab29637789e64890c9015e793f76c779a1ff6c45d9eb08a75810985d",
+            "id": "S2",
+            "role": "CHALLENGE",
+            "status": "READABLE",
+            "text": "ATTEST SYNTHETIC TEST FIXTURE \u2014 not an independent audit or a real grant distribution.\nThis file is controlled by the ATTEST demo project.\nThe October 2026 synthetic register contains exactly three unique recipient addresses.\nThere are no duplicate addresses in the published synthetic register.\nEach of the three listed amounts is greater than zero test GEN.",
+            "url": "https://attest-web-silk.vercel.app/evidence/demo-audit.txt"
+          }
+        ],
+        "id": "att-1",
+        "outcome": "DISPROVEN",
+        "reason": "The evidence from the synthetic register and audit explicitly states that there are exactly three unique recipient addresses, contradicting the claim's assertion that there are four unique recipients.",
+        "resolved_at": 1790635041,
+        "response_argument": "",
+        "response_urls": [],
+        "review_window_secs": 3600,
+        "source_urls": [
+          "https://attest-web-silk.vercel.app/evidence/demo-register.txt"
+        ],
+        "statement": "The ATTEST synthetic October 2026 grant register lists four unique recipients, each assigned a nonzero test GEN amount.",
+        "status": "RESOLVED",
+        "terms_digest": "9e75c84b734d60b42aac3f03c09eb411e1db054416163679f8891e58db1068cc",
+        "title": "ATTEST synthetic acceptance 3aFF086e disproven",
+        "verification_rule": "DISPROVEN if the published synthetic October 2026 register and audit show fewer than four unique recipient addresses; SUPPORTED only if four unique addresses with nonzero amounts are shown; otherwise INCONCLUSIVE."
+      }
+    },
+    "inconclusive-verdict": {
+      "checked_at": "2026-09-28T22:39:22.137256+00:00",
+      "passed": true,
+      "expected": {
+        "status": "RESOLVED",
+        "outcome": "INCONCLUSIVE"
+      },
+      "actual": {
+        "author": "0x1cc85742d0231973c801d69c9260a916e30510d5",
+        "author_argument": "",
+        "bond_atto": "4000000000000000",
+        "challenge": {
+          "argument": "The declared synthetic source is missing, and there is no readable record to assess.",
+          "bond_atto": "1000000000000000",
+          "challenger": "0x3792f2e35032bf32df31fe9b33e24301e8330f09",
+          "created_at": 1790631371,
+          "source_urls": [
+            "https://attest-web-silk.vercel.app/evidence/does-not-exist.txt?challenge=1"
+          ]
+        },
+        "challenge_bond_atto": "1000000000000000",
+        "challenge_deadline": 1790634907,
+        "citations": [],
+        "created_at": 1790631307,
+        "evidence_snapshot": [
+          {
+            "digest": "",
+            "id": "S1",
+            "role": "CLAIM",
+            "status": "UNAVAILABLE",
+            "text": "",
+            "url": "https://attest-web-silk.vercel.app/evidence/does-not-exist.txt"
+          },
+          {
+            "digest": "",
+            "id": "S2",
+            "role": "CHALLENGE",
+            "status": "UNAVAILABLE",
+            "text": "",
+            "url": "https://attest-web-silk.vercel.app/evidence/does-not-exist.txt?challenge=1"
+          }
+        ],
+        "id": "att-2",
+        "outcome": "INCONCLUSIVE",
+        "reason": "None of the declared evidence sources could be read when the claim was reviewed.",
+        "resolved_at": 1790635112,
+        "response_argument": "",
+        "response_urls": [],
+        "review_window_secs": 3600,
+        "source_urls": [
+          "https://attest-web-silk.vercel.app/evidence/does-not-exist.txt"
+        ],
+        "statement": "The unavailable ATTEST synthetic record lists four unique recipients with nonzero test GEN amounts.",
+        "status": "RESOLVED",
+        "terms_digest": "47eb81824a1020f227f56e96c391664bfcf57bdd07fdfd62f791be396399fef3",
+        "title": "ATTEST synthetic acceptance 3aFF086e inconclusive",
+        "verification_rule": "SUPPORTED only if the declared record shows four unique paid addresses; DISPROVEN only if readable evidence establishes fewer than four; otherwise INCONCLUSIVE."
+      }
+    },
+    "uncontested-refund": {
+      "checked_at": "2026-09-28T22:40:21.983005+00:00",
+      "passed": true,
+      "expected": {
+        "status": "RESOLVED",
+        "outcome": "UNCONTESTED"
+      },
+      "actual": {
+        "author": "0x1cc85742d0231973c801d69c9260a916e30510d5",
+        "author_argument": "",
+        "bond_atto": "4000000000000000",
+        "challenge": null,
+        "challenge_bond_atto": "1000000000000000",
+        "challenge_deadline": 1790635025,
+        "citations": [],
+        "created_at": 1790631425,
+        "evidence_snapshot": [],
+        "id": "att-3",
+        "outcome": "UNCONTESTED",
+        "reason": "The review window closed without a challenge.",
+        "resolved_at": 1790635177,
+        "response_argument": "",
+        "response_urls": [],
+        "review_window_secs": 3600,
+        "source_urls": [
+          "https://attest-web-silk.vercel.app/evidence/demo-register.txt"
+        ],
+        "statement": "The ATTEST synthetic October 2026 grant register lists three unique recipients with nonzero test GEN amounts.",
+        "status": "RESOLVED",
+        "terms_digest": "4eaa8484082502ad70484bd5b829fd1e7f17748b4c889ca0e4e4734c05f66ccd",
+        "title": "ATTEST synthetic acceptance 3aFF086e uncontested",
+        "verification_rule": "SUPPORTED only if the published synthetic register shows three unique addresses with nonzero amounts; DISPROVEN if it shows a different count; otherwise INCONCLUSIVE."
+      }
+    },
+    "author-credit-conserved": {
+      "checked_at": "2026-09-28T22:40:26.109836+00:00",
+      "passed": true,
+      "expected": {
+        "credit": "9000000000000000"
+      },
+      "actual": {
+        "credit": "9000000000000000"
+      }
+    },
+    "challenger-credit-conserved": {
+      "checked_at": "2026-09-28T22:40:29.989453+00:00",
+      "passed": true,
+      "expected": {
+        "credit": "6000000000000000"
+      },
+      "actual": {
+        "credit": "6000000000000000"
+      }
+    },
+    "final-stats": {
+      "checked_at": "2026-09-28T22:40:33.982711+00:00",
+      "passed": true,
+      "expected": {
+        "total_created": "3",
+        "total_challenged": "2",
+        "total_disproven": "1",
+        "total_inconclusive": "1",
+        "total_locked_atto": "0",
+        "total_settled_atto": "14000000000000000"
+      },
+      "actual": {
+        "total_challenged": "2",
+        "total_created": "3",
+        "total_disproven": "1",
+        "total_inconclusive": "1",
+        "total_locked_atto": "0",
+        "total_settled_atto": "14000000000000000",
+        "total_supported": "0",
+        "total_timeout_refunded": "0"
+      }
+    },
+    "author-credit-cleared": {
+      "checked_at": "2026-09-28T22:41:45.947666+00:00",
+      "passed": true,
+      "expected": {
+        "credit": "0"
+      },
+      "actual": {
+        "credit": "0"
+      }
+    },
+    "challenger-credit-cleared": {
+      "checked_at": "2026-09-28T22:42:52.529496+00:00",
+      "passed": true,
+      "expected": {
+        "credit": "0"
+      },
+      "actual": {
+        "credit": "0"
+      }
+    }
+  },
+  "fixture_disclosure": "The two hosted source files are synthetic and controlled by the ATTEST project. They do not prove independent organizations or a real grant distribution.",
+  "updated_at": "2026-09-28T22:43:08.537631+00:00",
+  "site_preflight": {
+    "checked_at": "2026-09-28T21:29:37.933151+00:00",
+    "status": "public_https_reachable"
+  },
+  "funding": {
+    "author": {
+      "checked_at": "2026-09-28T21:29:47.103177+00:00",
+      "balance_before_atto": "0",
+      "balance_after_atto": "22000000000000000",
+      "faucet_used": true
+    },
+    "challenger": {
+      "checked_at": "2026-09-28T21:29:59.121604+00:00",
+      "balance_before_atto": "0",
+      "balance_after_atto": "10000000000000000",
+      "faucet_used": true
+    }
+  },
+  "review_deadlines": {
+    "disproven": 1790634789,
+    "inconclusive": 1790634907,
+    "uncontested": 1790635025
+  },
+  "withdrawal_balance_before_author": "9000000000000000",
+  "withdrawal_proof": {
+    "withdraw-author": {
+      "parent_hash": "0xe87534aa7d0e3e2427978f0245d055e2a628b9086447c389ec2a580bbdf73228",
+      "child_hash": "0xa2baf471b8c6db3a3ab71d76b5ced1dc92fa5b2a7de70fc0052b0d267a1929e5",
+      "recipient": "0x1cc85742D0231973C801d69c9260A916E30510D5",
+      "value_atto": "9000000000000000",
+      "value_credited": true,
+      "balance_before_atto": "9000000000000000",
+      "balance_after_atto": "18000000000000000"
+    },
+    "withdraw-challenger": {
+      "parent_hash": "0xc9e99ed7e2469f45cb912efe8692228ab8b42431abae349c868368f3edb50128",
+      "child_hash": "0xe04cf9f3e1be058d110da4519692e267194a5eb6d1647544e82ce3735801793b",
+      "recipient": "0x3792f2E35032Bf32dF31FE9B33e24301e8330f09",
+      "value_atto": "6000000000000000",
+      "value_credited": true,
+      "balance_before_atto": "8000000000000000",
+      "balance_after_atto": "14000000000000000"
+    }
+  },
+  "withdrawal_balance_before_challenger": "8000000000000000",
+  "final_claims": {
+    "disproven": {
+      "author": "0x1cc85742d0231973c801d69c9260a916e30510d5",
+      "author_argument": "",
+      "bond_atto": "4000000000000000",
+      "challenge": {
+        "argument": "The project-controlled synthetic register and audit both show exactly three unique recipients, not four.",
+        "bond_atto": "1000000000000000",
+        "challenger": "0x3792f2e35032bf32df31fe9b33e24301e8330f09",
+        "created_at": 1790631247,
+        "source_urls": [
+          "https://attest-web-silk.vercel.app/evidence/demo-audit.txt"
+        ]
+      },
+      "challenge_bond_atto": "1000000000000000",
+      "challenge_deadline": 1790634789,
+      "citations": [
+        {
+          "digest": "027038ff1b2d3f85bd0157c2738b90e105c4090fb606ea5daf8117f6e7a2245d",
+          "excerpt": "The register lists exactly three unique recipient addresses, each with a nonzero test GEN amount.",
+          "line": 6,
+          "role": "CLAIM",
+          "source_id": "S1",
+          "url": "https://attest-web-silk.vercel.app/evidence/demo-register.txt"
+        },
+        {
+          "digest": "7d32def1ab29637789e64890c9015e793f76c779a1ff6c45d9eb08a75810985d",
+          "excerpt": "The October 2026 synthetic register contains exactly three unique recipient addresses.",
+          "line": 3,
+          "role": "CHALLENGE",
+          "source_id": "S2",
+          "url": "https://attest-web-silk.vercel.app/evidence/demo-audit.txt"
+        },
+        {
+          "digest": "7d32def1ab29637789e64890c9015e793f76c779a1ff6c45d9eb08a75810985d",
+          "excerpt": "Each of the three listed amounts is greater than zero test GEN.",
+          "line": 5,
+          "role": "CHALLENGE",
+          "source_id": "S2",
+          "url": "https://attest-web-silk.vercel.app/evidence/demo-audit.txt"
+        }
+      ],
+      "created_at": 1790631189,
+      "evidence_snapshot": [
+        {
+          "digest": "027038ff1b2d3f85bd0157c2738b90e105c4090fb606ea5daf8117f6e7a2245d",
+          "id": "S1",
+          "role": "CLAIM",
+          "status": "READABLE",
+          "text": "ATTEST SYNTHETIC TEST FIXTURE \u2014 not a real grant distribution.\nReporting period: October 2026.\nRecipient A: 0x1111111111111111111111111111111111111111, 1 test GEN.\nRecipient B: 0x2222222222222222222222222222222222222222, 1 test GEN.\nRecipient C: 0x3333333333333333333333333333333333333333, 1 test GEN.\nThe register lists exactly three unique recipient addresses, each with a nonzero test GEN amount.",
+          "url": "https://attest-web-silk.vercel.app/evidence/demo-register.txt"
+        },
+        {
+          "digest": "7d32def1ab29637789e64890c9015e793f76c779a1ff6c45d9eb08a75810985d",
+          "id": "S2",
+          "role": "CHALLENGE",
+          "status": "READABLE",
+          "text": "ATTEST SYNTHETIC TEST FIXTURE \u2014 not an independent audit or a real grant distribution.\nThis file is controlled by the ATTEST demo project.\nThe October 2026 synthetic register contains exactly three unique recipient addresses.\nThere are no duplicate addresses in the published synthetic register.\nEach of the three listed amounts is greater than zero test GEN.",
+          "url": "https://attest-web-silk.vercel.app/evidence/demo-audit.txt"
+        }
+      ],
+      "id": "att-1",
+      "outcome": "DISPROVEN",
+      "reason": "The evidence from the synthetic register and audit explicitly states that there are exactly three unique recipient addresses, contradicting the claim's assertion that there are four unique recipients.",
+      "resolved_at": 1790635041,
+      "response_argument": "",
+      "response_urls": [],
+      "review_window_secs": 3600,
+      "source_urls": [
+        "https://attest-web-silk.vercel.app/evidence/demo-register.txt"
+      ],
+      "statement": "The ATTEST synthetic October 2026 grant register lists four unique recipients, each assigned a nonzero test GEN amount.",
+      "status": "RESOLVED",
+      "terms_digest": "9e75c84b734d60b42aac3f03c09eb411e1db054416163679f8891e58db1068cc",
+      "title": "ATTEST synthetic acceptance 3aFF086e disproven",
+      "verification_rule": "DISPROVEN if the published synthetic October 2026 register and audit show fewer than four unique recipient addresses; SUPPORTED only if four unique addresses with nonzero amounts are shown; otherwise INCONCLUSIVE."
+    },
+    "inconclusive": {
+      "author": "0x1cc85742d0231973c801d69c9260a916e30510d5",
+      "author_argument": "",
+      "bond_atto": "4000000000000000",
+      "challenge": {
+        "argument": "The declared synthetic source is missing, and there is no readable record to assess.",
+        "bond_atto": "1000000000000000",
+        "challenger": "0x3792f2e35032bf32df31fe9b33e24301e8330f09",
+        "created_at": 1790631371,
+        "source_urls": [
+          "https://attest-web-silk.vercel.app/evidence/does-not-exist.txt?challenge=1"
+        ]
+      },
+      "challenge_bond_atto": "1000000000000000",
+      "challenge_deadline": 1790634907,
+      "citations": [],
+      "created_at": 1790631307,
+      "evidence_snapshot": [
+        {
+          "digest": "",
+          "id": "S1",
+          "role": "CLAIM",
+          "status": "UNAVAILABLE",
+          "text": "",
+          "url": "https://attest-web-silk.vercel.app/evidence/does-not-exist.txt"
+        },
+        {
+          "digest": "",
+          "id": "S2",
+          "role": "CHALLENGE",
+          "status": "UNAVAILABLE",
+          "text": "",
+          "url": "https://attest-web-silk.vercel.app/evidence/does-not-exist.txt?challenge=1"
+        }
+      ],
+      "id": "att-2",
+      "outcome": "INCONCLUSIVE",
+      "reason": "None of the declared evidence sources could be read when the claim was reviewed.",
+      "resolved_at": 1790635112,
+      "response_argument": "",
+      "response_urls": [],
+      "review_window_secs": 3600,
+      "source_urls": [
+        "https://attest-web-silk.vercel.app/evidence/does-not-exist.txt"
+      ],
+      "statement": "The unavailable ATTEST synthetic record lists four unique recipients with nonzero test GEN amounts.",
+      "status": "RESOLVED",
+      "terms_digest": "47eb81824a1020f227f56e96c391664bfcf57bdd07fdfd62f791be396399fef3",
+      "title": "ATTEST synthetic acceptance 3aFF086e inconclusive",
+      "verification_rule": "SUPPORTED only if the declared record shows four unique paid addresses; DISPROVEN only if readable evidence establishes fewer than four; otherwise INCONCLUSIVE."
+    },
+    "uncontested": {
+      "author": "0x1cc85742d0231973c801d69c9260a916e30510d5",
+      "author_argument": "",
+      "bond_atto": "4000000000000000",
+      "challenge": null,
+      "challenge_bond_atto": "1000000000000000",
+      "challenge_deadline": 1790635025,
+      "citations": [],
+      "created_at": 1790631425,
+      "evidence_snapshot": [],
+      "id": "att-3",
+      "outcome": "UNCONTESTED",
+      "reason": "The review window closed without a challenge.",
+      "resolved_at": 1790635177,
+      "response_argument": "",
+      "response_urls": [],
+      "review_window_secs": 3600,
+      "source_urls": [
+        "https://attest-web-silk.vercel.app/evidence/demo-register.txt"
+      ],
+      "statement": "The ATTEST synthetic October 2026 grant register lists three unique recipients with nonzero test GEN amounts.",
+      "status": "RESOLVED",
+      "terms_digest": "4eaa8484082502ad70484bd5b829fd1e7f17748b4c889ca0e4e4734c05f66ccd",
+      "title": "ATTEST synthetic acceptance 3aFF086e uncontested",
+      "verification_rule": "SUPPORTED only if the published synthetic register shows three unique addresses with nonzero amounts; DISPROVEN if it shows a different count; otherwise INCONCLUSIVE."
+    }
+  },
+  "final_stats": {
+    "total_challenged": "2",
+    "total_created": "3",
+    "total_disproven": "1",
+    "total_inconclusive": "1",
+    "total_locked_atto": "0",
+    "total_settled_atto": "14000000000000000",
+    "total_supported": "0",
+    "total_timeout_refunded": "0"
+  },
+  "all_checks_passed": true,
+  "completed_at": "2026-09-28T22:43:08.537631+00:00"
+}

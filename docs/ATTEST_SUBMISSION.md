@@ -6,6 +6,7 @@ ATTEST lets users and agents put test-GEN bonds behind public claims with fixed 
 
 - [Live ATTEST app](https://attest-web-silk.vercel.app)
 - [StudioNet contract](https://explorer-studio.genlayer.com/address/0x3aFF086e8AAa7707b29ad88a9ebDf581d2d6Ef41)
+- [Reviewable release source](https://github.com/Demigodd00/demigodd00-genlayer-apps/tree/codex/attest-review/apps/attest-web) and [pull request](https://github.com/Demigodd00/demigodd00-genlayer-apps/pull/1)
 - [Contract source](../contracts/attest.py), [architecture](architecture/attest.md), and [release checks](ATTEST_REVIEW.md)
 - [Verified deployment](../deployments/attest_studionet.json) and [hosting manifest](../deployments/attest_vercel.json)
 
@@ -19,6 +20,6 @@ GenLayer is essential to the product because the dispute turns on interpreting p
 
 ## Scope of the demonstration
 
-The acceptance claims use two public, project-controlled text fixtures: [register](https://attest-web-silk.vercel.app/evidence/demo-register.txt) and [audit](https://attest-web-silk.vercel.app/evidence/demo-audit.txt). They are clearly marked synthetic. They prove the adjudication and bond flow, not an independent real-world grant distribution. One claim intentionally uses a missing source to exercise the unavailable-evidence result. The [acceptance script](../scripts/attest_acceptance.py) records finalized transaction hashes, stored claim states, balance and credit changes, and native withdrawal transfer proof in a [public journal](../deployments/attest_acceptance.json). Reviewers can run the [read-only verifier](../scripts/check_attest_release.py) without the test-wallet keys.
+The acceptance claims use two public, project-controlled text fixtures: [register](https://attest-web-silk.vercel.app/evidence/demo-register.txt) and [audit](https://attest-web-silk.vercel.app/evidence/demo-audit.txt). They are clearly marked synthetic. They prove the adjudication and bond flow, not an independent real-world grant distribution. One claim intentionally uses a missing source to exercise the unavailable-evidence result. The [public acceptance journal](../deployments/attest_acceptance.json) records 13 finalized transactions, 16 passing checks, and the final `DISPROVEN`, `INCONCLUSIVE`, and `UNCONTESTED` claims. The author and challenger withdrew 0.009 and 0.006 test GEN respectively; both native child transfers finalized with `value_credited=true` and exact recipient balance increases. Reviewers can run the [read-only verifier](../scripts/check_attest_release.py) without the test-wallet keys. See the [reviewer guide](ATTEST_REVIEW.md) for claim links, verdict receipts, and limitations.
 
 The review window is one hour on StudioNet. The seven-day unresolved-claim timeout and other time-dependent edge cases are covered by direct tests rather than accelerated on the shared chain. The app and contract are an experimental testnet demonstration, not a mainnet deployment or a security audit.

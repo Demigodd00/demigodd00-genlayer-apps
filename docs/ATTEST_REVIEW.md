@@ -1,6 +1,6 @@
 # ATTEST reviewer guide and release gate
 
-**Status: live StudioNet release; final settlement acceptance is waiting for the one-hour review deadline.** The contract is deployed and verified, and the public app is hosted. Three synthetic test claims are on-chain. Do not mark the bond-settlement acceptance complete until `deployments/attest_acceptance.json` records `all_checks_passed: true` with finalized transaction and native-transfer evidence.
+**Status: live StudioNet release; settlement acceptance verified.** The contract is deployed and source-verified, the public app is hosted, and three synthetic test claims have finalized. The [acceptance journal](../deployments/attest_acceptance.json) records `all_checks_passed: true`; the independent read-only verifier also passed against StudioNet.
 
 ## Open and inspect
 
@@ -21,7 +21,17 @@ The payout decision depends on interpreting public text under a claim-specific r
 
 On 2026-09-28, `genvm-lint check contracts/attest.py --json` passed; `pytest tests/direct/test_attest.py -q` passed all nine tests; and `pnpm typecheck`, `pnpm build`, and `pnpm audit --prod --audit-level high` passed in a clean ATTEST release checkout. The production app was built and published separately with the verified contract address. The linter notes a newer GenVM runner, but the pinned runner deployed successfully to StudioNet. The clean checkout and public deploy correspond to the same contract source digest.
 
-The resume-safe [acceptance script](../scripts/attest_acceptance.py) uses dedicated test wallets. It records each transaction hash, finalized status, execution result, claim ID, available credit, locked and settled counters, stored evidence snapshots and citations, and native withdrawal child transfers with `value_credited` and before/after recipient balances. The script also posts an invalid claim after a deposit and checks that the failed write leaves the credit recoverable. It never blindly resends a write after a hash is known. Reviewers can run `python scripts/check_attest_release.py` to [verify the public journal](../scripts/check_attest_release.py) against StudioNet without the test-wallet keys. The three live cases target `DISPROVEN`, `INCONCLUSIVE`, and `UNCONTESTED`. `SUPPORTED` and seven-day timeout behavior are covered by direct-mode tests and are not presented as live-tested here.
+The resume-safe [acceptance script](../scripts/attest_acceptance.py) uses dedicated test wallets. It recorded 13 finalized transactions and 16 passing checks, including a deliberately failed invalid-source post whose deposit credit remained recoverable. It never blindly resends a write after a hash is known. Reviewers can run `python scripts/check_attest_release.py` to [verify the public journal](../scripts/check_attest_release.py) against StudioNet without the test-wallet keys; this passed for all 13 receipts, final claim records, stored evidence digests and citations, and two native withdrawal transfers.
+
+| Case | On-chain record | Final result |
+| --- | --- | --- |
+| Readable register and audit contradict a four-recipient claim | [att-1](https://attest-web-silk.vercel.app/?claim=att-1) | `DISPROVEN`; the snapshot cites register line 6 and audit lines 3 and 5; both bonds credited to the challenger |
+| Both declared source URLs return 404 | [att-2](https://attest-web-silk.vercel.app/?claim=att-2) | `INCONCLUSIVE`; each side recovered its own bond |
+| No challenge before the deadline | [att-3](https://attest-web-silk.vercel.app/?claim=att-3) | `UNCONTESTED`; author bond returned without a truth judgment |
+
+The [DISPROVEN resolution](https://explorer-studio.genlayer.com/tx/0xa88a5875876e75d52bf73875ce08c921ca11f23683f4289db3bbec753b416f48), [INCONCLUSIVE resolution](https://explorer-studio.genlayer.com/tx/0xfe1fb56f2d51a24d5d6c8fc60195622298a4b37a06960ddc06f60ff22ae1d9c0), and [uncontested finalization](https://explorer-studio.genlayer.com/tx/0x246525e7ebf9bc406804d9d4e0a7882400f68887c8d8ded0febd02683a9fcb4c) all finalized with successful execution. The author withdrew **0.009 test GEN** through [this finalized transaction](https://explorer-studio.genlayer.com/tx/0xe87534aa7d0e3e2427978f0245d055e2a628b9086447c389ec2a580bbdf73228) and the challenger withdrew **0.006 test GEN** through [this one](https://explorer-studio.genlayer.com/tx/0xc9e99ed7e2469f45cb912efe8692228ab8b42431abae349c868368f3edb50128). Each emitted one finalized native child transfer with `value_credited=true`; recipient balances rose by the exact amounts and both contract credits cleared. The contract reports zero locked bond and 0.014 test GEN settled across the three claims.
+
+`SUPPORTED` and seven-day timeout behavior are covered by direct-mode tests and are not presented as live-tested here.
 
 ## Known limitations
 
